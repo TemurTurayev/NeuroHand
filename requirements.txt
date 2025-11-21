@@ -1,0 +1,42 @@
+# Deep Learning Framework
+torch>=2.0.0
+torchvision>=0.15.0
+
+# EEG Signal Processing
+mne>=1.5.0
+scipy>=1.10.0
+numpy>=1.24.0
+
+# Data Manipulation & Analysis
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Dataset Download & Management
+requests>=2.31.0
+tqdm>=4.65.0
+pooch>=1.7.0
+
+# Jupyter & Interactive Development
+jupyter>=1.0.0
+jupyterlab>=4.0.0
+ipywidgets>=8.0.0
+
+# Optional: Experiment Tracking
+# wandb>=0.15.0
+# tensorboard>=2.13.0
+
+# Optional: Advanced EEG Processing
+# pyedflib>=0.1.30  # For EDF file reading
+# pywavelets>=1.4.0  # For wavelet transforms
+
+# Development Tools
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0
+
+# MOABB for BCI Competition datasets (alternative)
+moabb>=0.4.6

@@ -28,9 +28,8 @@ from moabb.paradigms import MotorImagery
 import numpy as np
 from tqdm import tqdm
 
-# Add project root to path
+# Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 
 class BCIDataDownloader:

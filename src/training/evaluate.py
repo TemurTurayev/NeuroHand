@@ -8,7 +8,7 @@ Evaluation и метрики для trained EEGNet model.
 TashPMI, 2024
 """
 
-import sys
+import math
 from pathlib import Path
 from typing import Dict, Tuple
 
@@ -19,17 +19,28 @@ from sklearn.metrics import (
     accuracy_score,
     precision_recall_fscore_support,
     confusion_matrix,
-    classification_report
+    classification_report,
+    cohen_kappa_score
 )
 from tqdm import tqdm
 
-# Add project root to path
-PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
-
+from src.constants import CLASS_NAMES, N_CLASSES, N_CHANNELS, N_SAMPLES
 from src.models.eegnet import EEGNet
 from src.models.utils import load_checkpoint
 from src.data.dataset import create_data_loaders
+
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+
+
+def calculate_itr(n_classes: int, accuracy: float, trial_duration: float = 4.0) -> float:
+    """Calculate Information Transfer Rate in bits/min."""
+    if accuracy <= 0 or accuracy >= 1:
+        return 0.0
+    N = n_classes
+    P = accuracy
+    itr_per_trial = math.log2(N) + P * math.log2(P) + (1 - P) * math.log2((1 - P) / (N - 1))
+    trials_per_min = 60.0 / trial_duration
+    return itr_per_trial * trials_per_min
 
 
 class ModelEvaluator:
@@ -64,7 +75,7 @@ class ModelEvaluator:
         self.device = device
 
         if class_names is None:
-            self.class_names = ['Left Hand', 'Right Hand', 'Feet', 'Tongue']
+            self.class_names = list(CLASS_NAMES)
         else:
             self.class_names = class_names
 
@@ -114,10 +125,10 @@ class ModelEvaluator:
             y_true, y_pred, average=None
         )
 
-        # Confusion matrix
         cm = confusion_matrix(y_true, y_pred)
+        kappa = cohen_kappa_score(y_true, y_pred)
+        itr = calculate_itr(len(self.class_names), accuracy)
 
-        # Store results
         results = {
             'accuracy': accuracy,
             'precision': precision,
@@ -125,6 +136,8 @@ class ModelEvaluator:
             'f1': f1,
             'support': support,
             'confusion_matrix': cm,
+            'kappa': kappa,
+            'itr': itr,
             'y_true': y_true,
             'y_pred': y_pred
         }
@@ -142,7 +155,9 @@ class ModelEvaluator:
         print("📊 EVALUATION RESULTS")
         print("="*70)
 
-        print(f"\n🎯 Overall Accuracy: {results['accuracy']*100:.2f}%\n")
+        print(f"\n🎯 Overall Accuracy: {results['accuracy']*100:.2f}%")
+        print(f"   Cohen's Kappa:   {results['kappa']:.4f}")
+        print(f"   ITR:             {results['itr']:.2f} bits/min\n")
 
         print("Per-Class Metrics:")
         print("-" * 70)
@@ -279,9 +294,9 @@ def main():
     # Create model
     print("\n🧠 Loading model...")
     model = EEGNet(
-        n_classes=4,
-        n_channels=22,
-        n_samples=1000,
+        n_classes=N_CLASSES,
+        n_channels=N_CHANNELS,
+        n_samples=N_SAMPLES,
         verbose=False
     )
 

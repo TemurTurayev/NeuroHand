@@ -9,7 +9,6 @@ TashPMI, 2024
 """
 
 import os
-import sys
 from pathlib import Path
 from typing import Optional, Tuple, Callable
 
@@ -18,9 +17,9 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import pickle
 
-# Add project root to path
+from src.constants import CLASS_NAMES, N_CLASSES
+
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 
 class EEGDataset(Dataset):
@@ -147,9 +146,10 @@ class EEGDataset(Dataset):
             Augmented signal
 
         Augmentation Techniques:
-            1. Time shifting: Shift signal in time
-            2. Amplitude scaling: Scale amplitude
-            3. Additive noise: Add small Gaussian noise
+            1. Time shifting with zero-padding (no wrap-around)
+            2. Amplitude scaling
+            3. Additive noise
+            4. Channel dropout
 
         Medical Context:
             - EEG signals vary naturally between trials
@@ -158,22 +158,37 @@ class EEGDataset(Dataset):
         """
         augmented = signal.copy()
 
-        # 1. Time shifting (50% probability)
+        # 1. Time shifting with zero-padding (50% probability)
         if np.random.rand() < 0.5:
             max_shift = int(0.1 * signal.shape[1])  # Max 10% shift
             shift = np.random.randint(-max_shift, max_shift)
-            augmented = np.roll(augmented, shift, axis=1)
+            shifted = np.zeros_like(augmented)
+            if shift > 0:
+                shifted[:, shift:] = augmented[:, :-shift]
+            elif shift < 0:
+                shifted[:, :shift] = augmented[:, -shift:]
+            else:
+                shifted = augmented
+            augmented = shifted
 
         # 2. Amplitude scaling (50% probability)
         if np.random.rand() < 0.5:
-            scale = np.random.uniform(0.9, 1.1)  # ±10% scaling
+            scale = np.random.uniform(0.9, 1.1)
             augmented = augmented * scale
 
         # 3. Additive noise (30% probability)
         if np.random.rand() < 0.3:
-            noise_level = 0.01 * np.std(augmented)  # 1% of signal std
+            noise_level = 0.01 * np.std(augmented)
             noise = np.random.normal(0, noise_level, augmented.shape)
             augmented = augmented + noise
+
+        # 4. Channel dropout (20% probability, zero out 1-2 random channels)
+        if np.random.rand() < 0.2:
+            n_drop = np.random.randint(1, 3)
+            drop_channels = np.random.choice(
+                augmented.shape[0], size=n_drop, replace=False
+            )
+            augmented[drop_channels, :] = 0.0
 
         return augmented
 
@@ -200,36 +215,31 @@ def create_data_loaders(
     batch_size: int = 64,
     num_workers: int = 0,
     augment_train: bool = True,
+    include_val: bool = False,
     verbose: bool = False
-) -> Tuple[DataLoader, DataLoader]:
+) -> Tuple[DataLoader, ...]:
     """
-    Create train and test DataLoaders.
+    Create train, test, and optionally validation DataLoaders.
 
     Args:
         data_path: Path to processed data directory
         batch_size: Batch size for training
         num_workers: Number of workers for data loading (0 = main thread)
         augment_train: Apply augmentation to training data
+        include_val: If True, also return a validation DataLoader
         verbose: Print information
 
     Returns:
-        train_loader: DataLoader for training data
-        test_loader: DataLoader for test data
-
-    DataLoader Benefits:
-        - Automatic batching
-        - Shuffling (for training)
-        - Parallel loading (if num_workers > 0)
-        - Memory efficient (loads data on demand)
+        Tuple of (train_loader, test_loader) or
+        (train_loader, val_loader, test_loader) when include_val=True
 
     Usage:
         >>> train_loader, test_loader = create_data_loaders('data/processed/')
-        >>> for signals, labels in train_loader:
-        ...     # signals: [batch_size, 1, n_channels, n_samples]
-        ...     # labels: [batch_size]
-        ...     predictions = model(signals)
+        >>> train_loader, val_loader, test_loader = create_data_loaders(
+        ...     'data/processed/', include_val=True)
     """
-    # Create datasets
+    pin = torch.cuda.is_available()
+
     train_dataset = EEGDataset(
         data_path=data_path,
         split='train',
@@ -240,32 +250,51 @@ def create_data_loaders(
     test_dataset = EEGDataset(
         data_path=data_path,
         split='test',
-        augment=False,  # Never augment test data!
+        augment=False,
         verbose=verbose
     )
 
-    # Create data loaders
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
-        shuffle=True,  # Shuffle training data each epoch
+        shuffle=True,
         num_workers=num_workers,
-        pin_memory=True if torch.cuda.is_available() else False  # Faster GPU transfer
+        pin_memory=pin
     )
 
     test_loader = DataLoader(
         test_dataset,
         batch_size=batch_size,
-        shuffle=False,  # Don't shuffle test data
+        shuffle=False,
         num_workers=num_workers,
-        pin_memory=True if torch.cuda.is_available() else False
+        pin_memory=pin
     )
 
+    if include_val:
+        val_dataset = EEGDataset(
+            data_path=data_path,
+            split='val',
+            augment=False,
+            verbose=verbose
+        )
+        val_loader = DataLoader(
+            val_dataset,
+            batch_size=batch_size,
+            shuffle=False,
+            num_workers=num_workers,
+            pin_memory=pin
+        )
+
     if verbose:
-        print(f"\n📦 DataLoaders created:")
+        print(f"\nDataLoaders created:")
         print(f"   Train batches: {len(train_loader)}")
+        if include_val:
+            print(f"   Val batches: {len(val_loader)}")
         print(f"   Test batches: {len(test_loader)}")
         print(f"   Batch size: {batch_size}")
+
+    if include_val:
+        return train_loader, val_loader, test_loader
 
     return train_loader, test_loader
 
@@ -329,7 +358,7 @@ def main():
     print("\n⚖️  Class weights:")
     class_weights = train_dataset.get_class_weights()
     for i, weight in enumerate(class_weights):
-        class_name = ['Left Hand', 'Right Hand', 'Feet', 'Tongue'][i]
+        class_name = CLASS_NAMES[i]
         print(f"   {class_name}: {weight:.4f}")
 
     print("\n✅ Dataset test passed!")

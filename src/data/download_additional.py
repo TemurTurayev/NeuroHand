@@ -11,10 +11,10 @@ Author: Temur Turayev
 TashPMI, 2024
 """
 
-import sys
 from pathlib import Path
+
+# Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 import numpy as np
 from moabb.datasets import BNCI2014_004, Cho2017, PhysionetMI

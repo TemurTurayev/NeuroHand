@@ -8,7 +8,6 @@ Training Script for EEGNet
 TashPMI, 2024
 """
 
-import sys
 import time
 from pathlib import Path
 from typing import Dict, Tuple
@@ -20,12 +19,11 @@ from torch.utils.data import DataLoader
 import numpy as np
 from tqdm import tqdm
 
-# Add project root to path
+# Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 from src.models.eegnet import EEGNet
-from src.models.utils import save_checkpoint, count_parameters
+from src.models.utils import get_device, save_checkpoint, count_parameters
 from src.data.dataset import create_data_loaders
 from src.training.config import TrainingConfig
 
@@ -64,16 +62,7 @@ class Trainer:
         self.config = config
 
         # Set device
-        if config.device == "auto":
-            if torch.cuda.is_available():
-                self.device = torch.device("cuda")
-            elif torch.backends.mps.is_available():
-                self.device = torch.device("mps")
-            else:
-                self.device = torch.device("cpu")
-        else:
-            self.device = torch.device(config.device)
-
+        self.device = get_device(config.device)
         self.model = self.model.to(self.device)
 
         # Loss function (CrossEntropy for classification)
@@ -86,13 +75,23 @@ class Trainer:
             weight_decay=config.weight_decay
         )
 
-        # Learning rate scheduler (reduce LR when loss plateaus)
-        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-            self.optimizer,
-            mode='min',
-            factor=0.5,
-            patience=20
-        )
+        # Learning rate scheduler
+        if config.scheduler_type == "cosine":
+            self.scheduler = optim.lr_scheduler.CosineAnnealingWarmRestarts(
+                self.optimizer,
+                T_0=50,
+                T_mult=2,
+                eta_min=1e-6,
+            )
+            self._cosine_scheduler = True
+        else:
+            self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+                self.optimizer,
+                mode='min',
+                factor=0.5,
+                patience=20,
+            )
+            self._cosine_scheduler = False
 
         # Training history
         self.history = {
@@ -163,11 +162,28 @@ class Trainer:
             # Backward pass
             loss.backward()
 
+            # Gradient clipping (prevent exploding gradients)
+            if self.config.gradient_clip_norm > 0:
+                torch.nn.utils.clip_grad_norm_(
+                    self.model.parameters(),
+                    max_norm=self.config.gradient_clip_norm,
+                )
+
             # Update weights
             self.optimizer.step()
 
             # Apply max norm constraint (EEGNet specific)
             self.model.apply_max_norm_constraint()
+
+            # Optional whole-network max-norm constraint via renorm
+            if self.config.max_norm_constraint > 0:
+                with torch.no_grad():
+                    for name, param in self.model.named_parameters():
+                        if 'weight' in name and param.dim() >= 2:
+                            param.data = torch.renorm(
+                                param.data, p=2, dim=0,
+                                maxnorm=self.config.max_norm_constraint,
+                            )
 
             # Calculate accuracy
             _, predicted = torch.max(outputs, 1)
@@ -283,7 +299,10 @@ class Trainer:
             test_loss, test_acc = self.evaluate(epoch)
 
             # Update learning rate scheduler
-            self.scheduler.step(test_loss)
+            if self._cosine_scheduler:
+                self.scheduler.step()
+            else:
+                self.scheduler.step(test_loss)
 
             # Record history
             current_lr = self.optimizer.param_groups[0]['lr']
@@ -343,7 +362,7 @@ class Trainer:
         return self.history
 
 
-def set_seed(seed: int):
+def set_seed(seed: int) -> None:
     """
     Set random seed for reproducibility.
 
@@ -352,9 +371,13 @@ def set_seed(seed: int):
         - Debugging
         - Comparing different configurations
     """
+    import random
+    random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 
 def main():

@@ -14,22 +14,17 @@ TashPMI, 2024
 """
 
 import os
-import sys
 from pathlib import Path
 from typing import Optional, Tuple, List
 
-import mne
-from moabb.datasets import BNCI2014_001
-from moabb.paradigms import MotorImagery
 import numpy as np
 from scipy import signal as scipy_signal
 from sklearn.model_selection import train_test_split
-from tqdm import tqdm
 import pickle
 
-# Add project root to path
+from src.constants import CLASS_MAPPING, CLASS_NAMES, N_CLASSES
+
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 
 class EEGPreprocessor:
@@ -74,13 +69,7 @@ class EEGPreprocessor:
         self.n_samples = int(sampling_rate * epoch_duration)  # 1000 samples at 250 Hz
         self.verbose = verbose
 
-        # Class mapping (consistent with BCI Competition IV-2a)
-        self.class_mapping = {
-            'left_hand': 0,
-            'right_hand': 1,
-            'feet': 2,
-            'tongue': 3
-        }
+        self.class_mapping = CLASS_MAPPING
 
         if self.verbose:
             print(f"🔧 EEG Preprocessor initialized:")
@@ -194,6 +183,11 @@ class EEGPreprocessor:
         if self.verbose:
             print(f"\n📊 Processing Subject {subject_id:02d}...")
 
+        # Lazy import: mne/moabb are heavy and only needed for data loading
+        import mne  # noqa: E402
+        from moabb.datasets import BNCI2014_001  # noqa: E402
+        from moabb.paradigms import MotorImagery  # noqa: E402
+
         # Load data using MOABB
         dataset = BNCI2014_001()
         paradigm = MotorImagery(
@@ -287,6 +281,7 @@ class EEGPreprocessor:
         total_trials = 0
 
         # Process each subject
+        from tqdm import tqdm  # noqa: E402
         for subject_id in tqdm(subjects, desc="Processing subjects"):
             try:
                 X, y = self.process_subject(subject_id)
@@ -313,7 +308,7 @@ class EEGPreprocessor:
             'subjects': list(all_data.keys()),
             'total_trials': total_trials,
             'n_classes': 4,
-            'class_names': ['Left Hand', 'Right Hand', 'Feet', 'Tongue'],
+            'class_names': list(CLASS_NAMES),
             'sampling_rate': self.sampling_rate,
             'n_channels': self.n_channels,
             'n_samples': self.n_samples,
@@ -340,28 +335,25 @@ class EEGPreprocessor:
 
 def create_train_test_split(
     data_dir: Optional[str] = None,
-    test_size: float = 0.2,
+    test_size: float = 0.15,
+    val_size: float = 0.15,
     random_state: int = 42,
     verbose: bool = True
 ) -> None:
     """
-    Create train/test split from processed data.
+    Create train/val/test split from processed data.
 
     Args:
         data_dir: Directory with processed data
-        test_size: Fraction for test set (default: 0.2 = 20%)
+        test_size: Fraction for test set (default: 0.15 = 15%)
+        val_size: Fraction for validation set (default: 0.15 = 15%)
         random_state: Random seed for reproducibility
         verbose: Print information
 
     Creates:
-        - train_data.npy: Training epochs
-        - train_labels.npy: Training labels
-        - test_data.npy: Test epochs
-        - test_labels.npy: Test labels
-
-    Split Strategy:
-        - Subject-independent: Use subjects 1-7 for train, 8-9 for test
-        - OR trial-based: Split trials 80/20 within each subject
+        - train_data.npy, train_labels.npy (70%)
+        - val_data.npy, val_labels.npy (15%)
+        - test_data.npy, test_labels.npy (15%)
     """
     if data_dir is None:
         data_dir = PROJECT_ROOT / "data" / "processed"
@@ -369,9 +361,8 @@ def create_train_test_split(
         data_dir = Path(data_dir)
 
     if verbose:
-        print("\n🔀 Creating train/test split...")
+        print("\nCreating train/val/test split...")
 
-    # Load all subject data
     all_X = []
     all_y = []
 
@@ -386,7 +377,6 @@ def create_train_test_split(
         if verbose:
             print(f"   Loaded subject {subject_id:02d}: {X.shape}")
 
-    # Concatenate all data
     X_all = np.concatenate(all_X, axis=0)
     y_all = np.concatenate(all_y, axis=0)
 
@@ -394,26 +384,38 @@ def create_train_test_split(
         print(f"\n   Total data shape: {X_all.shape}")
         print(f"   Total labels: {len(y_all)}")
 
-    # Split into train/test
-    X_train, X_test, y_train, y_test = train_test_split(
+    # First split: separate test set
+    X_temp, X_test, y_temp, y_test = train_test_split(
         X_all, y_all,
         test_size=test_size,
         random_state=random_state,
-        stratify=y_all  # Maintain class distribution
+        stratify=y_all
     )
 
-    # Save splits
+    # Second split: separate val from remaining train data
+    relative_val_size = val_size / (1.0 - test_size)
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_temp, y_temp,
+        test_size=relative_val_size,
+        random_state=random_state,
+        stratify=y_temp
+    )
+
     np.save(data_dir / "train_data.npy", X_train)
     np.save(data_dir / "train_labels.npy", y_train)
+    np.save(data_dir / "val_data.npy", X_val)
+    np.save(data_dir / "val_labels.npy", y_val)
     np.save(data_dir / "test_data.npy", X_test)
     np.save(data_dir / "test_labels.npy", y_test)
 
     if verbose:
-        print(f"\n✅ Split created:")
+        print(f"\nSplit created:")
         print(f"   Train: {X_train.shape} - {len(y_train)} trials")
+        print(f"   Val:   {X_val.shape} - {len(y_val)} trials")
         print(f"   Test:  {X_test.shape} - {len(y_test)} trials")
         print(f"   Train class distribution: {np.bincount(y_train)}")
-        print(f"   Test class distribution: {np.bincount(y_test)}")
+        print(f"   Val class distribution:   {np.bincount(y_val)}")
+        print(f"   Test class distribution:  {np.bincount(y_test)}")
         print(f"   Saved to: {data_dir}")
 
 

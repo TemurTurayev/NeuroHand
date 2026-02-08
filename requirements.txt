@@ -1,11 +1,10 @@
 # Deep Learning Framework
-torch>=2.0.0
-torchvision>=0.15.0
+torch>=2.0.0,<3.0.0
 
 # EEG Signal Processing
 mne>=1.5.0
 scipy>=1.10.0
-numpy>=1.24.0
+numpy>=1.24.0,<2.0.0
 
 # Data Manipulation & Analysis
 pandas>=2.0.0
@@ -15,28 +14,22 @@ scikit-learn>=1.3.0
 matplotlib>=3.7.0
 seaborn>=0.12.0
 
+# Web Interface (required by src/interface/)
+gradio>=4.0.0
+plotly>=5.15.0
+psutil>=5.9.0
+
 # Dataset Download & Management
 requests>=2.31.0
 tqdm>=4.65.0
 pooch>=1.7.0
 
-# Jupyter & Interactive Development
-jupyter>=1.0.0
-jupyterlab>=4.0.0
-ipywidgets>=8.0.0
+# Configuration
+pyyaml>=6.0
 
-# Optional: Experiment Tracking
-# wandb>=0.15.0
-# tensorboard>=2.13.0
-
-# Optional: Advanced EEG Processing
-# pyedflib>=0.1.30  # For EDF file reading
-# pywavelets>=1.4.0  # For wavelet transforms
-
-# Development Tools
-pytest>=7.4.0
-black>=23.0.0
-flake8>=6.0.0
-
-# MOABB for BCI Competition datasets (alternative)
+# MOABB for BCI Competition datasets
 moabb>=0.4.6
+
+# --- Development Dependencies ---
+# Install with: pip install -r requirements-dev.txt
+# Or: pip install ".[dev]" (via pyproject.toml)

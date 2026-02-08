@@ -19,13 +19,12 @@ Features:
     - 💼 Startup-ready presentation
 """
 
-import sys
 from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
 
+# Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 import numpy as np
 import torch
@@ -38,6 +37,7 @@ from datetime import datetime
 import json
 from typing import List, Tuple, Dict
 
+from src.constants import CLASS_NAMES, N_CLASSES, N_CHANNELS, N_SAMPLES, SAMPLING_RATE
 from src.models.eegnet import EEGNet
 
 
@@ -49,14 +49,8 @@ MODEL_PATH = PROJECT_ROOT / "models" / "checkpoints" / "best_model.pth"
 HISTORY_PATH = PROJECT_ROOT / "models" / "checkpoints" / "training_history.npy"
 EVAL_RESULTS_PATH = PROJECT_ROOT / "models" / "checkpoints" / "evaluation_results.npy"
 
-CLASS_NAMES = ['Left Hand', 'Right Hand', 'Feet', 'Tongue']
 CLASS_ICONS = ['🤚', '🫱', '🦶', '👅']
 CLASS_COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A']
-
-N_CLASSES = 4
-N_CHANNELS = 22
-N_SAMPLES = 1000
-SAMPLING_RATE = 250
 
 # EEG Channel Positions (10-20 system approximation)
 CHANNEL_POSITIONS = {

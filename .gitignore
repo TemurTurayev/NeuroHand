@@ -22,6 +22,7 @@ wheels/
 
 # Virtual Environment
 venv/
+.venv/
 env/
 ENV/
 
@@ -64,6 +65,7 @@ Thumbs.db
 
 # Secrets (IMPORTANT!)
 .env
+.env.local
 secrets.txt
 *_token.txt
 credentials/
@@ -81,3 +83,10 @@ figures/
 *.jpg
 !docs/images/*.png
 !docs/images/*.jpg
+
+# Testing
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.mypy_cache/

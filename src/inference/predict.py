@@ -12,18 +12,19 @@ Usage:
 TashPMI, 2024
 """
 
-import sys
 from pathlib import Path
 
+# Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 import argparse
 import numpy as np
 import torch
 import time
 
+from src.constants import CLASS_NAMES, N_CLASSES, N_CHANNELS, N_SAMPLES
 from src.models.eegnet import EEGNet
+from src.models.utils import get_device
 from src.data.dataset import EEGDataset
 
 
@@ -51,26 +52,24 @@ class EEGPredictor:
             device: 'auto', 'mps', 'cuda', or 'cpu'
         """
         # Set device
-        if device == 'auto':
-            if torch.backends.mps.is_available():
-                self.device = torch.device('mps')
-            elif torch.cuda.is_available():
-                self.device = torch.device('cuda')
-            else:
-                self.device = torch.device('cpu')
-        else:
-            self.device = torch.device(device)
+        self.device = get_device(device)
 
-        print(f"📱 Using device: {self.device}")
+        print(f"Using device: {self.device}")
 
         # Load model
-        self.model = EEGNet(n_classes=4, n_channels=22, n_samples=1000).to(self.device)
-        checkpoint = torch.load(model_path, map_location=self.device)
+        self.model = EEGNet(
+            n_classes=N_CLASSES,
+            n_channels=N_CHANNELS,
+            n_samples=N_SAMPLES,
+        ).to(self.device)
+        checkpoint = torch.load(
+            model_path, map_location=self.device, weights_only=False
+        )
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.model.eval()
 
         # Class names
-        self.class_names = ['Left Hand', 'Right Hand', 'Feet', 'Tongue']
+        self.class_names = list(CLASS_NAMES)
 
         print(f"✅ Model loaded from: {model_path}")
         print(f"   Trained for {checkpoint['epoch']} epochs")

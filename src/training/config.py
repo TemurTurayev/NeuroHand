@@ -8,8 +8,13 @@ Hyperparameters и настройки для обучения EEGNet.
 TashPMI, 2024
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from pathlib import Path
+
+from src.constants import (
+    N_CLASSES, N_CHANNELS, N_SAMPLES,
+    LOWCUT, HIGHCUT, SAMPLING_RATE,
+)
 
 
 @dataclass
@@ -27,9 +32,9 @@ class TrainingConfig:
 
     # Data
     data_dir: str = "data/processed"
-    n_classes: int = 4
-    n_channels: int = 22
-    n_samples: int = 1000
+    n_classes: int = N_CLASSES
+    n_channels: int = N_CHANNELS
+    n_samples: int = N_SAMPLES
 
     # Model
     F1: int = 8
@@ -46,8 +51,22 @@ class TrainingConfig:
     weight_decay: float = 0.0001
     early_stopping_patience: int = 50
 
+    gradient_clip_norm: float = 1.0
+
+    # Scheduler
+    scheduler_type: str = "plateau"  # "plateau" or "cosine"
+    cosine_T_0: int = 50
+
+    max_norm_constraint: float = 0.25
+
     # Data augmentation
     augment_train: bool = True
+
+    # Validation split
+    val_size: float = 0.15
+
+    # Experiment
+    experiment_name: str = "default"
 
     # Device
     device: str = "auto"  # 'auto', 'cuda', 'mps', or 'cpu'
@@ -68,6 +87,25 @@ class TrainingConfig:
         self.data_dir = Path(self.data_dir)
         self.save_dir = Path(self.save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)
+
+    @classmethod
+    def from_yaml(cls, yaml_path: str) -> "TrainingConfig":
+        """Load configuration from a YAML file.
+
+        Args:
+            yaml_path: Path to the YAML config file.
+
+        Returns:
+            TrainingConfig populated from the YAML values.
+        """
+        import yaml
+
+        with open(yaml_path, 'r') as f:
+            raw = yaml.safe_load(f) or {}
+
+        valid_fields = {field.name for field in fields(cls)}
+        filtered = {k: v for k, v in raw.items() if k in valid_fields}
+        return cls(**filtered)
 
 
 # Default configuration

@@ -21,7 +21,6 @@ Reference Paper:
 TashPMI, 2024
 """
 
-import sys
 from pathlib import Path
 from typing import Optional, Tuple
 
@@ -29,9 +28,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# Add project root to path
+from src.constants import N_CLASSES, N_CHANNELS, N_SAMPLES, CLASS_NAMES
+
+# Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.append(str(PROJECT_ROOT))
 
 
 class EEGNet(nn.Module):
@@ -57,9 +57,9 @@ class EEGNet(nn.Module):
 
     def __init__(
         self,
-        n_classes: int = 4,
-        n_channels: int = 22,
-        n_samples: int = 1000,
+        n_classes: int = N_CLASSES,
+        n_channels: int = N_CHANNELS,
+        n_samples: int = N_SAMPLES,
         dropout_rate: float = 0.5,
         kernel_length: int = 64,
         F1: int = 8,
@@ -386,9 +386,8 @@ def main():
     # Test softmax (convert to probabilities)
     probs = F.softmax(output, dim=1)
     print(f"\n📊 Class probabilities (first sample):")
-    class_names = ['Left Hand', 'Right Hand', 'Feet', 'Tongue']
     for i, prob in enumerate(probs[0]):
-        print(f"   {class_names[i]}: {prob:.4f}")
+        print(f"   {CLASS_NAMES[i]}: {prob:.4f}")
 
     # Test max norm constraint
     print(f"\n🔧 Testing max norm constraint...")

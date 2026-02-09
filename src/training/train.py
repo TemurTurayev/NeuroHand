@@ -26,6 +26,9 @@ from src.models.eegnet import EEGNet
 from src.models.utils import get_device, save_checkpoint, count_parameters
 from src.data.dataset import create_data_loaders
 from src.training.config import TrainingConfig
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class Trainer:
@@ -107,11 +110,11 @@ class Trainer:
         self.epochs_no_improve = 0
 
         if config.verbose:
-            print(f"\n🚀 Trainer initialized")
-            print(f"   Device: {self.device}")
-            print(f"   Model parameters: {count_parameters(model):,}")
-            print(f"   Train batches: {len(train_loader)}")
-            print(f"   Test batches: {len(test_loader)}")
+            logger.info("Trainer initialized")
+            logger.info("Device: %s", self.device)
+            logger.info("Model parameters: %s", f"{count_parameters(model):,}")
+            logger.info("Train batches: %d", len(train_loader))
+            logger.info("Test batches: %d", len(test_loader))
 
     def train_epoch(self, epoch: int) -> Tuple[float, float]:
         """
@@ -279,15 +282,10 @@ class Trainer:
                 4. Save checkpoint if best model
                 5. Check early stopping
         """
-        print("\n" + "="*70)
-        print("🎯 TRAINING STARTED")
-        print("="*70)
-        print(f"Configuration:")
-        print(f"  Epochs: {self.config.epochs}")
-        print(f"  Batch size: {self.config.batch_size}")
-        print(f"  Learning rate: {self.config.learning_rate}")
-        print(f"  Device: {self.device}")
-        print("="*70 + "\n")
+        logger.info("TRAINING STARTED")
+        logger.info("Configuration: epochs=%d, batch_size=%d, lr=%s, device=%s",
+                     self.config.epochs, self.config.batch_size,
+                     self.config.learning_rate, self.device)
 
         start_time = time.time()
 
@@ -312,12 +310,12 @@ class Trainer:
             self.history['test_acc'].append(test_acc)
             self.history['learning_rates'].append(current_lr)
 
-            # Print epoch summary
+            # Log epoch summary
             if self.config.verbose:
-                print(f"\nEpoch {epoch+1}/{self.config.epochs}")
-                print(f"  Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.2f}%")
-                print(f"  Test Loss:  {test_loss:.4f} | Test Acc:  {test_acc:.2f}%")
-                print(f"  LR: {current_lr:.6f}")
+                logger.info("Epoch %d/%d - Train Loss: %.4f | Train Acc: %.2f%% | "
+                            "Test Loss: %.4f | Test Acc: %.2f%% | LR: %.6f",
+                            epoch + 1, self.config.epochs,
+                            train_loss, train_acc, test_loss, test_acc, current_lr)
 
             # Save best model
             if test_acc > self.best_test_acc:
@@ -335,14 +333,14 @@ class Trainer:
                         filepath=str(checkpoint_path)
                     )
                     if self.config.verbose:
-                        print(f"  ✅ Best model saved! (Test Acc: {test_acc:.2f}%)")
+                        logger.info("Best model saved (Test Acc: %.2f%%)", test_acc)
             else:
                 self.epochs_no_improve += 1
 
             # Early stopping check
             if self.epochs_no_improve >= self.config.early_stopping_patience:
-                print(f"\n⚠️  Early stopping triggered!")
-                print(f"   No improvement for {self.config.early_stopping_patience} epochs")
+                logger.warning("Early stopping triggered - no improvement for %d epochs",
+                               self.config.early_stopping_patience)
                 break
 
         # Training complete
@@ -351,13 +349,9 @@ class Trainer:
         minutes = int((elapsed_time % 3600) // 60)
         seconds = int(elapsed_time % 60)
 
-        print("\n" + "="*70)
-        print("✅ TRAINING COMPLETE!")
-        print("="*70)
-        print(f"  Total time: {hours}h {minutes}m {seconds}s")
-        print(f"  Best test accuracy: {self.best_test_acc:.2f}%")
-        print(f"  Final learning rate: {current_lr:.6f}")
-        print("="*70 + "\n")
+        logger.info("TRAINING COMPLETE - Total time: %dh %dm %ds | "
+                    "Best test accuracy: %.2f%% | Final LR: %.6f",
+                    hours, minutes, seconds, self.best_test_acc, current_lr)
 
         return self.history
 

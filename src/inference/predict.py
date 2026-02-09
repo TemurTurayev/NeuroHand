@@ -26,6 +26,9 @@ from src.constants import CLASS_NAMES, N_CLASSES, N_CHANNELS, N_SAMPLES
 from src.models.eegnet import EEGNet
 from src.models.utils import get_device
 from src.data.dataset import EEGDataset
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 
 class EEGPredictor:
@@ -54,7 +57,7 @@ class EEGPredictor:
         # Set device
         self.device = get_device(device)
 
-        print(f"Using device: {self.device}")
+        logger.info("Using device: %s", self.device)
 
         # Load model
         self.model = EEGNet(
@@ -71,10 +74,9 @@ class EEGPredictor:
         # Class names
         self.class_names = list(CLASS_NAMES)
 
-        print(f"✅ Model loaded from: {model_path}")
-        print(f"   Trained for {checkpoint['epoch']} epochs")
+        logger.info("Model loaded from: %s (trained for %d epochs)", model_path, checkpoint['epoch'])
         if 'train_acc' in checkpoint:
-            print(f"   Training accuracy: {checkpoint['train_acc']:.2f}%")
+            logger.info("Training accuracy: %.2f%%", checkpoint['train_acc'])
 
     def preprocess(self, signal: np.ndarray) -> torch.Tensor:
         """
@@ -187,9 +189,7 @@ def demo_prediction(predictor: EEGPredictor, data_dir: str = 'data/processed'):
         predictor: Initialized EEGPredictor
         data_dir: Directory with processed data
     """
-    print("\n" + "="*70)
-    print("🎯 DEMO PREDICTION")
-    print("="*70)
+    logger.info("DEMO PREDICTION")
 
     # Load test data
     data_dir = Path(data_dir)
@@ -202,29 +202,27 @@ def demo_prediction(predictor: EEGPredictor, data_dir: str = 'data/processed'):
     true_label = y_test[idx]
     true_class = predictor.class_names[true_label]
 
-    print(f"\n📊 Sample {idx}:")
-    print(f"   True class: {true_class} (ID: {true_label})")
-    print(f"   Signal shape: {signal.shape}")
+    logger.info("Sample %d: true_class=%s (ID=%d), shape=%s",
+                idx, true_class, true_label, signal.shape)
 
     # Make prediction
     result = predictor.predict(signal)
 
     # Display results
-    print(f"\n🔮 Prediction:")
-    print(f"   Predicted: {result['class_name']} (ID: {result['class_id']})")
-    print(f"   Confidence: {result['confidence']*100:.2f}%")
-    print(f"   Inference time: {result['inference_time_ms']:.2f} ms")
+    logger.info("Prediction: %s (ID=%d), confidence=%.2f%%, inference_time=%.2f ms",
+                result['class_name'], result['class_id'],
+                result['confidence'] * 100, result['inference_time_ms'])
 
-    print(f"\n📊 Class Probabilities:")
     for name, prob in result['probabilities'].items():
-        bar = "█" * int(prob * 40)
-        print(f"   {name:<12} {bar:<40} {prob*100:5.2f}%")
+        logger.info("  %s: %.2f%%", name, prob * 100)
 
     # Correctness
     is_correct = result['class_id'] == true_label
-    emoji = "✅" if is_correct else "❌"
-    print(f"\n{emoji} Prediction: {'CORRECT' if is_correct else 'INCORRECT'}")
-    print("="*70)
+    if is_correct:
+        logger.info("Prediction: CORRECT")
+    else:
+        logger.warning("Prediction: INCORRECT (predicted=%s, true=%s)",
+                       result['class_name'], true_class)
 
 
 def main():

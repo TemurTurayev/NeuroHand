@@ -74,7 +74,8 @@ NeuroHand aims to create an **affordable EEG-controlled prosthetic hand** (targe
 |-----------|--------|----------|
 | Data Pipeline | ✅ Complete | 100% |
 | EEGNet Model | ✅ Complete | 100% |
-| Baseline Training | 🔄 In Progress | 90% |
+| Baseline Training | ✅ Complete | 100% |
+| Test Suite | ✅ Complete (46 tests) | 100% |
 | OpenBCI Integration | ⏳ Waiting | 0% |
 | Prosthetic Hardware | ⏳ Planned | 0% |
 | Real-time System | ⏳ Planned | 0% |
@@ -137,8 +138,7 @@ jupyter lab
 
 Then open:
 1. `notebooks/01_explore_data.ipynb` - Understand EEG data
-2. `notebooks/02_preprocessing.ipynb` - Learn signal processing
-3. `notebooks/03_model_training.ipynb` - Train and evaluate model
+2. `notebooks/02_training_results.ipynb` - View training results and evaluation
 
 ### Option B: Command Line Training
 
@@ -192,27 +192,48 @@ NeuroHand/
 │   ├── data/
 │   │   ├── download.py         # Dataset download script
 │   │   ├── preprocessing.py    # Signal filtering & epoching
-│   │   └── dataset.py          # PyTorch Dataset class
+│   │   ├── dataset.py          # PyTorch Dataset class
+│   │   ├── combine_datasets.py # Multi-dataset combination
+│   │   └── explore_datasets.py # Dataset exploration utilities
 │   ├── models/
 │   │   ├── eegnet.py           # EEGNet architecture
 │   │   └── utils.py            # Model utilities
 │   ├── training/
 │   │   ├── train.py            # Training loop
-│   │   ├── evaluate.py         # Evaluation & metrics
-│   │   └── config.py           # Hyperparameters
+│   │   ├── evaluate.py         # Evaluation & metrics (Cohen's Kappa, ITR)
+│   │   ├── config.py           # Hyperparameters
+│   │   └── hyperparameter_tuning.py  # Hyperparameter search
+│   ├── inference/
+│   │   └── predict.py          # Prediction pipeline
+│   ├── interface/
+│   │   ├── gradio_app.py       # Gradio web interface
+│   │   └── professional_app.py # Professional demo interface
 │   └── visualization/
 │       ├── plot_signals.py     # EEG visualization
 │       └── plot_results.py     # Training curves, confusion matrix
+├── tests/                      # Test suite (46 tests)
+│   ├── conftest.py             # Test fixtures
+│   ├── test_models.py          # Model architecture tests
+│   ├── test_preprocessing.py   # Preprocessing pipeline tests
+│   ├── test_dataset.py         # Dataset loading tests
+│   ├── test_training.py        # Training loop tests
+│   ├── test_evaluate.py        # Evaluation tests
+│   ├── test_predict.py         # Prediction tests
+│   └── test_integration.py     # Integration tests
 ├── notebooks/
 │   ├── 01_explore_data.ipynb   # Dataset exploration
-│   ├── 02_preprocessing.ipynb  # Signal processing tutorial
-│   └── 03_model_training.ipynb # Interactive training
+│   └── 02_training_results.ipynb # Training results & evaluation
 ├── models/
 │   └── checkpoints/            # Saved model weights
 ├── docs/
-│   ├── Claude.pdf              # Technical specifications (RU)
-│   └── Claude1.pdf             # 12-week implementation plan (RU)
+│   └── images/                 # Documentation images
+├── Claude.pdf                  # Technical specifications (RU)
+├── Claude1.pdf                 # 12-week implementation plan (RU)
+├── launch_interface.py         # Launch Gradio interface
+├── launch_professional.py      # Launch professional demo
+├── pyproject.toml              # Project configuration
 ├── requirements.txt
+├── QUICKSTART.md               # Quick start guide
 ├── README.md
 ├── CLAUDE.md                   # Developer configuration
 └── .gitignore
@@ -266,7 +287,7 @@ Output: [Batch, n_classes]
 
 | Metric | BCI IV-2a | Your OpenBCI (expected) |
 |--------|-----------|-------------------------|
-| **Accuracy** | 70-75% | 65-80% (after fine-tuning) |
+| **Accuracy** | ~63% (baseline) | 65-80% (after fine-tuning) |
 | **Training Time** | ~30-60 min | ~5-10 min (transfer learning) |
 | **Inference Time** | ~10ms | ~10-20ms (on RPi 5) |
 | **Model Size** | ~50KB | Same |
@@ -281,7 +302,9 @@ Output: [Batch, n_classes]
 - [x] BCI Competition IV-2a dataset integration
 - [x] Preprocessing pipeline
 - [x] EEGNet implementation
-- [ ] Baseline model training (90% complete)
+- [x] Baseline model training (~63% accuracy)
+- [x] Comprehensive test suite (46 tests)
+- [x] Gradio web interface
 - [x] Jupyter notebooks for learning
 
 ### 🔄 Phase 2: OpenBCI Integration (Next)
@@ -376,14 +399,15 @@ MIT License - See [LICENSE](LICENSE) file for details.
 ![GitHub Forks](https://img.shields.io/github/forks/TemurTurayev/NeuroHand?style=social)
 
 **Current Stats**:
-- 🧠 Model Accuracy: Training in progress
-- 📦 Dataset: BCI Competition IV-2a (9 subjects, 288 trials each)
-- 🔬 Code Status: 60% complete
-- 📚 Documentation: 80% complete
+- Model Accuracy: ~63% (BCI Competition IV-2a baseline)
+- Evaluation Metrics: Cohen's Kappa, ITR (Information Transfer Rate)
+- Dataset: BCI Competition IV-2a (9 subjects, 288 trials each)
+- Test Suite: 46 tests passing
+- Code Status: Pre-hardware phase complete
 
 ---
 
-*Last updated: 2025-11-12*
+*Last updated: 2026-02-09*
 *Developed with ❤️ for accessible healthcare technology*
 
 **НИКОГДА НЕ СДАВАЙСЯ!** 💪

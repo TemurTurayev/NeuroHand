@@ -28,6 +28,9 @@ from src.constants import CLASS_NAMES, N_CLASSES, N_CHANNELS, N_SAMPLES
 from src.models.eegnet import EEGNet
 from src.models.utils import load_checkpoint
 from src.data.dataset import create_data_loaders
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
@@ -93,7 +96,7 @@ class ModelEvaluator:
         all_labels = []
         all_predictions = []
 
-        print("🔮 Generating predictions...")
+        logger.info("Generating predictions...")
         for signals, labels in tqdm(self.test_loader):
             signals = signals.to(self.device)
             labels = labels.to(self.device)
@@ -122,7 +125,7 @@ class ModelEvaluator:
         # Calculate metrics
         accuracy = accuracy_score(y_true, y_pred)
         precision, recall, f1, support = precision_recall_fscore_support(
-            y_true, y_pred, average=None
+            y_true, y_pred, average=None, zero_division=0
         )
 
         cm = confusion_matrix(y_true, y_pred)
@@ -146,83 +149,50 @@ class ModelEvaluator:
 
     def print_results(self, results: Dict):
         """
-        Print evaluation results.
+        Log evaluation results.
 
         Args:
             results: Results dictionary from evaluate()
         """
-        print("\n" + "="*70)
-        print("📊 EVALUATION RESULTS")
-        print("="*70)
+        logger.info("EVALUATION RESULTS")
+        logger.info("Overall Accuracy: %.2f%% | Cohen's Kappa: %.4f | ITR: %.2f bits/min",
+                     results['accuracy'] * 100, results['kappa'], results['itr'])
 
-        print(f"\n🎯 Overall Accuracy: {results['accuracy']*100:.2f}%")
-        print(f"   Cohen's Kappa:   {results['kappa']:.4f}")
-        print(f"   ITR:             {results['itr']:.2f} bits/min\n")
-
-        print("Per-Class Metrics:")
-        print("-" * 70)
-        print(f"{'Class':<15} {'Precision':<12} {'Recall':<12} {'F1-Score':<12} {'Support':<10}")
-        print("-" * 70)
-
+        # Per-class metrics
         for i, class_name in enumerate(self.class_names):
-            print(f"{class_name:<15} "
-                  f"{results['precision'][i]:<12.4f} "
-                  f"{results['recall'][i]:<12.4f} "
-                  f"{results['f1'][i]:<12.4f} "
-                  f"{results['support'][i]:<10}")
+            logger.info("Class %-15s Precision: %.4f  Recall: %.4f  F1: %.4f  Support: %d",
+                         class_name, results['precision'][i], results['recall'][i],
+                         results['f1'][i], results['support'][i])
 
         # Average metrics
         avg_precision = results['precision'].mean()
         avg_recall = results['recall'].mean()
         avg_f1 = results['f1'].mean()
-
-        print("-" * 70)
-        print(f"{'Average':<15} "
-              f"{avg_precision:<12.4f} "
-              f"{avg_recall:<12.4f} "
-              f"{avg_f1:<12.4f}")
-        print("-" * 70)
+        logger.info("Average            Precision: %.4f  Recall: %.4f  F1: %.4f",
+                     avg_precision, avg_recall, avg_f1)
 
         # Confusion matrix
-        print("\n📈 Confusion Matrix:")
-        print("-" * 70)
-        print(f"{'':>15}", end='')
-        for class_name in self.class_names:
-            print(f"{class_name[:10]:>12}", end='')
-        print()
-
         cm = results['confusion_matrix']
+        header = "Confusion Matrix: " + " ".join(f"{name[:10]:>12}" for name in self.class_names)
+        logger.info(header)
         for i, class_name in enumerate(self.class_names):
-            print(f"{class_name:<15}", end='')
-            for j in range(len(self.class_names)):
-                print(f"{cm[i, j]:>12}", end='')
-            print()
-
-        print("="*70 + "\n")
+            row = f"{class_name:<15}" + " ".join(f"{cm[i, j]:>12}" for j in range(len(self.class_names)))
+            logger.info(row)
 
         # Medical interpretation
-        print("🏥 MEDICAL INTERPRETATION:")
-        print("-" * 70)
         if results['accuracy'] >= 0.80:
-            print("✅ Excellent performance (≥80%)")
-            print("   Model is ready for real-world testing")
+            logger.info("Medical interpretation: Excellent performance (>=80%%) - ready for real-world testing")
         elif results['accuracy'] >= 0.70:
-            print("✅ Good performance (70-80%)")
-            print("   Model shows promise, consider more training data")
+            logger.info("Medical interpretation: Good performance (70-80%%) - consider more training data")
         elif results['accuracy'] >= 0.60:
-            print("⚠️  Moderate performance (60-70%)")
-            print("   May need hyperparameter tuning or more data")
+            logger.warning("Medical interpretation: Moderate performance (60-70%%) - may need tuning or more data")
         else:
-            print("❌ Poor performance (<60%)")
-            print("   Consider data quality, preprocessing, or model architecture")
+            logger.warning("Medical interpretation: Poor performance (<60%%) - review data quality and architecture")
 
-        print("\nPer-Class Analysis:")
         for i, class_name in enumerate(self.class_names):
             if results['f1'][i] < 0.60:
-                print(f"  ⚠️  {class_name}: Low F1-score ({results['f1'][i]:.2f})")
-                print(f"     → May need more training data for this class")
-
-        print("="*70 + "\n")
+                logger.warning("Class %s has low F1-score (%.2f) - may need more training data",
+                               class_name, results['f1'][i])
 
 
 def main():

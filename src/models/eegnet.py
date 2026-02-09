@@ -29,6 +29,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from src.constants import N_CLASSES, N_CHANNELS, N_SAMPLES, CLASS_NAMES
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Project root for file resolution (not added to sys.path)
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -271,23 +274,20 @@ class EEGNet(nn.Module):
             self.fc.weight *= (desired / (1e-8 + norm))
 
     def print_architecture(self):
-        """Print model architecture summary."""
-        print("\n" + "="*70)
-        print("🧠 EEGNet ARCHITECTURE")
-        print("="*70)
-        print(f"Input shape: [batch, 1, {self.n_channels}, {self.n_samples}]")
-        print("\nBLOCK 1: Temporal + Spatial Filtering")
-        print(f"  Conv2D (temporal):    [batch, {self.F1}, {self.n_channels}, {self.n_samples}]")
-        print(f"  DepthwiseConv2D:      [batch, {self.F1*self.D}, 1, {self.n_samples}]")
-        print(f"  AvgPool2D:            [batch, {self.F1*self.D}, 1, {self.n_samples//4}]")
-        print("\nBLOCK 2: Separable Convolution")
-        print(f"  SeparableConv2D:      [batch, {self.F2}, 1, {self.n_samples//32}]")
-        print("\nCLASSIFIER")
-        print(f"  Flatten:              [batch, {self.flatten_size}]")
-        print(f"  Dense:                [batch, {self.n_classes}]")
-        print(f"\nTotal parameters: {sum(p.numel() for p in self.parameters()):,}")
-        print(f"Trainable parameters: {sum(p.numel() for p in self.parameters() if p.requires_grad):,}")
-        print("="*70 + "\n")
+        """Log model architecture summary."""
+        total_params = sum(p.numel() for p in self.parameters())
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        logger.info("EEGNet Architecture: input=[batch, 1, %d, %d]", self.n_channels, self.n_samples)
+        logger.info("Block 1: Conv2D->[batch, %d, %d, %d] | DepthwiseConv->[batch, %d, 1, %d] | "
+                     "Pool->[batch, %d, 1, %d]",
+                     self.F1, self.n_channels, self.n_samples,
+                     self.F1 * self.D, self.n_samples,
+                     self.F1 * self.D, self.n_samples // 4)
+        logger.info("Block 2: SeparableConv->[batch, %d, 1, %d]", self.F2, self.n_samples // 32)
+        logger.info("Classifier: Flatten->[batch, %d] | Dense->[batch, %d]",
+                     self.flatten_size, self.n_classes)
+        logger.info("Parameters: total=%s, trainable=%s",
+                     f"{total_params:,}", f"{trainable_params:,}")
 
     def count_parameters(self) -> int:
         """Count total number of trainable parameters."""
@@ -340,9 +340,7 @@ def create_model(
     model = model.to(device)
 
     if verbose:
-        print(f"✅ Model created and moved to: {device}")
-        if device == 'mps':
-            print("   (Using Apple Silicon GPU acceleration! 🚀)")
+        logger.info("Model created and moved to: %s", device)
 
     return model
 

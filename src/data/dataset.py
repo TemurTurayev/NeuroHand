@@ -18,6 +18,9 @@ from torch.utils.data import Dataset, DataLoader
 import pickle
 
 from src.constants import CLASS_NAMES, N_CLASSES
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
@@ -63,12 +66,9 @@ class EEGDataset(Dataset):
         self._load_data()
 
         if self.verbose:
-            print(f"📊 EEGDataset loaded:")
-            print(f"   Split: {split}")
-            print(f"   Samples: {len(self)}")
-            print(f"   Shape: {self.data.shape}")
-            print(f"   Classes: {len(np.unique(self.labels))}")
-            print(f"   Augmentation: {self.augment}")
+            logger.info("EEGDataset loaded: split=%s, samples=%d, shape=%s, classes=%d, augmentation=%s",
+                         split, len(self), self.data.shape,
+                         len(np.unique(self.labels)), self.augment)
 
     def _load_data(self):
         """Load preprocessed data from disk."""
@@ -286,12 +286,10 @@ def create_data_loaders(
         )
 
     if verbose:
-        print(f"\nDataLoaders created:")
-        print(f"   Train batches: {len(train_loader)}")
+        logger.info("DataLoaders created: train_batches=%d, test_batches=%d, batch_size=%d",
+                     len(train_loader), len(test_loader), batch_size)
         if include_val:
-            print(f"   Val batches: {len(val_loader)}")
-        print(f"   Test batches: {len(test_loader)}")
-        print(f"   Batch size: {batch_size}")
+            logger.info("Validation batches: %d", len(val_loader))
 
     if include_val:
         return train_loader, val_loader, test_loader

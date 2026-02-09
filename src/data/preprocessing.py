@@ -13,7 +13,6 @@ EEG Signal Preprocessing Pipeline
 TashPMI, 2024
 """
 
-import os
 from pathlib import Path
 from typing import Optional, Tuple, List
 
@@ -23,6 +22,9 @@ from sklearn.model_selection import train_test_split
 import pickle
 
 from src.constants import CLASS_MAPPING, CLASS_NAMES, N_CLASSES
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 
@@ -72,11 +74,10 @@ class EEGPreprocessor:
         self.class_mapping = CLASS_MAPPING
 
         if self.verbose:
-            print(f"🔧 EEG Preprocessor initialized:")
-            print(f"   Sampling rate: {sampling_rate} Hz")
-            print(f"   Bandpass: {lowcut}-{highcut} Hz")
-            print(f"   Channels: {n_channels}")
-            print(f"   Epoch duration: {epoch_duration}s ({self.n_samples} samples)")
+            logger.info("EEG Preprocessor initialized: rate=%d Hz, bandpass=%.1f-%.1f Hz, "
+                         "channels=%d, epoch=%.1fs (%d samples)",
+                         sampling_rate, lowcut, highcut, n_channels,
+                         epoch_duration, self.n_samples)
 
     def bandpass_filter(
         self,
@@ -181,7 +182,7 @@ class EEGPreprocessor:
             5. Return as numpy arrays
         """
         if self.verbose:
-            print(f"\n📊 Processing Subject {subject_id:02d}...")
+            logger.info("Processing Subject %02d...", subject_id)
 
         # Lazy import: mne/moabb are heavy and only needed for data loading
         import mne  # noqa: E402
@@ -207,13 +208,12 @@ class EEGPreprocessor:
         )
 
         if self.verbose:
-            print(f"   Raw shape: {X.shape}")
-            print(f"   Labels shape: {labels.shape}")
+            logger.info("Raw shape: %s, Labels shape: %s", X.shape, labels.shape)
 
         # Apply bandpass filter
         if apply_filter:
             if self.verbose:
-                print(f"   Applying bandpass filter ({self.lowcut}-{self.highcut} Hz)...")
+                logger.debug("Applying bandpass filter (%.1f-%.1f Hz)...", self.lowcut, self.highcut)
 
             X_filtered = np.zeros_like(X)
             for trial in range(X.shape[0]):
@@ -223,7 +223,7 @@ class EEGPreprocessor:
         # Apply normalization
         if apply_normalization:
             if self.verbose:
-                print(f"   Applying normalization...")
+                logger.debug("Applying normalization...")
 
             X_normalized = np.zeros_like(X)
             for trial in range(X.shape[0]):
@@ -236,9 +236,8 @@ class EEGPreprocessor:
                       for label in labels])
 
         if self.verbose:
-            print(f"   Final shape: {X.shape}")
-            print(f"   Class distribution: {np.bincount(y)}")
-            print(f"   ✅ Subject {subject_id:02d} processed!")
+            logger.info("Subject %02d processed: shape=%s, class_distribution=%s",
+                         subject_id, X.shape, np.bincount(y))
 
         return X, y
 
@@ -273,9 +272,7 @@ class EEGPreprocessor:
         save_dir.mkdir(parents=True, exist_ok=True)
 
         if self.verbose:
-            print("\n" + "="*60)
-            print("🔄 PREPROCESSING ALL SUBJECTS")
-            print("="*60)
+            logger.info("PREPROCESSING ALL SUBJECTS")
 
         all_data = {}
         total_trials = 0
@@ -299,7 +296,7 @@ class EEGPreprocessor:
                 total_trials += len(y)
 
             except Exception as e:
-                print(f"❌ Error processing subject {subject_id}: {e}")
+                logger.error("Error processing subject %d: %s", subject_id, e)
                 continue
 
         # Save dataset info
@@ -322,13 +319,8 @@ class EEGPreprocessor:
             pickle.dump(info, f)
 
         if self.verbose:
-            print("\n" + "="*60)
-            print("✅ PREPROCESSING COMPLETE!")
-            print("="*60)
-            print(f"   Total subjects: {info['n_subjects']}")
-            print(f"   Total trials: {info['total_trials']}")
-            print(f"   Saved to: {save_dir}")
-            print("="*60)
+            logger.info("PREPROCESSING COMPLETE - subjects=%d, total_trials=%d, saved_to=%s",
+                         info['n_subjects'], info['total_trials'], save_dir)
 
         return info
 
@@ -361,7 +353,7 @@ def create_train_test_split(
         data_dir = Path(data_dir)
 
     if verbose:
-        print("\nCreating train/val/test split...")
+        logger.info("Creating train/val/test split...")
 
     all_X = []
     all_y = []
@@ -375,14 +367,13 @@ def create_train_test_split(
         all_y.append(y)
 
         if verbose:
-            print(f"   Loaded subject {subject_id:02d}: {X.shape}")
+            logger.debug("Loaded subject %02d: %s", subject_id, X.shape)
 
     X_all = np.concatenate(all_X, axis=0)
     y_all = np.concatenate(all_y, axis=0)
 
     if verbose:
-        print(f"\n   Total data shape: {X_all.shape}")
-        print(f"   Total labels: {len(y_all)}")
+        logger.info("Total data shape: %s, total labels: %d", X_all.shape, len(y_all))
 
     # First split: separate test set
     X_temp, X_test, y_temp, y_test = train_test_split(
@@ -409,14 +400,11 @@ def create_train_test_split(
     np.save(data_dir / "test_labels.npy", y_test)
 
     if verbose:
-        print(f"\nSplit created:")
-        print(f"   Train: {X_train.shape} - {len(y_train)} trials")
-        print(f"   Val:   {X_val.shape} - {len(y_val)} trials")
-        print(f"   Test:  {X_test.shape} - {len(y_test)} trials")
-        print(f"   Train class distribution: {np.bincount(y_train)}")
-        print(f"   Val class distribution:   {np.bincount(y_val)}")
-        print(f"   Test class distribution:  {np.bincount(y_test)}")
-        print(f"   Saved to: {data_dir}")
+        logger.info("Split created: train=%s (%d trials), val=%s (%d trials), test=%s (%d trials)",
+                     X_train.shape, len(y_train), X_val.shape, len(y_val), X_test.shape, len(y_test))
+        logger.info("Class distributions: train=%s, val=%s, test=%s",
+                     np.bincount(y_train), np.bincount(y_val), np.bincount(y_test))
+        logger.info("Saved to: %s", data_dir)
 
 
 def main():

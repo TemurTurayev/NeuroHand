@@ -83,10 +83,11 @@ figures/
 *.jpg
 !docs/images/*.png
 !docs/images/*.jpg
-
 # Testing
 htmlcov/
 .coverage
 .coverage.*
 .pytest_cache/
 .mypy_cache/
+!MM/MM_2.0/game/images/**/*.png
+node_modules

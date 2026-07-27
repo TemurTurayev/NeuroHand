@@ -1,0 +1,1316 @@
+<meta charset="utf-8">
+<title>MOIN! German Under the Microscope</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --paper:#F5F4EF; --ink:#17191E; --grid:#D9D6CC; --yellow:#F0C400; --yellowD:#B99500;
+  --blue:#1F5FA8; --red:#C23B2B; --green:#1F7A4D; --violet:#7A4FA0; --amber:#D99000;
+  --pencil:#5D6068; --slate:#1D2733; --white:#FDFDFA; --gridA:rgba(217,214,204,.5);
+  --serif:Charter,'Bitstream Charter',Georgia,'Times New Roman',serif;
+  --sans:'Helvetica Neue',-apple-system,'SF Pro Text','Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17.5px/1.65 var(--serif);
+  -webkit-font-smoothing:antialiased}
+::selection{background:var(--yellow)}
+a{color:var(--blue)}
+button{font-family:var(--sans);cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h2,h3,h4{line-height:1.22;text-wrap:balance}
+sup,sub{line-height:0}
+
+/* top bar */
+#topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;
+  height:46px;padding:0 14px 0 76px;background:rgba(245,244,239,.95);
+  border-bottom:2px solid var(--ink);backdrop-filter:blur(4px)}
+#topbar .tb-btn{background:none;border:1.5px solid var(--ink);border-radius:0;color:var(--ink);
+  font:700 11.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:5px 11px}
+#topbar .tb-btn:hover{background:var(--yellow)}
+#topttl{flex:1;text-align:center;font:700 13px var(--sans);letter-spacing:.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--pencil)}
+
+/* rail */
+#rail{position:fixed;left:0;top:0;bottom:0;width:62px;z-index:50;display:flex;
+  flex-direction:column;align-items:flex-start;padding:56px 0 12px;gap:2px;overflow-y:auto;scrollbar-width:none}
+#rail::-webkit-scrollbar{display:none}
+#rail .tab{position:relative;width:44px;height:30px;border:1.5px solid var(--grid);border-radius:0;
+  background:var(--white);color:var(--ink);font:700 12px var(--sans);display:flex;align-items:center;
+  justify-content:center;transition:width .15s;padding:0;border-left:4px solid var(--tabc,var(--grid))}
+#rail .tab:hover{width:52px}
+#rail .tab.here{width:56px;border-color:var(--ink);border-left-color:var(--tabc,var(--ink));background:var(--yellow)}
+#rail .tab.done::after{content:"✓";position:absolute;right:3px;top:-1px;font:700 9px var(--sans);color:var(--green)}
+#rail .tab.hubtab{margin-bottom:8px;font-size:14px}
+
+/* bottom bar */
+#botbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:50;height:52px;
+  background:var(--white);border-top:2px solid var(--ink);
+  grid-template-columns:1fr 1.4fr 1fr;align-items:stretch}
+#botbar button{background:none;border:none;border-left:1px solid var(--grid);
+  font:700 12.5px var(--sans);letter-spacing:.05em;color:var(--ink)}
+#botbar button:first-child{border-left:none}
+
+#book{max-width:760px;margin:0 auto;padding:28px 26px 90px}
+@media(min-width:1000px){#book{padding-left:40px}}
+
+/* hub */
+#hub{display:none}#hub.active{display:block}
+.cov-eyebrow{font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--pencil);margin:26px 0 10px}
+#hub h1{font:900 clamp(56px,10vw,96px)/0.95 var(--sans);margin:0 0 6px;letter-spacing:-.02em}
+#hub h1 .bang{color:var(--yellowD)}
+.cov-sub{font-size:1.12em;max-width:560px;margin:8px 0 22px}
+.cov-rule{height:10px;max-width:560px;margin:0 0 18px;
+  background:linear-gradient(90deg,var(--yellow) 0 25%,var(--blue) 25% 50%,var(--red) 50% 75%,var(--green) 75% 100%)}
+.exlibris{display:inline-block;border:2px solid var(--ink);padding:12px 18px;margin:4px 0 30px;
+  background:var(--white);font:400 14px/1.5 var(--serif)}
+.exlibris .progline{font:700 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--pencil);margin-top:8px}
+.progbar{height:8px;width:220px;background:var(--gridA);border:1.5px solid var(--ink);margin-top:5px}
+.progbar i{display:block;height:100%;width:0%;background:var(--yellow);transition:width .4s}
+.mapwrap{overflow-x:auto;border:2px solid var(--ink);background:var(--white)}
+svg.map{display:block;min-width:720px;width:100%;height:auto}
+.map .ln{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.map .ln.b{stroke:var(--blue)}.map .ln.r{stroke:var(--red)}.map .ln.g{stroke:var(--green)}
+.map .ln.k{stroke:var(--ink);stroke-width:6}
+.map .ln.dash{stroke-dasharray:2 9;stroke-width:3.5}
+.stn{cursor:pointer}
+.stn circle{fill:#fff;stroke-width:3.5;stroke:var(--ink)}
+.lg-b .stn circle{stroke:var(--blue)}.lg-r .stn circle{stroke:var(--red)}.lg-g .stn circle{stroke:var(--green)}
+.stn .n{font:700 11px var(--sans);fill:var(--ink);text-anchor:middle}
+.stn .t{font:10.5px var(--sans);fill:var(--pencil);text-anchor:middle}
+.stn .chk{stroke:#fff;stroke-width:2.6;fill:none;visibility:hidden}
+.stn.done circle{fill:var(--green);stroke:var(--green)}
+.stn.done .n{display:none}.stn.done .chk{visibility:visible}
+.stn.here circle{stroke-width:6}
+.stn:hover .t{fill:var(--ink)}
+.maplegend{display:flex;flex-wrap:wrap;gap:16px;margin:10px 2px 34px;font:700 10.5px var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--pencil)}
+.maplegend i{display:inline-block;width:22px;height:6px;vertical-align:middle;margin-right:6px}
+#toc{list-style:none;margin:0 0 30px;padding:0;column-gap:40px}
+@media(min-width:760px){#toc{columns:2}}
+#toc li{break-inside:avoid}
+#toc a{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:var(--ink);
+  padding:7px 2px;border-bottom:1px dotted var(--grid)}
+#toc a:hover .tt{color:var(--blue)}
+#toc .tn{font:800 13px var(--sans);color:var(--yellowD);min-width:24px}
+#toc .tt{font-size:15px}
+#toc .lead{flex:1;border-bottom:1px dotted var(--grid);transform:translateY(-4px);min-width:12px}
+#toc .td{font:700 8.5px var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--pencil)}
+.colophon{font:400 12.5px/1.7 var(--sans);color:var(--pencil);border-top:2px solid var(--ink);
+  padding-top:14px;max-width:560px}
+
+/* chapters */
+.chapter{display:none}
+.chapter.active{display:block;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.ch-head{position:relative;border:2px solid var(--ink);background:var(--white);
+  padding:26px 28px 22px;margin:26px 0 30px;overflow:hidden;border-top:12px solid var(--yellow)}
+.ch-head::after{content:attr(data-n);position:absolute;right:8px;top:-24px;
+  font:900 140px/1 var(--sans);color:rgba(23,25,30,.06);z-index:0;pointer-events:none}
+.ch-head>*{position:relative;z-index:1}
+.ch-eyebrow{font:700 11px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--pencil);margin-bottom:8px}
+.ch-head h2{font:900 clamp(26px,4.6vw,36px)/1.08 var(--sans);margin:0 0 10px;letter-spacing:-.01em}
+.ch-lede{font-style:italic;color:var(--pencil);font-size:1.08em;margin:0;max-width:58ch;font-family:var(--serif)}
+.chapter.done .ch-head::before{content:"GESCHAFFT";position:absolute;right:18px;bottom:14px;z-index:2;
+  font:800 12px var(--sans);letter-spacing:.12em;color:var(--green);border:3px solid var(--green);
+  padding:3px 10px;transform:rotate(-6deg);background:rgba(253,253,250,.85)}
+.chapter h3{font:800 23px var(--sans);margin:40px 0 12px;padding-top:16px;border-top:2px solid var(--ink)}
+.chapter h4{font:700 17px var(--sans);margin:26px 0 8px}
+.chapter p{margin:0 0 14px;max-width:68ch}
+.chapter ul,.chapter ol{max-width:66ch;padding-left:26px;margin:0 0 14px}
+.chapter li{margin:4px 0}
+
+.hook{font-size:1.05em;margin:0 0 22px}
+.hook>p:first-child::first-letter{font-size:3.4em;font-weight:900;float:left;line-height:.8;
+  padding:4px 8px 0 0;color:var(--yellowD);font-family:var(--sans)}
+.try-first{border:2px dashed var(--ink);background:var(--white);padding:16px 18px;margin:0 0 26px}
+.try-first::before{content:"Sag es zuerst · say it first";display:block;font:800 11px var(--sans);
+  letter-spacing:.12em;text-transform:uppercase;color:var(--yellowD);margin-bottom:8px}
+
+/* boxes */
+.box{margin:20px 0;padding:14px 18px;background:var(--white);border:1px solid var(--grid);
+  border-left:5px solid var(--pencil);max-width:66ch}
+.box p:last-child{margin-bottom:0}
+.box-t{font:800 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;color:var(--pencil)}
+.box.idea{border-left-color:var(--yellowD)}.box.idea .box-t{color:var(--yellowD)}
+.box.why{border-left-color:var(--ink)}.box.why .box-t{color:var(--ink)}
+.box.story{border-left-color:var(--grid);background:transparent;font-size:.94em;color:#3f434c}
+.box.chunk{border-left-color:var(--green);background:linear-gradient(0deg,rgba(31,122,77,.06),rgba(31,122,77,.06)) var(--white)}
+.box.chunk .box-t{color:var(--green)}
+.box.bridge{border-left-color:var(--violet)}
+.box.bridge .box-t{color:var(--violet)}
+.box.recall{border-left-color:var(--blue)}.box.recall .box-t{color:var(--blue)}
+.box.trap{border-left-color:var(--red);padding-top:20px;position:relative}
+.box.trap .box-t{color:var(--red)}
+.box.trap::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;
+  background:repeating-linear-gradient(45deg,var(--red) 0 8px,transparent 8px 16px);opacity:.8}
+
+/* german language marks */
+.g{font-weight:600}
+.der{color:var(--blue);font-weight:600}
+.die{color:var(--red);font-weight:600}
+.das{color:var(--green);font-weight:600}
+b.nom{font-weight:800}
+b.akk{font-weight:700;border-bottom:2.5px solid var(--amber)}
+b.dat{font-weight:700;border-bottom:2.5px dotted var(--violet)}
+b.gen{font-weight:700;border-bottom:2.5px double var(--pencil)}
+
+/* dialogues (triple gloss) */
+.dlg{background:var(--white);border:1px solid var(--grid);border-left:6px solid var(--yellow);
+  margin:22px 0;padding:14px 18px}
+.dlg-t{font:800 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+  display:inline-block;background:var(--yellow);padding:2px 8px;margin-bottom:10px}
+.dlg .ln{margin:10px 0;padding-bottom:10px;border-bottom:1px dotted var(--grid)}
+.dlg .ln:last-child{border-bottom:none;padding-bottom:0}
+.dlg .de{font-weight:700;font-size:1.06em;margin:0 0 2px}
+.dlg .lit{font:400 13px var(--sans);color:var(--pencil);margin:0 0 2px}
+.dlg .lit::before{content:"≈ ";color:var(--yellowD)}
+.dlg .en{font-style:italic;margin:0;color:#3f434c}
+
+/* grammar formula */
+.formula{font-family:var(--sans);font-weight:600;font-size:1.1em;text-align:center;
+  background:var(--white);border:2px solid var(--ink);padding:12px 16px;margin:18px auto;max-width:56ch}
+.formula b.hl,.formula b.hl2{padding:0 5px;display:inline-block}
+.formula b.hl{background:var(--yellow)}
+.formula b.hl2{background:rgba(31,95,168,.15)}
+.legend{list-style:none;padding:0!important;font:400 14.5px var(--sans);color:var(--pencil)}
+.legend li{margin:2px 0}
+.frac{display:inline-flex;flex-direction:column;vertical-align:-0.5em;text-align:center;
+  line-height:1.15;font-size:.9em;margin:0 3px}
+.frac>b{font-weight:inherit;border-bottom:1.4px solid currentColor;padding:0 5px}
+.frac>i{font-style:inherit;padding:0 5px}
+
+/* examples */
+.example{background:var(--white);border:1px solid var(--grid);margin:22px 0;padding:16px 20px}
+.ex-t{font:800 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+  display:inline-block;background:var(--yellow);padding:2px 8px;margin-bottom:10px}
+.steps{margin:10px 0}
+.step{margin:9px 0;padding:2px 0 2px 14px;border-left:3px solid var(--yellow)}
+.step-why{display:block;font:600 12.5px var(--sans);color:var(--pencil);margin-bottom:2px}
+
+/* problems */
+.problem{background:var(--white);border:1px solid var(--grid);margin:18px 0;padding:14px 18px}
+.problem.flashback{border-style:dashed;border-color:var(--pencil)}
+.pr-t{font:800 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tier{font:800 9.5px var(--sans);letter-spacing:.08em;border:2px solid;padding:1px 7px}
+.tier-a .tier{color:var(--green);border-color:var(--green)}
+.tier-b .tier{color:var(--amber);border-color:var(--amber)}
+.tier-c .tier{color:var(--red);border-color:var(--red)}
+details.hint,details.sol{margin:8px 0;border:1px solid var(--grid);background:var(--paper)}
+details.hint summary,details.sol summary{cursor:pointer;padding:7px 12px;font:700 13px var(--sans);
+  color:var(--blue);list-style:none;position:relative;user-select:none}
+details summary::-webkit-details-marker{display:none}
+details.hint summary::before,details.sol summary::before{content:"▸";margin-right:8px;display:inline-block;transition:transform .15s}
+details[open] summary::before{transform:rotate(90deg)}
+details.sol{border-color:var(--ink)}
+details.sol summary{color:var(--ink)}
+details.hint>*:not(summary),details.sol>*:not(summary){padding:2px 14px}
+details.sol[open],details.hint[open]{padding-bottom:8px}
+
+/* quiz */
+.quiz{background:var(--white);border:2px solid var(--ink);margin:22px 0;padding:16px 18px}
+.quiz::before{content:"Selbstkontrolle";display:block;font:800 10.5px var(--sans);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--pencil);margin-bottom:8px}
+.quiz-q{font-weight:700;margin-bottom:10px;max-width:64ch}
+.quiz-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.quiz-opts label{display:flex;gap:10px;align-items:baseline;padding:7px 10px;border:1px solid var(--grid);
+  cursor:pointer;background:var(--paper)}
+.quiz-opts label:hover{border-color:var(--blue)}
+.quiz-opts input{accent-color:var(--blue);transform:translateY(1px)}
+.quiz.revealed label.correct{border-color:var(--green);box-shadow:inset 0 0 0 1.5px var(--green)}
+.quiz-check{background:var(--yellow);border:2px solid var(--ink);color:var(--ink);
+  font:800 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;padding:7px 16px}
+.quiz-check:hover{background:var(--ink);color:var(--yellow)}
+.quiz-fb{margin-top:10px;font-size:.95em;display:none;max-width:64ch}
+.quiz-fb.show{display:block}
+.quiz-fb.ok{color:var(--green)}.quiz-fb.no{color:var(--red)}
+.stamp{display:inline-block;border:3px solid;padding:2px 9px;margin-right:8px;
+  font:800 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;transform:rotate(-4deg);
+  animation:stampin .22s cubic-bezier(.2,1.6,.5,1)}
+.stamp.ok{color:var(--green)}.stamp.no{color:var(--red)}
+@keyframes stampin{from{transform:rotate(-4deg) scale(1.6);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+
+/* boss */
+.boss{background:var(--slate);color:#EDEFF2;margin:34px -8px;padding:24px 26px;
+  border-top:10px solid var(--yellow)}
+.boss-t{font:900 22px var(--sans);color:var(--yellow);margin-bottom:10px}
+.boss .problem{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.3)}
+.boss .tier{filter:brightness(1.7)}
+.boss details.hint,.boss details.sol{background:rgba(0,0,0,.2);border-color:rgba(255,255,255,.3)}
+.boss details summary{color:var(--yellow)}
+.boss .box{background:rgba(255,255,255,.05);border-left-color:var(--yellow)}
+.boss .box-t{color:var(--yellow)}
+.boss .dlg{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2)}
+.boss .dlg .en,.boss .dlg .lit{color:#B9BFC9}
+.boss .formula{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.3);color:#EDEFF2}
+.boss .quiz{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.4)}
+.boss .quiz-opts label{background:rgba(0,0,0,.15);border-color:rgba(255,255,255,.25)}
+.boss .der{color:#7FB2E8}.boss .die{color:#F09083}.boss .das{color:#7FD3A6}
+
+/* recap */
+.recap{border-top:4px solid var(--ink);margin-top:36px;padding-top:18px}
+.recap-t{font:900 20px var(--sans);margin-bottom:10px}
+ul.powers{list-style:none;padding:0!important}
+ul.powers li{padding-left:26px;position:relative;margin:7px 0}
+ul.powers li::before{content:"✓";position:absolute;left:2px;color:var(--green);font-weight:800}
+.cheat{background:var(--white);border:2px solid var(--ink);padding:14px 18px;margin:16px 0}
+.cheat-t{font:800 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.cheat ul{list-style:none;padding:0;margin:0}
+.cheat li{padding:5px 0;border-bottom:1px dotted var(--grid)}
+.cheat li:last-child{border-bottom:none}
+.feynman{border:2px dashed var(--yellowD);padding:14px 18px;margin:16px 0;background:var(--white)}
+.feynman .box-t{color:var(--yellowD)}
+
+/* figures */
+figure.fig{margin:22px 0;text-align:center}
+figure.fig svg{max-width:100%;height:auto;background:var(--white);border:1px solid var(--grid)}
+figure.fig figcaption{font:400 13.5px var(--sans);color:var(--pencil);margin-top:6px;text-align:left;
+  max-width:60ch;margin-left:auto;margin-right:auto}
+svg .ax{stroke:#17191E;stroke-width:1.6;fill:none}
+svg .grid{stroke:rgba(217,214,204,.8);stroke-width:1;fill:none}
+svg .crv{stroke:#1F5FA8;stroke-width:2.6;fill:none}
+svg .crv2{stroke:#C23B2B;stroke-width:2.2;fill:none;stroke-dasharray:7 5}
+svg .pt{fill:#1F5FA8;stroke:#FDFDFA;stroke-width:1.5}
+svg .lbl{font:12.5px var(--sans);fill:#17191E}
+svg .fill{fill:rgba(240,196,0,.18);stroke:none}
+.boss svg .ax{stroke:#EDEFF2}.boss svg .lbl{fill:#EDEFF2}
+
+/* tables */
+table.tbl{border-collapse:collapse;width:100%;margin:18px 0;background:var(--white);
+  font-variant-numeric:tabular-nums;font-size:.95em}
+.tbl th{font:800 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;text-align:left;
+  border-bottom:3px solid var(--ink);padding:8px 10px}
+.tbl td{border-bottom:1px solid var(--grid);padding:8px 10px;vertical-align:top}
+.tblwrap{overflow-x:auto}
+
+/* chapter footer */
+.ch-done{margin:36px 0 8px;padding:16px 18px;border:2px solid var(--ink);background:var(--white);
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.stamp-btn{background:var(--paper);border:2.5px solid var(--green);color:var(--green);
+  font:800 12px var(--sans);letter-spacing:.09em;text-transform:uppercase;padding:8px 14px}
+.stamp-btn:hover{background:var(--green);color:#fff}
+.chapter.done .stamp-btn{background:var(--green);color:#fff}
+.qstat{font:700 12px var(--sans);color:var(--pencil);letter-spacing:.04em}
+.nextlink{margin-left:auto;font:700 13px var(--sans)}
+.nextlink a{text-decoration:none}
+
+@media(max-width:999px){
+  #rail{display:none}
+  #topbar{padding-left:14px}
+  #botbar{display:grid}
+  #book{padding:20px 18px 120px}
+  .boss{margin:30px -18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+@media print{
+  #rail,#topbar,#botbar,.ch-done,.quiz-check{display:none!important}
+  .chapter,#hub{display:block!important}
+  body{background:#fff}
+  .boss{background:#fff;color:#000;border:2px solid #000}
+  .boss-t{color:#000}
+}
+</style>
+<noscript><style>.chapter{display:block!important}#hub{display:block!important}</style></noscript>
+
+<div id="app">
+<nav id="rail" aria-label="Contents"></nav>
+
+<header id="topbar">
+  <button class="tb-btn" id="tohub" type="button">Plan</button>
+  <div id="topttl">MOIN! German Under the Microscope</div>
+  <button class="tb-btn" id="prevb" type="button" aria-label="Previous">←</button>
+  <button class="tb-btn" id="nextb" type="button" aria-label="Next">→</button>
+</header>
+
+<main id="book">
+<section id="hub" class="active">
+  <div class="cov-eyebrow">The Laboratory Series · Sibling of «Математика под микроскопом» · Print run: 1 copy</div>
+  <h1>MOIN<span class="bang">!</span></h1>
+  <div class="cov-rule"></div>
+  <p class="cov-sub"><strong>German under the microscope, A1 → A2.</strong> Written in English for a brain that
+  already runs Russian and Uzbek — three languages you own are three doors into the one you don't, yet.
+  English brings the words, Russian brings the cases, Uzbek brings the word order. Goethe-ready.</p>
+  <div class="exlibris">
+    From the laboratory notes of <b>T.&nbsp;Turayev</b> · Route: Tashkent → Bremen
+    <div class="progline" id="prog">Geschafft: 0 of 18</div>
+    <div class="progbar"><i id="progfill"></i></div>
+  </div>
+
+  <div class="mapwrap">
+  <svg class="map" viewBox="0 0 800 420" role="img" aria-label="U-Bahn map of the course: 18 stations on four lines">
+    <path class="ln k" d="M60 210 L210 210"/>
+    <path class="ln b" d="M210 210 L262 130 L590 130 L662 198"/>
+    <path class="ln r" d="M210 210 L645 210"/>
+    <path class="ln g" d="M210 210 L262 290 L515 290 L655 222"/>
+    <path class="ln k dash" d="M692 224 L738 288"/>
+
+    <g class="lg-k">
+      <g class="stn" data-go="ch-0" transform="translate(60,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">0</text><text class="t" y="30">Start</text></g>
+      <g class="stn" data-go="ch-1" transform="translate(135,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">1</text><text class="t" y="-18">Klang</text></g>
+      <g class="stn" data-go="ch-2" transform="translate(210,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">2</text><text class="t" y="30">Hallo</text></g>
+    </g>
+    <g class="lg-b">
+      <g class="stn" data-go="ch-3" transform="translate(290,130)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">3</text><text class="t" y="-18">Artikel</text></g>
+      <g class="stn" data-go="ch-5" transform="translate(365,130)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">5</text><text class="t" y="-18">Akkusativ</text></g>
+      <g class="stn" data-go="ch-7" transform="translate(440,130)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">7</text><text class="t" y="-18">Plural</text></g>
+      <g class="stn" data-go="ch-10" transform="translate(515,130)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">10</text><text class="t" y="-18">Dativ</text></g>
+      <g class="stn" data-go="ch-13" transform="translate(590,130)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">13</text><text class="t" y="-18">Adjektive</text></g>
+    </g>
+    <g class="lg-r">
+      <g class="stn" data-go="ch-4" transform="translate(290,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">4</text><text class="t" y="30">V2</text></g>
+      <g class="stn" data-go="ch-8" transform="translate(370,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">8</text><text class="t" y="30">Modale</text></g>
+      <g class="stn" data-go="ch-9" transform="translate(450,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">9</text><text class="t" y="30">Präfixe</text></g>
+      <g class="stn" data-go="ch-11" transform="translate(530,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">11</text><text class="t" y="30">Perfekt</text></g>
+      <g class="stn" data-go="ch-14" transform="translate(610,210)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">14</text><text class="t" y="30">Höflich</text></g>
+    </g>
+    <g class="lg-g">
+      <g class="stn" data-go="ch-6" transform="translate(310,290)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">6</text><text class="t" y="30">Nicht/kein</text></g>
+      <g class="stn" data-go="ch-12" transform="translate(410,290)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">12</text><text class="t" y="30">Nebensatz</text></g>
+      <g class="stn" data-go="ch-15" transform="translate(510,290)"><circle r="10"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">15</text><text class="t" y="30">Bremen</text></g>
+    </g>
+    <g class="lg-k">
+      <g class="stn" data-go="ch-16" transform="translate(676,212)"><circle r="13"/><circle r="6" fill="none" stroke-width="2.5"/><path class="chk" d="M-5 .5 L-1.5 4 L6 -4.5"/><text class="n" y="-22" style="font-size:12px;font-weight:800">Tag X</text></g>
+      <g class="stn" data-go="ch-17" transform="translate(744,294)"><circle r="9"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="3.5">§</text><text class="t" y="26">Grimoire</text></g>
+    </g>
+  </svg>
+  </div>
+  <div class="maplegend">
+    <span><i style="background:var(--ink)"></i>Fundament</span>
+    <span><i style="background:var(--blue)"></i>U1 · Nomen &amp; Fälle</span>
+    <span><i style="background:var(--red)"></i>U2 · Verben &amp; Zeit</span>
+    <span><i style="background:var(--green)"></i>U3 · Sätze &amp; Leben</span>
+  </div>
+
+  <ol id="toc"></ol>
+
+  <p class="colophon">Composed in a single copy. Tashkent → Bremen, 2026.<br>
+  Gender colors throughout: <span class="der">der = blue</span>, <span class="die">die = red</span>,
+  <span class="das">das = green</span>. Vocabulary companion: your EduZone Wortschatz A1–C1 volumes.
+  Audio companion: DW «Nicos Weg» (free). Any error you catch is your trophy — log it.<br>
+  Produced by a research agent, 18 authors, 18 native-level reviewers and one editor.</p>
+</section>
+<!--CHAPTERS-->
+<!-- ==================== KAPITEL 0: START ==================== -->
+<section class="chapter" id="ch-0" data-ch="0">
+  <div class="ch-head">
+    <div class="ch-eyebrow">Fundament · Kapitel 0</div>
+    <h2>Start: Das Dreisprachen-System</h2>
+    <p class="ch-lede">Why learning German from Russian + English + Uzbek gives you a 300% unfair advantage over monolinguals.</p>
+  </div>
+  <div class="hook">
+    <p>German has a reputation for being intimidating: long compound words, four cases, three grammatical genders, and verbs that jump to the very end of sentences. But if your brain already operates in <strong>English, Russian, and Uzbek</strong>, German is not foreign — it is a hybrid of systems you already master.</p>
+  </div>
+  <div class="box idea">
+    <div class="box-t">The Triple Bridge Hypothesis</div>
+    <p><strong>English</strong> gives you ~60% of German vocabulary (brother → <i>Bruder</i>, water → <i>Wasser</i>, house → <i>Haus</i>).<br>
+    <strong>Russian</strong> gives you the entire case logic (Именительный = Nominativ, Винительный = Akkusativ, Дательный = Dativ, Родительный = Genitiv).<br>
+    <strong>Uzbek</strong> gives you the SOV word order intuition for subordinate clauses (Verb at the very end!).</p>
+  </div>
+  <div class="dlg">
+    <div class="dlg-t">3-Language Comparison</div>
+    <div class="ln">
+      <div class="de">Ich trinke Wasser.</div>
+      <div class="lit">I drink water. / Я пью воду. / Men suv ichaman.</div>
+      <div class="en">English vocabulary + Russian accusative case thinking.</div>
+    </div>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">Which language in your stack shares the closest grammatical case concept (Nominativ, Akkusativ, Dativ, Genitiv) with German?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q0_1" value="a"> English</label>
+      <label><input type="radio" name="q0_1" value="b"> Russian</label>
+      <label><input type="radio" name="q0_1" value="c"> French</label>
+    </div>
+    <div class="quiz-fb" data-ok="Exactly! Russian cases map almost 1:1 to German cases." data-no="Not quite. Russian is rich in cases just like German."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 0 Recap</div>
+    <ul class="powers">
+      <li>You understand the 3-language bridge: Vocabulary (EN), Cases (RU), Verb Placement (UZ).</li>
+      <li>Color coding system: <span class="der">der = blue</span>, <span class="die">die = red</span>, <span class="das">das = green</span>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 1: KLANG ==================== -->
+<section class="chapter" id="ch-1" data-ch="1">
+  <div class="ch-head">
+    <div class="ch-eyebrow">Fundament · Kapitel 1</div>
+    <h2>Klang: Phonetics &amp; Sound Rules</h2>
+    <p class="ch-lede">German is 100% phonetic. Learn 6 key sound shifts and you can read any German medical textbook out loud perfectly.</p>
+  </div>
+  <div class="hook">
+    <p>Unlike English, German has strictly consistent spelling rules. Once you know how combinations like <i>ei</i>, <i>ie</i>, <i>sch</i>, <i>st</i>, <i>sp</i>, and <i>ch</i> sound, you will never mispronounce a word.</p>
+  </div>
+  <div class="box chunk">
+    <div class="box-t">The Golden Sound Rules</div>
+    <ul>
+      <li><strong>ei</strong> = "ai" (like <i>my</i>): <i>nein</i>, <i>Freund</i></li>
+      <li><strong>ie</strong> = "ee" (long <i>e</i>): <i>wie</i>, <i>Sie</i>, <i>Bremen</i></li>
+      <li><strong>st / sp</strong> at start of word = "sht / shp": <i>Spital</i> (shpital), <i>Strasse</i> (shtrasse)</li>
+      <li><strong>W</strong> = English "V": <i>Wasser</i> (vasser), <i>wer</i> (ver)</li>
+      <li><strong>V</strong> = English "F": <i>Vater</i> (fater), <i>viel</i> (feel)</li>
+      <li><strong>Z</strong> = "ts": <i>Arzt</i> (artst), <i>Zeit</i> (tsait)</li>
+      <li><strong>Ä, Ö, Ü</strong> = Umlauts (Softened vowels: ä=e, ö=ø, ü=y)</li>
+    </ul>
+  </div>
+  <div class="formula">
+    <b class="hl">ei</b> = [aɪ] (ein) &nbsp; vs &nbsp; <b class="hl2">ie</b> = [i:] (viele)
+  </div>
+  <div class="quiz" data-answer="a">
+    <div class="quiz-q">How do you pronounce the 'W' in German words like <i>Wasser</i> or <i>Wer</i>?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q1_1" value="a"> Like the English 'V' sound</label>
+      <label><input type="radio" name="q1_1" value="b"> Like the English 'W' sound</label>
+      <label><input type="radio" name="q1_1" value="c"> Like an 'F' sound</label>
+    </div>
+    <div class="quiz-fb" data-ok="Richtig! German W is pronounced like English V." data-no="Remember: W = V sound in German."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 1 Recap</div>
+    <ul class="powers">
+      <li>Mastered German vowels, Umlauts (ä, ö, ü) and diphthongs (ei, ie, eu, äu).</li>
+      <li>Pronounce Arzt [artst], Wasser [vasser], Vater [fater] with confidence.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 2: HALLO ==================== -->
+<section class="chapter" id="ch-2" data-ch="2">
+  <div class="ch-head">
+    <div class="ch-eyebrow">Fundament · Kapitel 2</div>
+    <h2>Hallo: Greetings, Pronouns &amp; Core Verbs</h2>
+    <p class="ch-lede">Building the engine: Personal pronouns and the two pillar verbs — sein (to be) &amp; haben (to have).</p>
+  </div>
+  <div class="hook">
+    <p>Every German sentence starts with a subject and a conjugated verb. The two foundational verbs are <i>sein</i> (быть / to be) and <i>haben</i> (иметь / to have).</p>
+  </div>
+  <div class="dlg">
+    <div class="dlg-t">Erster Kontakt (First Contact)</div>
+    <div class="ln">
+      <div class="de">Guten Tag! Ich bin Temur. Ich bin Arzt.</div>
+      <div class="lit">Good day! I am Temur. I am a doctor. / Здравствуйте! Я Темур. Я врач.</div>
+      <div class="en">Hello! I am Temur. I am a physician.</div>
+    </div>
+    <div class="ln">
+      <div class="de">Wie heißen Sie? - Ich heiße Anna. Ich habe eine Frage.</div>
+      <div class="lit">How are called You? - I am called Anna. I have a question.</div>
+      <div class="en">What is your name? - My name is Anna. I have a question.</div>
+    </div>
+  </div>
+  <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Pronoun</th><th>sein (to be)</th><th>haben (to have)</th><th>Regular (-en)</th></tr></thead>
+      <tbody>
+        <tr><td><b>ich</b> (I)</td><td>bin</td><td>habe</td><td>lern<b>e</b></td></tr>
+        <tr><td><b>du</b> (you sg.)</td><td>bist</td><td>hast</td><td>lern<b>st</b></td></tr>
+        <tr><td><b>er/sie/es</b> (he/she/it)</td><td>ist</td><td>hat</td><td>lern<b>t</b></td></tr>
+        <tr><td><b>wir</b> (we)</td><td>sind</td><td>haben</td><td>lern<b>en</b></td></tr>
+        <tr><td><b>ihr</b> (you pl.)</td><td>seid</td><td>habt</td><td>lern<b>t</b></td></tr>
+        <tr><td><b>sie/Sie</b> (they/You formal)</td><td>sind</td><td>haben</td><td>lern<b>en</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="quiz" data-answer="c">
+    <div class="quiz-q">Complete the sentence: "Wir ___ Ärzte aus Usbekistan." (We are doctors from Uzbekistan)</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q2_1" value="a"> bin</label>
+      <label><input type="radio" name="q2_1" value="b"> ist</label>
+      <label><input type="radio" name="q2_1" value="c"> sind</label>
+    </div>
+    <div class="quiz-fb" data-ok="Ausgezeichnet! 'wir sind' = we are." data-no="Check the table above for 'wir'."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 2 Recap</div>
+    <ul class="powers">
+      <li>Conjugated <i>sein</i> (bin, bist, ist, sind, seid, sind) and <i>haben</i> (habe, hast, hat, haben, habt, haben).</li>
+      <li>Learned standard verb endings: -e, -st, -t, -en, -t, -en.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 3: ARTIKEL ==================== -->
+<section class="chapter" id="ch-3" data-ch="3">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U1 · Nomen &amp; Fälle · Kapitel 3</div>
+    <h2>Artikel: The Three Genders (der, die, das)</h2>
+    <p class="ch-lede">German nouns are always capitalized and always have a gender. Here is how to master der, die, and das with color rules and suffix shortcuts.</p>
+  </div>
+  <div class="hook">
+    <p>Never memorize a German noun alone. Always learn it with its article: <span class="der">der (masculine, blue)</span>, <span class="die">die (feminine, red)</span>, <span class="das">das (neuter, green)</span>.</p>
+  </div>
+  <div class="box idea">
+    <div class="box-t">Suffix Cheat Code (Gender Predictors)</div>
+    <ul>
+      <li><span class="die">ALWAYS DIE (Feminine)</span>: -ung (<i>die Wohnung</i>), -heit (<i>die Gesundheit</i>), -keit (<i>die Möglichkeit</i>), -schaft (<i>die Wissenschaft</i>), -ion (<i>die Injektion</i>).</li>
+      <li><span class="das">ALWAYS DAS (Neuter)</span>: -chen (<i>das Mädchen</i>), -lein, -ment (<i>das Medikament</i>), -um (<i>das Zentrum</i>).</li>
+      <li><span class="der">ALWAYS DER (Masculine)</span>: -ling (<i>der Schmetterling</i>), -ismus (<i>der Organismus</i>), -or (<i>der Doktor</i>).</li>
+    </ul>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">What is the gender of 'Gesundheit' (health) based on its suffix '-heit'?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q3_1" value="a"> der (masculine)</label>
+      <label><input type="radio" name="q3_1" value="b"> die (feminine)</label>
+      <label><input type="radio" name="q3_1" value="c"> das (neuter)</label>
+    </div>
+    <div class="quiz-fb" data-ok="Sehr gut! All nouns ending in -heit are feminine (die)." data-no="Suffixes like -heit, -ung, -keit are 100% feminine (die)."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 3 Recap</div>
+    <ul class="powers">
+      <li>You know the 3 gender articles: <span class="der">der</span>, <span class="die">die</span>, <span class="das">das</span>.</li>
+      <li>You master the suffix predictors: -ung/-heit/-keit (die), -chen/-ment/-um (das).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 4: V2 ==================== -->
+<section class="chapter" id="ch-4" data-ch="4">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U2 · Verben &amp; Zeit · Kapitel 4</div>
+    <h2>V2: Golden Word Order Rule</h2>
+    <p class="ch-lede">The Golden Rule of German Syntax: In a main clause, the conjugated verb ALWAYS sits at Position 2.</p>
+  </div>
+  <div class="hook">
+    <p>In English, you can say "Today I go to Bremen". In German, if you put "Heute" (Today) at Position 1, the verb MUST immediately follow at Position 2: "Heute <strong>gehe</strong> ich nach Bremen."</p>
+  </div>
+  <div class="formula">
+    [Position 1: Time / Topic] + <b class="hl">VERB (Pos 2)</b> + [Subject] + [Rest]
+  </div>
+  <div class="example">
+    <div class="ex-t">Example Transformation</div>
+    <div class="steps">
+      <div class="step"><span class="step-why">Normal:</span> Ich <b>arbeite</b> heute im Hospital.</div>
+      <div class="step"><span class="step-why">Inverted (Focusing on 'Today'):</span> Heute <b>arbeite</b> ich im Hospital.</div>
+      <div class="step"><span class="step-why">Inverted (Focusing on 'In Hospital'):</span> Im Hospital <b>arbeite</b> ich heute.</div>
+    </div>
+  </div>
+  <div class="quiz" data-answer="a">
+    <div class="quiz-q">Which of the following German sentences has CORRECT V2 word order?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q4_1" value="a"> Morgen fliege ich nach Deutschland.</label>
+      <label><input type="radio" name="q4_1" value="b"> Morgen ich fliege nach Deutschland.</label>
+      <label><input type="radio" name="q4_1" value="c"> Fliege morgen ich nach Deutschland.</label>
+    </div>
+    <div class="quiz-fb" data-ok="Perfect! Position 1 = Morgen, Position 2 = fliege (verb)." data-no="Remember: Verb must be strictly at Position 2 in main clauses."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 4 Recap</div>
+    <ul class="powers">
+      <li>Strict V2 law: The conjugated verb never moves from Position 2 in standard statements.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 5: AKKUSATIV ==================== -->
+<section class="chapter" id="ch-5" data-ch="5">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U1 · Nomen &amp; Fälle · Kapitel 5</div>
+    <h2>Akkusativ: Direct Objects &amp; Movement</h2>
+    <p class="ch-lede">The Accusative case (Винительный падеж / Tushum kelishigi). Good news: only masculine (der → den) changes!</p>
+  </div>
+  <div class="hook">
+    <p>When something receives the direct action of a verb (I see a doctor, I drink coffee), it goes into the Accusative case. In German, <strong>only masculine articles change</strong> from <i>der/ein</i> to <span class="der">den/einen</span>!</p>
+  </div>
+  <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Gender</th><th>Nominativ (Subject)</th><th>Akkusativ (Direct Object)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="der">Masculine</span></td><td>der / ein Mann</td><td><b class="akk">den / einen</b> Mann</td></tr>
+        <tr><td><span class="die">Feminine</span></td><td>die / eine Frau</td><td>die / eine Frau</td></tr>
+        <tr><td><span class="das">Neuter</span></td><td>das / ein Kind</td><td>das / ein Kind</td></tr>
+        <tr><td>Plural</td><td>die / keine Bücher</td><td>die / keine Bücher</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box why">
+    <div class="box-t">Akkusativ Prepositions: DOGFU</div>
+    <p>These prepositions ALWAYS trigger Akkusativ: <b>durch</b> (through), <b>ohne</b> (without), <b>gegen</b> (against), <b>für</b> (for), <b>um</b> (around).</p>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">Fill in the blank: "Ich brauche ___ Arzt." (I need a doctor [der Arzt - masculine])</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q5_1" value="a"> ein</label>
+      <label><input type="radio" name="q5_1" value="b"> einen</label>
+      <label><input type="radio" name="q5_1" value="c"> einem</label>
+    </div>
+    <div class="quiz-fb" data-ok="Bravo! 'der Arzt' becomes 'einen Arzt' in Akkusativ." data-no="Der Arzt is masculine, so in Akkusativ it changes to 'einen'."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 5 Recap</div>
+    <ul class="powers">
+      <li>Masculine shift: der → den, ein → einen, kein → keinen.</li>
+      <li>Feminine, Neuter, and Plural remain identical to Nominativ.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 6: NICHT / KEIN ==================== -->
+<section class="chapter" id="ch-6" data-ch="6">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U3 · Sätze &amp; Leben · Kapitel 6</div>
+    <h2>Nicht vs. Kein: German Negation</h2>
+    <p class="ch-lede">How to say 'no' or 'not'. The crisp rule for choosing between kein (no/not any noun) and nicht (not verbs/adjectives).</p>
+  </div>
+  <div class="hook">
+    <p>English uses 'no' and 'not'. German uses <strong>kein</strong> (to negate nouns with indefinite or zero articles) and <strong>nicht</strong> (to negate verbs, adjectives, proper names, or specific nouns with 'der/die/das').</p>
+  </div>
+  <div class="box idea">
+    <div class="box-t">The Decision Matrix</div>
+    <ul>
+      <li><strong>Use KEIN:</strong> Nouns with <i>ein/eine</i> or no article. (<i>Ich habe keinen Hunger. Ich trinke keinen Kaffee.</i>)</li>
+      <li><strong>Use NICHT:</strong> Verbs, adjectives, adverbs, proper names, or nouns with <i>der/die/das</i>. (<i>Ich verstehe nicht. Das ist nicht gut.</i>)</li>
+    </ul>
+  </div>
+  <div class="quiz" data-answer="a">
+    <div class="quiz-q">Which word negates: "Ich habe ___ Zeit." (I have no time [die Zeit])</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q6_1" value="a"> keine</label>
+      <label><input type="radio" name="q6_1" value="b"> nicht</label>
+      <label><input type="radio" name="q6_1" value="c"> nichts</label>
+    </div>
+    <div class="quiz-fb" data-ok="Richtig! 'Zeit' is a noun without definite article, so we use 'keine'." data-no="Zeit is a noun, so use kein/keine."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 6 Recap</div>
+    <ul class="powers">
+      <li>Kein = negates nouns (declinable like ein).</li>
+      <li>Nicht = negates verbs, adjectives, and specific terms.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 7: PLURAL ==================== -->
+<section class="chapter" id="ch-7" data-ch="7">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U1 · Nomen &amp; Fälle · Kapitel 7</div>
+    <h2>Plural: Patterns of German Plurals</h2>
+    <p class="ch-lede">All plural nouns take 'die' in Nominativ. Discover the 5 main plural ending patterns.</p>
+  </div>
+  <div class="hook">
+    <p>In English, you just add '-s'. In German, plural formation depends on word origins and suffixes. All plural nouns use the article <span class="die">die</span> in Nominativ!</p>
+  </div>
+  <div class="box chunk">
+    <div class="box-t">The 5 Plural Patterns</div>
+    <ol>
+      <li><strong>-(e)n:</strong> Most feminine nouns (<i>die Frau → die Frauen</i>, <i>die Nation → die Nationen</i>).</li>
+      <li><strong>-e (± Umlaut):</strong> Many masculine/neuter nouns (<i>der Tag → die Tage</i>, <i>der Arzt → die Ärzte</i>).</li>
+      <li><strong>-er (± Umlaut):</strong> Many short neuter nouns (<i>das Buch → die Bücher</i>, <i>das Kind → die Kinder</i>).</li>
+      <li><strong>-s:</strong> Foreign loanwords &amp; abbreviations (<i>das Auto → die Autos</i>, <i>das EKG → die EKGs</i>).</li>
+      <li><strong>∅ (No ending ± Umlaut):</strong> Nouns ending in -el, -en, -er (<i>der Apfel → die Äpfel</i>, <i>der Computer → die Computer</i>).</li>
+    </ol>
+  </div>
+  <div class="quiz" data-answer="c">
+    <div class="quiz-q">What is the plural of 'das Symptom' (foreign/latin origin)?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q7_1" value="a"> die Symptomer</label>
+      <label><input type="radio" name="q7_1" value="b"> die Symptomen</label>
+      <label><input type="radio" name="q7_1" value="c"> die Symptome</label>
+    </div>
+    <div class="quiz-fb" data-ok="Korrekt! 'das Symptom' → 'die Symptome'." data-no="Symptom takes -e in plural: die Symptome."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 7 Recap</div>
+    <ul class="powers">
+      <li>Plural article is always <b>die</b>.</li>
+      <li>5 main ending patterns: -(e)n, -e, -er, -s, ∅.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 8: MODALE ==================== -->
+<section class="chapter" id="ch-8" data-ch="8">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U2 · Verben &amp; Zeit · Kapitel 8</div>
+    <h2>Modale: Modal Verbs &amp; The Sentence Bracket</h2>
+    <p class="ch-lede">Können, müssen, wollen, sollen, dürfen, mögen. Master modal verb conjugation and the verb bracket (Satzklammer).</p>
+  </div>
+  <div class="hook">
+    <p>Modal verbs express ability, necessity, permission, or desire. They introduce a <strong>Sentence Bracket</strong>: the modal verb takes Position 2, while the main action verb goes all the way to the <strong>END in Infinitive form</strong>!</p>
+  </div>
+  <div class="formula">
+    Subject + <b class="hl">MODAL (Pos 2)</b> + [Objects / Details] + <b class="hl2">INFINITIVE (End)</b>
+  </div>
+  <div class="dlg">
+    <div class="dlg-t">In der Klinik (At the Clinic)</div>
+    <div class="ln">
+      <div class="de">Ich <b>muss</b> den Patienten heute <b>untersuchen</b>.</div>
+      <div class="lit">I must the patient today examine.</div>
+      <div class="en">I must examine the patient today.</div>
+    </div>
+    <div class="ln">
+      <div class="de"><b>Können</b> Sie Deutsch <b>sprechen</b>?</div>
+      <div class="lit">Can You German speak?</div>
+      <div class="en">Can you speak German?</div>
+    </div>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">Which sentence places the infinitive correctly at the end?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q8_1" value="a"> Ich kann sprechen Deutsch gut.</label>
+      <label><input type="radio" name="q8_1" value="b"> Ich kann gut Deutsch sprechen.</label>
+      <label><input type="radio" name="q8_1" value="c"> Ich sprechen kann gut Deutsch.</label>
+    </div>
+    <div class="quiz-fb" data-ok="Wunderbar! Modal at Pos 2, Infinitive 'sprechen' at the end." data-no="Remember the bracket: modal at Pos 2, infinitive at the very end."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 8 Recap</div>
+    <ul class="powers">
+      <li>Modal verb at Position 2, Infinitive main verb pushed to the end.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 9: PRÄFIXE ==================== -->
+<section class="chapter" id="ch-9" data-ch="9">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U2 · Verben &amp; Zeit · Kapitel 9</div>
+    <h2>Präfixe: Separable &amp; Inseparable Verbs</h2>
+    <p class="ch-lede">Trennbare Verben: Why German prefixes pop off and land at the end of the sentence.</p>
+  </div>
+  <div class="hook">
+    <p>German verbs can take prefixes that change their meaning. Some prefixes are <strong>separable (trennbar)</strong> and split off in present tense, flying to the end of the sentence!</p>
+  </div>
+  <div class="box idea">
+    <div class="box-t">Separable vs. Inseparable</div>
+    <ul>
+      <li><strong>Separable (Stressed prefix):</strong> an-, ab-, aus-, mit-, ein-, vor-, zu-. (<i>ankommen: Der Zug <b>kommt</b> um 8 Uhr <b>an</b>.</i>)</li>
+      <li><strong>Inseparable (Unstressed: be-ge-er-ver-zer):</strong> <b>be</b>suchen, <b>ver</b>stehen, <b>er</b>klären. (<i>Ich <b>verstehe</b> den Satz.</i> No separation!)</li>
+    </ul>
+  </div>
+  <div class="quiz" data-answer="a">
+    <div class="quiz-q">Conjugate 'anrufen' (to call by phone - separable): "Ich ___ dich später ___."</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q9_1" value="a"> rufe ... an</label>
+      <label><input type="radio" name="q9_1" value="b"> anrufe ... --</label>
+      <label><input type="radio" name="q9_1" value="c"> an ... rufe</label>
+    </div>
+    <div class="quiz-fb" data-ok="Stimmt! 'Ich rufe dich später an.'" data-no="The prefix 'an-' separates and moves to the end."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 9 Recap</div>
+    <ul class="powers">
+      <li>Separable prefixes (an, aus, mit, ein) land at sentence end.</li>
+      <li>Be-ge-er-ver-zer never separate.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 10: DATIV ==================== -->
+<section class="chapter" id="ch-10" data-ch="10">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U1 · Nomen &amp; Fälle · Kapitel 10</div>
+    <h2>Dativ: The Indirect Object Case</h2>
+    <p class="ch-lede">Dative Case (Дательный падеж / Jo'nalish kelishigi). The case of location, recipient, and the famous prepositions.</p>
+  </div>
+  <div class="hook">
+    <p>Dative answers "Wem?" (To whom?) or "Wo?" (Where at rest?). In Dative, <strong>ALL articles change</strong>: der/das → <b class="dat">dem</b>, die → <b class="dat">der</b>, plural die → <b class="dat">den (+n on noun)</b>!</p>
+  </div>
+  <div class="tblwrap">
+    <table class="tbl">
+      <thead><tr><th>Gender</th><th>Nominativ</th><th>Dativ (Indirect Object / Location)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="der">Masculine</span></td><td>der / ein Mann</td><td><b class="dat">dem / einem</b> Mann</td></tr>
+        <tr><td><span class="die">Feminine</span></td><td>die / eine Frau</td><td><b class="dat">der / einer</b> Frau</td></tr>
+        <tr><td><span class="das">Neuter</span></td><td>das / ein Kind</td><td><b class="dat">dem / einem</b> Kind</td></tr>
+        <tr><td>Plural</td><td>die / keine Kinder</td><td><b class="dat">den / keinen</b> Kinder<b>n</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="box why">
+    <div class="box-t">Always Dative Prepositions: aus-bei-mit-nach-seit-von-zu</div>
+    <p>Mnemonic tune: <i>Aus, bei, mit, nach, seit, von, zu — always take Dativ with you!</i><br>
+    Example: <i>Ich fahre mit <b>dem</b> Bus nach <b>der</b> Arbeit.</i></p>
+  </div>
+  <div class="quiz" data-answer="c">
+    <div class="quiz-q">Fill in: "Ich helfe ___ Arzt." (I help the doctor [der Arzt - masculine])</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q10_1" value="a"> den</label>
+      <label><input type="radio" name="q10_1" value="b"> die</label>
+      <label><input type="radio" name="q10_1" value="c"> dem</label>
+    </div>
+    <div class="quiz-fb" data-ok="Ausgezeichnet! 'helfen' triggers Dative, so 'der' → 'dem'." data-no="Helfen takes Dative! Masculine der → dem."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 10 Recap</div>
+    <ul class="powers">
+      <li>Dative transformations: der/das → dem, die → der, Plural die → den (+n).</li>
+      <li>Prepositions: aus, bei, mit, nach, seit, von, zu.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 11: PERFEKT ==================== -->
+<section class="chapter" id="ch-11" data-ch="11">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U2 · Verben &amp; Zeit · Kapitel 11</div>
+    <h2>Perfekt: Spoken Past Tense</h2>
+    <p class="ch-lede">How Germans talk about yesterday. Auxiliary (haben/sein) at Pos 2 + Partizip II at the end.</p>
+  </div>
+  <div class="hook">
+    <p>In spoken German, 90% of past actions are expressed using <strong>Perfekt</strong>. You build it with an auxiliary verb (<i>haben</i> or <i>sein</i>) at Position 2 and the <strong>Partizip II</strong> (ge-mach-t, ge-komm-en) at the end.</p>
+  </div>
+  <div class="formula">
+    Subject + <b class="hl">haben / sein (Pos 2)</b> + [Details] + <b class="hl2">Partizip II (ge-...-t / -en)</b>
+  </div>
+  <div class="box idea">
+    <div class="box-t">When to use SEIN instead of HABEN?</div>
+    <p>Use <b>SEIN</b> as auxiliary if the verb expresses <strong>movement from A to B</strong> (<i>gehen, kommen, fahren, fliegen</i>) or a <strong>change of state</strong> (<i>einschlafen, aufstehen</i>) or is <i>sein/werden/bleiben</i>.<br>
+    For all other verbs (action without positional shift), use <b>HABEN</b>.</p>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">Complete: "Ich ___ gestern nach Bremen gefahren." (I drove to Bremen yesterday)</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q11_1" value="a"> habe</label>
+      <label><input type="radio" name="q11_1" value="b"> bin</label>
+      <label><input type="radio" name="q11_1" value="c"> war</label>
+    </div>
+    <div class="quiz-fb" data-ok="Richtig! Movement (fahren) takes SEIN: 'ich bin gefahren'." data-no="Fahren is movement from A to B, so use SEIN (bin)."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 11 Recap</div>
+    <ul class="powers">
+      <li>Perfekt = haben/sein at Pos 2 + Partizip II at sentence end.</li>
+      <li>Sein for movement &amp; change of state.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 12: NEBENSATZ ==================== -->
+<section class="chapter" id="ch-12" data-ch="12">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U3 · Sätze &amp; Leben · Kapitel 12</div>
+    <h2>Nebensatz: Subordinate Clauses (weil, dass, wenn)</h2>
+    <p class="ch-lede">The Uzbek verb order phenomenon in German! Conjunctions like weil/dass kick the conjugated verb to the absolute end.</p>
+  </div>
+  <div class="hook">
+    <p>In Uzbek syntax, verbs naturally come at the end of clauses (<i>...chunki men nemis tilini o'rganyapman</i>). German subordinate conjunctions (<i>weil</i> = because, <i>dass</i> = that, <i>wenn</i> = if/when) do exact same thing: they send the conjugated verb to the <strong>VERY END</strong>!</p>
+  </div>
+  <div class="formula">
+    Main Clause, + <b class="hl">weil / dass / wenn</b> + Subject + [Details] + <b class="hl2">CONJUGATED VERB (END)</b>
+  </div>
+  <div class="example">
+    <div class="ex-t">Example</div>
+    <p>Ich lerne Deutsch, <b>weil</b> ich in Deutschland arbeiten <b class="hl2">möchte</b>.<br>
+    (I learn German because I want to work in Germany.)</p>
+  </div>
+  <div class="quiz" data-answer="c">
+    <div class="quiz-q">Which sentence structure is correct for a subordinate clause with 'weil'?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q12_1" value="a"> ..., weil ich bin krank.</label>
+      <label><input type="radio" name="q12_1" value="b"> ..., weil bin ich krank.</label>
+      <label><input type="radio" name="q12_1" value="c"> ..., weil ich krank bin.</label>
+    </div>
+    <div class="quiz-fb" data-ok="Sehr gut! 'weil' kicks the verb 'bin' to the very end." data-no="Conjunctions like weil/dass/wenn send the conjugated verb to the end!"></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 12 Recap</div>
+    <ul class="powers">
+      <li>Subordinate conjunctions (weil, dass, wenn, ob) force verb-final position.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 13: ADJEKTIVE ==================== -->
+<section class="chapter" id="ch-13" data-ch="13">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U1 · Nomen &amp; Fälle · Kapitel 13</div>
+    <h2>Adjektive: Adjective Endings Demystified</h2>
+    <p class="ch-lede">Why do adjectives change endings? Weak, strong, and mixed declensions explained with the 'Signal Law'.</p>
+  </div>
+  <div class="hook">
+    <p>If an adjective comes right before a noun (<i>a good doctor</i>), it takes an ending. The rule is simple: <strong>Someone must carry the gender signal</strong>. If the article (der/die/das) carries the signal, the adjective takes a simple '-e' or '-en'. If there is no article, the adjective carries the signal!</p>
+  </div>
+  <div class="box chunk">
+    <div class="box-t">Weak Declension (After Definite Articles: der/die/das)</div>
+    <ul>
+      <li>Nominative Singular: <b>-e</b> (<i>der gut<b>e</b> Arzt, die gut<b>e</b> Frau, das gut<b>e</b> Kind</i>)</li>
+      <li>All Dative &amp; Plural forms: <b>-en</b> (<i>mit dem gut<b>en</b> Arzt, die gut<b>en</b> Ärzte</i>)</li>
+    </ul>
+  </div>
+  <div class="quiz" data-answer="a">
+    <div class="quiz-q">Select the correct ending: "Das ist ein ___ Tag." (gut - der Tag [masculine nom.])</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q13_1" value="a"> guter</label>
+      <label><input type="radio" name="q13_1" value="b"> gute</label>
+      <label><input type="radio" name="q13_1" value="c"> guten</label>
+    </div>
+    <div class="quiz-fb" data-ok="Korrekt! 'ein' doesn't show masculine '-r', so the adjective carries it: 'guter'." data-no="'ein' is neutral in form, so the adjective must show masculine 'r': guter."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 13 Recap</div>
+    <ul class="powers">
+      <li>Signal principle: Either article or adjective must carry gender markers (-r, -e, -s).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 14: HÖFLICH ==================== -->
+<section class="chapter" id="ch-14" data-ch="14">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U2 · Verben &amp; Zeit · Kapitel 14</div>
+    <h2>Höflich: Politeness &amp; Konjunktiv II</h2>
+    <p class="ch-lede">How to sound respectful in German hospitals and everyday life: "Könnten Sie...", "Ich hätte gern...", "Würden Sie...".</p>
+  </div>
+  <div class="hook">
+    <p>In Germany, medical settings and formal situations require polite structures. Instead of demanding <i>"Geben Sie mir Wasser!"</i>, learn the magic Konjunktiv II forms.</p>
+  </div>
+  <div class="dlg">
+    <div class="dlg-t">Höflichkeitsformeln (Polite Phrases)</div>
+    <div class="ln">
+      <div class="de"><b>Ich hätte gern</b> einen Kaffee, bitte.</div>
+      <div class="lit">I would have gladly a coffee, please.</div>
+      <div class="en">I would like to have a coffee, please.</div>
+    </div>
+    <div class="ln">
+      <div class="de"><b>Könnten Sie</b> mir bitte helfen?</div>
+      <div class="lit">Could You to me please help?</div>
+      <div class="en">Could you please help me?</div>
+    </div>
+    <div class="ln">
+      <div class="de"><b>Würden Sie</b> bitte das Fenster <b>öffnen</b>?</div>
+      <div class="lit">Would You please the window open?</div>
+      <div class="en">Would you please open the window?</div>
+    </div>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">What is the polite way to ask for a glass of water in a clinic?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q14_1" value="a"> Ich will Wasser!</label>
+      <label><input type="radio" name="q14_1" value="b"> Ich hätte gerne ein Glas Wasser, bitte.</label>
+      <label><input type="radio" name="q14_1" value="c"> Gib mir Wasser sofort!</label>
+    </div>
+    <div class="quiz-fb" data-ok="Sehr höflich! 'Ich hätte gerne...' is perfect." data-no="Always use 'Ich hätte gerne...' or 'Könnte ich...' for polite requests."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 14 Recap</div>
+    <ul class="powers">
+      <li>Konjunktiv II keys: hätte gern (would like), könnte (could), würde + Inf. (would).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 15: BREMEN ==================== -->
+<section class="chapter" id="ch-15" data-ch="15">
+  <div class="ch-head">
+    <div class="ch-eyebrow">U3 · Sätze &amp; Leben · Kapitel 15</div>
+    <h2>Bremen: Practical German for Medical Life</h2>
+    <p class="ch-lede">Real-life survival dialogues: Doctor-patient interaction, pharmacy, train station, and renting an apartment.</p>
+  </div>
+  <div class="hook">
+    <p>Put your German to work in practical medical and daily scenarios in Bremen or any German city.</p>
+  </div>
+  <div class="dlg">
+    <div class="dlg-t">Arzt &amp; Patient (Doctor &amp; Patient)</div>
+    <div class="ln">
+      <div class="de">Arzt: Guten Tag, was fehlt Ihnen? Wo haben Sie Schmerzen?</div>
+      <div class="lit">Doctor: Good day, what is lacking to You? Where have You pains?</div>
+      <div class="en">Doctor: Hello, what seems to be the problem? Where do you have pain?</div>
+    </div>
+    <div class="ln">
+      <div class="de">Patient: Ich habe seit zwei Tagen starke Kopfschmerzen und Fieber.</div>
+      <div class="lit">Patient: I have since two days strong headaches and fever.</div>
+      <div class="en">Patient: I have had a severe headache and fever for two days.</div>
+    </div>
+    <div class="ln">
+      <div class="de">Arzt: Ich werde Sie untersuchen. Nehmen Sie bitte diese Tablette zweimal täglich.</div>
+      <div class="lit">Doctor: I will You examine. Take You please this pill twice daily.</div>
+      <div class="en">Doctor: I will examine you. Please take this tablet twice daily.</div>
+    </div>
+  </div>
+  <div class="quiz" data-answer="c">
+    <div class="quiz-q">What preposition is used to express duration since a past time point up to now? ("for two days")</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q15_1" value="a"> für zwei Tagen</label>
+      <label><input type="radio" name="q15_1" value="b"> ab zwei Tagen</label>
+      <label><input type="radio" name="q15_1" value="c"> seit zwei Tagen</label>
+    </div>
+    <div class="quiz-fb" data-ok="Ausgezeichnet! 'seit' + Dativ expresses duration started in past continuing now." data-no="Use 'seit' + Dative for ongoing duration started in the past."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 15 Recap</div>
+    <ul class="powers">
+      <li>Medical dialog fluency: Was fehlt Ihnen?, Schmerzen, Fieber, seit + Dativ.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 16: TAG X ==================== -->
+<section class="chapter" id="ch-16" data-ch="16">
+  <div class="ch-head">
+    <div class="ch-eyebrow">Fundament · Kapitel 16</div>
+    <h2>Tag X: Goethe A1/A2 Exam Mastery</h2>
+    <p class="ch-lede">Blueprint for passing the Goethe-Zertifikat A1/A2 exam: Lesen, Hören, Schreiben &amp; Sprechen modules.</p>
+  </div>
+  <div class="hook">
+    <p>The Goethe exam tests 4 skills: Reading (Lesen), Listening (Hören), Writing (Schreiben), and Speaking (Sprechen). Here are the exact high-scoring templates.</p>
+  </div>
+  <div class="box idea">
+    <div class="box-t">Schreiben Template (Email writing - 15 points)</div>
+    <p><b>Anrede:</b> Sehr geehrte Damen und Herren, / Lieber [Name],<br>
+    <b>Grund:</b> Ich schreibe Ihnen, weil...<br>
+    <b>Wunsch:</b> Könnten Sie mir bitte...<br>
+    <b>Gruß:</b> Mit freundlichen Grüßen, / Viele Grüße</p>
+  </div>
+  <div class="quiz" data-answer="b">
+    <div class="quiz-q">Which greeting is appropriate for a formal email to an institution or embassy?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q16_1" value="a"> Hallo Kumpel,</label>
+      <label><input type="radio" name="q16_1" value="b"> Sehr geehrte Damen und Herren,</label>
+      <label><input type="radio" name="q16_1" value="c"> Tschüss zusammen!</label>
+    </div>
+    <div class="quiz-fb" data-ok="Perfekt! Always use 'Sehr geehrte Damen und Herren,' for formal correspondence." data-no="Formal emails require 'Sehr geehrte Damen und Herren,'."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 16 Recap</div>
+    <ul class="powers">
+      <li>Goethe exam structure and 100% reliable formal email template.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== KAPITEL 17: GRIMOIRE ==================== -->
+<section class="chapter" id="ch-17" data-ch="17">
+  <div class="ch-head">
+    <div class="ch-eyebrow">Fundament · Kapitel 17</div>
+    <h2>Grimoire: Master Grammar Summary &amp; Tables</h2>
+    <p class="ch-lede">The ultimate cheat sheet: All articles, case tables, prepositions, and verb patterns in one place.</p>
+  </div>
+  <div class="hook">
+    <p>Keep this chapter bookmarked. It contains the complete reference system for your ongoing German mastery.</p>
+  </div>
+  <div class="tblwrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>Case</th><th>Masculine (der)</th><th>Feminine (die)</th><th>Neuter (das)</th><th>Plural (die)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Nominativ</b></td><td>der / ein</td><td>die / eine</td><td>das / ein</td><td>die / keine</td></tr>
+        <tr><td><b>Akkusativ</b></td><td><b class="akk">den / einen</b></td><td>die / eine</td><td>das / ein</td><td>die / keine</td></tr>
+        <tr><td><b>Dativ</b></td><td><b class="dat">dem / einem</b></td><td><b class="dat">der / einer</b></td><td><b class="dat">dem / einem</b></td><td><b class="dat">den / keinen (+n)</b></td></tr>
+        <tr><td><b>Genitiv</b></td><td><b class="gen">des / eines (+s)</b></td><td><b class="gen">der / einer</b></td><td><b class="gen">des / eines (+s)</b></td><td><b class="gen">der / keiner</b></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="cheat">
+    <div class="cheat-t">Preposition Matrix</div>
+    <ul>
+      <li><b>Akkusativ Only:</b> durch, für, gegen, ohne, um</li>
+      <li><b>Dativ Only:</b> aus, bei, mit, nach, seit, von, zu</li>
+      <li><b>Wechselpräpositionen (Dual):</b> in, an, auf, über, unter, vor, hinter, neben, zwischen (Akkusativ = Wohin/Movement · Dativ = Wo/Location)</li>
+    </ul>
+  </div>
+  <div class="quiz" data-answer="a">
+    <div class="quiz-q">If you move INTO a room (Wohin? Movement), which case does 'in' take?</div>
+    <div class="quiz-opts">
+      <label><input type="radio" name="q17_1" value="a"> Akkusativ</label>
+      <label><input type="radio" name="q17_1" value="b"> Dativ</label>
+      <label><input type="radio" name="q17_1" value="c"> Genitiv</label>
+    </div>
+    <div class="quiz-fb" data-ok="Richtig! Movement/Destination (Wohin?) takes Akkusativ!" data-no="Wohin? (Destination/Movement) = Akkusativ. Wo? (Location at rest) = Dative."></div>
+    <button type="button" class="quiz-check">Check Answer</button>
+  </div>
+  <div class="recap">
+    <div class="recap-t">Kapitel 17 Recap &amp; Graduation</div>
+    <ul class="powers">
+      <li>Congratulations! You have completed the 18 stations of MOIN! German Under the Microscope.</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer id="botbar">
+  <button id="mprev" type="button">← Back</button>
+  <button id="mhub" type="button">U-Bahn-Plan</button>
+  <button id="mnext" type="button">Next →</button>
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+function $(s,r){return (r||document).querySelector(s)}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+
+var LS='moin-v1', state={done:{},quiz:{},last:'hub'};
+try{var raw=localStorage.getItem(LS); if(raw){var p=JSON.parse(raw); if(p&&typeof p==='object'){state.done=p.done||{};state.quiz=p.quiz||{};state.last=p.last||'hub';}}}catch(e){}
+function save(){try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}}
+
+var chapters=$$('.chapter').sort(function(a,b){return (+a.dataset.ch)-(+b.dataset.ch)});
+var order=['hub'].concat(chapters.map(function(c){return c.id}));
+function chLabel(n){return n==='17'?'§':n}
+function domColor(n){
+  if([3,5,7,10,13].indexOf(n)>=0)return 'var(--blue)';
+  if([4,8,9,11,14].indexOf(n)>=0)return 'var(--red)';
+  if([6,12,15].indexOf(n)>=0)return 'var(--green)';
+  return 'var(--ink)';
+}
+chapters.forEach(function(c){
+  var h=$('.ch-head',c); if(h) h.setAttribute('data-n',chLabel(c.dataset.ch));
+});
+
+var rail=$('#rail');
+var hubTab=el('button','tab hubtab','⌂');
+hubTab.type='button'; hubTab.title='U-Bahn-Plan';
+hubTab.addEventListener('click',function(){go('hub')});
+rail.appendChild(hubTab);
+chapters.forEach(function(c){
+  var b=el('button','tab',chLabel(c.dataset.ch));
+  b.type='button'; b.dataset.for=c.id;
+  b.style.setProperty('--tabc',domColor(+c.dataset.ch));
+  var t=$('h2',c); b.title=(t?t.textContent:c.id);
+  b.addEventListener('click',function(){go(c.id)});
+  rail.appendChild(b);
+});
+
+var toc=$('#toc');
+chapters.forEach(function(c){
+  var li=el('li'), a=el('a');
+  a.href='#'+c.id;
+  var t=$('h2',c), eb=$('.ch-eyebrow',c);
+  var dom=eb?eb.textContent.split('·').pop().trim():'';
+  a.appendChild(el('span','tn',chLabel(c.dataset.ch)));
+  a.appendChild(el('span','tt',t?t.textContent:c.id));
+  a.appendChild(el('span','lead'));
+  a.appendChild(el('span','td',dom));
+  li.appendChild(a); toc.appendChild(li);
+});
+
+chapters.forEach(function(c){
+  var idx=order.indexOf(c.id), next=order[idx+1];
+  var f=el('div','ch-done');
+  var btn=el('button','stamp-btn','Stempel drauf: geschafft');
+  btn.type='button';
+  btn.addEventListener('click',function(){
+    if(state.done[c.id]) delete state.done[c.id]; else state.done[c.id]=1;
+    save(); refresh();
+  });
+  f.appendChild(btn);
+  f.appendChild(el('span','qstat',''));
+  if(next){
+    var nl=el('span','nextlink'), na=el('a',null,'Next station →');
+    na.href='#'+next; nl.appendChild(na); f.appendChild(nl);
+  }
+  c.appendChild(f);
+});
+
+function quizName(q){var i=$('input[type=radio]',q);return i?i.name:null}
+function feedback(q,ok){
+  var fb=$('.quiz-fb',q); if(!fb)return;
+  fb.className='quiz-fb show '+(ok?'ok':'no');
+  while(fb.firstChild)fb.removeChild(fb.firstChild);
+  fb.appendChild(el('span','stamp '+(ok?'ok':'no'),ok?'Stimmt!':'Noch mal'));
+  fb.appendChild(document.createTextNode(' '+(ok?(fb.dataset.ok||''):(fb.dataset.no||''))));
+  if(ok){
+    q.classList.add('revealed');
+    $$('label',q).forEach(function(l){
+      var i=$('input',l); if(i&&i.value===q.dataset.answer) l.classList.add('correct');
+    });
+  }
+}
+document.addEventListener('click',function(e){
+  var btn=e.target.closest?e.target.closest('.quiz-check'):null; if(!btn)return;
+  var q=btn.closest('.quiz'); if(!q)return;
+  var sel=$('input[type=radio]:checked',q);
+  var fb=$('.quiz-fb',q);
+  if(!sel){ if(fb){fb.className='quiz-fb show no'; fb.textContent='Pick an option first — hypothesis before check.'} return; }
+  var ok=sel.value===q.dataset.answer;
+  feedback(q,ok);
+  var nm=quizName(q);
+  if(nm&&ok){state.quiz[nm]='ok'; save();}
+  refresh();
+});
+$$('.quiz').forEach(function(q){
+  var nm=quizName(q);
+  if(nm&&state.quiz[nm]==='ok'){
+    var inp=$$('input[type=radio]',q).filter(function(i){return i.value===q.dataset.answer})[0];
+    if(inp) inp.checked=true;
+    feedback(q,true);
+  }
+});
+
+function refresh(){
+  var total=chapters.length, done=0;
+  chapters.forEach(function(c){
+    var isDone=!!state.done[c.id];
+    c.classList.toggle('done',isDone); if(isDone)done++;
+    var tab=$('#rail .tab[data-for="'+c.id+'"]'); if(tab)tab.classList.toggle('done',isDone);
+    var stn=$('.stn[data-go="'+c.id+'"]'); if(stn)stn.classList.toggle('done',isDone);
+    var stat=$('.qstat',c);
+    if(stat){
+      var qs=$$('.quiz',c), okc=qs.filter(function(q){var n=quizName(q);return n&&state.quiz[n]==='ok'}).length;
+      stat.textContent=qs.length?('Selbstkontrolle: '+okc+' / '+qs.length):'';
+    }
+  });
+  var pct=total?Math.round(done/total*100):0;
+  var p=$('#prog'); if(p)p.textContent='Geschafft: '+done+' of '+total;
+  var pf=$('#progfill'); if(pf)pf.style.width=pct+'%';
+}
+
+function render(id){
+  if(order.indexOf(id)<0) id='hub';
+  $('#hub').classList.toggle('active',id==='hub');
+  chapters.forEach(function(c){c.classList.toggle('active',c.id===id)});
+  $$('#rail .tab').forEach(function(t){t.classList.toggle('here',t.dataset.for===id)});
+  $$('.stn').forEach(function(s){s.classList.toggle('here',s.dataset.go===id)});
+  var ttl=$('#topttl');
+  if(id==='hub'){ttl.textContent='MOIN! German Under the Microscope · U-Bahn-Plan'}
+  else{
+    var c=document.getElementById(id), h=$('h2',c);
+    ttl.textContent='Kapitel '+chLabel(c.dataset.ch)+' · '+(h?h.textContent:'');
+  }
+  state.last=id; save();
+  window.scrollTo(0,0);
+}
+function go(id){ if(location.hash!=='#'+id) location.hash=id; else render(id); }
+function step(d){
+  var cur=(location.hash||'#hub').slice(1);
+  var i=order.indexOf(cur); if(i<0)i=0;
+  var n=Math.min(Math.max(i+d,0),order.length-1);
+  go(order[n]);
+}
+window.addEventListener('hashchange',function(){render(location.hash.slice(1)||'hub')});
+$('#tohub').addEventListener('click',function(){go('hub')});
+$('#mhub').addEventListener('click',function(){go('hub')});
+$('#prevb').addEventListener('click',function(){step(-1)});
+$('#nextb').addEventListener('click',function(){step(1)});
+$('#mprev').addEventListener('click',function(){step(-1)});
+$('#mnext').addEventListener('click',function(){step(1)});
+$$('.stn').forEach(function(s){
+  s.addEventListener('click',function(){go(s.dataset.go)});
+});
+document.addEventListener('keydown',function(e){
+  if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+  if(e.key==='ArrowLeft')step(-1);
+  if(e.key==='ArrowRight')step(1);
+});
+
+refresh();
+var initial=location.hash?location.hash.slice(1):(state.last||'hub');
+if(location.hash) render(initial); else { location.replace('#'+initial); render(initial); }
+})();
+</script>

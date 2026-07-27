@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Библиотека интерактивных книг · T. Turayev Laboratory</title>
+  <meta name="description" content="Интерактивные онлайн-книги и учебные пособия с автоматическим сохранением прогресса.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d12;
+      --card-bg: rgba(21, 29, 41, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f0f4f8;
+      --muted: #94a3b8;
+      --accent-de: #f59e0b;
+      --accent-math: #3b82f6;
+      --accent-bio: #10b981;
+      --glow-de: rgba(245, 158, 11, 0.15);
+      --glow-math: rgba(59, 130, 246, 0.15);
+      --glow-bio: rgba(16, 185, 129, 0.15);
+      --font-head: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      padding-top: 1.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+      backdrop-filter: blur(8px);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    p.subtitle {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--card-accent, #64748b);
+      transition: opacity 0.3s ease;
+      opacity: 0.7;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 40px -15px var(--card-glow, rgba(0,0,0,0.5));
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-de { --card-accent: var(--accent-de); --card-glow: var(--glow-de); }
+    .card-math { --card-accent: var(--accent-math); --card-glow: var(--glow-math); }
+    .card-bio { --card-accent: var(--accent-bio); --card-glow: var(--glow-bio); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+    }
+
+    .card h2 {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .card p.desc {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      flex-grow: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: var(--card-accent, #fff);
+      color: #090d12;
+      border-color: var(--card-accent, #fff);
+      box-shadow: 0 4px 15px var(--card-glow, rgba(255,255,255,0.2));
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    footer a { color: #94a3b8; text-decoration: none; }
+    footer a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Онлайн-синхронизация &amp; Сохранение прогресса</span>
+      </div>
+      <h1>Интерактивная Библиотека</h1>
+      <p class="subtitle">Полные интерактивные книги-брошюры с поддержкой мобильных устройств, встроенными тестами и локальным сохранением прогресса.</p>
+    </header>
+
+    <main class="grid">
+      <!-- GERMAN BOOK -->
+      <article class="card card-de">
+        <div>
+          <div class="card-header">
+            <div class="icon-box">🇩🇪</div>
+            <span class="tag">18 Глав · A1→A2</span>
+          </div>
+          <h2>MOIN! German Under the Microscope</h2>
+          <p class="desc">Интерактивный курс немецкого языка на основе системы 3-х языков (EN + RU + UZ). Содержит правила чтения, падежи, диалоги, грамматику и интерактивы.</p>
+        </div>
+        <a href="GermanBook/frame.html" class="btn">
+          <span>Читать книгу</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </article>
+
+      <!-- MATH BOOK -->
+      <article class="card card-math">
+        <div>
+          <div class="card-header">
+            <div class="icon-box">📐</div>
+            <span class="tag">Интерактив · RU/EN</span>
+          </div>
+          <h2>Математика под микроскопом</h2>
+          <p class="desc">Наглядное пособие по математике и анализу с интерактивной навигацией, разбором формул, упражнениями и переключением языков.</p>
+        </div>
+        <a href="MathBook/frame.html" class="btn">
+          <span>Читать книгу</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </article>
+
+      <!-- BIO BOOK -->
+      <article class="card card-bio">
+        <div>
+          <div class="card-header">
+            <div class="icon-box">🧬</div>
+            <span class="tag">Путеводитель врача</span>
+          </div>
+          <h2>Количественная биология без страха</h2>
+          <p class="desc">Пособие по биостатистике и квантитативной медицине. Система квестов, карточки для запоминания терминов, XP и тесты.</p>
+        </div>
+        <a href="QLS_Interactive_Book.html" class="btn">
+          <span>Читать книгу</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </article>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 T. Turayev Laboratory · Все прогрессы автоматически сохраняются в вашем браузере.</p>
+    </footer>
+  </div>
+
+</body>
+</html>

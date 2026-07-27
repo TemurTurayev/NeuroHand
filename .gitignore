@@ -91,3 +91,4 @@ htmlcov/
 .mypy_cache/
 !MM/MM_2.0/game/images/**/*.png
 node_modules
+MathBook/translation

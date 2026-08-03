@@ -81,3 +81,67 @@ export function buildBook(shell, chapterFiles) {
     .join('');
   return shell.replace(marker, body);
 }
+
+export function assertContiguousNumbers(numbers, first, last) {
+  const expected = Array.from(
+    { length: last - first + 1 },
+    (_, index) => first + index,
+  );
+  if (JSON.stringify(numbers) !== JSON.stringify(expected)) {
+    throw new Error(`Chapter numbers must be contiguous ${first}..${last}`);
+  }
+}
+
+function uniqueAttributeValues(html, attribute) {
+  return new Set(
+    [...html.matchAll(new RegExp(`${attribute}="([^"]+)"`, 'g'))].map(
+      (match) => match[1],
+    ),
+  );
+}
+
+export function validateBook(html, expectedLastChapter) {
+  const pairs = extractChapterPairs(html);
+  assertContiguousNumbers(
+    pairs.map((pair) => pair.number),
+    0,
+    expectedLastChapter,
+  );
+
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+  const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+  if (duplicateIds.length > 0) {
+    throw new Error(`Duplicate element id: ${duplicateIds[0]}`);
+  }
+
+  const quizOwners = new Map();
+  for (const pair of pairs) {
+    for (const lang of ['ru', 'en']) {
+      for (const name of uniqueAttributeValues(pair[lang], 'name')) {
+        const owner = `ch-${pair.number}-${lang}`;
+        if (quizOwners.has(name)) {
+          throw new Error(
+            `Duplicate quiz radio name ${name} in ${quizOwners.get(name)} and ${owner}`,
+          );
+        }
+        quizOwners.set(name, owner);
+      }
+    }
+  }
+
+  if (/<script\b[^>]*\bsrc=|<link\b[^>]*rel="stylesheet"/i.test(html)) {
+    throw new Error('Publication must not depend on external runtime assets');
+  }
+  if (html.includes('<!--CHAPTERS-->')) {
+    throw new Error('Generated publication contains an unfilled CHAPTERS marker');
+  }
+
+  const knownChapters = new Set(pairs.map((pair) => `ch-${pair.number}`));
+  for (const match of html.matchAll(/href="#(ch-\d+)"/g)) {
+    if (!knownChapters.has(match[1])) {
+      throw new Error(`Broken internal chapter link: #${match[1]}`);
+    }
+  }
+
+  return { chapterPairs: pairs.length, quizNames: quizOwners.size };
+}

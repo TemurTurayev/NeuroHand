@@ -1,12 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=frame.html">
-  <title>Математика под микроскопом</title>
-  <script>window.location.replace("frame.html");</script>
-</head>
-<body>
-  <p>Redirecting to <a href="frame.html">MathBook frame</a>...</p>
-</body>
+<meta charset="utf-8">
+<title>Математика под микроскопом</title>
+<script>location.replace('kniga.html' + location.hash)</script>
+<p><a id="fallback" href="kniga.html">Открыть полную книгу</a></p>
+<script>document.getElementById('fallback').href = 'kniga.html' + location.hash</script>
 </html>

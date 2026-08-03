@@ -4,7 +4,7 @@
 <style>
 :root{
   --paper:#F6F5F0; --ink:#22303C; --grid:#C4D5E3; --blue:#2456A6; --red:#9E3B32;
-  --green:#2F6B4A; --hl:#F6E9BE; --amber:#A87D1F; --slate:#24303F; --pencil:#5B6B7A;
+  --green:#2F6B4A; --hl:#F6E9BE; --amber:#A87D1F; --violet:#6B4FA3; --slate:#24303F; --pencil:#5B6B7A;
   --gold:#E8C87A; --gridA:rgba(196,213,227,.38); --white:#FDFDFB;
   --serif:Charter,'Bitstream Charter',Georgia,'Times New Roman',serif;
   --sans:-apple-system,'SF Pro Text','Segoe UI','Helvetica Neue',Arial,sans-serif;
@@ -78,12 +78,13 @@ sup,sub{line-height:0}
 svg.map{display:block;min-width:700px;width:100%;height:auto}
 .map .ln{fill:none;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.92}
 .map .ln.b{stroke:var(--blue)}.map .ln.a{stroke:var(--amber)}.map .ln.g{stroke:var(--green)}
-.map .ln.r{stroke:var(--red)}.map .ln.k{stroke:var(--ink);stroke-width:5}
+.map .ln.r{stroke:var(--red)}.map .ln.q{stroke:var(--violet)}.map .ln.k{stroke:var(--ink);stroke-width:5}
 .map .ln.dash{stroke-dasharray:2 9;stroke-width:3.5}
 .stn{cursor:pointer}
 .stn circle{fill:#fff;stroke-width:3.5;stroke:var(--ink)}
 .lg-b .stn circle{stroke:var(--blue)}.lg-a .stn circle{stroke:var(--amber)}
-.lg-g .stn circle{stroke:var(--green)}.lg-r .stn circle{stroke:var(--red)}
+.lg-g .stn circle{stroke:var(--green)}.lg-r .stn circle{stroke:var(--red)}.lg-q .stn circle{stroke:var(--violet)}
+.qls-title{font:800 13px var(--sans);letter-spacing:.12em;text-transform:uppercase;fill:var(--violet)}
 .stn .n{font:700 11px var(--sans);fill:var(--ink);text-anchor:middle}
 .stn .t{font:10.5px var(--sans);fill:var(--pencil);text-anchor:middle}
 .stn .chk{stroke:#fff;stroke-width:2.6;fill:none;visibility:hidden}
@@ -254,6 +255,8 @@ ul.powers li::before{content:"✓";position:absolute;left:2px;color:var(--green)
 .cheat li:last-child{border-bottom:none}
 .feynman{border:1px dashed var(--amber);padding:14px 18px;margin:16px 0;background:var(--white)}
 .feynman .box-t{color:var(--amber)}
+.py-lab{background:#17212B;color:#E8EDF4;border-left:5px solid var(--violet);padding:16px 18px;margin:20px 0}
+.py-lab .box-t{color:#D8C8FF}.py-lab pre{overflow:auto;white-space:pre-wrap;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;margin:10px 0 0}
 
 /* figures */
 figure.fig{margin:22px 0;text-align:center}
@@ -334,10 +337,10 @@ body[data-lang="en"] .chapter.done .ch-head::before{content:"EXPERIMENT COMPLETE
   <div class="cov-eyebrow"><span class="l-ru">Серия «Матемагия» · Лабораторный журнал · Тираж: 1 экземпляр</span><span class="l-en">The Mathemagic Series · A Laboratory Journal · Print run: 1 copy</span></div>
   <h1><span class="l-ru">Математика<br>под микроскопом</span><span class="l-en">Mathematics<br>Under the Microscope</span></h1>
   <p class="cov-sub l-ru">Полный курс — от числовой смекалки до тригонометрии и стратегии Digital SAT
-  (цель: Math 650–700, суммарно 1300+). Восемнадцать опытов, один гримуар, ноль скуки.
+  (цель: Math 650–700, суммарно 1300+), а затем — мост к Quantitative Life Science. Двадцать шесть опытов, ноль скуки.
   Ошибка здесь — не приговор, а данные.</p>
   <p class="cov-sub l-en">The full course — from number sense to trigonometry and Digital SAT strategy
-  (target: Math 650–700, 1300+ total). Eighteen experiments, one grimoire, zero boredom.
+  (target: Math 650–700, 1300+ total), followed by a bridge to Quantitative Life Science. Twenty-six experiments, zero boredom.
   Here, a mistake is not a verdict — it is data.</p>
   <div class="exlibris">
     <span class="l-ru">Из лабораторных записей <b>Т.&nbsp;Тураева</b></span><span class="l-en">From the laboratory notes of <b>T.&nbsp;Turayev</b></span>
@@ -386,12 +389,26 @@ body[data-lang="en"] .chapter.done .ch-head::before{content:"EXPERIMENT COMPLETE
       <g class="stn" data-go="ch-18" transform="translate(710,276)"><circle r="9"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="3.5">§</text><text class="t" y="26">Гримуар</text></g>
     </g>
   </svg>
+  <svg class="map qls-map" viewBox="0 0 780 180" role="img" aria-label="QLS Extension">
+    <text class="qls-title" x="70" y="32">QLS Extension</text>
+    <path class="ln q" d="M70 94 L710 94"/>
+    <g class="lg-q">
+      <g class="stn" data-go="ch-19" transform="translate(90,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">19</text><text class="t" y="34">Матрицы</text></g>
+      <g class="stn" data-go="ch-20" transform="translate(190,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">20</text><text class="t" y="34">PCA</text></g>
+      <g class="stn" data-go="ch-21" transform="translate(290,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">21</text><text class="t" y="34">Производные</text></g>
+      <g class="stn" data-go="ch-22" transform="translate(390,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">22</text><text class="t" y="34">ОДУ</text></g>
+      <g class="stn" data-go="ch-23" transform="translate(490,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">23</text><text class="t" y="34">Распределения</text></g>
+      <g class="stn" data-go="ch-24" transform="translate(590,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">24</text><text class="t" y="34">Вывод</text></g>
+      <g class="stn" data-go="ch-25" transform="translate(690,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">25</text><text class="t" y="34">Модели</text></g>
+    </g>
+  </svg>
   </div>
   <div class="maplegend">
     <span><i style="background:var(--blue)"></i><span class="l-ru">Алгебра</span><span class="l-en">Algebra</span></span>
     <span><i style="background:var(--amber)"></i><span class="l-ru">Продвинутая математика</span><span class="l-en">Advanced Math</span></span>
     <span><i style="background:var(--green)"></i><span class="l-ru">Анализ данных</span><span class="l-en">Data Analysis</span></span>
     <span><i style="background:var(--red)"></i><span class="l-ru">Геометрия и тригонометрия</span><span class="l-en">Geometry &amp; Trigonometry</span></span>
+    <span><i style="background:var(--violet)"></i>QLS Extension</span>
   </div>
 
   <ol id="toc"></ol>
@@ -15229,6 +15246,285 @@ body[data-lang="en"] .chapter.done .ch-head::before{content:"EXPERIMENT COMPLETE
 <div class="box idea"><div class="box-t">Idea</div><p>If you remember one thing: the armory does not make you stronger—it reminds you that you are already strong. Everything here you have forged yourself over seventeen chapters. Before battle, you do not learn new things. Before battle, you make sure your hands remember the hilt. Yours do.</p></div>
 
 </section>
+<section class="chapter" id="ch-19" data-ch="19" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 19 · QLS Extension</div><h2>Векторы, матрицы и линейные системы</h2><p class="ch-lede">Как превратить таблицу биологических измерений в объект, с которым умеет работать алгоритм.</p></header>
+<div class="hook"><p>Один пациент — это не одно число. Возраст, давление, экспрессия генов, лабораторные показатели образуют <strong>вектор признаков</strong>. Если поставить векторы многих пациентов строками, получится матрица данных. Именно так таблица из клиники становится математикой.</p></div>
+<h3>Вектор — упорядоченный набор</h3>
+<p>Вектор <span class="m">x = (x₁,…,xₙ)</span> хранит и значения, и их порядок. Сумма считается покомпонентно, умножение на число меняет масштаб. Длина <span class="m">||x||₂ = √(Σxᵢ²)</span>, а скалярное произведение <span class="m">x·w = Σxᵢwᵢ</span> измеряет совпадение направлений и строит взвешенную сумму.</p>
+<div class="example"><div class="ex-t">Пример · Индекс риска</div><p>После стандартизации признаки пациента равны <span class="m">x=(0.5,−1,2)</span>, веса модели <span class="m">w=(0.4,0.2,0.3)</span>. Тогда score = <span class="m">x·w = 0.2−0.2+0.6 = 0.6</span>. Каждый вес показывает вклад соответствующего признака.</p></div>
+<div class="box trap"><div class="box-t">Важно</div><p>Нельзя складывать «годы», «мм рт. ст.» и «ммоль/л» как есть. Перед моделированием признаки обычно центрируют и масштабируют; иначе большая единица измерения может доминировать без биологической причины.</p></div>
+<h3>Матрица — набор линейных преобразований</h3>
+<p>Матрица <span class="m">A</span> размера <span class="m">m×n</span> переводит вектор из <span class="m">n</span> координат в <span class="m">m</span>. Произведение <span class="m">Ax</span> состоит из скалярных произведений строк A с x. Для <span class="m">AB</span> внутренние размеры обязаны совпасть; порядок обычно нельзя менять: <span class="m">AB ≠ BA</span>.</p>
+<div class="formula">A<sub>m×n</sub>x<sub>n×1</sub> = y<sub>m×1</sub> &nbsp;·&nbsp; (AB)<sub>ij</sub> = Σ<sub>k</sub>A<sub>ik</sub>B<sub>kj</sub></div>
+<h3>Система Ax=b</h3>
+<p>Метод Гаусса заменяет строки эквивалентными и приводит расширенную матрицу к ступенчатому виду. Единственное решение означает независимые ограничения; свободная переменная — бесконечно много решений; строка <span class="m">0=1</span> — несовместность.</p>
+<div class="example"><div class="ex-t">Пример · Смесь двух растворов</div><p><span class="m">x+y=10</span>, <span class="m">0.1x+0.3y=2</span>. Вычтем 0.1 первой строки из второй: <span class="m">0.2y=1</span>, значит <span class="m">y=5</span> и <span class="m">x=5</span>. Это и есть исключение Гаусса в бытовой форме.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">Матрица X имеет 120 строк-пациентов и 8 столбцов-признаков. Каков размер Xw, если w содержит 8 весов?</div><div class="quiz-opts"><label><input type="radio" name="q19ru-1" value="a"><span>8×1</span></label><label><input type="radio" name="q19ru-1" value="b"><span>120×1</span></label><label><input type="radio" name="q19ru-1" value="c"><span>120×8</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: для каждого из 120 пациентов получается один score." data-no="Проверь внутренние размеры: (120×8)(8×1) = 120×1."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · NumPy</div><pre>import numpy as np
+X = np.array([[0.5, -1, 2], [1, 0, -0.5]])
+w = np.array([0.4, 0.2, 0.3])
+print(X @ w)
+A = np.array([[1, 1], [.1, .3]])
+b = np.array([10, 2])
+print(np.linalg.solve(A, b))</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>проверяешь размеры до умножения;</li><li>читаешь Ax как преобразование данных;</li><li>решаешь небольшие системы исключением Гаусса.</li></ul></div>
+<div class="feynman"><div class="box-t">Объясни без формул</div><p>Почему строки матрицы данных удобно считать пациентами, а столбцы — признаками? Что изменится, если таблицу транспонировать?</p></div>
+</section>
+<section class="chapter" id="ch-19-en" data-ch="19" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 19 · QLS Extension</div><h2>Vectors, matrices, and linear systems</h2><p class="ch-lede">Turning a table of biological measurements into an object an algorithm can use.</p></header>
+<div class="hook"><p>A patient is not one number. Age, blood pressure, gene expression, and laboratory values form a <strong>feature vector</strong>. Stack many patient vectors as rows and you obtain a data matrix.</p></div>
+<h3>Vectors are ordered collections</h3><p>A vector <span class="m">x=(x₁,…,xₙ)</span> preserves both values and order. Addition is componentwise. Its Euclidean length is <span class="m">||x||₂=√(Σxᵢ²)</span>; the dot product <span class="m">x·w=Σxᵢwᵢ</span> is a weighted sum and a measure of directional agreement.</p>
+<div class="example"><div class="ex-t">Example · Risk score</div><p>For standardized features <span class="m">x=(0.5,−1,2)</span> and model weights <span class="m">w=(0.4,0.2,0.3)</span>, the score is <span class="m">x·w=0.6</span>. Each weight controls the contribution of one feature.</p></div>
+<div class="box trap"><div class="box-t">Important</div><p>Raw years, mmHg, and mmol/L should not be combined blindly. Features are commonly centered and scaled so measurement units do not dominate the biology.</p></div>
+<h3>Matrices are linear transformations</h3><p>An <span class="m">m×n</span> matrix maps an n-vector to an m-vector. Each entry of <span class="m">Ax</span> is the dot product of one row with x. Inner dimensions must match, and order matters: usually <span class="m">AB≠BA</span>.</p>
+<div class="formula">A<sub>m×n</sub>x<sub>n×1</sub> = y<sub>m×1</sub> &nbsp;·&nbsp; (AB)<sub>ij</sub> = Σ<sub>k</sub>A<sub>ik</sub>B<sub>kj</sub></div>
+<h3>The system Ax=b</h3><p>Gaussian elimination uses solution-preserving row operations. A pivot for every unknown gives a unique solution; a free variable gives infinitely many; a row equivalent to <span class="m">0=1</span> means no solution.</p>
+<div class="example"><div class="ex-t">Example · Mixing two solutions</div><p><span class="m">x+y=10</span> and <span class="m">0.1x+0.3y=2</span>. Subtract 0.1 times the first equation from the second: <span class="m">0.2y=1</span>, so <span class="m">x=y=5</span>.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">X has 120 patient rows and 8 feature columns. What is the shape of Xw when w has 8 weights?</div><div class="quiz-opts"><label><input type="radio" name="q19en-1" value="a"><span>8×1</span></label><label><input type="radio" name="q19en-1" value="b"><span>120×1</span></label><label><input type="radio" name="q19en-1" value="c"><span>120×8</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: one score is produced for each of 120 patients." data-no="Match the inner dimensions: (120×8)(8×1)=120×1."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · NumPy</div><pre>import numpy as np
+X = np.array([[0.5, -1, 2], [1, 0, -0.5]])
+w = np.array([0.4, 0.2, 0.3])
+print(X @ w)
+A = np.array([[1, 1], [.1, .3]])
+b = np.array([10, 2])
+print(np.linalg.solve(A, b))</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>check dimensions before multiplication;</li><li>read Ax as a data transformation;</li><li>solve small systems by elimination.</li></ul></div><div class="feynman"><div class="box-t">Explain without formulas</div><p>Why are patients naturally rows and features columns? What changes after transposition?</p></div>
+</section>
+<section class="chapter" id="ch-20" data-ch="20" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 20 · QLS Extension</div><h2>Собственные векторы и PCA</h2><p class="ch-lede">Как найти устойчивые направления в данных с тысячами коррелирующих признаков.</p></header>
+<div class="hook"><p>В транскриптомике генов много, но изменения часто движутся несколькими согласованными программами. PCA ищет направления, вдоль которых данные меняются сильнее всего, и показывает сложное облако в нескольких координатах.</p></div>
+<h3>Особые направления преобразования</h3><p>Собственный вектор <span class="m">v</span> матрицы A не поворачивается после преобразования: <span class="m">Av=λv</span>. Число λ говорит, насколько направление растянулось и сменило ли знак. Нулевой вектор не считается собственным.</p>
+<div class="example"><div class="ex-t">Пример</div><p>Для <span class="m">A=diag(3,0.5)</span> оси координат — собственные направления. Вдоль первой всё растягивается втрое, вдоль второй сжимается вдвое.</p></div>
+<h3>От ковариации к главным компонентам</h3><p>Сначала центрируем столбцы X. Ковариационная матрица <span class="m">C=XᵀX/(n−1)</span> описывает совместные изменения признаков. Её собственный вектор с наибольшим λ — PC1; следующий ортогональный — PC2. Доля <span class="m">λᵢ/Σλ</span> показывает объяснённую дисперсию.</p>
+<div class="box trap"><div class="box-t">Интерпретация без самообмана</div><p>PCA не знает диагнозов и не доказывает причинность. Компонента — линейная комбинация признаков; знак вектора условен, а сильный batch effect может стать PC1 вместо биологии.</p></div>
+<div class="formula">center X → C = XᵀX/(n−1) → Cv = λv → scores = Xv</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Что означает, что PC1 объясняет 62% дисперсии?</div><div class="quiz-opts"><label><input type="radio" name="q20ru-1" value="a"><span>Модель верна на 62%</span></label><label><input type="radio" name="q20ru-1" value="b"><span>62% пациентов относятся к одному классу</span></label><label><input type="radio" name="q20ru-1" value="c"><span>62% общей вариабельности приходится на это линейное направление</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно. Это доля вариабельности, а не точность и не размер класса." data-no="Explained variance описывает разброс данных вдоль направления, а не качество классификации."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · PCA вручную</div><pre>import numpy as np
+X = np.array([[2., 1.], [3., 2.], [4., 4.], [5., 5.]])
+Xc = X - X.mean(axis=0)
+C = np.cov(Xc, rowvar=False)
+values, vectors = np.linalg.eigh(C)
+order = values.argsort()[::-1]
+print(values[order] / values.sum())
+print(Xc @ vectors[:, order[:1]])</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>понимаешь Av=λv геометрически;</li><li>связываешь PCA с ковариацией;</li><li>не путаешь дисперсию с точностью модели.</li></ul></div>
+</section>
+<section class="chapter" id="ch-20-en" data-ch="20" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 20 · QLS Extension</div><h2>Eigenvectors and PCA</h2><p class="ch-lede">Finding stable directions in data with thousands of correlated features.</p></header>
+<div class="hook"><p>Transcriptomic datasets contain many genes, yet their changes often follow a few coordinated programs. PCA finds directions of greatest variation and projects a complex cloud into a few coordinates.</p></div>
+<h3>Special directions of a transformation</h3><p>An eigenvector <span class="m">v</span> does not change direction under A: <span class="m">Av=λv</span>. The eigenvalue λ gives the scale and possible sign reversal. The zero vector is excluded.</p>
+<div class="example"><div class="ex-t">Example</div><p>For <span class="m">A=diag(3,0.5)</span>, the coordinate axes are eigenvectors: one direction stretches threefold and the other contracts by half.</p></div>
+<h3>From covariance to principal components</h3><p>Center the columns of X. The covariance matrix <span class="m">C=XᵀX/(n−1)</span> describes joint variation. Its eigenvector with the largest λ is PC1; the next orthogonal direction is PC2. The ratio <span class="m">λᵢ/Σλ</span> is explained variance.</p>
+<div class="box trap"><div class="box-t">Interpret carefully</div><p>PCA does not know labels and cannot establish causality. A component is a linear combination; its sign is arbitrary, and a batch effect may become PC1 instead of biology.</p></div>
+<div class="formula">center X → C = XᵀX/(n−1) → Cv = λv → scores = Xv</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">What does it mean when PC1 explains 62% of variance?</div><div class="quiz-opts"><label><input type="radio" name="q20en-1" value="a"><span>The model is 62% correct</span></label><label><input type="radio" name="q20en-1" value="b"><span>62% of patients belong to one class</span></label><label><input type="radio" name="q20en-1" value="c"><span>62% of total variability lies along this linear direction</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct. It is a share of variability, not accuracy or class size." data-no="Explained variance describes spread along a direction, not classification accuracy."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · PCA by hand</div><pre>import numpy as np
+X = np.array([[2., 1.], [3., 2.], [4., 4.], [5., 5.]])
+Xc = X - X.mean(axis=0)
+C = np.cov(Xc, rowvar=False)
+values, vectors = np.linalg.eigh(C)
+order = values.argsort()[::-1]
+print(values[order] / values.sum())
+print(Xc @ vectors[:, order[:1]])</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>interpret Av=λv geometrically;</li><li>connect PCA to covariance;</li><li>do not confuse variance with predictive accuracy.</li></ul></div>
+</section>
+<section class="chapter" id="ch-21" data-ch="21" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 21 · QLS Extension</div><h2>Производные, градиенты и оптимизация</h2><p class="ch-lede">Математика скорости изменения — от фармакокинетики до обучения модели.</p></header>
+<div class="hook"><p>Концентрация лекарства меняется во времени, а ошибка модели — при изменении параметров. Производная отвечает на один вопрос: что произойдёт с выходом при очень малом изменении входа?</p></div>
+<h3>Локальный наклон</h3><p><span class="m">f′(x)=lim<sub>h→0</sub>[f(x+h)−f(x)]/h</span>. Если <span class="m">f′&gt;0</span>, функция локально растёт; если <span class="m">f′&lt;0</span> — падает. Единицы производной — «единицы выхода на единицу входа».</p>
+<div class="example"><div class="ex-t">Пример · Элиминация препарата</div><p><span class="m">C(t)=100e<sup>−0.2t</sup></span>, поэтому <span class="m">C′(t)=−20e<sup>−0.2t</sup>=−0.2C(t)</span>. Скорость выведения пропорциональна текущей концентрации.</p></div>
+<h3>Несколько переменных</h3><p>Частная производная меняет одну координату, фиксируя остальные. Градиент <span class="m">∇L=(∂L/∂w₁,…)</span> указывает направление самого быстрого роста. Поэтому градиентный спуск идёт в противоположную сторону:</p>
+<div class="formula">w<sub>new</sub> = w<sub>old</sub> − η∇L(w)</div>
+<p>Слишком большой learning rate η перепрыгивает минимум; слишком маленький учится медленно. В точке минимума градиент равен нулю лишь как необходимый признак: это также может быть максимум или седло.</p>
+<div class="example"><div class="ex-t">Пример · Один шаг обучения</div><p>Если <span class="m">L(w)=(w−3)²</span>, то <span class="m">L′=2(w−3)</span>. При <span class="m">w=0, η=0.1</span>: новый вес <span class="m">0−0.1(−6)=0.6</span>, то есть ближе к минимуму w=3.</p></div>
+<div class="quiz" data-answer="a"><div class="quiz-q">Градиент loss в текущей точке равен (4, −2). В каком направлении делает шаг gradient descent?</div><div class="quiz-opts"><label><input type="radio" name="q21ru-1" value="a"><span>(−4, 2)</span></label><label><input type="radio" name="q21ru-1" value="b"><span>(4, −2)</span></label><label><input type="radio" name="q21ru-1" value="c"><span>(2, 4)</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: descent идёт против градиента." data-no="Градиент указывает самый быстрый подъём; для спуска нужен минус."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · численная производная</div><pre>def f(w): return (w - 3)**2
+def derivative(f, x, h=1e-5):
+    return (f(x + h) - f(x - h)) / (2*h)
+w, eta = 0.0, 0.1
+for _ in range(8):
+    w -= eta * derivative(f, w)
+    print(round(w, 4), round(f(w), 4))</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>читаешь производную как скорость и единицы;</li><li>собираешь частные производные в градиент;</li><li>понимаешь один шаг gradient descent.</li></ul></div>
+</section>
+<section class="chapter" id="ch-21-en" data-ch="21" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 21 · QLS Extension</div><h2>Derivatives, gradients, and optimization</h2><p class="ch-lede">The mathematics of change, from pharmacokinetics to model training.</p></header>
+<div class="hook"><p>Drug concentration changes with time, and model loss changes with its parameters. A derivative asks what happens to the output after a very small input change.</p></div>
+<h3>Local slope</h3><p><span class="m">f′(x)=lim<sub>h→0</sub>[f(x+h)−f(x)]/h</span>. Positive means local increase and negative means decrease. Its units are “output units per input unit.”</p>
+<div class="example"><div class="ex-t">Example · Drug elimination</div><p>For <span class="m">C(t)=100e<sup>−0.2t</sup></span>, <span class="m">C′(t)=−20e<sup>−0.2t</sup>=−0.2C(t)</span>. Elimination rate is proportional to current concentration.</p></div>
+<h3>Several variables</h3><p>A partial derivative changes one coordinate while holding the others fixed. The gradient <span class="m">∇L=(∂L/∂w₁,…)</span> points toward steepest increase, so gradient descent moves against it:</p>
+<div class="formula">w<sub>new</sub> = w<sub>old</sub> − η∇L(w)</div>
+<p>A large η can overshoot; a small one learns slowly. Zero gradient is necessary at a smooth minimum but may also indicate a maximum or saddle.</p>
+<div class="example"><div class="ex-t">Example · One training step</div><p>If <span class="m">L(w)=(w−3)²</span>, then <span class="m">L′=2(w−3)</span>. At <span class="m">w=0, η=0.1</span>, the new weight is <span class="m">0.6</span>, closer to the minimum at 3.</p></div>
+<div class="quiz" data-answer="a"><div class="quiz-q">The loss gradient is (4, −2). In which direction does gradient descent move?</div><div class="quiz-opts"><label><input type="radio" name="q21en-1" value="a"><span>(−4, 2)</span></label><label><input type="radio" name="q21en-1" value="b"><span>(4, −2)</span></label><label><input type="radio" name="q21en-1" value="c"><span>(2, 4)</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: descent moves against the gradient." data-no="The gradient points uphill; descent needs its negative."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · numerical derivative</div><pre>def f(w): return (w - 3)**2
+def derivative(f, x, h=1e-5):
+    return (f(x + h) - f(x - h)) / (2*h)
+w, eta = 0.0, 0.1
+for _ in range(8):
+    w -= eta * derivative(f, w)
+    print(round(w, 4), round(f(w), 4))</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>read a derivative as rate with units;</li><li>assemble partial derivatives into a gradient;</li><li>understand one gradient-descent step.</li></ul></div>
+</section>
+<section class="chapter" id="ch-22" data-ch="22" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 22 · QLS Extension</div><h2>Интегралы, ODE и численные методы</h2><p class="ch-lede">От мгновенной скорости к накопленному эффекту и динамике живых систем.</p></header>
+<div class="hook"><p>Производная говорит, как быстро меняется система сейчас. Интеграл собирает эти маленькие изменения во времени. Дифференциальное уравнение связывает состояние системы со скоростью его изменения.</p></div>
+<h3>Интеграл как накопление</h3><p>Определённый интеграл <span class="m">∫<sub>a</sub><sup>b</sup>f(t)dt</span> — предел суммы маленьких площадей. Он учитывает знак: область ниже оси вычитается. Фундаментальная теорема связывает две половины анализа: если <span class="m">F′=f</span>, то интеграл равен <span class="m">F(b)−F(a)</span>.</p>
+<div class="example"><div class="ex-t">Пример · AUC</div><p>Площадь под кривой концентрации <span class="m">C(t)</span> — лекарственная экспозиция. Для <span class="m">C(t)=100e<sup>−0.2t</sup></span> от 0 до бесконечности AUC = <span class="m">100/0.2=500</span> концентрация·час.</p></div>
+<h3>Обыкновенные дифференциальные уравнения</h3><p>Модель <span class="m">dN/dt=rN</span> даёт экспоненциальный рост <span class="m">N=N₀e<sup>rt</sup></span>. Логистическая модель <span class="m">dN/dt=rN(1−N/K)</span> добавляет ёмкость среды K: рост замедляется у предела.</p>
+<div class="formula">новое состояние ≈ старое состояние + шаг × текущая скорость</div>
+<p>Это метод Эйлера: <span class="m">y<sub>k+1</sub>=y<sub>k</sub>+h f(t<sub>k</sub>,y<sub>k</sub>)</span>. Меньший h обычно точнее, но требует больше шагов; слишком крупный может сделать динамику нестабильной.</p>
+<div class="box trap"><div class="box-t">Проверка модели</div><p>ODE — идеализация. Проверяй единицы, начальные условия, сохранение неотрицательности и чувствительность к шагу. Красивый график ещё не означает корректную биологию.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">Если скорость инфузии постоянна и равна 5 mg/h в течение 3 часов, чему равен интеграл скорости?</div><div class="quiz-opts"><label><input type="radio" name="q22ru-1" value="a"><span>5 mg</span></label><label><input type="radio" name="q22ru-1" value="b"><span>15 mg</span></label><label><input type="radio" name="q22ru-1" value="c"><span>15 mg/h</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: скорость × время = количество, 5×3=15 mg." data-no="Следи за единицами: (mg/h)×h даёт mg."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · логистический рост</div><pre>r, K, h = 0.8, 1000, 0.05
+N = 20.0
+trajectory = []
+for step in range(200):
+    N += h * r * N * (1 - N/K)
+    trajectory.append(N)
+print(round(trajectory[-1], 2))
+# Повтори с h=1.0 и сравни устойчивость.</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>читаешь интеграл как накопление с единицами;</li><li>узнаёшь экспоненциальную и логистическую ODE;</li><li>понимаешь идею метода Эйлера.</li></ul></div>
+</section>
+<section class="chapter" id="ch-22-en" data-ch="22" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 22 · QLS Extension</div><h2>Integrals, ODEs, and numerical methods</h2><p class="ch-lede">From instantaneous rates to accumulated effects and living-system dynamics.</p></header>
+<div class="hook"><p>A derivative describes change now. An integral accumulates small changes over time. A differential equation connects a system's state to its rate of change.</p></div>
+<h3>Integration as accumulation</h3><p>The definite integral <span class="m">∫<sub>a</sub><sup>b</sup>f(t)dt</span> is the limit of small signed areas. The fundamental theorem links differentiation and integration: if <span class="m">F′=f</span>, the integral is <span class="m">F(b)−F(a)</span>.</p>
+<div class="example"><div class="ex-t">Example · AUC</div><p>Area under a concentration curve measures drug exposure. For <span class="m">C(t)=100e<sup>−0.2t</sup></span> from zero to infinity, AUC is <span class="m">100/0.2=500</span> concentration·hours.</p></div>
+<h3>Ordinary differential equations</h3><p><span class="m">dN/dt=rN</span> gives exponential growth <span class="m">N=N₀e<sup>rt</sup></span>. Logistic growth <span class="m">dN/dt=rN(1−N/K)</span> adds carrying capacity K and slows near the limit.</p>
+<div class="formula">new state ≈ old state + step × current rate</div>
+<p>Euler's method is <span class="m">y<sub>k+1</sub>=y<sub>k</sub>+h f(t<sub>k</sub>,y<sub>k</sub>)</span>. A smaller h is usually more accurate but costs more steps; a large h can be unstable.</p>
+<div class="box trap"><div class="box-t">Model check</div><p>An ODE is an idealization. Check units, initial conditions, non-negativity, and sensitivity to step size. A smooth plot is not proof of sound biology.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">A constant infusion rate is 5 mg/h for 3 hours. What is the integral of the rate?</div><div class="quiz-opts"><label><input type="radio" name="q22en-1" value="a"><span>5 mg</span></label><label><input type="radio" name="q22en-1" value="b"><span>15 mg</span></label><label><input type="radio" name="q22en-1" value="c"><span>15 mg/h</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: rate × time = amount, 5×3=15 mg." data-no="Track the units: (mg/h)×h gives mg."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · logistic growth</div><pre>r, K, h = 0.8, 1000, 0.05
+N = 20.0
+trajectory = []
+for step in range(200):
+    N += h * r * N * (1 - N/K)
+    trajectory.append(N)
+print(round(trajectory[-1], 2))
+# Repeat with h=1.0 and compare stability.</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>read an integral as accumulation with units;</li><li>recognize exponential and logistic ODEs;</li><li>understand the idea of Euler's method.</li></ul></div>
+</section>
+<section class="chapter" id="ch-23" data-ch="23" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 23 · QLS Extension</div><h2>Случайные величины и распределения</h2><p class="ch-lede">Как описывать не отдельный исход, а весь механизм неопределённости.</p></header>
+<div class="hook"><p>Вероятность из главы 13 отвечала на события. Теперь случайная величина присваивает каждому исходу число — количество мутаций, время выживания или уровень экспрессии — и позволяет изучать весь спектр возможных значений.</p></div>
+<h3>Распределение, ожидание, дисперсия</h3><p>Дискретная величина имеет вероятности <span class="m">P(X=x)</span>; непрерывная — плотность, где вероятность равна площади интервала. Для непрерывной X вероятность одной точной точки равна нулю.</p>
+<div class="formula">E[X]=ΣxP(X=x) &nbsp;·&nbsp; Var(X)=E[(X−μ)²] &nbsp;·&nbsp; SD=√Var</div>
+<p>Ожидание — долгосрочный центр, не обязательно возможный исход. Дисперсия измеряет квадрат отклонения и имеет квадратные единицы; SD возвращает исходные единицы.</p>
+<h3>Четыре рабочих распределения</h3>
+<table class="tbl"><thead><tr><th>Распределение</th><th>Когда применять</th><th>Параметры</th></tr></thead><tbody><tr><td>Bernoulli</td><td>один успех/неуспех</td><td>p</td></tr><tr><td>Binomial</td><td>число успехов в n независимых попытках</td><td>n,p</td></tr><tr><td>Poisson</td><td>число редких событий на интервал</td><td>λ</td></tr><tr><td>Normal</td><td>непрерывная симметричная вариация</td><td>μ,σ</td></tr></tbody></table>
+<div class="example"><div class="ex-t">Пример · Число ответивших</div><p>Если вероятность ответа на терапию 0.3 и пациенты независимы, то <span class="m">X~Binomial(10,0.3)</span>. <span class="m">E[X]=np=3</span>, <span class="m">Var=np(1−p)=2.1</span>. Это не обещает ровно три ответа в каждой группе.</p></div>
+<div class="box trap"><div class="box-t">Условия важнее формулы</div><p>Binomial требует фиксированное n, одинаковое p, два исхода и независимость. Если пациенты влияют друг на друга или p меняется, привычная формула может быть неверна.</p></div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Какое распределение естественно для числа новых мутаций на фиксированном участке при редких независимых событиях?</div><div class="quiz-opts"><label><input type="radio" name="q23ru-1" value="a"><span>Normal</span></label><label><input type="radio" name="q23ru-1" value="b"><span>Bernoulli</span></label><label><input type="radio" name="q23ru-1" value="c"><span>Poisson</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: Poisson моделирует число редких событий на интервал." data-no="Нужно распределение счётчика событий, а не одного бинарного исхода."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · симуляция</div><pre>import numpy as np
+rng = np.random.default_rng(7)
+x = rng.binomial(n=10, p=.3, size=10000)
+print(x.mean(), x.var())
+y = rng.poisson(lam=2.5, size=10000)
+print(y.mean(), y.var())</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>различаешь событие, случайную величину и распределение;</li><li>интерпретируешь E, Var и SD;</li><li>выбираешь базовое распределение по механизму данных.</li></ul></div>
+</section>
+<section class="chapter" id="ch-23-en" data-ch="23" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 23 · QLS Extension</div><h2>Random variables and distributions</h2><p class="ch-lede">Describing an entire mechanism of uncertainty rather than one outcome.</p></header>
+<div class="hook"><p>A random variable assigns a number to every outcome: mutation count, survival time, or expression level. Its distribution describes the full range of possible values.</p></div>
+<h3>Distribution, expectation, variance</h3><p>A discrete variable has probabilities <span class="m">P(X=x)</span>. A continuous variable has a density, and interval probability is area; any exact point has probability zero.</p>
+<div class="formula">E[X]=ΣxP(X=x) &nbsp;·&nbsp; Var(X)=E[(X−μ)²] &nbsp;·&nbsp; SD=√Var</div>
+<p>Expectation is a long-run center, not necessarily a possible outcome. Variance has squared units; SD returns to the original units.</p>
+<h3>Four working distributions</h3><table class="tbl"><thead><tr><th>Distribution</th><th>Use</th><th>Parameters</th></tr></thead><tbody><tr><td>Bernoulli</td><td>one success/failure</td><td>p</td></tr><tr><td>Binomial</td><td>successes in n independent trials</td><td>n,p</td></tr><tr><td>Poisson</td><td>rare-event count per interval</td><td>λ</td></tr><tr><td>Normal</td><td>continuous symmetric variation</td><td>μ,σ</td></tr></tbody></table>
+<div class="example"><div class="ex-t">Example · Number of responders</div><p>With independent patients and response probability 0.3, <span class="m">X~Binomial(10,0.3)</span>. Then <span class="m">E[X]=3</span> and <span class="m">Var=2.1</span>; this does not guarantee exactly three responses.</p></div>
+<div class="box trap"><div class="box-t">Conditions before formulas</div><p>Binomial requires fixed n, equal p, two outcomes, and independence. Dependence or varying probabilities break the simple model.</p></div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Which distribution naturally models rare independent mutation counts in a fixed genomic region?</div><div class="quiz-opts"><label><input type="radio" name="q23en-1" value="a"><span>Normal</span></label><label><input type="radio" name="q23en-1" value="b"><span>Bernoulli</span></label><label><input type="radio" name="q23en-1" value="c"><span>Poisson</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: Poisson models rare-event counts per interval." data-no="You need a count distribution, not one binary outcome."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · simulation</div><pre>import numpy as np
+rng = np.random.default_rng(7)
+x = rng.binomial(n=10, p=.3, size=10000)
+print(x.mean(), x.var())
+y = rng.poisson(lam=2.5, size=10000)
+print(y.mean(), y.var())</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>separate events, random variables, and distributions;</li><li>interpret E, Var, and SD;</li><li>choose a basic distribution from the data-generating mechanism.</li></ul></div>
+</section>
+<section class="chapter" id="ch-24" data-ch="24" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 24 · QLS Extension</div><h2>Статистический вывод, likelihood и Bayes</h2><p class="ch-lede">Как переходить от ограниченной выборки к осторожному утверждению о мире.</p></header>
+<div class="hook"><p>Данные шумны, а выборка конечна. Статистический вывод не устраняет неопределённость; он делает её измеримой и заставляет нас отделять наблюдение от силы доказательства.</p></div>
+<h3>Оценка и стандартная ошибка</h3><p>Оценка — число из выборки; параметр — неизвестное число популяции. При повторных выборках оценки меняются. Стандартная ошибка описывает этот разброс и обычно уменьшается примерно как <span class="m">1/√n</span>.</p>
+<div class="formula">примерный 95% CI = estimate ± 1.96 × SE</div>
+<p>Доверительный интервал — процедура, которая в долгой серии покрывает истинный параметр примерно в 95% случаев. Он не означает, что 95% пациентов лежат внутри интервала.</p>
+<h3>Тестирование гипотез</h3><p>p-value — вероятность получить такие же или более экстремальные данные <em>при условии</em>, что H₀ и модель верны. Это не вероятность истинности H₀ и не размер эффекта. До анализа важны гипотеза, уровень α и план множественных сравнений.</p>
+<h3>Likelihood и Bayes</h3><p>Likelihood <span class="m">L(θ|data)</span> рассматривает данные как фиксированные и сравнивает, какие θ лучше их объясняют. Байесовское обновление объединяет prior и likelihood:</p>
+<div class="formula">posterior ∝ likelihood × prior</div>
+<div class="example"><div class="ex-t">Пример · Редкая болезнь</div><p>Чувствительность 90%, ложноположительная доля 5%, распространённость 1%. Из 10 000 людей ожидаем 90 истинно положительных и 495 ложноположительных. Поэтому <span class="m">P(болезнь|+)=90/(90+495)≈15%</span>, а не 90%.</p></div>
+<div class="box trap"><div class="box-t">Не путай направления условия</div><p><span class="m">P(+|болезнь)</span> — чувствительность теста. Пациента интересует <span class="m">P(болезнь|+)</span>. Их связывает базовая частота; одно нельзя заменить другим.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">Исследование сообщает p=0.03. Какое утверждение корректно?</div><div class="quiz-opts"><label><input type="radio" name="q24ru-1" value="a"><span>Вероятность H₀ равна 3%</span></label><label><input type="radio" name="q24ru-1" value="b"><span>При H₀ такие или более экстремальные данные возникали бы примерно в 3% повторений</span></label><label><input type="radio" name="q24ru-1" value="c"><span>Эффект клинически важен с вероятностью 97%</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно. p-value условен на H₀ и не измеряет клиническую важность." data-no="p-value не является вероятностью гипотезы и не говорит о размере эффекта."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · Bayes через частоты</div><pre>population = 10000
+prevalence, sensitivity, fpr = .01, .90, .05
+true_positive = population * prevalence * sensitivity
+false_positive = population * (1-prevalence) * fpr
+ppv = true_positive / (true_positive + false_positive)
+print(ppv)</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>разделяешь estimate, parameter и SE;</li><li>правильно читаешь CI и p-value;</li><li>обновляешь вероятность с учётом базовой частоты.</li></ul></div>
+</section>
+<section class="chapter" id="ch-24-en" data-ch="24" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 24 · QLS Extension</div><h2>Statistical inference, likelihood, and Bayes</h2><p class="ch-lede">Moving from a limited sample to a cautious statement about the world.</p></header>
+<div class="hook"><p>Data are noisy and samples finite. Inference does not remove uncertainty; it quantifies it and separates an observation from the strength of evidence.</p></div>
+<h3>Estimates and standard errors</h3><p>An estimate comes from a sample; a parameter belongs to the population. Estimates vary across repeated samples. Standard error measures this variation and often decreases approximately as <span class="m">1/√n</span>.</p>
+<div class="formula">approximate 95% CI = estimate ± 1.96 × SE</div>
+<p>A confidence interval is a procedure that covers the true parameter in about 95% of repeated studies. It does not contain 95% of individual patients.</p>
+<h3>Hypothesis testing</h3><p>A p-value is the probability of equally or more extreme data <em>assuming</em> H₀ and the model. It is not the probability that H₀ is true or a measure of effect size.</p>
+<h3>Likelihood and Bayes</h3><p>Likelihood <span class="m">L(θ|data)</span> fixes the data and compares parameter values. Bayesian updating combines prior information with evidence:</p>
+<div class="formula">posterior ∝ likelihood × prior</div>
+<div class="example"><div class="ex-t">Example · Rare disease</div><p>With 90% sensitivity, 5% false-positive rate, and 1% prevalence, 10,000 people yield about 90 true positives and 495 false positives. Thus <span class="m">P(disease|+)=90/(90+495)≈15%</span>, not 90%.</p></div>
+<div class="box trap"><div class="box-t">Do not reverse the condition</div><p><span class="m">P(+|disease)</span> is sensitivity. A patient wants <span class="m">P(disease|+)</span>. The base rate connects them.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">A study reports p=0.03. Which statement is valid?</div><div class="quiz-opts"><label><input type="radio" name="q24en-1" value="a"><span>H₀ has a 3% probability</span></label><label><input type="radio" name="q24en-1" value="b"><span>Under H₀, equally or more extreme data would occur in about 3% of repetitions</span></label><label><input type="radio" name="q24en-1" value="c"><span>The effect is clinically important with 97% probability</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct. A p-value is conditional on H₀ and does not measure clinical importance." data-no="A p-value is neither a hypothesis probability nor an effect size."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · Bayes with counts</div><pre>population = 10000
+prevalence, sensitivity, fpr = .01, .90, .05
+true_positive = population * prevalence * sensitivity
+false_positive = population * (1-prevalence) * fpr
+ppv = true_positive / (true_positive + false_positive)
+print(ppv)</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>separate estimates, parameters, and SE;</li><li>read CIs and p-values correctly;</li><li>update probability using the base rate.</li></ul></div>
+</section>
+<section class="chapter" id="ch-25" data-ch="25" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 25 · QLS Extension</div><h2>Линейные модели и математика ML</h2><p class="ch-lede">Как связать матрицы, производные и статистику в первый настоящий предиктивный алгоритм.</p></header>
+<div class="hook"><p>Линейная регрессия выглядит скромно, но в ней уже есть весь цикл машинного обучения: признаки, параметры, предсказание, loss, оптимизация, проверка на новых данных и интерпретация с оговорками.</p></div>
+<h3>Модель и остатки</h3><p><span class="m">ŷ=Xβ</span>. Вектор β содержит коэффициенты, а остаток <span class="m">e=y−ŷ</span> — то, что модель не объяснила. Метод наименьших квадратов минимизирует <span class="m">MSE=(1/n)Σ(yᵢ−ŷᵢ)²</span>.</p>
+<div class="example"><div class="ex-t">Пример · Интерпретация</div><p>В модели давления <span class="m">ŷ=95+0.6·age−4·treatment</span> коэффициент 0.6 означает среднюю разницу 0.6 mmHg на год при фиксированном treatment. Это условная ассоциация, не автоматически причинный эффект.</p></div>
+<h3>Обобщение и regularization</h3><p>Train error оценивает подгонку знакомых данных; test error — перенос на новые. Слишком гибкая модель запоминает шум. Ridge добавляет <span class="m">λΣβⱼ²</span> и мягко уменьшает коэффициенты; Lasso добавляет <span class="m">λΣ|βⱼ|</span> и может занулять некоторые.</p>
+<div class="box trap"><div class="box-t">Утечка данных</div><p>Разделяй train/test до масштабирования и выбора признаков. Если test участвовал в подготовке модели, это уже не честная проверка. Для малых данных используй cross-validation, но сохраняй финальный независимый test.</p></div>
+<h3>От регрессии к классификации</h3><p>Логистическая регрессия превращает линейный score в вероятность: <span class="m">p=1/(1+e<sup>−z</sup>)</span>, где <span class="m">z=Xβ</span>. Порог переводит вероятность в класс, но выбор порога меняет чувствительность и специфичность.</p>
+<div class="formula">данные X → score Xβ → prediction → loss → gradient → обновлённые β</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Модель имеет почти нулевую train error, но большую test error. Наиболее вероятная проблема?</div><div class="quiz-opts"><label><input type="radio" name="q25ru-1" value="a"><span>Underfitting</span></label><label><input type="radio" name="q25ru-1" value="b"><span>Неверный размер матрицы</span></label><label><input type="radio" name="q25ru-1" value="c"><span>Overfitting</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: модель выучила training data, но плохо обобщает." data-no="Большой разрыв train–test при отличном train обычно указывает на overfitting."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · линейная регрессия без библиотек ML</div><pre>import numpy as np
+age = np.array([20, 30, 40, 50, 60.])
+y = np.array([108, 112, 121, 126, 132.])
+X = np.c_[np.ones(len(age)), age]
+beta = np.linalg.solve(X.T @ X, X.T @ y)
+prediction = X @ beta
+print(beta)
+print(((y - prediction)**2).mean())</pre></div>
+<div class="boss"><div class="boss-t">Финальный босс · Честный pipeline</div><p>У тебя 200 пациентов и 5 000 генов. Сформулируй порядок действий: split, preprocessing, feature selection, обучение, настройка и оценка. Где должна происходить каждая операция, чтобы test не утёк в модель?</p><details class="sol"><summary>Один корректный скелет</summary><p>Сначала отделить финальный test. Всё обучение preprocessing, отбор генов и подбор гиперпараметров выполнять только внутри training data, лучше внутри folds cross-validation. После выбора pipeline один раз оценить его на нетронутом test и сообщить метрику вместе с неопределённостью и ограничениями.</p></details></div>
+<div class="recap"><div class="recap-t">QLS-мост построен</div><ul class="powers"><li>видишь линейную модель как Xβ;</li><li>различаешь fit и generalization;</li><li>связываешь loss, gradient и regularization;</li><li>защищаешь оценку от data leakage.</li></ul></div>
+</section>
+<section class="chapter" id="ch-25-en" data-ch="25" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 25 · QLS Extension</div><h2>Linear models and the mathematics of ML</h2><p class="ch-lede">Connecting matrices, derivatives, and statistics into a real predictive algorithm.</p></header>
+<div class="hook"><p>Linear regression already contains the full machine-learning cycle: features, parameters, predictions, loss, optimization, evaluation on new data, and careful interpretation.</p></div>
+<h3>Model and residuals</h3><p><span class="m">ŷ=Xβ</span>. The vector β contains coefficients; <span class="m">e=y−ŷ</span> contains residuals. Least squares minimizes <span class="m">MSE=(1/n)Σ(yᵢ−ŷᵢ)²</span>.</p>
+<div class="example"><div class="ex-t">Example · Interpretation</div><p>In <span class="m">ŷ=95+0.6·age−4·treatment</span>, 0.6 is the average mmHg difference per year holding treatment fixed. It is a conditional association, not automatically a causal effect.</p></div>
+<h3>Generalization and regularization</h3><p>Training error measures fit to familiar data; test error measures transfer to new data. Ridge adds <span class="m">λΣβⱼ²</span> and shrinks coefficients; Lasso adds <span class="m">λΣ|βⱼ|</span> and may set some to zero.</p>
+<div class="box trap"><div class="box-t">Data leakage</div><p>Split train and test before scaling or feature selection. If test data shaped the model, it is no longer an honest evaluation. Cross-validation helps with small datasets, while a final test remains untouched.</p></div>
+<h3>From regression to classification</h3><p>Logistic regression maps a linear score to probability: <span class="m">p=1/(1+e<sup>−z</sup>)</span>, where <span class="m">z=Xβ</span>. A threshold creates classes, but changing it trades sensitivity against specificity.</p>
+<div class="formula">data X → score Xβ → prediction → loss → gradient → updated β</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">A model has almost zero training error but large test error. What is the likely problem?</div><div class="quiz-opts"><label><input type="radio" name="q25en-1" value="a"><span>Underfitting</span></label><label><input type="radio" name="q25en-1" value="b"><span>Wrong matrix shape</span></label><label><input type="radio" name="q25en-1" value="c"><span>Overfitting</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: the model learned training data but generalizes poorly." data-no="A large train–test gap with excellent training fit usually means overfitting."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · linear regression without ML libraries</div><pre>import numpy as np
+age = np.array([20, 30, 40, 50, 60.])
+y = np.array([108, 112, 121, 126, 132.])
+X = np.c_[np.ones(len(age)), age]
+beta = np.linalg.solve(X.T @ X, X.T @ y)
+prediction = X @ beta
+print(beta)
+print(((y - prediction)**2).mean())</pre></div>
+<div class="boss"><div class="boss-t">Final boss · An honest pipeline</div><p>You have 200 patients and 5,000 genes. Order split, preprocessing, feature selection, training, tuning, and evaluation so test data cannot leak into the model.</p><details class="sol"><summary>One valid skeleton</summary><p>Hold out final test data first. Learn preprocessing, gene selection, and hyperparameters using training data only, preferably inside cross-validation folds. Evaluate the chosen pipeline once on untouched test data and report the metric with uncertainty and limitations.</p></details></div>
+<div class="recap"><div class="recap-t">The QLS bridge is complete</div><ul class="powers"><li>see a linear model as Xβ;</li><li>separate fit from generalization;</li><li>connect loss, gradients, and regularization;</li><li>protect evaluation from data leakage.</li></ul></div>
+</section>
 </main>
 
 <footer id="botbar">
@@ -15260,7 +15556,7 @@ ru:{map:'Карта',hubTab:'Карта курса',bookTitle:'Математи�
   qstat:function(a,b){return 'Проверки гипотез: '+a+' / '+b},
   prog:function(pc,d,t){return 'Журнал заполнен на '+pc+'% · опытов завершено: '+d+' из '+t},
   dayx:'День X',
-  stn:{'ch-0':'Старт','ch-1':'Числа','ch-2':'Иксы','ch-3':'Прямые','ch-4':'Системы','ch-5':'Неравенства','ch-6':'Степени','ch-7':'Экспонента','ch-8':'Парабола','ch-9':'Многочлены','ch-10':'Функции','ch-11':'Проценты','ch-12':'Статистика','ch-13':'Вероятность','ch-14':'Треугольники','ch-15':'Круги','ch-16':'Тригонометрия','ch-18':'Гримуар'}},
+  stn:{'ch-0':'Старт','ch-1':'Числа','ch-2':'Иксы','ch-3':'Прямые','ch-4':'Системы','ch-5':'Неравенства','ch-6':'Степени','ch-7':'Экспонента','ch-8':'Парабола','ch-9':'Многочлены','ch-10':'Функции','ch-11':'Проценты','ch-12':'Статистика','ch-13':'Вероятность','ch-14':'Треугольники','ch-15':'Круги','ch-16':'Тригонометрия','ch-18':'Гримуар','ch-19':'Матрицы','ch-20':'PCA','ch-21':'Производные','ch-22':'ОДУ','ch-23':'Распределения','ch-24':'Вывод','ch-25':'Модели'}},
 en:{map:'Map',hubTab:'Course map',bookTitle:'Mathematics Under the Microscope · Course Map',
   chapter:'Chapter',back:'← Back',fwd:'Forward →',course:'Course map',
   stampBtn:'Stamp it: experiment complete',next:'Next station →',
@@ -15269,7 +15565,7 @@ en:{map:'Map',hubTab:'Course map',bookTitle:'Mathematics Under the Microscope ·
   qstat:function(a,b){return 'Hypothesis checks: '+a+' / '+b},
   prog:function(pc,d,t){return 'Journal '+pc+'% complete · experiments finished: '+d+' of '+t},
   dayx:'Day X',
-  stn:{'ch-0':'Start','ch-1':'Numbers','ch-2':'The X’s','ch-3':'Lines','ch-4':'Systems','ch-5':'Inequalities','ch-6':'Exponents','ch-7':'Growth & Decay','ch-8':'The Parabola','ch-9':'Polynomials','ch-10':'Functions','ch-11':'Percents','ch-12':'Statistics','ch-13':'Probability','ch-14':'Triangles','ch-15':'Circles','ch-16':'Trigonometry','ch-18':'Grimoire'}}
+  stn:{'ch-0':'Start','ch-1':'Numbers','ch-2':'The X’s','ch-3':'Lines','ch-4':'Systems','ch-5':'Inequalities','ch-6':'Exponents','ch-7':'Growth & Decay','ch-8':'The Parabola','ch-9':'Polynomials','ch-10':'Functions','ch-11':'Percents','ch-12':'Statistics','ch-13':'Probability','ch-14':'Triangles','ch-15':'Circles','ch-16':'Trigonometry','ch-18':'Grimoire','ch-19':'Matrices','ch-20':'PCA','ch-21':'Derivatives','ch-22':'ODEs','ch-23':'Distributions','ch-24':'Inference','ch-25':'Models'}}
 };
 function T(){return I18N[state.lang]}
 
@@ -15286,6 +15582,7 @@ function domColor(n){
   if(n>=6&&n<=10)return 'var(--amber)';
   if(n>=11&&n<=13)return 'var(--green)';
   if(n>=14&&n<=16)return 'var(--red)';
+  if(n>=19&&n<=25)return 'var(--violet)';
   return 'var(--ink)';
 }
 allSecs.forEach(function(c){

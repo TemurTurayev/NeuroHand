@@ -1,0 +1,804 @@
+<section class="chapter" id="ch-4" data-ch="4" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 4 · Алгебра</div><h2>Системы: два чека</h2><p class="ch-lede">Цен в чеке нет — а ты уже можешь их назвать, потому что чеков два.</p></header>
+
+<div class="hook">
+<p>Вы зашли в кофейню вдвоём. Ты взял два кофе и один круассан — касса пробила <strong>39 000 сум</strong>. Друг взял один кофе и один круассан — <strong>27 000 сум</strong>. А теперь неприятность: цен на витрине нет, в чеке — только итог. Бариста уже отвернулся. Сколько стоит кофе?</p>
+<p>Если смотреть на любой из чеков по отдельности — ты в тупике. «Один кофе и один круассан — 27 000». Кофе за 20 000 и круассан за 7 000? Пожалуйста. Кофе за 10 000 и круассан за 17 000? Тоже сходится. Один чек ничего не доказывает — это слух, сплетня, «кто-то что-то заплатил».</p>
+<p>Но у тебя <em>два</em> чека. Положи их рядом. Твой отличается от чека друга ровно на один лишний кофе — а по деньгам на <span class="m">39 000 − 27 000 = 12 000</span>. Вот он, кофе. Один лишний кофе стоит 12 000 — и других вариантов нет. Подставь обратно: <span class="m">12 000 + круассан = 27 000</span>, значит круассан — 15 000. Один чек — слух. Два чека — улика.</p>
+<p>Мы только что сделали то, ради чего написана вся глава: взяли два уравнения с двумя неизвестными и вычли одно из другого, чтобы одно неизвестное <em>исчезло</em>. Этому фокусу больше тысячи лет. В древнекитайском трактате «Математика в девяти книгах» есть задача про клетку, где сидят фазаны и кролики: голов 35, ног 94 — сколько кого? Те же два чека: одно уравнение про головы, другое про ноги. Мы к ней ещё вернёмся.</p>
+</div>
+
+<div class="try-first">
+<p>Прежде чем читать дальше — возьми пять-десять минут и повозись честно. Не подглядывай.</p>
+<div class="problem tier-a">
+<div class="pr-t">Разминка <span class="tier">попробуй сначала</span></div>
+<p>В детском отделении закупили лекарство. По одной накладной: <strong>3 упаковки и 2 флакона — 116 000 сум</strong>. По другой: <strong>1 упаковка и 2 флакона — 76 000 сум</strong>. Сколько стоит одна упаковка и сколько один флакон?</p>
+<p>Подсказка на будущее: ты, скорее всего, попробуешь угадывать пары чисел, которые дают 76 000, — и утонешь, вариантов бесконечно. Секрет в том, что накладных <em>две</em>, и они отличаются ровно на две упаковки. Держи эту мысль — в конце главы стоит Босс из этой же породы, и он ещё жульничает.</p>
+</div>
+</div>
+
+<div class="box idea"><div class="box-t">Идея</div><p>Если запомнишь одно: <strong>вычти известное из известного — останется искомое.</strong> Два уравнения дают тебе право вычитать одно из другого целиком, и при удаче лишняя неизвестная схлопывается сама.</p></div>
+
+<h3>Что значит «решить систему»</h3>
+
+<p>Одно уравнение <span class="m">x + y = 27</span> — это не одна пара чисел, а целая прямая: (0; 27), (10; 17), (12; 15), (27; 0) — сколько угодно. Второе уравнение <span class="m">2x + y = 39</span> — тоже прямая, свой набор пар. <strong>Решить систему</strong> (solve a system) — значит найти пару <span class="m">(x; y)</span>, которая устраивает <em>оба</em> уравнения сразу. Не одно из двух — оба.</p>
+
+<p>Геометрически это до глупого наглядно: две прямые на плоскости обычно пересекаются в одной точке. Эта точка — единственная, что лежит и на первой прямой, и на второй. Её координаты и есть ответ.</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Две пересекающиеся прямые и точка их пересечения — решение системы">
+<line class="grid" x1="90" y1="30" x2="90" y2="240"/>
+<line class="grid" x1="140" y1="30" x2="140" y2="240"/>
+<line class="grid" x1="190" y1="30" x2="190" y2="240"/>
+<line class="grid" x1="240" y1="30" x2="240" y2="240"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="240"/>
+<line class="grid" x1="340" y1="30" x2="340" y2="240"/>
+<line class="grid" x1="40" y1="200" x2="400" y2="200"/>
+<line class="grid" x1="40" y1="160" x2="400" y2="160"/>
+<line class="grid" x1="40" y1="120" x2="400" y2="120"/>
+<line class="grid" x1="40" y1="80" x2="400" y2="80"/>
+<line class="ax" x1="40" y1="240" x2="400" y2="240"/>
+<line class="ax" x1="40" y1="240" x2="40" y2="20"/>
+<path class="crv" d="M40 60 L400 240" fill="none"/>
+<path class="crv2" d="M40 235 L360 30" fill="none"/>
+<circle class="pt" cx="193" cy="137" r="4"/>
+<text class="lbl" x="201" y="132">(x; y)</text>
+<text class="lbl" x="360" y="255">x</text>
+<text class="lbl" x="20" y="30">y</text>
+</svg><figcaption>Каждое уравнение — прямая. Точка их пересечения устраивает оба уравнения, значит она и есть решение системы.</figcaption></figure>
+
+<p>Держи эту картинку в голове — она объяснит всё дальнейшее: и почему у системы бывает ровно одно решение, и когда решений нет вовсе, и когда их бесконечно много. Всё сведётся к вопросу «как расположены две прямые».</p>
+
+<h3>Первый инструмент: подстановка</h3>
+
+<p>Иногда одна переменная уже выражена через другую — сидит в готовом виде, только руку протяни. Тогда работает <strong>подстановка</strong> (substitution): берём это выражение и <em>подставляем</em> его во второе уравнение вместо переменной. Вместо двух неизвестных остаётся одна.</p>
+
+<div class="example"><div class="ex-t">Пример 1 · Когда переменная уже выражена</div>
+<p>Реши систему: <span class="m">y = 2x − 1</span> и <span class="m">3x + y = 14</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим свести к одной неизвестной:</span> первое уравнение уже говорит, чему равен <span class="m">y</span>. Значит во втором уравнении <span class="m">y</span> можно смело заменить на <span class="m">2x − 1</span>.</div>
+<div class="step"><span class="step-why">Подставляем и получаем уравнение с одним x:</span> <span class="m">3x + (2x − 1) = 14</span>.</div>
+<div class="step"><span class="step-why">Собираем подобные, чтобы найти x:</span> <span class="m">5x − 1 = 14</span>, значит <span class="m">5x = 15</span>, <span class="m">x = 3</span>.</div>
+<div class="step"><span class="step-why">Возвращаемся за вторым числом:</span> <span class="m">y = 2·3 − 1 = 5</span>.</div>
+</div>
+<p>Ответ: <strong>x = 3, y = 5</strong>. <em>Взгляд назад.</em> Проверка бесплатна и обязательна: <span class="m">3·3 + 5 = 14</span> — сходится. Заметь, где сработала подстановка: <span class="m">y</span> был выражен без дробей, готовенький. Подстановка любит именно такие уравнения — где переменная уже стоит отдельно.</p>
+</div>
+
+<details class="hint"><summary>Почему вообще можно подставлять <span class="m">2x − 1</span> вместо <span class="m">y</span>?</summary><p>Потому что в решении системы <span class="m">y</span> и <span class="m">2x − 1</span> — это одно и то же число. Первое уравнение прямо говорит: они равны. А равное можно заменять равным в любом другом уравнении — числу всё равно, каким именем его назвали.</p></details>
+
+<div class="box tool"><div class="box-t">Приём: «Два чека»</div><p>Если два уравнения отличаются на «одну штуку», вычти их целиком друг из друга — общее сократится, и останется цена этой штуки. Твой чек минус чек друга — исчезли круассаны, остался один кофе. Это самый быстрый путь, когда у уравнений есть одинаковый кусок.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Реши подстановкой: <span class="m">y = x + 4</span> и <span class="m">2x + y = 16</span>. Чему равен <span class="m">y</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-5" value="a"><span>4</span></label>
+<label><input type="radio" name="q4-5" value="b"><span>6</span></label>
+<label><input type="radio" name="q4-5" value="c"><span>12</span></label>
+<label><input type="radio" name="q4-5" value="d"><span>8</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Подставь: 2x+(x+4)=16 → 3x=12 → x=4, значит y=4+4=8." data-no="Вариант a — это x (спросили-то y!). Подставь y во второе уравнение: 2x+(x+4)=16, отсюда x=4, а y=x+4=8. Не забывай вернуться за той переменной, про которую спрашивают."></div>
+</div>
+
+<h3>Второй инструмент: уничтожение</h3>
+
+<p>Подстановка хороша, когда переменная выражена. А если оба уравнения записаны «вперемешку», как в чеках? Тогда работает <strong>сложение и вычитание</strong> уравнений — по-английски elimination, «уничтожение». Мысль та же, что с чеками: сделать так, чтобы одна переменная при сложении (или вычитании) обнулилась.</p>
+
+<div class="box tool"><div class="box-t">Приём: «Уничтожение»</div><p>Домножь одно (или оба) уравнения на числа так, чтобы у какой-то переменной коэффициенты стали <em>противоположными</em> (для сложения) или <em>одинаковыми</em> (для вычитания). Сложи или вычти уравнения целиком — эта переменная исчезнет. Реши то, что осталось, и вернись за второй координатой.</p></div>
+
+<div class="example"><div class="ex-t">Пример 2 · Кофе и круассан, теперь по правилам</div>
+<p>Вернёмся к чекам как к системе. Пусть <span class="m">к</span> — цена кофе, <span class="m">р</span> — цена круассана.</p>
+<div class="formula">2<b class="hl">к</b> + р = 39 000<br>1<b class="hl">к</b> + р = 27 000</div>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим убить круассан — у него в обоих уравнениях коэффициент уже одинаковый (по одному р):</span> значит вычитаем второе уравнение из первого целиком.</div>
+<div class="step"><span class="step-why">Вычитаем аккуратно, каждую часть:</span> <span class="m">(2к − к) + (р − р) = 39 000 − 27 000</span>, то есть <span class="m">к = 12 000</span>.</div>
+<div class="step"><span class="step-why">Круассан исчез — берём любое исходное уравнение за второй координатой:</span> <span class="m">12 000 + р = 27 000</span>, значит <span class="m">р = 15 000</span>.</div>
+</div>
+<p>Ответ: <strong>кофе 12 000, круассан 15 000</strong> — ровно то, что мы вычислили в самом начале, теперь по правилам. <em>Взгляд назад.</em> Мы вычитали, потому что коэффициенты у <span class="m">р</span> были <em>одинаковыми</em>. Если бы они были противоположными (например, <span class="m">+р</span> и <span class="m">−р</span>), мы бы <em>складывали</em>. Правило-компас: одинаковые — вычитаем, противоположные — складываем.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Самая частая гибель на вычитании: минус теряется на <em>части</em> второго уравнения. Вычитая <span class="m">2к + р = 39 000</span> минус <span class="m">к + р = 27 000</span>, надо вычесть <em>всё</em> второе уравнение — и <span class="m">к</span>, и <span class="m">р</span>, и правую часть. Кто вычтет только первый член, получит мусор. Минус — как скобка на всё уравнение: <span class="m">−(к + р) = −к − р</span>, а не <span class="m">−к + р</span>.</p></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Из уравнения <span class="m">5x + 3y = 22</span> вычитают уравнение <span class="m">2x + 3y = 10</span>. Что получится?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-1" value="a"><span><span class="m">7x + 6y = 32</span></span></label>
+<label><input type="radio" name="q4-1" value="b"><span><span class="m">3x = 12</span></span></label>
+<label><input type="radio" name="q4-1" value="c"><span><span class="m">3x + 6y = 12</span></span></label>
+<label><input type="radio" name="q4-1" value="d"><span><span class="m">3x = 32</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! 5x−2x=3x, 3y−3y=0, 22−10=12. Игрек уничтожен — ровно то, что нужно." data-no="Вариант c оставил y (не вычел его), а d забыл вычесть правую часть. Вычитай ВСЁ второе уравнение: 3y−3y=0, 22−10=12. Ответ 3x=12."></div>
+</div>
+
+<h3>Медицина: смесь двух растворов</h3>
+
+<p>Теперь то, ради чего эта математика однажды спасёт тебе процедуру. В отделении есть глюкоза 10 % и глюкоза 40 %. Нужно получить <strong>300 мл раствора 20 %</strong>. Сколько миллилитров каждого взять?</p>
+
+<p>Здесь два разных «чека», и путать их нельзя. Один считает <em>объём</em> (сколько всего миллилитров жидкости), другой — <em>чистое вещество</em> (сколько в них собственно глюкозы). Пусть <span class="m">x</span> — миллилитры 10 %-го раствора, <span class="m">y</span> — миллилитры 40 %-го.</p>
+
+<div class="example"><div class="ex-t">Пример 3 · Глюкоза 10 % и 40 % → 300 мл 20 %</div>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим уравнение объёма — просто складываем миллилитры:</span> <span class="m">x + y = 300</span>.</div>
+<div class="step"><span class="step-why">Хотим уравнение чистой глюкозы — берём процент от каждого объёма:</span> в 10 %-м её <span class="m">0{,}10x</span>, в 40 %-м <span class="m">0{,}40y</span>, а в итоговых 300 мл при 20 % её <span class="m">0{,}20·300 = 60</span> мл. Значит <span class="m">0{,}10x + 0{,}40y = 60</span>.</div>
+<div class="step"><span class="step-why">Не любим десятичные — домножаем второе уравнение на 10, чтобы стали целые:</span> <span class="m">x + 4y = 600</span>.</div>
+<div class="step"><span class="step-why">Теперь у обоих уравнений одинаковый x — вычитаем, чтобы убить его:</span> <span class="m">(x + 4y) − (x + y) = 600 − 300</span>, то есть <span class="m">3y = 300</span>, <span class="m">y = 100</span>.</div>
+<div class="step"><span class="step-why">Возвращаемся за x:</span> <span class="m">x + 100 = 300</span>, <span class="m">x = 200</span>.</div>
+</div>
+<p>Ответ: <strong>200 мл десятипроцентного и 100 мл сорокапроцентного</strong>. <em>Взгляд назад.</em> Проверь по чистому веществу — это разумнее, чем по объёму: <span class="m">0{,}10·200 + 0{,}40·100 = 20 + 40 = 60</span> мл глюкозы в 300 мл — это ровно 20 %. Сходится. И заметь логику: итоговые 20 % ближе к 10 %, чем к 40 %, поэтому десятипроцентного мы и взяли больше. Ответ прошёл проверку на здравый смысл ещё до арифметики.</p>
+</div>
+
+<div class="box why"><div class="box-t">Почему это работает</div><p>Смесь подчиняется двум законам сохранения сразу: жидкость ниоткуда не берётся (объёмы складываются) и глюкоза ниоткуда не берётся (граммы вещества складываются). Два закона — два уравнения. Столько уравнений, сколько независимых неизвестных, — и система замыкается. Меньше уравнений, чем неизвестных, — ответ не определён; это не свойство математики, это свойство реальности.</p></div>
+
+<div class="box recall"><div class="box-t">Стоп-кадр</div><p>Закрой экран. Восстанови по памяти: (1) что значит «решить систему» одной фразой про точку; (2) когда удобнее подстановка, а когда уничтожение; (3) в задаче про смесь — какие два уравнения ты пишешь и чем они отличаются. Не подглядывай минуту.</p></div>
+
+<h3>SAT-фишка: спрашивают не то, что ты нашёл</h3>
+
+<p>Держись, тут ловят почти всех. Ты честно решаешь систему, находишь <span class="m">x</span>, гордо пишешь <span class="m">x</span> в ответ — а вопрос был про <span class="m">y</span>. Или про <span class="m">x + y</span>. SAT обожает спрашивать <span class="m">x + y</span> или <span class="m">x − y</span> вместо самих неизвестных — и часто это можно получить <em>одним</em> сложением или вычитанием, вообще не решая систему до конца.</p>
+
+<div class="example"><div class="ex-t">Пример 4 · Хитрый вопрос про сумму</div>
+<p>Дано: <span class="m">4x + 3y = 29</span> и <span class="m">3x + 4y = 27</span>. Найди <span class="m">x + y</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Не бросаемся решать — смотрим, что просят. Просят x + y, а не x и y по отдельности:</span> значит, может, до полного решения и не дойдёт.</div>
+<div class="step"><span class="step-why">Хотим, чтобы у x и y оказался одинаковый коэффициент — тогда сумма выскочит сама. Сложим уравнения:</span> <span class="m">(4x + 3x) + (3y + 4y) = 29 + 27</span>, то есть <span class="m">7x + 7y = 56</span>.</div>
+<div class="step"><span class="step-why">Делим на 7 — и коэффициенты у x и y равны, это и есть x + y:</span> <span class="m">x + y = 8</span>.</div>
+</div>
+<p>Ответ: <strong>x + y = 8</strong>. Одно сложение, одно деление — и всё. <em>Взгляд назад.</em> Если бы тебя всё же спросили сами <span class="m">x</span> и <span class="m">y</span>, пришлось бы ещё и вычесть уравнения (<span class="m">x − y = 2</span>), а потом сложить с <span class="m">x + y = 8</span>. Но нас спасла лень в хорошем смысле: сначала посмотри на вопрос, потом считай.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Граф Подвох наклоняется к твоему листу и вкрадчиво предлагает: «Ты ведь нашёл, что <span class="m">x = 5</span>. Пиши пятёрку». В вариантах ответа <em>стоит</em> и 5, и 3 (это <span class="m">y</span>), и 8 (это <span class="m">x + y</span>) — специально, чтобы поймать каждого, кто не дочитал вопрос. Прежде чем обвести кружок, вернись глазами к последней строке условия: что именно просили? Подчеркни это слово, пока решаешь.</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Дано <span class="m">2x + y = 13</span> и <span class="m">x + 2y = 11</span>. Чему равно <span class="m">x + y</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-2" value="a"><span>5</span></label>
+<label><input type="radio" name="q4-2" value="b"><span>3</span></label>
+<label><input type="radio" name="q4-2" value="c"><span>8</span></label>
+<label><input type="radio" name="q4-2" value="d"><span>24</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Сложи уравнения: 3x+3y=24, делим на 3 → x+y=8. Полное решение не понадобилось." data-no="Вариант a — это x, b — это y (соблазн ответить одной неизвестной), d — забыл поделить на 3. Сложи уравнения: 3x+3y=24, значит x+y=8."></div>
+</div>
+
+<h3>Сколько у системы решений</h3>
+
+<p>Пока каждая наша система имела ровно одну точку пересечения. Но две прямые могут вести себя тремя способами — и SAT это любит спрашивать без всякого решения, прямо по коэффициентам.</p>
+
+<ul>
+<li><strong>Одно решение</strong> — прямые пересекаются. Наклоны (slope) разные. Это норма.</li>
+<li><strong>Ноль решений</strong> — прямые <em>параллельны</em>: наклоны равны, но прямые не совпадают. Они идут бок о бок и никогда не встречаются. Свободные члены не согласованы.</li>
+<li><strong>Бесконечно много</strong> — это <em>одна и та же прямая</em>, записанная дважды (одно уравнение — просто другое, домноженное на число). Каждая точка одной лежит на другой.</li>
+</ul>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Две параллельные прямые с одинаковым наклоном, которые никогда не пересекаются — система без решений">
+<line class="grid" x1="90" y1="30" x2="90" y2="240"/>
+<line class="grid" x1="140" y1="30" x2="140" y2="240"/>
+<line class="grid" x1="190" y1="30" x2="190" y2="240"/>
+<line class="grid" x1="240" y1="30" x2="240" y2="240"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="240"/>
+<line class="grid" x1="340" y1="30" x2="340" y2="240"/>
+<line class="grid" x1="40" y1="200" x2="400" y2="200"/>
+<line class="grid" x1="40" y1="160" x2="400" y2="160"/>
+<line class="grid" x1="40" y1="120" x2="400" y2="120"/>
+<line class="grid" x1="40" y1="80" x2="400" y2="80"/>
+<line class="ax" x1="40" y1="240" x2="400" y2="240"/>
+<line class="ax" x1="40" y1="240" x2="40" y2="20"/>
+<path class="crv" d="M40 210 L380 40" fill="none"/>
+<path class="crv2" d="M40 250 L360 90" fill="none"/>
+<text class="lbl" x="350" y="45">одинаковый</text>
+<text class="lbl" x="350" y="60">наклон</text>
+</svg><figcaption>Одинаковый наклон, но прямые не совпадают — параллельны. Точки пересечения нет: система не имеет решений.</figcaption></figure>
+
+<div class="box idea"><div class="box-t">Идея</div><p>Возьми систему в виде <span class="m">a₁x + b₁y = c₁</span> и <span class="m">a₂x + b₂y = c₂</span> и сравни три отношения: <span class="frac"><b>a₁</b><i>a₂</i></span>, <span class="frac"><b>b₁</b><i>b₂</i></span>, <span class="frac"><b>c₁</b><i>c₂</i></span>. Если первые два <em>не</em> равны — одно решение. Если <span class="frac"><b>a₁</b><i>a₂</i></span> = <span class="frac"><b>b₁</b><i>b₂</i></span>, но это не равно <span class="frac"><b>c₁</b><i>c₂</i></span> — параллельны, решений нет. Если равны все три — одна прямая, решений бесконечно.</p></div>
+
+<div class="example"><div class="ex-t">Пример 5 · При каком k система не имеет решений</div>
+<p>Дано: <span class="m">2x + 3y = 7</span> и <span class="m">kx + 6y = 5</span>. При каком <span class="m">k</span> у системы нет решений?</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим параллельные прямые, то есть равные наклоны — сравниваем коэффициенты при x и y:</span> нужно, чтобы <span class="frac"><b>k</b><i>2</i></span> = <span class="frac"><b>6</b><i>3</i></span>.</div>
+<div class="step"><span class="step-why">Решаем это маленькое уравнение относительно k:</span> <span class="frac"><b>6</b><i>3</i></span> = 2, значит <span class="frac"><b>k</b><i>2</i></span> = 2, откуда <span class="m">k = 4</span>.</div>
+<div class="step"><span class="step-why">Проверяем, что прямые именно параллельны, а не совпадают — сравниваем свободные члены:</span> при <span class="m">k = 4</span> первое уравнение, домноженное на 2, даёт <span class="m">4x + 6y = 14</span>, а у нас <span class="m">4x + 6y = 5</span>. Левые части одинаковы, правые — 14 и 5 — нет. Прямые параллельны, не совпадают.</div>
+</div>
+<p>Ответ: <strong>k = 4</strong>. <em>Взгляд назад.</em> Была ловушка мимо: если бы справа стояло не 5, а 14, прямые совпали бы — и решений было бы <em>бесконечно</em>, а не ноль. «Нет решений» и «бесконечно решений» разделяет только правая часть. Всегда делай третий шаг.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>«Нет решений» и «бесконечно много» путают постоянно, потому что оба начинаются одинаково — с равных наклонов. Разница только в свободном члене: согласован (одна прямая, бесконечно решений) или рассогласован (параллельны, ноль решений). Граф Подвох радостно подсунет «бесконечно», когда правильный ответ «ноль». Проверяй свободный член <em>всегда</em> — это и есть развилка.</p></div>
+
+<div class="box desmos"><div class="box-t">Ленивый Гений: Desmos</div><p>Обычную систему из SAT почти всегда быстрее решить не руками, а глазами. Вбей оба уравнения в Desmos — он нарисует две прямые, наведи курсор на пересечение, и координаты высветятся. Ноль алгебры, ноль шансов потерять минус.</p><p>А вот на «при каком <span class="m">k</span>…» график сам не ответит — но есть трюк. Впиши коэффициент <span class="m">k</span> буквой: <span class="m">kx + 6y = 5</span>. Desmos предложит создать <em>слайдер</em> для <span class="m">k</span>. Тяни его и смотри: при <span class="m">k = 4</span> вторая прямая ложится параллельно первой — точка пересечения улетает в бесконечность и пропадает. Вот он, момент «нет решений», прямо на экране. Слайдер — это ум, отданный напрокат ползунку.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">При каком <span class="m">k</span> система <span class="m">3x + y = 4</span> и <span class="m">6x + ky = 9</span> не имеет решений?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-3" value="a"><span><span class="m">k = 2</span></span></label>
+<label><input type="radio" name="q4-3" value="b"><span><span class="m">k = 4</span></span></label>
+<label><input type="radio" name="q4-3" value="c"><span><span class="m">k = 1</span></span></label>
+<label><input type="radio" name="q4-3" value="d"><span><span class="m">k = 3</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Наклоны равны при 6/3 = k/1, значит k=2. Свободные члены (4 и 9) не согласованы, поэтому именно НЕТ решений, а не бесконечно." data-no="Нужны равные наклоны: коэффициент при x вырос втрое (3→6), значит и при y должен втрое — k=2. Проверь: 6x+2y=9 против удвоенного 6x+2y=8 — параллельны."></div>
+</div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Система <span class="m">x − 2y = 5</span> и <span class="m">3x − 6y = 15</span>. Сколько решений?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-4" value="a"><span>Ровно одно</span></label>
+<label><input type="radio" name="q4-4" value="b"><span>Ни одного</span></label>
+<label><input type="radio" name="q4-4" value="c"><span>Ровно два</span></label>
+<label><input type="radio" name="q4-4" value="d"><span>Бесконечно много</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Второе уравнение — это первое, умноженное на 3. Одна и та же прямая, значит бесконечно много решений." data-no="Ловушка «нет решений»: но здесь и свободный член согласован (15 = 3·5). Всё уравнение — просто первое ×3. Это ОДНА прямая → бесконечно решений. У линейной системы никогда не бывает ровно двух."></div>
+</div>
+
+<h3>Текстовые задачи: количество и стоимость</h3>
+
+<p>Здесь спрятана ещё одна классическая ловушка. В задачах про билеты, покупки, смеси почти всегда два уравнения: одно про <em>количество</em> (сколько штук, голов, человек), другое про <em>стоимость</em> (сколько денег, ног, вещества). Их легко перепутать местами — и тогда весь ответ едет.</p>
+
+<div class="example"><div class="ex-t">Пример 6 · Билеты в театр</div>
+<p>Продали билеты взрослым и детям. <strong>2 взрослых и 3 детских</strong> стоили 155 000 сум, <strong>4 взрослых и 1 детский</strong> — 185 000. Сколько стоит взрослый билет и сколько детский?</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим перевести слова в уравнения — заводим имена. Пусть в — цена взрослого, д — детского:</span> первая покупка даёт <span class="m">2в + 3д = 155 000</span>, вторая — <span class="m">4в + 1д = 185 000</span>.</div>
+<div class="step"><span class="step-why">Хотим уничтожить взрослого — у него коэффициенты 2 и 4, домножим первое уравнение на 2, чтобы стало 4 и там, и там:</span> <span class="m">4в + 6д = 310 000</span>.</div>
+<div class="step"><span class="step-why">Вычитаем второе из нового первого — взрослый исчезает:</span> <span class="m">(4в + 6д) − (4в + д) = 310 000 − 185 000</span>, то есть <span class="m">5д = 125 000</span>, <span class="m">д = 25 000</span>.</div>
+<div class="step"><span class="step-why">Возвращаемся за взрослым:</span> <span class="m">4в + 25 000 = 185 000</span>, <span class="m">4в = 160 000</span>, <span class="m">в = 40 000</span>.</div>
+</div>
+<p>Ответ: <strong>взрослый 40 000, детский 25 000</strong>. Проверка по первой покупке: <span class="m">2·40 000 + 3·25 000 = 80 000 + 75 000 = 155 000</span> — сходится.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Уравнение количества и уравнение стоимости перепутаны местами. В задаче «купили 8 билетов на 300 000 сум» соблазнительно записать <span class="m">взрослый + детский = 300 000</span> — но 8 это <em>штуки</em>, а 300 000 это <em>деньги</em>. Штуки со штуками (<span class="m">в + д = 8</span>), деньги с деньгами (<span class="m">40 000в + 25 000д = 300 000</span>). Смешаешь единицы — получишь бессмыслицу вроде «билет стоит 8».</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Купили <strong>6 билетов</strong> на общую сумму <strong>240 000 сум</strong>. Взрослый стоит 45 000, детский — 30 000. Сколько куплено <em>детских</em> билетов?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-6" value="a"><span>4</span></label>
+<label><input type="radio" name="q4-6" value="b"><span>3</span></label>
+<label><input type="radio" name="q4-6" value="c"><span>2</span></label>
+<label><input type="radio" name="q4-6" value="d"><span>Данных не хватает</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Штуки: в+д=6. Деньги: 45000в+30000д=240000. Отсюда в=4, д=2." data-no="Вариант a — это число взрослых (спросили детских). Не смешивай единицы: штуки со штуками (в+д=6), деньги с деньгами (45000в+30000д=240000). Решив, получишь в=4, д=2."></div>
+</div>
+
+<h3>Флешбэки</h3>
+
+<div class="problem flashback tier-b">
+<div class="pr-t">Задача Ф1 <span class="tier">флешбэк · глава 3</span></div>
+<p>Прямая проходит через точки <span class="m">(2; 50 000)</span> и <span class="m">(5; 110 000)</span> — это тариф такси: посадка плюс цена за километр. Найди уравнение прямой <span class="m">y = mx + b</span>, а заодно скажи, чему равна посадка (это <span class="m">b</span>).</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель: сначала найди наклон <span class="m">m</span> (цена одного километра) как отношение изменения <span class="m">y</span> к изменению <span class="m">x</span>. Потом подставь одну точку, чтобы вытащить <span class="m">b</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Наклон: <span class="m">m = (110 000 − 50 000) / (5 − 2)</span>. Получив <span class="m">m</span>, реши <span class="m">50 000 = m·2 + b</span> относительно <span class="m">b</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Наклон <span class="m">m = 60 000 / 3 = 20 000</span> сум за километр. Подставляем точку <span class="m">(2; 50 000)</span>: <span class="m">50 000 = 20 000·2 + b = 40 000 + b</span>, значит <span class="m">b = 10 000</span>. Уравнение: <span class="m">y = 20 000x + 10 000</span>. Посадка — <strong>10 000 сум</strong>. Проверка второй точкой: <span class="m">20 000·5 + 10 000 = 110 000</span> — сходится. Кстати, «найти прямую по двум точкам» — это и есть решённая система: две точки дали два уравнения на <span class="m">m</span> и <span class="m">b</span>.</p></details>
+</div>
+
+<div class="problem flashback tier-a">
+<div class="pr-t">Задача Ф2 <span class="tier">флешбэк · глава 2</span></div>
+<p>Переведи в уравнения, но <em>не решай</em>: «Число взрослых на 12 больше числа детей, а всего людей 40». Обозначь взрослых <span class="m">в</span>, детей <span class="m">д</span> и запиши систему.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>«На 12 больше» — это про разность. «Всего 40» — это про сумму. Две фразы — два уравнения.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>«Взрослых на 12 больше детей» дословно: <span class="m">в = д + 12</span>. «Всего 40»: <span class="m">в + д = 40</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Система: <span class="m">в = д + 12</span> и <span class="m">в + д = 40</span>. Первое уравнение уже выражает <span class="m">в</span> — значит напрашивается подстановка: <span class="m">(д + 12) + д = 40</span>, откуда <span class="m">2д = 28</span>, <span class="m">д = 14</span>, <span class="m">в = 26</span>. Проверка: <span class="m">26 − 14 = 12</span>, <span class="m">26 + 14 = 40</span>. Главное этой задачи — увидеть, что «больше на» и «всего» это два <em>разных</em> уравнения, а не одно.</p></details>
+</div>
+
+<h3>Задачи</h3>
+
+<div class="problem tier-a">
+<div class="pr-t">Задача 1 <span class="tier">уровень А</span></div>
+<p>Реши подстановкой: <span class="m">y = 3x − 2</span> и <span class="m">2x + y = 13</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — одно уравнение с одним <span class="m">x</span>. Игрек уже выражен, подставь его во второе.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">2x + (3x − 2) = 13</span>. Собери подобные.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">2x + 3x − 2 = 13</span>, значит <span class="m">5x = 15</span>, <span class="m">x = 3</span>. Тогда <span class="m">y = 3·3 − 2 = 7</span>. Ответ: <strong>x = 3, y = 7</strong>. Проверка: <span class="m">2·3 + 7 = 13</span> — сходится.</p></details>
+</div>
+
+<div class="problem tier-a">
+<div class="pr-t">Задача 2 <span class="tier">уровень А</span></div>
+<p>Реши уничтожением: <span class="m">2x + y = 11</span> и <span class="m">x − y = 1</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>У игрека коэффициенты <span class="m">+1</span> и <span class="m">−1</span> — они противоположны. Что делать с противоположными: складывать или вычитать?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Противоположные — складываем. Сложи уравнения целиком, игрек исчезнет.</p></details>
+<details class="sol"><summary>Решение</summary><p>Складываем: <span class="m">(2x + x) + (y − y) = 11 + 1</span>, то есть <span class="m">3x = 12</span>, <span class="m">x = 4</span>. Затем <span class="m">4 − y = 1</span>, значит <span class="m">y = 3</span>. Ответ: <strong>x = 4, y = 3</strong>. Проверка: <span class="m">2·4 + 3 = 11</span> — сходится.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Задача 3 <span class="tier">уровень Б</span></div>
+<p>Дано <span class="m">5x + 2y = 26</span> и <span class="m">2x + 5y = 17</span>. Найди <span class="m">x − y</span> (не сами <span class="m">x</span> и <span class="m">y</span>).</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — <span class="m">x − y</span> одним ходом. Полное решение даёт дроби; тебе они не нужны. Что если вычесть одно уравнение из другого?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Вычти второе из первого: слева <span class="m">(5x − 2x) + (2y − 5y) = 3x − 3y</span>. Дальше подели.</p></details>
+<details class="sol"><summary>Решение</summary><p>Вычитаем второе уравнение из первого: <span class="m">(5x + 2y) − (2x + 5y) = 26 − 17</span>, то есть <span class="m">3x − 3y = 9</span>. Делим на 3: <span class="m">x − y = 3</span>. Ответ: <strong>3</strong>. Красота в том, что сами <span class="m">x</span> и <span class="m">y</span> тут дробные (<span class="frac"><b>32</b><i>7</i></span> и <span class="frac"><b>11</b><i>7</i></span>), а вопрос про разность обошёл их стороной. Всегда смотри, что просят, прежде чем считать.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Задача 4 <span class="tier">уровень Б</span></div>
+<p>Смешивают спирт 70 % и спирт 30 %, чтобы получить <strong>200 мл раствора 60 %</strong>. Сколько миллилитров каждого нужно?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Два уравнения: объём (миллилитры складываются) и чистый спирт (проценты от объёмов). Обозначь <span class="m">x</span> — мл 70 %-го, <span class="m">y</span> — мл 30 %-го.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Объём: <span class="m">x + y = 200</span>. Спирт: <span class="m">0{,}70x + 0{,}30y = 0{,}60·200 = 120</span>. Домножь второе на 10, чтобы убрать десятичные.</p></details>
+<details class="sol"><summary>Решение</summary><p>Система: <span class="m">x + y = 200</span> и <span class="m">7x + 3y = 1200</span> (домножили на 10). Из первого <span class="m">y = 200 − x</span>, подставляем: <span class="m">7x + 3(200 − x) = 1200</span>, то есть <span class="m">7x + 600 − 3x = 1200</span>, <span class="m">4x = 600</span>, <span class="m">x = 150</span>. Тогда <span class="m">y = 50</span>. Ответ: <strong>150 мл семидесятипроцентного и 50 мл тридцатипроцентного</strong>. Проверка по спирту: <span class="m">0{,}70·150 + 0{,}30·50 = 105 + 15 = 120</span> мл в 200 мл — ровно 60 %. И здравый смысл: 60 % ближе к 70 %, поэтому крепкого взяли больше — сходится.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Задача 5 <span class="tier">уровень Б</span></div>
+<p>Классическая задача из «Математики в девяти книгах»: в клетке фазаны и кролики. Голов — <strong>35</strong>, ног — <strong>94</strong>. Сколько фазанов и сколько кроликов?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Одно уравнение про головы (у всех по одной), другое про ноги. У фазана 2 ноги, у кролика 4.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Пусть <span class="m">ф</span> — фазаны, <span class="m">к</span> — кролики. Головы: <span class="m">ф + к = 35</span>. Ноги: <span class="m">2ф + 4к = 94</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Система: <span class="m">ф + к = 35</span> и <span class="m">2ф + 4к = 94</span>. Домножим первое на 2: <span class="m">2ф + 2к = 70</span>. Вычтем из второго: <span class="m">(2ф + 4к) − (2ф + 2к) = 94 − 70</span>, то есть <span class="m">2к = 24</span>, <span class="m">к = 12</span>. Тогда <span class="m">ф = 23</span>. Ответ: <strong>23 фазана и 12 кроликов</strong>. Проверка: <span class="m">23 + 12 = 35</span> голов, <span class="m">2·23 + 4·12 = 46 + 48 = 94</span> ноги. Старый китайский способ был ещё изящнее: представь, что все встали на две ноги — тогда ног было бы <span class="m">2·35 = 70</span>. Лишние <span class="m">94 − 70 = 24</span> ноги — это вторые пары кроликов, по 2 на кролика, значит кроликов <span class="m">24 / 2 = 12</span>. Та же система, другой язык.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Задача 6 <span class="tier">уровень Б</span></div>
+<p>При каком значении <span class="m">c</span> система <span class="m">x + 2y = 4</span> и <span class="m">3x + 6y = c</span> имеет <em>бесконечно много</em> решений?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Бесконечно решений — это когда второе уравнение оказывается тем же самым, что первое, просто домноженным на число.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Коэффициенты слева выросли втрое (1→3, 2→6). Чтобы это была та же прямая, правая часть тоже должна вырасти втрое.</p></details>
+<details class="sol"><summary>Решение</summary><p>Второе уравнение получается из первого умножением на 3: <span class="m">3(x + 2y) = 3·4</span>, то есть <span class="m">3x + 6y = 12</span>. Чтобы прямые совпали (а не оказались параллельными), нужно <span class="m">c = 12</span>. Ответ: <strong>c = 12</strong>. Если бы стояло любое другое <span class="m">c</span>, прямые были бы параллельны — и решений не было бы <em>вовсе</em>. Одно число <span class="m">c</span> отделяет «бесконечно» от «ноль».</p></details>
+</div>
+
+<div class="problem flashback tier-b">
+<div class="pr-t">Задача 7 <span class="tier">флешбэк · глава 3</span></div>
+<p>Две прямые заданы уравнениями <span class="m">y = 2x + 1</span> и <span class="m">y = −x + 7</span>. Найди точку их пересечения — то есть реши систему графическим смыслом наизнанку.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>В точке пересечения <span class="m">y</span> у обеих прямых одинаковый. Значит правые части равны между собой.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Приравняй: <span class="m">2x + 1 = −x + 7</span>. Это уже одно уравнение с одним <span class="m">x</span> — то же, что подстановка.</p></details>
+<details class="sol"><summary>Решение</summary><p>Приравниваем правые части (обе равны <span class="m">y</span>): <span class="m">2x + 1 = −x + 7</span>. Переносим: <span class="m">3x = 6</span>, <span class="m">x = 2</span>. Тогда <span class="m">y = 2·2 + 1 = 5</span>. Точка пересечения: <strong>(2; 5)</strong>. Проверка по второй прямой: <span class="m">−2 + 7 = 5</span> — сходится. Наклоны <span class="m">2</span> и <span class="m">−1</span> разные, поэтому пересечение ровно одно, как и положено.</p></details>
+</div>
+
+<div class="problem tier-c">
+<div class="pr-t">Задача 8 <span class="tier">уровень В</span></div>
+<p>В системе <span class="m">4x + 6y = 10</span> и <span class="m">6x + 9y = t</span> при одном значении <span class="m">t</span> решений бесконечно много, а при всех остальных — ноль. Найди это значение <span class="m">t</span> и объясни, почему при других <span class="m">t</span> решений нет вовсе (а не одно).</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Проверь наклоны: пропорциональны ли коэффициенты при <span class="m">x</span> и <span class="m">y</span> в двух уравнениях? Если да — прямые либо совпадают, либо параллельны, третьего не дано.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Отношение коэффициентов: <span class="frac"><b>6</b><i>4</i></span> и <span class="frac"><b>9</b><i>6</i></span>. Оба равны <span class="frac"><b>3</b><i>2</i></span>. Значит наклоны совпадают всегда — судьба системы решается только правой частью.</p></details>
+<details class="sol"><summary>Решение</summary><p>Коэффициенты второго уравнения ровно в <span class="frac"><b>3</b><i>2</i></span> раза больше первого: <span class="m">6 = <span class="frac"><b>3</b><i>2</i></span>·4</span>, <span class="m">9 = <span class="frac"><b>3</b><i>2</i></span>·6</span>. Наклоны у прямых одинаковы при <em>любом</em> <span class="m">t</span> — поэтому одного-единственного пересечения не может быть в принципе. Прямые либо совпадут (бесконечно решений), либо разойдутся параллельно (ноль). Совпадут, когда и правая часть подчинится тому же множителю: <span class="m">t = <span class="frac"><b>3</b><i>2</i></span>·10 = 15</span>. Ответ: <strong>при t = 15 решений бесконечно</strong>; при любом другом <span class="m">t</span> прямые параллельны и решений <strong>ноль</strong>. Ключ: раз наклоны заведомо равны, «ровно одно решение» тут невозможно вообще — картинка допускает только «слились» или «разбежались».</p></details>
+</div>
+
+<div class="problem tier-c">
+<div class="pr-t">Задача 9 · Найди ошибку <span class="tier">уровень В</span></div>
+<p>Ниже приведено правдоподобное, но <em>неверное</em> решение. Найди изъян, назови его и доведи до правильного ответа.</p>
+<p><strong>Дано:</strong> <span class="m">2x + 3y = 16</span> и <span class="m">2x − y = 8</span>. Найти <span class="m">x</span> и <span class="m">y</span>.</p>
+<p><strong>«Решение».</strong> «У обоих уравнений при <span class="m">x</span> коэффициент 2 — уничтожим <span class="m">x</span> вычитанием. Вычитаю второе из первого: <span class="m">2x − 2x = 0</span>, а игреки дают <span class="m">3y − y = 2y</span>, справа <span class="m">16 − 8 = 8</span>. Значит <span class="m">2y = 8</span>, <span class="m">y = 4</span>. Тогда <span class="m">2x − 4 = 8</span>, <span class="m">2x = 12</span>, <span class="m">x = 6</span>. Ответ: <span class="m">x = 6, y = 4</span>».</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Подставь предложенный ответ обратно в первое уравнение. Сходится ли <span class="m">2·6 + 3·4 = 16</span>? Если нет — ошибка где-то в вычитании.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Присмотрись к строчке <span class="m">3y − y</span>. Второе уравнение — это <span class="m">2x − y</span>. Ты вычитаешь <em>всё</em> второе уравнение, а значит вычитаешь и <span class="m">(−y)</span>. Чему равно <span class="m">3y − (−y)</span>?</p></details>
+<details class="sol"><summary>Решение</summary><p>Ошибка — потерянный знак при вычитании. Второй игрек стоит с минусом: <span class="m">−y</span>. Вычитая всё второе уравнение, мы вычитаем и его: <span class="m">3y − (−y) = 3y + y = 4y</span>, а не <span class="m">2y</span>. Минус ведёт себя как скобка на всё уравнение: <span class="m">−(2x − y) = −2x + y</span>. Правильно: <span class="m">4y = 8</span>, значит <span class="m">y = 2</span>. Тогда <span class="m">2x − 2 = 8</span>, <span class="m">2x = 10</span>, <span class="m">x = 5</span>. Ответ: <strong>x = 5, y = 2</strong>. Проверка: <span class="m">2·5 + 3·2 = 16</span> и <span class="m">2·5 − 2 = 8</span> — оба сходятся, чего неверный ответ (6; 4) не давал (<span class="m">12 + 12 = 24 ≠ 16</span>). Мораль: минус при вычитании накрывает <em>каждый</em> член второго уравнения, включая те, что и так были отрицательными.</p></details>
+</div>
+
+<div class="boss">
+<div class="boss-t">Босс главы: «Аптечный ревизор»</div>
+<p>Ты — ревизор, тебе принесли аптечную накладную на закупку. В ней три строки, но цен за единицу нет — только суммы по строкам. Две первые строки честны, и по ним ты можешь восстановить цены. А в третьей строке кладовщик, кажется, приписал лишнего. Восстанови цены и поймай приписку — это и есть работа Босса: сначала два чека, потом улика.</p>
+<div class="problem tier-c">
+<div class="pr-t">Босс, часть 1 · Восстанови цены <span class="tier">уровень В</span></div>
+<p>Строка 1: <strong>3 упаковки + 2 флакона — 116 000 сум</strong>. Строка 2: <strong>1 упаковка + 2 флакона — 76 000 сум</strong>. Найди цену одной упаковки и одного флакона.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Чем отличаются две строки? У флаконов коэффициент одинаковый (по 2). Приём «Два чека»: вычти одну строку из другой — флаконы исчезнут.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Строка 1 минус строка 2: упаковок было 3 и 1, разница 2 упаковки; денег 116 000 и 76 000. Значит <span class="m">2 упаковки = 40 000</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Пусть <span class="m">п</span> — упаковка, <span class="m">ф</span> — флакон. Система: <span class="m">3п + 2ф = 116 000</span> и <span class="m">п + 2ф = 76 000</span>. Вычитаем вторую из первой (флаконы уничтожаются): <span class="m">(3п − п) + (2ф − 2ф) = 116 000 − 76 000</span>, то есть <span class="m">2п = 40 000</span>, <span class="m">п = 20 000</span>. Возвращаемся: <span class="m">20 000 + 2ф = 76 000</span>, <span class="m">2ф = 56 000</span>, <span class="m">ф = 28 000</span>. Ответ: <strong>упаковка 20 000, флакон 28 000</strong>. Проверка первой строки: <span class="m">3·20 000 + 2·28 000 = 60 000 + 56 000 = 116 000</span> — сходится.</p></details>
+</div>
+<div class="problem tier-c">
+<div class="pr-t">Босс, часть 2 · Поймай приписку <span class="tier">уровень В</span></div>
+<p>Строка 3 накладной гласит: <strong>4 упаковки + 3 флакона — 180 000 сум</strong>. Пользуясь ценами из части 1, проверь: сколько эта строка должна стоить на самом деле, и на сколько кладовщик приписал лишнего?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цели заданы: цены ты уже знаешь. Посчитай честную стоимость 4 упаковок и 3 флаконов и сравни с заявленной суммой.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Честная стоимость: <span class="m">4·20 000 + 3·28 000</span>. Приписка — это заявленные 180 000 минус честная стоимость.</p></details>
+<details class="sol"><summary>Решение</summary><p>Честная стоимость строки 3: <span class="m">4·20 000 + 3·28 000 = 80 000 + 84 000 = 164 000</span> сум. А в накладной стоит 180 000. Приписка: <span class="m">180 000 − 164 000 = 16 000</span> сум. Ответ: <strong>строка должна стоить 164 000, приписано лишних 16 000 сум</strong>. Босс повержен: два честных чека дали тебе цены, а третий «чек» ты проверил на этих ценах — и поймал руку в кассе. Это и есть сила системы: две улики восстанавливают истину, по которой судят третью.</p></details>
+</div>
+</div>
+
+<div class="recap">
+<div class="recap-t">Теперь ты умеешь</div>
+<ul class="powers">
+<li>Восстанавливаешь скрытые цены по двум чекам, вычитая одно уравнение из другого целиком.</li>
+<li>Решаешь систему подстановкой, когда переменная уже выражена, и уничтожением, когда уравнения записаны вперемешку.</li>
+<li>Выбираешь, что уничтожать: выравниваешь коэффициенты и складываешь противоположные или вычитаешь одинаковые.</li>
+<li>Читаешь число решений прямо по коэффициентам — одно, ноль или бесконечно — не решая систему.</li>
+<li>Находишь <span class="m">k</span>, при котором система параллельна и решений нет, и отличаешь этот случай от «бесконечно решений» по свободному члену.</li>
+<li>Выхватываешь <span class="m">x + y</span> или <span class="m">x − y</span> одним сложением или вычитанием, не доводя до полного решения.</li>
+<li>Переводишь текст в два уравнения — количество отдельно, стоимость отдельно — и не путаешь единицы.</li>
+<li>Ловишь потерянный знак при вычитании и приписку в чужой накладной.</li>
+</ul>
+<div class="cheat"><div class="cheat-t">Шпаргалка</div>
+<ul>
+<li><span class="m">a₁x + b₁y = c₁</span>, <span class="m">a₂x + b₂y = c₂</span> — общий вид системы двух линейных уравнений.</li>
+<li>Подстановка — если переменная выражена: подставь и получи одно уравнение с одной неизвестной.</li>
+<li>Уничтожение — выровняй коэффициенты; одинаковые вычитаешь, противоположные складываешь.</li>
+<li>Одно решение: <span class="frac"><b>a₁</b><i>a₂</i></span> ≠ <span class="frac"><b>b₁</b><i>b₂</i></span> (наклоны разные).</li>
+<li>Ноль решений: <span class="frac"><b>a₁</b><i>a₂</i></span> = <span class="frac"><b>b₁</b><i>b₂</i></span> ≠ <span class="frac"><b>c₁</b><i>c₂</i></span> (параллельны).</li>
+<li>Бесконечно решений: <span class="frac"><b>a₁</b><i>a₂</i></span> = <span class="frac"><b>b₁</b><i>b₂</i></span> = <span class="frac"><b>c₁</b><i>c₂</i></span> (одна прямая).</li>
+<li>Смесь: объём <span class="m">x + y = V</span> и вещество <span class="m">p₁x + p₂y = p·V</span> (проценты в долях).</li>
+<li>Минус при вычитании накрывает всё второе уравнение: <span class="m">−(ax + by) = −ax − by</span>.</li>
+</ul>
+</div>
+<div class="feynman"><div class="box-t">Задание Фейнмана</div><p>Объясни воображаемому двенадцатилетнему, без слова «уравнение», почему из одного чека нельзя узнать цену кофе, а из двух — можно.</p>
+<details class="sol"><summary>Образец объяснения</summary><p>Представь, ты знаешь только, что «кофе и булочка вместе стоят 27 тысяч». Кофе может быть дорогой, а булочка дешёвой, или наоборот — ты никак не разберёшь, где чьи деньги. Это как услышать: «двое вместе весят 100 килограммов». Кто из них сколько? Непонятно. А теперь у тебя вторая записка: «два кофе и та же булочка — 39 тысяч». Второй чек отличается от первого ровно на один лишний кофе, а по деньгам — на 12 тысяч. Значит этот лишний кофе и стоит 12 тысяч, тут уже не поспоришь. А как узнал кофе — булочку находишь мгновенно. Один чек — это слух. Два чека — это улика: они ловят цену в ловушку между собой.</p></details>
+</div>
+</div>
+</section>
+
+<section class="chapter" id="ch-4-en" data-ch="4" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 4 · Algebra</div><h2>Systems: Two Receipts</h2><p class="ch-lede">There are no prices on the receipt—yet you can already name them because there are two receipts.</p></header>
+
+<div class="hook">
+<p>You and a friend walk into a coffee shop. You order two coffees and one croissant—the register rings up <strong>39 000 soums</strong>. Your friend orders one coffee and one croissant—<strong>27 000 soums</strong>. And now for the catch: there are no prices on display, and the receipt only shows the total. The barista has already turned away. How much does a coffee cost?</p>
+<p>If you look at either receipt on its own, you are stuck. "One coffee and one croissant—27 000." A 20 000 coffee and a 7 000 croissant? Sure. A 10 000 coffee and a 17 000 croissant? That works too. A single receipt proves nothing—it's just a rumor, gossip, "someone paid something."</p>
+<p>But you have <em>two</em> receipts. Lay them side by side. Yours differs from your friend's by exactly one extra coffee—and in money by <span class="m">39 000 − 27 000 = 12 000</span>. There is your coffee. One extra coffee costs 12 000—there is no other way. Plug it back in: <span class="m">12 000 + croissant = 27 000</span>, which means the croissant is 15 000. One receipt is a rumor. Two receipts are evidence.</p>
+<p>We have just done what this entire chapter was written for: we took two equations with two variables and subtracted one from the other so that one variable <em>disappeared</em>. This trick is over a thousand years old. In the ancient Chinese treatise <em>The Nine Chapters on the Mathematical Art</em>, there is a problem about a cage containing pheasants and rabbits: 35 heads, 94 legs—how many of each? It's the same two receipts: one equation for heads, another for legs. We will return to it.</p>
+</div>
+
+<div class="try-first">
+<p>Before reading on—take five to ten minutes and give it an honest try. No peeking.</p>
+<div class="problem tier-a">
+<div class="pr-t">Warm-up <span class="tier">try it first</span></div>
+<p>In a pediatric department, medication was purchased. According to one invoice: <strong>3 packs and 2 vials—116 000 soums</strong>. According to another: <strong>1 pack and 2 vials—76 000 soums</strong>. How much does one pack cost, and how much for one vial?</p>
+<p>A hint for the future: you will probably try to guess pairs of numbers that add up to 76 000—and drown in them, since there are infinitely many options. The secret is that there are <em>two</em> invoices, and they differ by exactly two packs. Keep this in mind—at the end of the chapter, there is a Boss of the same breed, and he plays dirty.</p>
+</div>
+</div>
+
+<div class="box idea"><div class="box-t">Idea</div><p>If you remember one thing: <strong>subtract the known from the known—what remains is what you are looking for.</strong> Two equations give you the right to subtract one from the other entirely, and with any luck, the extra variable collapses on its own.</p></div>
+
+<h3>What it Means to "Solve a System"</h3>
+
+<p>A single equation <span class="m">x + y = 27</span> is not just a single pair of numbers, but an entire line: (0, 27), (10, 17), (12, 15), (27, 0)—as many as you want. The second equation <span class="m">2x + y = 39</span> is also a line, with its own set of pairs. To <strong>solve a system</strong> is to find a pair <span class="m">(x, y)</span> that satisfies <em>both</em> equations at once. Not just one of the two—both.</p>
+
+<p>Geometrically, this is visually plain: two lines on a plane usually intersect at a single point. This point is the only one that lies on both the first line and the second. Its coordinates are the answer.</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Two intersecting lines and their intersection point—the solution to the system">
+<line class="grid" x1="90" y1="30" x2="90" y2="240"/>
+<line class="grid" x1="140" y1="30" x2="140" y2="240"/>
+<line class="grid" x1="190" y1="30" x2="190" y2="240"/>
+<line class="grid" x1="240" y1="30" x2="240" y2="240"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="240"/>
+<line class="grid" x1="340" y1="30" x2="340" y2="240"/>
+<line class="grid" x1="40" y1="200" x2="400" y2="200"/>
+<line class="grid" x1="40" y1="160" x2="400" y2="160"/>
+<line class="grid" x1="40" y1="120" x2="400" y2="120"/>
+<line class="grid" x1="40" y1="80" x2="400" y2="80"/>
+<line class="ax" x1="40" y1="240" x2="400" y2="240"/>
+<line class="ax" x1="40" y1="240" x2="40" y2="20"/>
+<path class="crv" d="M40 60 L400 240" fill="none"/>
+<path class="crv2" d="M40 235 L360 30" fill="none"/>
+<circle class="pt" cx="193" cy="137" r="4"/>
+<text class="lbl" x="201" y="132">(x, y)</text>
+<text class="lbl" x="360" y="255">x</text>
+<text class="lbl" x="20" y="30">y</text>
+</svg><figcaption>Each equation is a line. Their intersection point satisfies both equations, meaning it is the solution to the system.</figcaption></figure>
+
+<p>Keep this picture in mind—it will explain everything that follows: why a system can have exactly one solution, when there are no solutions at all, and when there are infinitely many. Everything comes down to the question of how the two lines are positioned.</p>
+
+<h3>The First Tool: Substitution</h3>
+
+<p>Sometimes one variable is already expressed in terms of the other—sitting there on a silver platter. In that case, we use <strong>substitution</strong>: we take this expression and plug it into the second equation in place of that variable. Instead of two unknowns, we are left with one.</p>
+
+<div class="example"><div class="ex-t">Example 1 · When a Variable is Already Expressed</div>
+<p>Solve the system: <span class="m">y = 2x − 1</span> and <span class="m">3x + y = 14</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to reduce this to one variable:</span> the first equation already tells us what <span class="m">y</span> is. This means that in the second equation, we can replace <span class="m">y</span> with <span class="m">2x − 1</span>.</div>
+<div class="step"><span class="step-why">Substitute to get an equation with one x:</span> <span class="m">3x + (2x − 1) = 14</span>.</div>
+<div class="step"><span class="step-why">Combine like terms to find x:</span> <span class="m">5x − 1 = 14</span>, which means <span class="m">5x = 15</span>, <span class="m">x = 3</span>.</div>
+<div class="step"><span class="step-why">Go back for the second number:</span> <span class="m">y = 2·3 − 1 = 5</span>.</div>
+</div>
+<p>Answer: <strong>x = 3, y = 5</strong>. <em>Looking back.</em> Checking is free and mandatory: <span class="m">3·3 + 5 = 14</span>—it works. Notice where substitution worked: <span class="m">y</span> was expressed without fractions, ready to go. Substitution loves equations like that—where a variable is already isolated.</p>
+</div>
+
+<details class="hint"><summary>Why are we allowed to substitute <span class="m">2x − 1</span> for <span class="m">y</span> in the first place?</summary><p>Because in the solution of the system, <span class="m">y</span> and <span class="m">2x − 1</span> are the exact same number. The first equation explicitly states they are equal. And you can replace equals with equals in any other equation—the number doesn't care what name you call it.</p></details>
+
+<div class="box tool"><div class="box-t">Move: "Two Receipts"</div><p>If two equations differ by "one item," subtract them from each other entirely—the shared part cancels out, leaving the price of that item. Your receipt minus your friend's receipt—the croissants disappear, and one coffee remains. This is the fastest route when the equations share an identical piece.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Solve by substitution: <span class="m">y = x + 4</span> and <span class="m">2x + y = 16</span>. What is <span class="m">y</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-5e" value="a"><span>4</span></label>
+<label><input type="radio" name="q4-5e" value="b"><span>6</span></label>
+<label><input type="radio" name="q4-5e" value="c"><span>12</span></label>
+<label><input type="radio" name="q4-5e" value="d"><span>8</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Substitute: 2x+(x+4)=16 → 3x=12 → x=4, which means y=4+4=8." data-no="Option a is x (but they asked for y!). Substitute y into the second equation: 2x+(x+4)=16, which gives x=4, and y=x+4=8. Don't forget to go back for the variable they actually asked for."></div>
+</div>
+
+<h3>The Second Tool: Elimination</h3>
+
+<p>Substitution is good when a variable is already isolated. But what if both equations are written in a jumble, like on the receipts? In that case, <strong>adding and subtracting</strong> equations works—what we call elimination. The idea is the same as with the receipts: make it so that one variable cancels out when we add (or subtract).</p>
+
+<div class="box tool"><div class="box-t">Move: "Elimination"</div><p>Multiply one (or both) equations by numbers so that the coefficients of a variable become <em>opposites</em> (for addition) or <em>identical</em> (for subtraction). Add or subtract the equations entirely—that variable will disappear. Solve what remains, then go back for the second coordinate.</p></div>
+
+<div class="example"><div class="ex-t">Example 2 · Coffee and Croissant, Now by the Rules</div>
+<p>Let's return to the receipts as a system. Let <span class="m">c</span> be the price of coffee, and <span class="m">r</span> be the price of a croissant.</p>
+<div class="formula">2<b class="hl">c</b> + r = 39 000<br>1<b class="hl">c</b> + r = 27 000</div>
+<div class="steps">
+<div class="step"><span class="step-why">We want to eliminate the croissant—its coefficient is already the same in both equations (one r):</span> so we subtract the second equation from the first entirely.</div>
+<div class="step"><span class="step-why">Subtract carefully, part by part:</span> <span class="m">(2c − c) + (r − r) = 39 000 − 27 000</span>, which means <span class="m">c = 12 000</span>.</div>
+<div class="step"><span class="step-why">The croissant is gone—grab either original equation to find the second coordinate:</span> <span class="m">12 000 + r = 27 000</span>, which means <span class="m">r = 15 000</span>.</div>
+</div>
+<p>Answer: <strong>coffee 12 000, croissant 15 000</strong>—exactly what we calculated at the very beginning, now done by the rules. <em>Looking back.</em> We subtracted because the coefficients of <span class="m">r</span> were <em>identical</em>. If they had been opposites (for example, <span class="m">+r</span> and <span class="m">−r</span>), we would have <em>added</em>. The compass rule: identical—subtract, opposites—add.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>The most common way to fail at subtraction is to lose the minus sign on <em>part</em> of the second equation. When subtracting <span class="m">2c + r = 39 000</span> minus <span class="m">c + r = 27 000</span>, you must subtract the <em>entire</em> second equation—both the <span class="m">c</span>, the <span class="m">r</span>, and the right side. If you only subtract the first term, you will get garbage. The minus sign acts like parentheses around the whole equation: <span class="m">−(c + r) = −c − r</span>, not <span class="m">−c + r</span>.</p></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">The equation <span class="m">2x + y = 10</span> is subtracted from <span class="m">5x + y = 22</span>. What is the result?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-1e" value="a"><span><span class="m">7x + 6y = 32</span></span></label>
+<label><input type="radio" name="q4-1e" value="b"><span><span class="m">3x = 12</span></span></label>
+<label><input type="radio" name="q4-1e" value="c"><span><span class="m">3x + 6y = 12</span></span></label>
+<label><input type="radio" name="q4-1e" value="d"><span><span class="m">3x = 32</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! 5x−2x=3x, 3y−3y=0, 22−10=12. The y variable is eliminated—exactly what we wanted." data-no="Option c left the y (didn't subtract it), and d forgot to subtract the right side. Subtract the ENTIRE second equation: 3y−3y=0, 22−10=12. The answer is 3x=12."></div>
+</div>
+
+<h3>Medicine: Mixing Two Solutions</h3>
+
+<p>Now for the reason this math might one day save your shift. The department has 10% glucose and 40% glucose. You need to prepare <strong>300 mL of a 20% solution</strong>. How many milliliters of each should you take?</p>
+
+<p>There are two different "receipts" here, and they must not be confused. One tracks <em>volume</em> (the total milliliters of liquid), the other tracks <em>pure substance</em> (how much actual glucose is in them). Let <span class="m">x</span> be the milliliters of the 10% solution, and <span class="m">y</span> be the milliliters of the 40% solution.</p>
+
+<div class="example"><div class="ex-t">Example 3 · 10% and 40% Glucose → 300 mL of 20%</div>
+<div class="steps">
+<div class="step"><span class="step-why">We want a volume equation—we add the milliliters together:</span> <span class="m">x + y = 300</span>.</div>
+<div class="step"><span class="step-why">We want a pure glucose equation—we take a percentage of each volume:</span> in the 10% solution there is <span class="m">0.10x</span>, in the 40% solution there is <span class="m">0.40y</span>, and in the final 300 mL at 20% there is <span class="m">0.20·300 = 60</span> mL. This means <span class="m">0.10x + 0.40y = 60</span>.</div>
+<div class="step"><span class="step-why">We don't like decimals—we multiply the second equation by 10 to get integers:</span> <span class="m">x + 4y = 600</span>.</div>
+<div class="step"><span class="step-why">Now both equations have the same x—we subtract to eliminate it:</span> <span class="m">(x + 4y) − (x + y) = 600 − 300</span>, which means <span class="m">3y = 300</span>, <span class="m">y = 100</span>.</div>
+<div class="step"><span class="step-why">Go back for x:</span> <span class="m">x + 100 = 300</span>, <span class="m">x = 200</span>.</div>
+</div>
+<p>Answer: <strong>200 mL of the 10% solution and 100 mL of the 40% solution</strong>. <em>Looking back.</em> Check the pure substance—this is smarter than checking by volume: <span class="m">0.10·200 + 0.40·100 = 20 + 40 = 60</span> mL of glucose in 300 mL—that is exactly 20%. It works. And notice the logic: the final 20% is closer to 10% than to 40%, which is why we took more of the 10% solution. The answer passed a sanity check before we even did the arithmetic.</p>
+</div>
+
+<div class="box why"><div class="box-t">Why It Works</div><p>A mixture obeys two conservation laws at once: liquid doesn't appear out of nowhere (volumes add up) and glucose doesn't appear out of nowhere (the grams of substance add up). Two laws—two equations. As many equations as independent unknowns—and the system is locked in. Fewer equations than unknowns—the answer is undefined; this is not a property of mathematics, it is a property of reality.</p></div>
+
+<div class="box recall"><div class="box-t">Freeze-Frame</div><p>Cover the screen. Recall from memory: (1) what it means to "solve a system" in a single phrase about a point; (2) when substitution is more convenient, and when elimination is; (3) in the mixture problem—what two equations you write and how they differ. No peeking for one minute.</p></div>
+
+<h3>SAT Twist: They Aren't Asking for What You Found</h3>
+
+<p>Brace yourself—this is where almost everyone gets caught. You diligently solve the system, find <span class="m">x</span>, and proudly write <span class="m">x</span> as the answer—but the question was about <span class="m">y</span>. Or about <span class="m">x + y</span>. The SAT loves to ask for <span class="m">x + y</span> or <span class="m">x − y</span> instead of the variables themselves—and you can often get this with <em>a single</em> addition or subtraction, without solving the system completely.</p>
+
+<div class="example"><div class="ex-t">Example 4 · A Clever Question About a Sum</div>
+<p>Given: <span class="m">4x + 3y = 29</span> and <span class="m">3x + 4y = 27</span>. Find <span class="m">x + y</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Don't rush to solve—look at what is asked. They want x + y, not x and y individually:</span> so maybe we won't even need a full solution.</div>
+<div class="step"><span class="step-why">We want x and y to have the same coefficient—then the sum will pop out on its own. Let's add the equations:</span> <span class="m">(4x + 3x) + (3y + 4y) = 29 + 27</span>, which gives <span class="m">7x + 7y = 56</span>.</div>
+<div class="step"><span class="step-why">Divide by 7—the coefficients of x and y are now 1, which gives us x + y:</span> <span class="m">x + y = 8</span>.</div>
+</div>
+<p>Answer: <strong>x + y = 8</strong>. One addition, one division—and that's it. <em>Looking back.</em> If you had been asked for <span class="m">x</span> and <span class="m">y</span> individually, you would have also had to subtract the equations (<span class="m">x − y = 2</span>) and then add that to <span class="m">x + y = 8</span>. But laziness saved us in a good way: first look at the question, then calculate.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Count Gotcha leans over your page and whispers: "You found that x = 5, right? Write down 5." The answer choices will <em>contain</em> 5, 3 (which is y), and 8 (which is x + y)—specifically to catch anyone who didn't finish reading the question. Before you bubble in your answer, look back at the last line of the problem statement: what exactly did they ask for? Underline that word while you are solving.</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Given <span class="m">2x + y = 13</span> and <span class="m">x + 2y = 11</span>. What is <span class="m">x + y</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-2e" value="a"><span>5</span></label>
+<label><input type="radio" name="q4-2e" value="b"><span>3</span></label>
+<label><input type="radio" name="q4-2e" value="c"><span>8</span></label>
+<label><input type="radio" name="q4-2e" value="d"><span>24</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Add the equations: 3x+3y=24, divide by 3 → x+y=8. A full solution was not needed." data-no="Option a is x, b is y (the temptation to answer with a single variable), d is forgetting to divide by 3. Add the equations: 3x+3y=24, which means x+y=8."></div>
+</div>
+
+<h3>How Many Solutions a System Has</h3>
+
+<p>So far, every system we've seen has had exactly one intersection point. But two lines can behave in three different ways—and the SAT loves to ask about this directly from the coefficients, without you needing to solve anything.</p>
+
+<ul>
+<li><strong>One solution</strong>—the lines intersect. The slopes are different. This is the norm.</li>
+<li><strong>No solution</strong>—the lines are <em>parallel</em>: the slopes are equal, but the lines do not overlap. They run side by side and never meet. The constant terms are not aligned.</li>
+<li><strong>Infinitely many solutions</strong>—this is <em>the exact same line</em> written twice (one equation is just the other multiplied by a number). Every point on one line lies on the other.</li>
+</ul>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Two parallel lines with the same slope that never intersect—a system with no solutions">
+<line class="grid" x1="90" y1="30" x2="90" y2="240"/>
+<line class="grid" x1="140" y1="30" x2="140" y2="240"/>
+<line class="grid" x1="190" y1="30" x2="190" y2="240"/>
+<line class="grid" x1="240" y1="30" x2="240" y2="240"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="240"/>
+<line class="grid" x1="340" y1="30" x2="340" y2="240"/>
+<line class="grid" x1="40" y1="200" x2="400" y2="200"/>
+<line class="grid" x1="40" y1="160" x2="400" y2="160"/>
+<line class="grid" x1="40" y1="120" x2="400" y2="120"/>
+<line class="grid" x1="40" y1="80" x2="400" y2="80"/>
+<line class="ax" x1="40" y1="240" x2="400" y2="240"/>
+<line class="ax" x1="40" y1="240" x2="40" y2="20"/>
+<path class="crv" d="M40 210 L380 40" fill="none"/>
+<path class="crv2" d="M40 250 L360 90" fill="none"/>
+<text class="lbl" x="350" y="45">same</text>
+<text class="lbl" x="350" y="60">slope</text>
+</svg><figcaption>Same slope, but the lines do not overlap—they are parallel. There is no intersection point: the system has no solutions.</figcaption></figure>
+
+<div class="box idea"><div class="box-t">Idea</div><p>Take a system in the form <span class="m">a₁x + b₁y = c₁</span> and <span class="m">a₂x + b₂y = c₂</span> and compare the three ratios: <span class="frac"><b>a₁</b><i>a₂</i></span>, <span class="frac"><b>b₁</b><i>b₂</i></span>, and <span class="frac"><b>c₁</b><i>c₂</i></span>. If the first two are <em>not</em> equal—one solution. If <span class="frac"><b>a₁</b><i>a₂</i></span> = <span class="frac"><b>b₁</b><i>b₂</i></span> but does not equal <span class="frac"><b>c₁</b><i>c₂</i></span>—they are parallel, no solution. If all three are equal—they are the exact same line, infinitely many solutions.</p></div>
+
+<div class="example"><div class="ex-t">Example 5 · For What Value of k the System Has No Solution</div>
+<p>Given: <span class="m">2x + 3y = 7</span> and <span class="m">kx + 6y = 5</span>. For what value of <span class="m">k</span> does the system have no solution?</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want parallel lines, meaning equal slopes—so we compare the coefficients of x and y:</span> we need <span class="frac"><b>k</b><i>2</i></span> = <span class="frac"><b>6</b><i>3</i></span>.</div>
+<div class="step"><span class="step-why">Solve this little equation for k:</span> <span class="frac"><b>6</b><i>3</i></span> = 2, which means <span class="frac"><b>k</b><i>2</i></span> = 2, giving <span class="m">k = 4</span>.</div>
+<div class="step"><span class="step-why">Verify that the lines are indeed parallel and do not overlap—compare the constant terms:</span> with <span class="m">k = 4</span>, the first equation multiplied by 2 gives <span class="m">4x + 6y = 14</span>, whereas we have <span class="m">4x + 6y = 5</span>. The left sides are identical, but the right sides—14 and 5—are not. The lines are parallel, not overlapping.</div>
+</div>
+<p>Answer: <strong>k = 4</strong>. <em>Looking back.</em> A near-miss trap: if the right side had been 14 instead of 5, the lines would have overlapped—giving <em>infinitely many</em> solutions, not zero. Only the right side separates "no solution" from "infinitely many solutions." Always do that third step.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>People confuse "no solution" and "infinitely many solutions" all the time, because both start the exact same way—with equal slopes. The only difference is in the constant term: matched (same line, infinitely many solutions) or mismatched (parallel, zero solutions). Count Gotcha will happily slip you "infinitely many" when the correct answer is "zero." <em>Always</em> check the constant term—that is the fork in the road.</p></div>
+
+<div class="box desmos"><div class="box-t">The Lazy Genius: Desmos</div><p>A typical SAT system is almost always faster to solve with your eyes rather than your hands. Type both equations into Desmos—it will draw the two lines, hover your cursor over the intersection, and the coordinates will pop up. Zero algebra, zero chance of losing a minus sign.</p><p>But Desmos won't answer "for what value of k..." on its own—yet there is a trick. Type the coefficient k as a letter: <span class="m">kx + 6y = 5</span>. Desmos will offer to create a <em>slider</em> for k. Drag it and watch: at <span class="m">k = 4</span>, the second line runs parallel to the first—the intersection point flies off to infinity and disappears. There it is, the "no solution" moment, right on your screen. A slider is like outsourcing your brain to a toggle.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">For what value of <span class="m">k</span> does the system <span class="m">3x + y = 4</span> and <span class="m">6x + ky = 9</span> have no solution?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-3e" value="a"><span><span class="m">k = 2</span></span></label>
+<label><input type="radio" name="q4-3e" value="b"><span><span class="m">k = 4</span></span></label>
+<label><input type="radio" name="q4-3e" value="c"><span><span class="m">k = 1</span></span></label>
+<label><input type="radio" name="q4-3e" value="d"><span><span class="m">k = 3</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! The slopes are equal when 6/3 = k/1, which means k=2. The constant terms (4 and 9) are mismatched, so there is indeed NO solution, rather than infinitely many." data-no="We need equal slopes: the coefficient of x doubled (3→6), so the coefficient of y must also double—k=2. Check: 6x+2y=9 compared to the doubled 6x+2y=8—they are parallel."></div>
+</div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">The system <span class="m">x − 2y = 5</span> and <span class="m">3x − 6y = 15</span>. How many solutions does it have?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-4e" value="a"><span>Exactly one</span></label>
+<label><input type="radio" name="q4-4e" value="b"><span>None</span></label>
+<label><input type="radio" name="q4-4e" value="c"><span>Exactly two</span></label>
+<label><input type="radio" name="q4-4e" value="d"><span>Infinitely many</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! The second equation is just the first multiplied by 3. It's the same line, which means infinitely many solutions." data-no="The 'no solution' trap: but here, the constant term is also matched (15 = 3·5). The whole equation is just the first ×3. This is ONE line → infinitely many solutions. A linear system never has exactly two solutions."></div>
+</div>
+
+<h3>Word Problems: Quantity and Value</h3>
+
+<p>Another classic trap is hidden here. In problems about tickets, purchases, or mixtures, there are almost always two equations: one about <em>quantity</em> (how many items, heads, people) and the other about <em>value</em> (how much money, legs, substance). It is easy to mix them up—and then your entire answer goes off the rails.</p>
+
+<div class="example"><div class="ex-t">Example 6 · Theater Tickets</div>
+<p>Tickets were sold to adults and children. <strong>2 adult tickets and 3 child tickets</strong> cost 155 000 soums, and <strong>4 adult tickets and 1 child ticket</strong> cost 185 000 soums. How much does an adult ticket cost, and how much for a child's?</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to translate the words into equations—let's define our variables. Let <span class="m">a</span> be the price of an adult ticket, and <span class="m">c</span> be the price of a child's:</span> the first purchase gives <span class="m">2a + 3c = 155 000</span>, and the second gives <span class="m">4a + 1c = 185 000</span>.</div>
+<div class="step"><span class="step-why">We want to eliminate the adult tickets—their coefficients are 2 and 4, so let's multiply the first equation by 2 so that we have 4 in both:</span> <span class="m">4a + 6c = 310 000</span>.</div>
+<div class="step"><span class="step-why">Subtract the second from the new first—the adult tickets disappear:</span> <span class="m">(4a + 6c) − (4a + c) = 310 000 − 185 000</span>, which means <span class="m">5c = 125 000</span>, <span class="m">c = 25 000</span>.</div>
+<div class="step"><span class="step-why">Go back for the adult ticket:</span> <span class="m">4a + 25 000 = 185 000</span>, <span class="m">4a = 160 000</span>, <span class="m">a = 40 000</span>.</div>
+</div>
+<p>Answer: <strong>adult 40 000, child 25 000</strong>. Checking against the first purchase: <span class="m">2·40 000 + 3·25 000 = 80 000 + 75 000 = 155 000</span>—it works.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>The quantity equation and the value equation are mixed up. In a problem like "bought 8 tickets for 300 000 soums," it is tempting to write "adult + child = 300 000"—but 8 represents <em>items</em>, while 300 000 represents <em>money</em>. Group items with items (<span class="m">a + c = 8</span>), and money with money (<span class="m">40 000a + 25 000c = 300 000</span>). Mix up the units, and you will get nonsense like "a ticket costs 8."</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">They bought <strong>6 tickets</strong> for a total of <strong>240 000 soums</strong>. An adult ticket costs 45 000, and a child's costs 30 000. How many <em>child</em> tickets were purchased?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q4-6e" value="a"><span>4</span></label>
+<label><input type="radio" name="q4-6e" value="b"><span>3</span></label>
+<label><input type="radio" name="q4-6e" value="c"><span>2</span></label>
+<label><input type="radio" name="q4-6e" value="d"><span>Not enough information</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Items: a+c=6. Money: 45000a+30000c=240000. This gives a=4, c=2." data-no="Option a is the number of adult tickets (they asked for child tickets). Don't mix up units: items with items (a+c=6), money with money (45000a+30000c=240000). Solving this gives a=4, c=2."></div>
+</div>
+
+<h3>Flashbacks</h3>
+
+<div class="problem flashback tier-b">
+<div class="pr-t">Problem F1 <span class="tier">flashback · Chapter 3</span></div>
+<p>A line passes through the points <span class="m">(2, 50 000)</span> and <span class="m">(5, 110 000)</span>—this represents a taxi fare: a base fare plus a rate per kilometer. Find the equation of the line <span class="m">y = mx + b</span>, and also state the base fare (which is <span class="m">b</span>).</p>
+<details class="hint"><summary>Hint 1</summary><p>Goal: first find the slope <span class="m">m</span> (the rate per kilometer) as the ratio of the change in <span class="m">y</span> to the change in <span class="m">x</span>. Then substitute one point to find <span class="m">b</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Slope: <span class="m">m = (110 000 − 50 000) / (5 − 2)</span>. Once you get <span class="m">m</span>, solve <span class="m">50 000 = m·2 + b</span> for <span class="m">b</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>Slope <span class="m">m = 60 000 / 3 = 20 000</span> soums per kilometer. Substitute the point <span class="m">(2, 50 000)</span>: <span class="m">50 000 = 20 000·2 + b = 40 000 + b</span>, which means <span class="m">b = 10 000</span>. Equation: <span class="m">y = 20 000x + 10 000</span>. The base fare is <strong>10 000 soums</strong>. Check with the second point: <span class="m">20 000·5 + 10 000 = 110 000</span>—it works. By the way, "finding a line from two points" is a solved system: the two points gave us two equations for <span class="m">m</span> and <span class="m">b</span>.</p></details>
+</div>
+
+<div class="problem flashback tier-a">
+<div class="pr-t">Problem F2 <span class="tier">flashback · Chapter 2</span></div>
+<p>Translate into equations, but <em>do not solve</em>: "The number of adults is 12 more than the number of children, and there are 40 people in total." Let <span class="m">a</span> be the adults, and <span class="m">c</span> be the children, and write down the system.</p>
+<details class="hint"><summary>Hint 1</summary><p>"12 more than" is about a difference. "40 in total" is about a sum. Two statements—two equations.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>"Adults is 12 more than children" literally: <span class="m">a = c + 12</span>. "40 in total": <span class="m">a + c = 40</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>System: <span class="m">a = c + 12</span> and <span class="m">a + c = 40</span>. The first equation already expresses <span class="m">a</span>—so substitution is called for: <span class="m">(c + 12) + c = 40</span>, which gives <span class="m">2c = 28</span>, <span class="m">c = 14</span>, <span class="m">a = 26</span>. Verification: <span class="m">26 − 14 = 12</span>, <span class="m">26 + 14 = 40</span>. The main point of this problem is to see that "more by" and "in total" are two <em>different</em> equations, not one.</p></details>
+</div>
+
+<h3>Problems</h3>
+
+<div class="problem tier-a">
+<div class="pr-t">Problem 1 <span class="tier">Level A</span></div>
+<p>Solve by substitution: <span class="m">y = 3x − 2</span> and <span class="m">2x + y = 13</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Goal—one equation with one <span class="m">x</span>. The y is already isolated; substitute it into the second.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">2x + (3x − 2) = 13</span>. Combine like terms.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">2x + 3x − 2 = 13</span>, which means <span class="m">5x = 15</span>, <span class="m">x = 3</span>. Then <span class="m">y = 3·3 − 2 = 7</span>. Answer: <strong>x = 3, y = 7</strong>. Verification: <span class="m">2·3 + 7 = 13</span>—it works.</p></details>
+</div>
+
+<div class="problem tier-a">
+<div class="pr-t">Problem 2 <span class="tier">Level A</span></div>
+<p>Solve by elimination: <span class="m">2x + y = 11</span> and <span class="m">x − y = 1</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>The coefficients of y are <span class="m">+1</span> and <span class="m">−1</span>—they are opposites. What do we do with opposites: add or subtract?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Opposites—we add. Add the equations entirely, and the y will disappear.</p></details>
+<details class="sol"><summary>Solution</summary><p>Add: <span class="m">(2x + x) + (y − y) = 11 + 1</span>, which means <span class="m">3x = 12</span>, <span class="m">x = 4</span>. Then <span class="m">4 − y = 1</span>, so <span class="m">y = 3</span>. Answer: <strong>x = 4, y = 3</strong>. Check: <span class="m">2·4 + 3 = 11</span>—it works.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Problem 3 <span class="tier">Level B</span></div>
+<p>Given <span class="m">5x + 2y = 26</span> and <span class="m">2x + 5y = 17</span>. Find <span class="m">x − y</span> (not <span class="m">x</span> and <span class="m">y</span> individually).</p>
+<details class="hint"><summary>Hint 1</summary><p>Goal—get <span class="m">x − y</span> in a single step. The full solution yields fractions; you don't need them. What if you subtract one equation from the other?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Subtract the second from the first: on the left side, <span class="m">(5x − 2x) + (2y − 5y) = 3x − 3y</span>. Then divide.</p></details>
+<details class="sol"><summary>Solution</summary><p>Subtract the second equation from the first: <span class="m">(5x + 2y) − (2x + 5y) = 26 − 17</span>, which means <span class="m">3x − 3y = 9</span>. Divide by 3: <span class="m">x − y = 3</span>. Answer: <strong>3</strong>. The beauty is that <span class="m">x</span> and <span class="m">y</span> themselves are fractions here (<span class="frac"><b>32</b><i>7</i></span> and <span class="frac"><b>11</b><i>7</i></span>), but the question about the difference bypassed them completely. Always look at what is asked before you compute.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Problem 4 <span class="tier">Level B</span></div>
+<p>They are mixing a 70% alcohol solution and a 30% alcohol solution to get <strong>200 mL of a 60% solution</strong>. How many milliliters of each are needed?</p>
+<details class="hint"><summary>Hint 1</summary><p>Two equations: volume (milliliters add up) and pure alcohol (percentages of the volumes). Let <span class="m">x</span> be the mL of the 70% solution, and <span class="m">y</span> be the mL of the 30% solution.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Volume: <span class="m">x + y = 200</span>. Alcohol: <span class="m">0.70x + 0.30y = 0.60·200 = 120</span>. Multiply the second by 10 to clear the decimals.</p></details>
+<details class="sol"><summary>Solution</summary><p>System: <span class="m">x + y = 200</span> and <span class="m">7x + 3y = 1200</span> (multiplied by 10). From the first, <span class="m">y = 200 − x</span>; substitute: <span class="m">7x + 3(200 − x) = 1200</span>, which gives <span class="m">7x + 600 − 3x = 1200</span>, <span class="m">4x = 600</span>, <span class="m">x = 150</span>. Then <span class="m">y = 50</span>. Answer: <strong>150 mL of the 70% solution and 50 mL of the 30% solution</strong>. Alcohol check: <span class="m">0.70·150 + 0.30·50 = 105 + 15 = 120</span> mL in 200 mL—exactly 60%. And a sanity check: 60% is closer to 70%, which is why we used more of the stronger solution—it works.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Problem 5 <span class="tier">Level B</span></div>
+<p>A classic problem from <em>The Nine Chapters on the Mathematical Art</em>: rabbits and pheasants in a cage. Heads—<strong>35</strong>, legs—<strong>94</strong>. How many pheasants and how many rabbits?</p>
+<details class="hint"><summary>Hint 1</summary><p>One equation for heads (everyone has one), the other for legs. A pheasant has 2 legs, a rabbit has 4.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Let <span class="m">p</span> be pheasants, and <span class="m">r</span> be rabbits. Heads: <span class="m">p + r = 35</span>. Legs: <span class="m">2p + 4r = 94</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>System: <span class="m">p + r = 35</span> and <span class="m">2p + 4r = 94</span>. Multiply the first by 2: <span class="m">2p + 2r = 70</span>. Subtract it from the second: <span class="m">(2p + 4r) − (2p + 2r) = 94 − 70</span>, which means <span class="m">2r = 24</span>, <span class="m">r = 12</span>. Then <span class="m">p = 23</span>. Answer: <strong>23 pheasants and 12 rabbits</strong>. Check: <span class="m">23 + 12 = 35</span> heads, <span class="m">2·23 + 4·12 = 46 + 48 = 94</span> legs. The old Chinese method was even more elegant: imagine everyone stood on two legs—then there would be <span class="m">2·35 = 70</span> legs. The extra <span class="m">94 − 70 = 24</span> legs are the second pairs of rabbit legs, 2 per rabbit, so there are <span class="m">24 / 2 = 12</span> rabbits. The same system, just a different language.</p></details>
+</div>
+
+<div class="problem tier-b">
+<div class="pr-t">Problem 6 <span class="tier">Level B</span></div>
+<p>For what value of <span class="m">c</span> does the system <span class="m">x + 2y = 4</span> and <span class="m">3x + 6y = c</span> have <em>infinitely many</em> solutions?</p>
+<details class="hint"><summary>Hint 1</summary><p>Infinitely many solutions is when the second equation turns out to be the exact same as the first, just multiplied by a number.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The coefficients on the left tripled (1→3, 2→6). For it to be the same line, the right side must also triple.</p></details>
+<details class="sol"><summary>Solution</summary><p>The second equation is obtained from the first by multiplying by 3: <span class="m">3(x + 2y) = 3·4</span>, which is <span class="m">3x + 6y = 12</span>. For the lines to overlap (rather than be parallel), we need <span class="m">c = 12</span>. Answer: <strong>c = 12</strong>. If <span class="m">c</span> were any other value, the lines would be parallel—and there would be <em>no solution at all</em>. A single number <span class="m">c</span> separates "infinitely many" from "zero."</p></details>
+</div>
+
+<div class="problem flashback tier-b">
+<div class="pr-t">Problem 7 <span class="tier">flashback · Chapter 3</span></div>
+<p>Two lines are given by the equations <span class="m">y = 2x + 1</span> and <span class="m">y = −x + 7</span>. Find their intersection point—that is, solve the system by reversing the graphical meaning.</p>
+<details class="hint"><summary>Hint 1</summary><p>At the intersection point, the <span class="m">y</span> of both lines is the same. This means the right sides are equal to each other.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Set them equal: <span class="m">2x + 1 = −x + 7</span>. This is now a single equation with one <span class="m">x</span>—just like substitution.</p></details>
+<details class="sol"><summary>Solution</summary><p>Set the right sides equal (both are equal to <span class="m">y</span>): <span class="m">2x + 1 = −x + 7</span>. Rearrange terms: <span class="m">3x = 6</span>, <span class="m">x = 2</span>. Then <span class="m">y = 2·2 + 1 = 5</span>. Intersection point: <strong>(2, 5)</strong>. Check against the second line: <span class="m">−2 + 7 = 5</span>—it works. The slopes <span class="m">2</span> and <span class="m">−1</span> are different, so there is exactly one intersection, as expected.</p></details>
+</div>
+
+<div class="problem tier-c">
+<div class="pr-t">Problem 8 <span class="tier">Level C</span></div>
+<p>In the system <span class="m">4x + 6y = 10</span> and <span class="m">6x + 9y = t</span>, for one value of <span class="m">t</span> there are infinitely many solutions, and for all other values there are none. Find this value of <span class="m">t</span> and explain why for other values of <span class="m">t</span> there are no solutions at all (rather than one).</p>
+<details class="hint"><summary>Hint 1</summary><p>Check the slopes: are the coefficients of <span class="m">x</span> and <span class="m">y</span> proportional in the two equations? If so, the lines either overlap or are parallel—there is no third option.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The ratio of the coefficients: <span class="frac"><b>6</b><i>4</i></span> and <span class="frac"><b>9</b><i>6</i></span>. Both are equal to <span class="frac"><b>3</b><i>2</i></span>. This means the slopes are always the same—the fate of the system is decided solely by the right side.</p></details>
+<details class="sol"><summary>Solution</summary><p>The coefficients of the second equation are exactly <span class="frac"><b>3</b><i>2</i></span> times larger than the first: <span class="m">6 = <span class="frac"><b>3</b><i>2</i></span>·4</span>, <span class="m">9 = <span class="frac"><b>3</b><i>2</i></span>·6</span>. The slopes of the lines are identical for <em>any</em> <span class="m">t</span>—so a single intersection is impossible in principle. The lines will either overlap (infinitely many solutions) or separate in parallel (zero). They overlap when the right side also obeys the same factor: <span class="m">t = <span class="frac"><b>3</b><i>2</i></span>·10 = 15</span>. Answer: <strong>with t = 15, there are infinitely many solutions</strong>; for any other <span class="m">t</span>, the lines are parallel and there are <strong>zero</strong> solutions. Key: since the slopes are guaranteed to be equal, "exactly one solution" is impossible here—the geometry only allows them to either "merge" or "split."</p></details>
+</div>
+
+<div class="problem tier-c">
+<div class="pr-t">Problem 9 · Spot the error <span class="tier">Level C</span></div>
+<p>Below is a plausible but <em>incorrect</em> solution. Find the flaw, name it, and carry the work through to the correct answer.</p>
+<p><strong>Given:</strong> <span class="m">2x + 3y = 16</span> and <span class="m">2x − y = 8</span>. Find <span class="m">x</span> and <span class="m">y</span>.</p>
+<p><strong>"Solution."</strong> "Both equations have a coefficient of 2 for <span class="m">x</span>—let's eliminate <span class="m">x</span> by subtraction. Subtracting the second from the first: <span class="m">2x − 2x = 0</span>, while the y-terms give <span class="m">3y − y = 2y</span>, and on the right side <span class="m">16 − 8 = 8</span>. This means <span class="m">2y = 8</span>, <span class="m">y = 4</span>. Then <span class="m">2x − 4 = 8</span>, <span class="m">2x = 12</span>, <span class="m">x = 6</span>. Answer: <span class="m">x = 6, y = 4</span>."</p>
+<details class="hint"><summary>Hint 1</summary><p>Plug the proposed answer back into the first equation. Does <span class="m">2·6 + 3·4 = 16</span> work? If not, the error is somewhere in the subtraction.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Look closely at the line <span class="m">3y − y</span>. The second equation is <span class="m">2x − y</span>. You are subtracting the <em>entire</em> second equation, which means you are also subtracting <span class="m">(−y)</span>. What is <span class="m">3y − (−y)</span>?</p></details>
+<details class="sol"><summary>Solution</summary><p>The error is a lost sign during subtraction. The second y-term has a minus sign: <span class="m">−y</span>. When we subtract the entire second equation, we subtract that as well: <span class="m">3y − (−y) = 3y + y = 4y</span>, not <span class="m">2y</span>. The minus sign acts like parentheses around the whole equation: <span class="m">−(2x − y) = −2x + y</span>. The correct way: <span class="m">4y = 8</span>, which means <span class="m">y = 2</span>. Then <span class="m">2x − 2 = 8</span>, <span class="m">2x = 10</span>, <span class="m">x = 5</span>. Answer: <strong>x = 5, y = 2</strong>. Check: <span class="m">2·5 + 3·2 = 16</span> and <span class="m">2·5 − 2 = 8</span>—both work, whereas the incorrect answer (6, 4) did not (<span class="m">12 + 12 = 24 ≠ 16</span>). Moral: the minus sign in subtraction covers <em>every</em> term of the second equation, including those that were already negative.</p></details>
+</div>
+
+<div class="boss">
+<div class="boss-t">Chapter Boss: "The Pharmacy Auditor"</div>
+<p>You are an auditor, and you've been handed a pharmacy purchase invoice. It has three lines, but no unit prices—only line totals. The first two lines are honest, and you can use them to reconstruct the prices. But in the third line, the stock clerk seems to have padded the total. Reconstruct the prices and catch the padding—that is the Boss's job: first two receipts, then the evidence.</p>
+<div class="problem tier-c">
+<div class="pr-t">Boss, Part 1 · Reconstruct the Prices <span class="tier">Level C</span></div>
+<p>Line 1: <strong>3 packs + 2 vials—116 000 soums</strong>. Line 2: <strong>1 pack + 2 vials—76 000 soums</strong>. Find the price of one pack and one vial.</p>
+<details class="hint"><summary>Hint 1</summary><p>How do the two lines differ? The vials have the same coefficient (2). Move: "Two Receipts"—subtract one line from the other and the vials will disappear.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Line 1 minus Line 2: there were 3 packs and 1 pack, a difference of 2 packs; money was 116 000 and 76 000. So <span class="m">2 packs = 40 000</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>Let <span class="m">p</span> be a pack, and <span class="m">v</span> be a vial. System: <span class="m">3p + 2v = 116 000</span> and <span class="m">p + 2v = 76 000</span>. Subtract the second from the first (vials are eliminated): <span class="m">(3p − p) + (2v − 2v) = 116 000 − 76 000</span>, which gives <span class="m">2p = 40 000</span>, <span class="m">p = 20 000</span>. Go back: <span class="m">20 000 + 2v = 76 000</span>, <span class="m">2v = 56 000</span>, <span class="m">v = 28 000</span>. Answer: <strong>pack 20 000, vial 28 000</strong>. Check the first line: <span class="m">3·20 000 + 2·28 000 = 60 000 + 56 000 = 116 000</span>—it works.</p></details>
+</div>
+<div class="problem tier-c">
+<div class="pr-t">Boss, Part 2 · Catch the Padding <span class="tier">Level C</span></div>
+<p>Line 3 of the invoice reads: <strong>4 packs + 3 vials—180 000 soums</strong>. Using the prices from Part 1, check: how much should this line actually cost, and how much did the stock clerk pad the total by?</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is set: you already know the prices. Calculate the fair cost of 4 packs and 3 vials and compare it with the claimed sum.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Fair cost: <span class="m">4·20 000 + 3·28 000</span>. The padding is the claimed 180 000 minus the fair cost.</p></details>
+<details class="sol"><summary>Solution</summary><p>Fair cost of Line 3: <span class="m">4·20 000 + 3·28 000 = 80 000 + 84 000 = 164 000</span> soums. But the invoice says 180 000. The padding: <span class="m">180 000 − 164 000 = 16 000</span> soums. Answer: <strong>the line should cost 164 000, with 16 000 soums of padding added</strong>. The Boss is defeated: two honest receipts gave you the prices, and you verified the third "receipt" against those prices—catching them red-handed. This is the power of a system: two pieces of evidence establish the truth, by which the third is judged.</p></details>
+</div>
+</div>
+
+<div class="recap">
+<div class="recap-t">You can now</div>
+<ul class="powers">
+<li>Reconstruct hidden prices from two receipts by subtracting one equation from the other entirely.</li>
+<li>Solve systems by substitution when a variable is already isolated, and by elimination when the equations are jumbled.</li>
+<li>Choose what to eliminate: align coefficients and add opposites or subtract identical values.</li>
+<li>Read the number of solutions directly from the coefficients—one, zero, or infinitely many—without solving the system.</li>
+<li>Find <span class="m">k</span> that makes a system parallel with no solution, and distinguish this case from "infinitely many solutions" by the constant term.</li>
+<li>Grab <span class="m">x + y</span> or <span class="m">x − y</span> with a single addition or subtraction, without doing a full solution.</li>
+<li>Translate text into two equations—quantity separately, value separately—without mixing up the units.</li>
+<li>Catch a lost sign during subtraction and padded totals in someone else's invoice.</li>
+</ul>
+<div class="cheat"><div class="cheat-t">Cheat sheet</div>
+<ul>
+<li><span class="m">a₁x + b₁y = c₁</span>, <span class="m">a₂x + b₂y = c₂</span>—the general form of a system of two linear equations.</li>
+<li>Substitution—if a variable is isolated: plug it in to get a single equation with one variable.</li>
+<li>Elimination—align the coefficients; subtract identical ones, add opposites.</li>
+<li>One solution: <span class="frac"><b>a₁</b><i>a₂</i></span> ≠ <span class="frac"><b>b₁</b><i>b₂</i></span> (different slopes).</li>
+<li>No solution: <span class="frac"><b>a₁</b><i>a₂</i></span> = <span class="frac"><b>b₁</b><i>b₂</i></span> ≠ <span class="frac"><b>c₁</b><i>c₂</i></span> (parallel).</li>
+<li>Infinitely many solutions: <span class="frac"><b>a₁</b><i>a₂</i></span> = <span class="frac"><b>b₁</b><i>b₂</i></span> = <span class="frac"><b>c₁</b><i>c₂</i></span> (the same line).</li>
+<li>Mixture: volume <span class="m">x + y = V</span> and substance <span class="m">p₁x + p₂y = p·V</span> (percentages as decimals).</li>
+<li>The minus sign in subtraction covers the entire second equation: <span class="m">−(ax + by) = −ax − by</span>.</li>
+</ul>
+</div>
+<div class="feynman"><div class="box-t">The Feynman Assignment</div><p>Explain to an imaginary twelve-year-old, without using the word "equation," why you can't figure out the price of coffee from one receipt, but you can from two.</p>
+<details class="sol"><summary>Model explanation</summary><p>Imagine you only know that "a coffee and a bun together cost 27 thousand." The coffee could be expensive and the bun cheap, or vice-versa—you have no way of sorting out which money belongs to what. It's like hearing: "two people together weigh 100 kilograms." Who weighs how much? You can't tell. But now you have a second note: "two coffees and that same bun—39 thousand." The second receipt differs from the first by exactly one extra coffee, and in money by 12 thousand. So that extra coffee must cost 12 thousand, no two ways about it. And once you know the coffee, you find the bun instantly. One receipt is a rumor. Two receipts are evidence: they trap the price between them.</p></details>
+</div>
+</div>
+</section>
+

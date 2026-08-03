@@ -1,0 +1,736 @@
+<section class="chapter" id="ch-5" data-ch="5" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 5 · Алгебра</div><h2>Математика «достаточно»</h2><p class="ch-lede">Мир почти нигде не требует равенства — он требует, чтобы величина оставалась в допустимой зоне.</p></header>
+
+<div class="hook">
+<p>В лифте твоего дома висит табличка: «Грузоподъёмность — до 630 кг». Лифт не знает, сколько ты весишь. Ему и не нужно. Он не требует, чтобы суммарный вес пассажиров равнялся какому-то числу — ему достаточно, чтобы вес не превышал 630. Внутри этого «не больше» помещаются миллионы сценариев: один человек с чемоданом, трое взрослых, пять подростков с рюкзаками. Уравнение выбрало бы ровно один.</p>
+<p>Осмотрись. Мост «до 10 тонн». Кредитный лимит. «Детям от 3 лет». Скорость «не выше 60». Парацетамол — «не более 60 мг на кг в сутки». Цивилизация почти нигде не стоит на равенстве: она стоит на том, чтобы величина не выходила из допустимой зоны. Равенство — хрупкое совпадение: чуть дрогнула рука — и его уже нет. А «не больше» несёт нагрузку десятилетиями.</p>
+<p>Эта глава — про математику слова «достаточно»: неравенства (inequalities). Хорошая новость: почти все правила ты уже знаешь из уравнений. Плохая: есть одно-единственное исключение, и именно на нём SAT ловит людей чаще всего. В конце тебя ждёт босс — «Протокол дозирования»: из инструкции к препарату нужно будет собрать систему неравенств и вычислить безопасный диапазон дозы для конкретного ребёнка. Для педиатра — не упражнение, а вторник.</p>
+</div>
+
+<div class="try-first">
+<p>Прежде чем читать дальше — честно повозись с двумя заданиями минут пять-десять. Оба расставлены как капканы, и вся их ценность в том, чтобы наступить в них до объяснений.</p>
+<div class="problem"><div class="pr-t">Разминка перед боем</div>
+<p>(а) Реши неравенство <span class="m">−2x &lt; 6</span>. Затем проверь себя: подставь какое-нибудь число из своего ответа в исходное неравенство и посмотри, получается ли истина.</p>
+<p>(б) Концентрация препарата <span class="m">C</span> должна быть от 10 до 20 мкг/мл. Запиши это условие одной формулой, в которой ровно один знак сравнения — без союза «и».</p>
+<details class="hint"><summary>Подсказка 1</summary><p>(а) Действуй как с уравнением, а потом обязательно проверь ответ подстановкой. (б) Найди середину диапазона: насколько далеко от неё разрешено отойти?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>(а) Если у тебя вышло <span class="m">x &lt; −3</span> — подставь <span class="m">x = −4</span> и посмотри, что скажет неравенство. (б) «Не дальше 5 от числа 15» — есть ли у математики знак для «не дальше»?</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) <span class="m">x &gt; −3</span>. Если вышло наоборот — ты наступил в главный капкан главы; разбор в секции «Единственное отличие от уравнений». (б) <span class="m">|C − 15| ≤ 5</span> — это приём «Терапевтическое окно», он появится в секции про модуль.</p></details>
+</div>
+</div>
+
+<h3>Территория вместо точки</h3>
+<p>У уравнения <span class="m">2x + 3 = 11</span> ответ — точка: <span class="m">x = 4</span>. У неравенства <span class="m">2x + 3 ≤ 11</span> ответ — территория: перенеси тройку, раздели на 2, и получишь <span class="m">x ≤ 4</span>. Подходит и 4, и 0, и −100. Все шаги — те же, что у уравнений: прибавляй, вычитай, дели на положительное — знак сравнения стоит смирно.</p>
+<div class="box idea"><div class="box-t">Идея</div><p>Если запомнишь одно: решение неравенства — не точка, а территория, и вся работа сводится к двум вопросам — где проходит граница и входит ли она сама.</p></div>
+<p>На числовой прямой территорию рисуют лучом или отрезком, а границу — точкой. Закрашенная точка: граница входит (знаки <span class="m">≤</span> и <span class="m">≥</span>, нестрогие). Пустая точка: граница не входит (строгие знаки <span class="m">&lt;</span> и <span class="m">&gt;</span>). В лифт «до 630 кг» с ровно 630 кг ещё можно; в клуб «строго старше 18» имениннику в день восемнадцатилетия — как повезёт с охраной, но математика говорит «нет».</p>
+<figure class="fig" id="ch5-fig1"><svg class="dia" viewBox="0 0 420 170" role="img" aria-label="Две числовые прямые: закрашенная точка при нестрогом знаке, пустая точка при строгом">
+<text class="lbl" x="30" y="30">n ≤ 5: точка закрашена — граница входит</text>
+<line class="ax" x1="30" y1="60" x2="390" y2="60"/>
+<line class="grid" x1="30" y1="55" x2="30" y2="65"/><line class="grid" x1="70" y1="55" x2="70" y2="65"/><line class="grid" x1="110" y1="55" x2="110" y2="65"/><line class="grid" x1="150" y1="55" x2="150" y2="65"/><line class="grid" x1="190" y1="55" x2="190" y2="65"/><line class="grid" x1="230" y1="55" x2="230" y2="65"/><line class="grid" x1="270" y1="55" x2="270" y2="65"/><line class="grid" x1="310" y1="55" x2="310" y2="65"/><line class="grid" x1="350" y1="55" x2="350" y2="65"/>
+<path class="crv" fill="none" d="M30 60 L230 60"/>
+<circle class="pt" cx="230" cy="60" r="6"/>
+<text class="lbl" x="26" y="82">0</text><text class="lbl" x="226" y="82">5</text>
+<text class="lbl" x="30" y="105">x &gt; 2: точка пустая — граница не входит</text>
+<line class="ax" x1="30" y1="130" x2="390" y2="130"/>
+<line class="grid" x1="30" y1="125" x2="30" y2="135"/><line class="grid" x1="70" y1="125" x2="70" y2="135"/><line class="grid" x1="150" y1="125" x2="150" y2="135"/><line class="grid" x1="190" y1="125" x2="190" y2="135"/><line class="grid" x1="230" y1="125" x2="230" y2="135"/><line class="grid" x1="270" y1="125" x2="270" y2="135"/><line class="grid" x1="310" y1="125" x2="310" y2="135"/><line class="grid" x1="350" y1="125" x2="350" y2="135"/>
+<path class="crv" fill="none" d="M104 130 A6 6 0 1 0 116 130 A6 6 0 1 0 104 130"/>
+<path class="crv" fill="none" d="M116 130 L390 130"/>
+<text class="lbl" x="26" y="152">0</text><text class="lbl" x="106" y="152">2</text>
+</svg><figcaption>Одна и та же логика: закрашенная точка — «включительно», пустая — «не считая».</figcaption></figure>
+<p>И сразу главный рабочий навык главы: любой ответ проверяй подстановкой. Возьми число из своей территории, подставь в исходное неравенство — должна получиться истина. Это бесплатный и безотказный детектор ошибок, и дальше он спасёт нас не раз.</p>
+<div class="box story"><div class="box-t">На полях</div><p>Инженеры называют это запасом прочности: мост, рассчитанный на 10 тонн, на самом деле выдерживает заметно больше. Табличка — не про то, когда он рухнет, а про территорию, где никто не обязан это выяснять.</p></div>
+
+<h3>Единственное отличие от уравнений</h3>
+<p>Вернёмся к разминке. Ты, скорее всего, решил <span class="m">−2x &lt; 6</span> так: разделил на −2 и получил <span class="m">x &lt; −3</span>. Проверим подстановкой: возьмём <span class="m">x = −4</span> из этой территории. Слева <span class="m">−2 · (−4) = 8</span>. Разве <span class="m">8 &lt; 6</span>? Нет. Территория выбрана неверно — детектор сработал.</p>
+<p>Что произошло? Умножение на −1 — это зеркало числовой прямой с осью в нуле. Было <span class="m">2 &lt; 5</span>; в отражении <span class="m">−2</span> и <span class="m">−5</span>, и теперь <span class="m">−2 &gt; −5</span>. Кто стоял правее, в зеркале оказался левее. Порядок чисел разворачивается — значит, и знак сравнения обязан развернуться.</p>
+<div class="formula">a &lt; b  ⇔  −a <b class="hl">&gt;</b> −b</div>
+<div class="box why"><div class="box-t">Почему это работает</div><p>Скептик: «„Разверни знак“ звучит как заклинание. Докажи». Хорошо. Запись <span class="m">a &lt; b</span> означает, что разность <span class="m">b − a</span> положительна. Теперь посмотри на числа <span class="m">−a</span> и <span class="m">−b</span>: их разность <span class="m">(−a) − (−b) = b − a</span> — та же самая, по-прежнему положительная. А раз <span class="m">(−a) − (−b)</span> положительна, то <span class="m">−a</span> больше, чем <span class="m">−b</span>. Разворот знака — не ритуал, а арифметика разности.</p></div>
+<div class="box tool"><div class="box-t">Приём: „Разворот знака“</div><p>Умножил или разделил обе части неравенства на отрицательное число — в тот же миг разверни знак сравнения. Прибавление и вычитание знак не трогают: они сдвигают оба числа одинаково, порядок сохраняется. Умножение и деление на положительное — тоже безопасны.</p></div>
+
+<div class="example"><div class="ex-t">Пример 1 · Подписки и остаток</div>
+<p>На карте 90 000 сум. Каждую неделю списывается 12 000 за подписки. Ты хочешь, чтобы на карте оставалось не меньше 30 000 — на непредвиденное. Сколько недель можно не пополнять карту?</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим формулу остатка:</span> через <span class="m">n</span> недель на карте <span class="m">90 000 − 12 000n</span>. Требование «не меньше 30 000» даёт <span class="m">90 000 − 12 000n ≥ 30 000</span>.</div>
+<div class="step"><span class="step-why">Хотим изолировать член с <span class="m">n</span>:</span> вычитаем 90 000 из обеих частей: <span class="m">−12 000n ≥ −60 000</span>. Знак пока на месте — вычитание его не трогает.</div>
+<div class="step"><span class="step-why">Хотим голое <span class="m">n</span>:</span> делим на −12 000. Это деление на отрицательное — по приёму «Разворот знака» знак сравнения разворачивается: <span class="m">n ≤ 5</span>.</div>
+</div>
+<details class="hint"><summary>Почему при вычитании 90 000 знак не развернулся?</summary><p>Вычитание сдвигает обе части на одно и то же расстояние влево — их взаимный порядок не меняется. Разворот случается только при умножении или делении на отрицательное: лишь оно отражает прямую в зеркале.</p></details>
+<p>Ответ: <strong>не больше 5 недель</strong>. Проверка: при <span class="m">n = 5</span> остаток ровно 30 000 — годится, знак нестрогий. Взгляд назад: минус можно было вообще не создавать. Перенеси <span class="m">12 000n</span> вправо, а 30 000 влево: <span class="m">60 000 ≥ 12 000n</span>, откуда <span class="m">n ≤ 5</span> — тот же ответ без единого опасного поворота.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Забытый разворот знака — ловушка номер один всей алгебры SAT. Составители это знают, поэтому вариант с неразвёрнутым знаком лежит среди ответов всегда. Противоядие тоже всегда при тебе: подставь одно число из своей территории. Десять секунд — и подделка вскрыта.</p></div>
+
+<div class="quiz" data-answer="c" id="ch5-quiz1">
+<div class="quiz-q">Реши: <span class="m">−4x &gt; 12</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-1" value="a"><span>x &gt; −3</span></label>
+<label><input type="radio" name="q5-1" value="b"><span>x &lt; 3</span></label>
+<label><input type="radio" name="q5-1" value="c"><span>x &lt; −3</span></label>
+<label><input type="radio" name="q5-1" value="d"><span>x &gt; 3</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Деление на −4 — деление на отрицательное: знак развернулся. Контроль: x = −5 даёт 20 &gt; 12 — истина." data-no="Не совсем. Либо знак остался неразвёрнутым, либо потерялся минус. Раздели на −4 и разверни: x &lt; −3. Проверь подстановкой: x = −5 даёт слева 20, и 20 &gt; 12 — истина."></div>
+</div>
+
+<h3>Три части, одна операция</h3>
+<p>Лабораторный бланк говорит: натрий в норме от 135 до 145 ммоль/л. Математик записывает это одной строкой: <span class="m">135 ≤ Na ≤ 145</span>. Это двойное неравенство (compound inequality): величина зажата между двумя границами. Читается изнутри наружу: натрий не меньше 135 и не больше 145.</p>
+<p>Решать двойное неравенство — значит освобождать переменную в середине, делая одно и то же со всеми тремя частями сразу.</p>
+
+<div class="example"><div class="ex-t">Пример 2 · Освободить середину</div>
+<p>Реши: <span class="m">3 &lt; 2x − 1 ≤ 9</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим убрать «−1» из середины:</span> прибавляем 1 ко всем трём частям: <span class="m">4 &lt; 2x ≤ 10</span>.</div>
+<div class="step"><span class="step-why">Хотим голый <span class="m">x</span>:</span> раздели все три части на 2 — допиши этот шаг сам, потом сверься.</div>
+</div>
+<details class="hint"><summary>Почему можно прибавлять ко всем трём частям?</summary><p>Двойное неравенство — это два обычных, склеенных вместе: <span class="m">3 &lt; 2x − 1</span> и <span class="m">2x − 1 ≤ 9</span>. Прибавление единицы законно в каждом из них по отдельности — значит, законно и в склейке.</p></details>
+<details class="hint"><summary>Сверка последнего шага</summary><p><span class="m">2 &lt; x ≤ 5</span>. Двойка не входит (знак строгий, точка пустая), пятёрка входит (знак нестрогий, точка закрашенная).</p></details>
+<p>Ответ: <strong>2 &lt; x ≤ 5</strong> — отрезок с пустой точкой в 2 и закрашенной в 5. И предупреждение на будущее: если бы пришлось делить на отрицательное, развернулись бы оба знака сразу — зеркало отражает всю строку целиком.</p></div>
+
+<div class="quiz" data-answer="a" id="ch5-quiz2">
+<div class="quiz-q">Реши: <span class="m">−2 ≤ 3x + 4 &lt; 10</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-2" value="a"><span>−2 ≤ x &lt; 2</span></label>
+<label><input type="radio" name="q5-2" value="b"><span>−2 &lt; x ≤ 2</span></label>
+<label><input type="radio" name="q5-2" value="c"><span>−6 ≤ x &lt; 6</span></label>
+<label><input type="radio" name="q5-2" value="d"><span>x ≥ −2</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Вычел 4 из всех трёх частей, разделил на 3, строгость каждого знака сохранил на своём месте." data-no="Не совсем. Вычти 4 из всех трёх частей: −6 ≤ 3x &lt; 6, затем раздели на 3. Если у тебя −6 и 6 — ты забыл разделить. Если строгость знаков поменялась местами — это вторая классическая ловушка: строгий знак остаётся строгим на своём конце."></div>
+</div>
+
+<h3>Модуль — это расстояние</h3>
+<p>Модуль (absolute value) числа — его расстояние до нуля: <span class="m">|7| = 7</span> и <span class="m">|−7| = 7</span>, потому что до нуля от обоих семь шагов. А <span class="m">|x − a|</span> — расстояние от <span class="m">x</span> до точки <span class="m">a</span>. Вся мощь модуля в этом переводе: увидел <span class="m">|x − a|</span> — читай «как далеко <span class="m">x</span> от <span class="m">a</span>», и половина задач решится головой, без выкладок.</p>
+
+<div class="example"><div class="ex-t">Пример 3 · Две ветки</div>
+<p>Реши: <span class="m">|x − 3| = 7</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим перевести с языка модуля:</span> какие точки лежат на расстоянии 7 от точки 3?</div>
+<div class="step"><span class="step-why">Идём в обе стороны:</span> шаг вправо — <span class="m">3 + 7 = 10</span>; шаг влево — <span class="m">3 − 7 = −4</span>. Формально это две ветки: <span class="m">x − 3 = 7</span> или <span class="m">x − 3 = −7</span>.</div>
+</div>
+<p>Ответ: <strong>x = 10 или x = −4</strong>. Проверка: <span class="m">|10 − 3| = 7</span>, <span class="m">|−4 − 3| = |−7| = 7</span>. Обе точки на месте.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>«А теперь <span class="m">|x + 7| = −5</span>, — вкрадчиво предлагает Граф Подвох. — Две ветки, как учили: <span class="m">x = −2</span> и <span class="m">x = −12</span>. Оба варианта уже напечатаны в тесте». Не спеши. Слева стоит расстояние, а расстояние не бывает отрицательным. Уравнение вида <span class="m">|что угодно| = −5</span> не имеет решений — и правильный вариант в таких задачах называется «no solution». Обе «ветки» Графа ведут в пропасть.</p></div>
+
+<div class="quiz" data-answer="d" id="ch5-quiz3">
+<div class="quiz-q">Сколько решений у уравнения <span class="m">|x + 7| = −5</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-3" value="a"><span>два: x = −2 и x = −12</span></label>
+<label><input type="radio" name="q5-3" value="b"><span>одно: x = −12</span></label>
+<label><input type="radio" name="q5-3" value="c"><span>бесконечно много</span></label>
+<label><input type="radio" name="q5-3" value="d"><span>ни одного</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Модуль — расстояние, а расстояние не может равняться −5. Решений нет." data-no="Граф Подвох доволен. Ты запустил машинку «две ветки», не взглянув на правую часть: модуль — это расстояние, он не бывает отрицательным. Уравнение не имеет решений."></div>
+</div>
+
+<h3>Коридор и лучи</h3>
+<p>Теперь неравенства с модулем. <span class="m">|x − a| ≤ r</span> читается: расстояние от <span class="m">x</span> до <span class="m">a</span> не больше <span class="m">r</span>. То есть <span class="m">x</span> заперт в коридоре: от <span class="m">a − r</span> до <span class="m">a + r</span>.</p>
+<div class="formula">|x − <b class="hl">a</b>| ≤ <b class="hl2">r</b>  ⇔  <b class="hl">a</b> − <b class="hl2">r</b> ≤ x ≤ <b class="hl">a</b> + <b class="hl2">r</b></div>
+<ul class="legend"><li><span class="m">a</span> — центр коридора, точка привязки;</li><li><span class="m">r</span> — радиус: насколько далеко от центра разрешено отойти.</li></ul>
+<div class="box tool"><div class="box-t">Приём: „Терапевтическое окно“</div><p>Любой коридор в мире — это модуль. Центр — среднее концов, радиус — половина размаха: <span class="m">|x − центр| ≤ радиус</span>. Приём работает в обе стороны: из диапазона в модуль и из модуля в диапазон.</p></div>
+
+<div class="example"><div class="ex-t">Пример 4 · Терапевтическое окно</div>
+<p>Препарат эффективен и безопасен при концентрации от 10 до 20 мкг/мл. Запиши условие одним неравенством.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим центр:</span> среднее концов — <span class="m">(10 + 20) / 2 = 15</span>.</div>
+<div class="step"><span class="step-why">Хотим радиус:</span> половина размаха — <span class="m">(20 − 10) / 2 = 5</span>.</div>
+<div class="step"><span class="step-why">Собираем по приёму «Терапевтическое окно»:</span> <span class="m">|C − 15| ≤ 5</span>.</div>
+</div>
+<p>Ответ: <strong>|C − 15| ≤ 5</strong> — это и был пункт (б) разминки. Если ты тогда написал <span class="m">10 ≤ C ≤ 20</span> — по смыслу верно, но в записи два знака; модуль складывает то же самое в один. Кстати, каждый референсный интервал в лабораторном бланке — это модульное неравенство, записанное для людей: натрий <span class="m">135 ≤ Na ≤ 145</span> — это <span class="m">|Na − 140| ≤ 5</span>.</p></div>
+
+<figure class="fig" id="ch5-fig2"><svg class="dia" viewBox="0 0 420 150" role="img" aria-label="Числовая прямая: коридор концентрации от 10 до 20 с центром 15 и радиусом 5">
+<text class="lbl" x="150" y="34">|C − 15| ≤ 5</text>
+<line class="grid" x1="210" y1="58" x2="124" y2="58"/><line class="grid" x1="210" y1="58" x2="296" y2="58"/>
+<text class="lbl" x="156" y="52">5</text><text class="lbl" x="252" y="52">5</text>
+<line class="grid" x1="210" y1="58" x2="210" y2="90"/>
+<line class="ax" x1="30" y1="90" x2="390" y2="90"/>
+<line class="grid" x1="30" y1="85" x2="30" y2="95"/><line class="grid" x1="120" y1="85" x2="120" y2="95"/><line class="grid" x1="210" y1="85" x2="210" y2="95"/><line class="grid" x1="300" y1="85" x2="300" y2="95"/><line class="grid" x1="390" y1="85" x2="390" y2="95"/>
+<path class="crv" fill="none" d="M120 90 L300 90"/>
+<circle class="pt" cx="120" cy="90" r="5"/><circle class="pt" cx="300" cy="90" r="5"/>
+<text class="lbl" x="24" y="112">5</text><text class="lbl" x="112" y="112">10</text><text class="lbl" x="200" y="112">15</text><text class="lbl" x="292" y="112">20</text><text class="lbl" x="380" y="112">25</text>
+<text class="lbl" x="182" y="132">центр</text>
+</svg><figcaption>Коридор <span class="m">|C − 15| ≤ 5</span>: центр 15, по 5 в каждую сторону, концы закрашены — знак нестрогий.</figcaption></figure>
+
+<p>А что значит <span class="m">|x − a| ≥ r</span>? Расстояние не меньше <span class="m">r</span>: точка вырвалась из коридора. Остаются два луча наружу: <span class="m">x ≤ a − r</span> или <span class="m">x ≥ a + r</span>.</p>
+
+<div class="example"><div class="ex-t">Пример 5 · Отклонение температуры</div>
+<p>Врача настораживает отклонение температуры тела от 36,6 хотя бы на один градус — в любую сторону. Запиши условие «настораживает» неравенством и реши его.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим перевести «отклонение хотя бы на 1»:</span> расстояние от <span class="m">T</span> до 36,6 не меньше 1, то есть <span class="m">|T − 36,6| ≥ 1</span>.</div>
+<div class="step"><span class="step-why">Идём наружу в обе стороны:</span> правый луч — <span class="m">T ≥ 37,6</span>. Левый луч достроишь сам?</div>
+</div>
+<details class="hint"><summary>Сверка левого луча</summary><p><span class="m">T ≤ 36,6 − 1 = 35,6</span>. Итого: <span class="m">T ≤ 35,6</span> или <span class="m">T ≥ 37,6</span> — гипотермия либо лихорадка.</p></details>
+<p>Ответ: <strong>T ≤ 35,6 или T ≥ 37,6</strong>. Взгляд назад: коридор и лучи — дополнения друг друга. Решения <span class="m">|T − 36,6| &lt; 1</span> и <span class="m">|T − 36,6| ≥ 1</span> вместе покрывают всю прямую и нигде не пересекаются — отличная самопроверка: если твои «коридор» и «лучи» перекрылись, где-то ошибка.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Перепутать коридор и лучи — значит выбрать в точности противоположное множество, и такой вариант в тесте есть всегда. Держи опору: <span class="m">≤</span> — «меньше» — зажат между, коридор; <span class="m">≥</span> — «больше» — вырвался врозь, лучи. Сомневаешься — подставь одну точку: центр <span class="m">a</span> обязан подходить коридору и не подходить лучам.</p></div>
+
+<div class="quiz" data-answer="b" id="ch5-quiz4">
+<div class="quiz-q">Реши: <span class="m">|x − 2| ≥ 5</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-4" value="a"><span>−3 ≤ x ≤ 7</span></label>
+<label><input type="radio" name="q5-4" value="b"><span>x ≤ −3 или x ≥ 7</span></label>
+<label><input type="radio" name="q5-4" value="c"><span>x ≥ 7</span></label>
+<label><input type="radio" name="q5-4" value="d"><span>−7 ≤ x ≤ 3</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Расстояние от x до 2 не меньше 5 — два луча наружу от точек −3 и 7." data-no="Не совсем. Знак ≥ — «вырвался из коридора»: лучи наружу, а не отрезок внутри. Проверь центром: x = 2 даёт |0| ≥ 5 — ложь, значит 2 не должно входить в ответ. Полный ответ: x ≤ −3 или x ≥ 7."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Стоп-кадр</div><p>Закрой экран и восстанови по памяти: (1) в какой именно момент разворачивается знак неравенства; (2) во что раскрывается <span class="m">|x − a| ≤ r</span>; (3) во что раскрывается <span class="m">|x − a| ≥ r</span>; (4) когда точка на прямой закрашенная, а когда пустая. Потом открой и сверься — расхождения перечитай прямо сейчас, пока дёшево.</p></div>
+
+<h3>Неравенство на плоскости: полуплоскость</h3>
+<p>До сих пор жили на прямой. Добавим вторую переменную: <span class="m">y = 2x + 1</span> — это линия, а <span class="m">y ≤ 2x + 1</span> — линия и вся территория под ней. Прямая режет плоскость на две полуплоскости (half-plane); неравенство выбирает одну из них. Правила границы те же, что у точек на прямой, только выросли: нестрогий знак — граница сплошная (solid) и входит в решение; строгий — пунктирная (dashed) и не входит.</p>
+<p>Как понять, какая сторона наша? Приём проверки точкой: возьми любую точку не на границе — удобнее всего <span class="m">(0; 0)</span> — и подставь. Истина — штрихуй её сторону, ложь — противоположную.</p>
+
+<div class="example"><div class="ex-t">Пример 6 · Бюджет процедурного кабинета</div>
+<p>Упаковка бинтов стоит 2 тысячи сум, упаковка перчаток — 3 тысячи. Бюджет — 12 тысяч. Какие покупки <span class="m">(x; y)</span> допустимы, если <span class="m">x</span> — бинты, <span class="m">y</span> — перчатки?</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим условие на деньги:</span> потрачено <span class="m">2x + 3y</span>, и это не больше бюджета: <span class="m">2x + 3y ≤ 12</span>.</div>
+<div class="step"><span class="step-why">Хотим границу:</span> рисуем прямую <span class="m">2x + 3y = 12</span> по двум точкам — <span class="m">(6; 0)</span> и <span class="m">(0; 4)</span>. Знак нестрогий — линия сплошная.</div>
+<div class="step"><span class="step-why">Хотим сторону:</span> проверяем <span class="m">(0; 0)</span>: <span class="m">0 ≤ 12</span> — истина. Штрихуем сторону нуля: ничего не купить — бюджету точно не больно.</div>
+</div>
+<p>Ответ: <strong>полуплоскость под прямой, включая саму прямую</strong>. А в жизни ещё и <span class="m">x ≥ 0</span>, <span class="m">y ≥ 0</span> — отрицательные бинты пока не завезли. Три условия сразу — это уже система, и о ней следующая секция.</p></div>
+
+<figure class="fig" id="ch5-fig3"><svg class="dia" viewBox="0 0 420 300" role="img" aria-label="Координатная плоскость: полуплоскость решений неравенства 2x плюс 3y не больше 12, штриховка со стороны начала координат">
+<line class="grid" x1="100" y1="20" x2="100" y2="260"/><line class="grid" x1="160" y1="20" x2="160" y2="260"/><line class="grid" x1="220" y1="20" x2="220" y2="260"/><line class="grid" x1="280" y1="20" x2="280" y2="260"/><line class="grid" x1="340" y1="20" x2="340" y2="260"/>
+<line class="grid" x1="40" y1="200" x2="400" y2="200"/><line class="grid" x1="40" y1="140" x2="400" y2="140"/><line class="grid" x1="40" y1="80" x2="400" y2="80"/>
+<path class="fill" d="M40 260 L220 260 L40 140 Z"/>
+<line class="ax" x1="40" y1="260" x2="400" y2="260"/><line class="ax" x1="40" y1="260" x2="40" y2="20"/>
+<path class="crv" fill="none" d="M40 140 L220 260"/>
+<circle class="pt" cx="40" cy="260" r="4"/>
+<text class="lbl" x="52" y="250">(0; 0) — подходит</text>
+<text class="lbl" x="46" y="132">(0; 4)</text>
+<text class="lbl" x="206" y="282">(6; 0)</text>
+<text class="lbl" x="160" y="170">2x + 3y = 12</text>
+<text class="lbl" x="54" y="228">решения</text>
+<text class="lbl" x="392" y="252">x</text><text class="lbl" x="48" y="30">y</text>
+<text class="lbl" x="96" y="278">2</text><text class="lbl" x="156" y="278">4</text>
+<text class="lbl" x="24" y="204">2</text><text class="lbl" x="24" y="144">4</text>
+</svg><figcaption>Граница сплошная — знак нестрогий. Точка <span class="m">(0; 0)</span> дала истину, поэтому заштрихована её сторона; условия <span class="m">x ≥ 0</span> и <span class="m">y ≥ 0</span> обрезают полуплоскость до треугольника.</figcaption></figure>
+
+<div class="box desmos"><div class="box-t">Ленивый Гений: Desmos</div><p>Я не штрихую руками. Вбей в Desmos строку <span class="m">2x + 3y ≤ 12</span> как есть — он сам зальёт нужную полуплоскость и сам нарисует пунктир, если знак строгий. Твоя работа — не раскрашивать, а читать картинку: с какой стороны заливка и входит ли граница. А на бумажном тесте быстрее проверки точкой <span class="m">(0; 0)</span> всё равно ничего не придумали.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Пунктирная граница означает: точки на самой линии решению не принадлежат. Любимый вопрос теста — точка, лежащая ровно на пунктире: выглядит как решение, не является им. Прежде чем отвечать про точку на границе, взгляни на строгость знака.</p></div>
+
+<div class="quiz" data-answer="c" id="ch5-quiz5">
+<div class="quiz-q">Как выглядит график неравенства <span class="m">y &gt; x − 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-5" value="a"><span>пунктирная граница, штриховка ниже прямой</span></label>
+<label><input type="radio" name="q5-5" value="b"><span>сплошная граница, штриховка выше прямой</span></label>
+<label><input type="radio" name="q5-5" value="c"><span>пунктирная граница, штриховка выше прямой</span></label>
+<label><input type="radio" name="q5-5" value="d"><span>сплошная граница, штриховка ниже прямой</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Знак строгий — пунктир; проверка точкой (0; 0): 0 &gt; −2 — истина, а (0; 0) лежит выше прямой." data-no="Не совсем. Два независимых вопроса: строгость и сторона. Знак &gt; строгий — граница пунктирная. Сторона — точкой (0; 0): 0 &gt; 0 − 2 — истина, значит штрихуем сторону нуля, то есть выше прямой."></div>
+</div>
+
+<h3>Системы: пересечение территорий</h3>
+<p>Система неравенств (system of inequalities) — это несколько условий, которые должны выполняться одновременно. Решение — пересечение территорий: то, что выживает после всех фильтров сразу. И бюджет, и вместимость, и минимальная доза — реальные задачи почти всегда многослойны, как ты уже видел в примере с бинтами.</p>
+<p>Проверить, принадлежит ли точка решению, можно без единого рисунка: подставь её в каждое условие. Провалила хотя бы одно — не решение. На SAT это целый жанр вопросов, и он решается быстрее, чем читается.</p>
+
+<div class="quiz" data-answer="b" id="ch5-quiz6">
+<div class="quiz-q">Какая точка удовлетворяет системе: <span class="m">y ≤ 2x + 1</span> и <span class="m">y &gt; −x + 4</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-6" value="a"><span>(0; 0)</span></label>
+<label><input type="radio" name="q5-6" value="b"><span>(2; 4)</span></label>
+<label><input type="radio" name="q5-6" value="c"><span>(1; 5)</span></label>
+<label><input type="radio" name="q5-6" value="d"><span>(3; 0)</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! (2; 4): первое условие — 4 ≤ 5, истина; второе — 4 &gt; 2, истина. Оба фильтра пройдены." data-no="Не совсем. Точка обязана пройти оба фильтра. (0; 0): 0 ≤ 1 — да, но 0 &gt; 4 — нет. (1; 5): 5 ≤ 3 — нет. (3; 0): 0 ≤ 7 — да, но 0 &gt; 1 — нет. Остаётся (2; 4): 4 ≤ 5 и 4 &gt; 2 — обе истины."></div>
+</div>
+
+<p>Последний навык — перевод с человеческого на математический. Слова коварнее знаков:</p>
+<table class="tbl"><thead><tr><th>Слова задачи</th><th>Знак</th></tr></thead><tbody>
+<tr><td>«не менее 5», «как минимум 5», «хотя бы 5»</td><td><span class="m">x ≥ 5</span></td></tr>
+<tr><td>«не более 5», «максимум 5», «до 5 включительно»</td><td><span class="m">x ≤ 5</span></td></tr>
+<tr><td>«больше 5», «превышает 5»</td><td><span class="m">x &gt; 5</span></td></tr>
+<tr><td>«меньше 5», «строго ниже 5»</td><td><span class="m">x &lt; 5</span></td></tr>
+</tbody></table>
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>«Не менее пяти, — уточняет Граф Подвох, — это ведь больше пяти? Сама пятёрка не в счёт?» В счёт. «Не менее 5» разрешает ровно пять: это <span class="m">x ≥ 5</span>. А «больше 5» — это <span class="m">x &gt; 5</span>, другое множество, и на SAT оба варианта лежат рядом, различаясь одной чёрточкой под знаком.</p></div>
+
+<h3>Тренировка</h3>
+<p>Первые задачи — рутина, дальше идеи начинают комбинироваться, ближе к концу — полноценный уровень сложного модуля SAT. Подсказки открывай по одной.</p>
+
+<div class="problem tier-a"><div class="pr-t">Задача 1 <span class="tier">уровень А</span></div>
+<p>Реши: <span class="m">4x − 9 &lt; 7</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — голый <span class="m">x</span> слева. Действуй ровно как с уравнением.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Прибавь 9, затем раздели на 4. Четвёрка положительная — знак стоит смирно.</p></details>
+<details class="sol"><summary>Решение</summary><p>Прибавляем 9: <span class="m">4x &lt; 16</span>. Делим на 4: <span class="m">x &lt; 4</span>. Проверка: <span class="m">x = 0</span> даёт <span class="m">−9 &lt; 7</span> — истина. Ответ: <strong>x &lt; 4</strong>, на прямой — луч влево с пустой точкой в 4.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 2 <span class="tier">уровень А</span></div>
+<p>Реши: <span class="m">5 − 2x ≤ 19</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала изолируй член <span class="m">−2x</span>: убери пятёрку.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Дальше деление на −2 — вспомни приём «Разворот знака».</p></details>
+<details class="sol"><summary>Решение</summary><p>Вычитаем 5: <span class="m">−2x ≤ 14</span>. Делим на −2 и по приёму «Разворот знака» разворачиваем: <span class="m">x ≥ −7</span>. Проверка границы: <span class="m">x = −7</span> даёт <span class="m">5 + 14 = 19 ≤ 19</span> — истина, граница входит. Ответ: <strong>x ≥ −7</strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 3 <span class="tier">уровень А</span></div>
+<p>Реши: <span class="m">|x + 2| = 6</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Перепиши мысленно: <span class="m">|x − (−2)| = 6</span> — расстояние от <span class="m">x</span> до точки −2 равно 6.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Шагни от −2 на 6 вправо и на 6 влево — или раскрой две ветки.</p></details>
+<details class="sol"><summary>Решение</summary><p>Ветки: <span class="m">x + 2 = 6</span> даёт <span class="m">x = 4</span>; <span class="m">x + 2 = −6</span> даёт <span class="m">x = −8</span>. Проверка: <span class="m">|4 + 2| = 6</span>, <span class="m">|−8 + 2| = |−6| = 6</span>. Ответ: <strong>x = 4 или x = −8</strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 4 <span class="tier">уровень Б</span></div>
+<p>Реши: <span class="m">−3 &lt; 2x + 5 ≤ 13</span>. Укажи, какие концы входят в ответ.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Освобождай середину: одно действие — сразу для всех трёх частей.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Вычти 5 из всех трёх, потом раздели на 2. Строгость каждого знака остаётся на своём конце.</p></details>
+<details class="sol"><summary>Решение</summary><p>Вычитаем 5: <span class="m">−8 &lt; 2x ≤ 8</span>. Делим на 2: <span class="m">−4 &lt; x ≤ 4</span>. Левый конец −4 не входит (строгий знак, пустая точка), правый конец 4 входит (нестрогий, закрашенная). Контроль: <span class="m">x = 4</span> даёт <span class="m">13 ≤ 13</span> — истина; <span class="m">x = −4</span> даёт <span class="m">−3 &lt; −3</span> — ложь. Ответ: <strong>−4 &lt; x ≤ 4</strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 5 <span class="tier">уровень Б</span></div>
+<p>Референсный интервал калия в крови: от 3,5 до 5,0 ммоль/л. Запиши это условие одним модульным неравенством.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Нужны две величины: центр коридора и его радиус.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Приём «Терапевтическое окно»: центр — среднее концов, радиус — половина размаха.</p></details>
+<details class="sol"><summary>Решение</summary><p>Центр: <span class="m">(3,5 + 5,0) / 2 = 4,25</span>. Радиус: <span class="m">(5,0 − 3,5) / 2 = 0,75</span>. Ответ: <strong>|K − 4,25| ≤ 0,75</strong>. Проверка концов: <span class="m">4,25 − 0,75 = 3,5</span> и <span class="m">4,25 + 0,75 = 5,0</span> — коридор сходится.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 6 <span class="tier">уровень Б</span></div>
+<p>По инструкции суточная доза препарата — не более 60 мг на кг массы тела. Ребёнок весит 18 кг, препарат дают 3 раза в сутки по <span class="m">x</span> мг. (а) Составь неравенство и найди допустимые <span class="m">x</span>. (б) Можно ли давать разово 400 мг?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала посчитай суточный потолок в миллиграммах для этого конкретного ребёнка.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>«Не более» — это <span class="m">≤</span>. Сумма за сутки — <span class="m">3x</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) Потолок: <span class="m">60 · 18 = 1080</span> мг/сут. Условие: <span class="m">3x ≤ 1080</span>, откуда <span class="m">x ≤ 360</span> мг на приём. (б) <span class="m">3 · 400 = 1200 &gt; 1080</span> — нельзя: превышение суточного максимума на 120 мг. Ответ: <strong>x ≤ 360 мг; 400 мг разово при трёх приёмах недопустимо</strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 7 <span class="tier">флешбэк · глава 2</span></div>
+<p>Реши: <span class="frac"><b>x + 1</b><i>2</i></span> − <span class="frac"><b>x − 3</b><i>5</i></span> ≥ 2.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — избавиться от дробей одним махом, как в главе 2. Каким числом это делается здесь?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Умножь обе части на 10. Десятка положительная — знак не трогаем. Дальше раскрой скобки, следя за минусом перед второй дробью.</p></details>
+<details class="sol"><summary>Решение</summary><p>Хотим убрать дроби: умножаем обе части на 10 (положительное — знак на месте): <span class="m">5(x + 1) − 2(x − 3) ≥ 20</span>. Раскрываем: <span class="m">5x + 5 − 2x + 6 ≥ 20</span>, то есть <span class="m">3x + 11 ≥ 20</span>. Вычитаем 11 и делим на 3: <span class="m">x ≥ 3</span>. Проверка границы: при <span class="m">x = 3</span> слева <span class="m">4/2 − 0/5 = 2 ≥ 2</span> — истина. Ответ: <strong>x ≥ 3</strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 8 <span class="tier">флешбэк · глава 4</span></div>
+<p>Зона допустимых точек задана системой: <span class="m">y ≤ x + 1</span> и <span class="m">y ≤ 7 − 2x</span>. Найди угловую точку зоны — место, где пересекаются обе границы.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Границы — это прямые <span class="m">y = x + 1</span> и <span class="m">y = 7 − 2x</span>. Угол — их общая точка, то есть решение системы уравнений из главы 4.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Оба выражения равны одному и тому же <span class="m">y</span> — приравняй их друг к другу.</p></details>
+<details class="sol"><summary>Решение</summary><p>Приравниваем: <span class="m">x + 1 = 7 − 2x</span>, значит <span class="m">3x = 6</span> и <span class="m">x = 2</span>. Тогда <span class="m">y = 2 + 1 = 3</span>. Контроль во втором уравнении: <span class="m">7 − 4 = 3</span> — сходится. Ответ: <strong>(2; 3)</strong>. Заметь: у зоны, собранной из неравенств, углы находят уравнениями — старый навык не ушёл на пенсию, он стал деталью нового.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 9 <span class="tier">уровень В</span></div>
+<p>Число <span class="m">x</span> удовлетворяет условию <span class="m">|x − 4| ≤ 3</span>. Какое наибольшее значение может принимать выражение <span class="m">5 − 2x</span>?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала преврати модуль в коридор для <span class="m">x</span>. А потом спроси себя: что происходит с коридором, когда его умножают на −2?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>«Разворот знака» действует и на двойные неравенства — разворачиваются оба знака сразу. Умножь коридор на −2, потом прибавь 5.</p></details>
+<details class="sol"><summary>Решение</summary><p>Коридор: <span class="m">1 ≤ x ≤ 7</span>. Умножаем все части на −2, разворачивая оба знака: <span class="m">−14 ≤ −2x ≤ −2</span> — заметь, границы поменялись местами. Прибавляем 5: <span class="m">−9 ≤ 5 − 2x ≤ 3</span>. Наибольшее значение — <strong>3</strong>, достигается при <span class="m">x = 1</span>: <span class="m">5 − 2 = 3</span>. Второй способ, без выкладок: <span class="m">5 − 2x</span> убывает с ростом <span class="m">x</span>, значит максимум — на левом конце коридора, при <span class="m">x = 1</span>. Тот же ответ в одну строку.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 10 · Найди ошибку <span class="tier">уровень Б</span></div>
+<p>Студент решает <span class="m">12 − 5x &lt; 2</span> и пишет: «Вычитаю 12: <span class="m">−5x &lt; −10</span>. Делю на −5: <span class="m">x &lt; 2</span>. Готово». Решение выглядит гладко. Найди изъян, сформулируй его одним предложением и дай верный ответ.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Прогони ответ через детектор: <span class="m">x = 0</span> входит в «<span class="m">x &lt; 2</span>». Подставь его в исходное неравенство.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">12 &lt; 2</span> — ложь, значит территория неверна. Теперь посмотри на последний шаг студента: что он сделал с знаком при делении?</p></details>
+<details class="sol"><summary>Решение</summary><p>Изъян: деление на −5 выполнено без разворота знака. Верно: <span class="m">−5x &lt; −10</span>, делим на −5 и разворачиваем — <span class="m">x &gt; 2</span>. Проверка: <span class="m">x = 3</span> даёт <span class="m">12 − 15 = −3 &lt; 2</span> — истина; <span class="m">x = 0</span> даёт <span class="m">12 &lt; 2</span> — ложь, как и должно быть за границей. Ответ: <strong>x &gt; 2</strong>.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Босс главы: «Протокол дозирования»</div>
+<p>Вечернее дежурство. На приёме девочка пяти лет, вес 18 кг, лихорадка. В твоих руках инструкция к сиропу «Феброцил» (30 мг действующего вещества в 1 мл): разовая доза — от 10 до 15 мг/кг; не более 4 приёмов в сутки; суточная доза — не более 50 мг/кг. Родители смотрят на тебя. Инструкция — это система неравенств, и решать её тебе.</p>
+<div class="problem tier-c"><div class="pr-t">Босс, раунд 1 <span class="tier">уровень В</span></div>
+<p>Планируется 4 приёма в сутки, разовая доза — <span class="m">d</span> мг. (а) Выпиши все ограничения на <span class="m">d</span> для этого ребёнка. (б) Найди допустимый диапазон <span class="m">d</span>. (в) Запиши диапазон приёмом «Терапевтическое окно».</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Ограничений три, и все — про <span class="m">d</span>: минимум на кг, максимум на кг, суточный потолок, делённый на число приёмов.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Посчитай <span class="m">10 · 18</span>, <span class="m">15 · 18</span> и <span class="m">50 · 18 / 4</span> — и пересеки все условия: выживает то, что проходит каждый фильтр.</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) Разовая доза: <span class="m">10 · 18 ≤ d ≤ 15 · 18</span>, то есть <span class="m">180 ≤ d ≤ 270</span>. Суточный потолок: <span class="m">4d ≤ 50 · 18 = 900</span>, то есть <span class="m">d ≤ 225</span>. (б) Пересечение: нижняя граница 180; верхних кандидатов две — 270 и 225, побеждает более строгая: <span class="m">180 ≤ d ≤ 225</span>. Суточный потолок оказался жёстче разового максимума — именно он здесь узкое место. (в) Центр <span class="m">(180 + 225)/2 = 202,5</span>, радиус <span class="m">(225 − 180)/2 = 22,5</span>: <strong>|d − 202,5| ≤ 22,5</strong>.</p></details>
+</div>
+<div class="problem tier-c"><div class="pr-t">Босс, раунд 2 <span class="tier">уровень В</span></div>
+<p>(а) Сироп содержит 30 мг в 1 мл. Переведи допустимый диапазон из раунда 1 в миллилитры на приём. (б) Семья может давать лекарство только 3 раза в сутки. Как изменится диапазон <span class="m">d</span> и какое ограничение перестанет быть узким местом?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>(а) Объём — это доза, делённая на концентрацию: <span class="m">V = d / 30</span>. (б) Пересчитай суточный фильтр: теперь в сутках 3 приёма, а не 4.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>(б) Из <span class="m">3d ≤ 900</span> следует новый потолок. Сравни его с разовым максимумом 270: какой из них теперь строже?</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) <span class="m">180 / 30 = 6</span> и <span class="m">225 / 30 = 7,5</span>: на приём — <strong>от 6 до 7,5 мл</strong>. (б) Теперь <span class="m">3d ≤ 900</span>, то есть <span class="m">d ≤ 300</span>. Это слабее разового максимума 270, так что узким местом становится сама инструкция «не более 15 мг/кг»: диапазон расширяется до <span class="m">180 ≤ d ≤ 270</span>, или от 6 до 9 мл. Меньше приёмов — шире допуск на каждый: система неравенств отвечает на вопросы, которые ты ей даже не задавал.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">Теперь ты умеешь</div>
+<ul class="powers">
+<li>решаешь линейные неравенства и разворачиваешь знак при умножении или делении на отрицательное — и можешь доказать, почему это законно;</li>
+<li>изображаешь решение на числовой прямой, правильно выбирая закрашенную или пустую точку;</li>
+<li>решаешь двойные неравенства, обрабатывая все три части одним действием;</li>
+<li>переводишь любой диапазон в модуль и обратно приёмом «Терапевтическое окно»;</li>
+<li>мгновенно различаешь коридор (<span class="m">≤</span>) и лучи (<span class="m">≥</span>) в модульных неравенствах — и распознаёшь уравнения без решений;</li>
+<li>штрихуешь полуплоскость проверкой точки <span class="m">(0; 0)</span> и выбираешь сплошную или пунктирную границу по строгости знака;</li>
+<li>проверяешь принадлежность точки решению системы подстановкой в каждое условие;</li>
+<li>вычисляешь безопасный диапазон дозы из инструкции к препарату, находя узкое место среди ограничений.</li>
+</ul>
+<p>И вернёмся к тому, с чего начали: равенство — точка, «достаточно» — территория. Теперь ты умеешь находить границы этой территории, решать, входят ли они, и уверенно жить внутри — как лифт, который не знает твоего веса, но точно знает свой предел.</p>
+<div class="cheat"><div class="cheat-t">Шпаргалка</div>
+<ul>
+<li><span class="m">a &lt; b ⇔ −a &gt; −b</span> — умножил или разделил на отрицательное: разверни знак;</li>
+<li><span class="m">a &lt; x ≤ b</span> — пустая точка в <span class="m">a</span>, закрашенная в <span class="m">b</span>;</li>
+<li><span class="m">|x − a| = r</span> ⇒ <span class="m">x = a − r</span> или <span class="m">x = a + r</span>; если <span class="m">r</span> отрицательное — решений нет;</li>
+<li><span class="m">|x − a| ≤ r ⇔ a − r ≤ x ≤ a + r</span> — коридор с центром <span class="m">a</span> и радиусом <span class="m">r</span>;</li>
+<li><span class="m">|x − a| ≥ r ⇔ x ≤ a − r</span> или <span class="m">x ≥ a + r</span> — лучи наружу;</li>
+<li>строгий знак — пунктирная граница, нестрогий — сплошная; сторону выбирай подстановкой <span class="m">(0; 0)</span>;</li>
+<li>«не менее <span class="m">a</span>» ⇔ <span class="m">x ≥ a</span>; «не более <span class="m">a</span>» ⇔ <span class="m">x ≤ a</span>;</li>
+<li>любой ответ проверяй подстановкой одного числа из своей территории.</li>
+</ul></div>
+<div class="feynman"><div class="box-t">Задание Фейнмана</div>
+<p>Объясни воображаемому 12-летнему, без слова «модуль» и без слова «неравенство»: (1) почему при умножении на минус слова «больше» и «меньше» меняются местами и (2) что означает запись <span class="m">|x − 5| ≤ 2</span>.</p>
+<details class="sol"><summary>Образец объяснения</summary><p>(1) Представь зеркало, поставленное в нуле числовой прямой. Число 2 стоит ближе к зеркалу, число 5 — дальше. Посмотри на их отражения: −2 и −5. Отражение того, кто был правее, оказалось левее — зеркало разворачивает порядок. Умножить всё на минус — это и есть посмотреть в зеркало, поэтому «больше» и «меньше» меняются местами. (2) Ты стоишь у столбика с номером 5, и у тебя поводок длины 2. Куда можно дойти? До 3 в одну сторону и до 7 в другую. Запись <span class="m">|x − 5| ≤ 2</span> означает: «расстояние от тебя до столбика 5 — не больше двух шагов». Всё, что от 3 до 7, — твоя территория.</p></details>
+</div>
+</div>
+</section>
+
+<section class="chapter" id="ch-5-en" data-ch="5" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 5 · Algebra</div><h2>The Mathematics of Enough</h2><p class="ch-lede">The world rarely demands equality — it just requires that a value stay within a safe zone.</p></header>
+
+<div class="hook">
+<p>There is a sign in your building's elevator: 'Capacity: 630 kg.' The elevator doesn't know how much you weigh. It doesn't need to. It doesn't demand that the total weight of the passengers equal some exact number — it only requires that the weight not exceed 630. Within this 'no more than,' millions of scenarios can coexist: one person with a suitcase, three adults, five teenagers with backpacks. An equation would choose exactly one.</p>
+<p>Look around. A bridge rated for 'up to 10 tons.' A credit limit. 'For ages 3 and up.' A 'speed limit 60' sign. Paracetamol — 'no more than 60 mg per kg per day.' Civilization rarely relies on equality; it relies on values staying within a safe zone. Equality is a fragile coincidence: a slight tremor of the hand, and it is gone. But 'no more than' carries the load for decades.</p>
+<p>This chapter is about the mathematics of the word 'enough': inequalities. The good news is that you already know almost all the rules from equations. The bad news is that there is a single exception, and it is the exact one the SAT uses to catch people most often. At the end, a boss awaits — 'Dosing Protocol': you will need to assemble a system of inequalities from a drug insert and calculate a safe dosage range for a specific child. For a pediatrician, this isn't an exercise; it is just Tuesday.</p>
+</div>
+
+<div class="try-first">
+<p>Before reading further, spend five to ten minutes wrestling with these two problems. Both are set up as traps, and their entire value lies in stepping into them before the explanation.</p>
+<div class="problem"><div class="pr-t">Warm-up Before Battle</div>
+<p>(a) Solve the inequality <span class="m">−2x &lt; 6</span>. Then check your work: plug some number from your solution back into the original inequality and see if it is true.</p>
+<p>(b) The drug concentration <span class="m">C</span> must be between 10 and 20 mcg/mL. Write this condition as a single formula with exactly one comparison symbol — without using the word 'and'.</p>
+<details class="hint"><summary>Hint 1</summary><p>(a) Treat it like an equation, then make sure to check your answer by plugging it back in. (b) Find the middle of the range: how far from it are you allowed to go?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>(a) If you got <span class="m">x &lt; −3</span>, plug in <span class="m">x = −4</span> and see what the inequality says. (b) 'No further than 5 from the number 15' — does math have a symbol for 'no further than'?</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) <span class="m">x &gt; −3</span>. If you got the opposite, you stepped into the chapter's biggest trap; see the explanation in the 'The Only Difference from Equations' section. (b) <span class="m">|C − 15| ≤ 5</span> — this is the 'The Therapeutic Window' move; it will appear in the section on absolute value.</p></details>
+</div>
+</div>
+
+<h3>Territory Instead of a Point</h3>
+<p>The equation <span class="m">2x + 3 = 11</span> has a point as its answer: <span class="m">x = 4</span>. The inequality <span class="m">2x + 3 ≤ 11</span> has a territory as its answer: move the three, divide by 2, and you get <span class="m">x ≤ 4</span>. Here, 4 works, 0 works, and −100 works. All the steps are the same as for equations: add, subtract, divide by a positive number — the comparison sign stays put.</p>
+<div class="box idea"><div class="box-t">Idea</div><p>If you remember one thing: the solution to an inequality is not a point, but a territory, and the whole task boils down to two questions: where is the boundary, and is it included?</p></div>
+<p>On the number line, a territory is drawn as a ray or a segment, and the boundary as a dot. A solid dot means the boundary is included (non-strict signs, <span class="m">≤</span> and <span class="m">≥</span>). An empty dot means the boundary is excluded (strict signs, <span class="m">&lt;</span> and <span class="m">&gt;</span>). In an elevator rated 'up to 630 kg,' exactly 630 kg is still allowed; at a club for 'strictly over 18,' a birthday boy on his eighteenth birthday might get in depending on the bouncers, but mathematics says 'no'.</p>
+<figure class="fig" id="ch5-fig1-en"><svg class="dia" viewBox="0 0 420 170" role="img" aria-label="Two number lines: solid dot for a non-strict sign, empty dot for a strict sign">
+<text class="lbl" x="30" y="30">n ≤ 5: dot is solid — boundary is included</text>
+<line class="ax" x1="30" y1="60" x2="390" y2="60"/>
+<line class="grid" x1="30" y1="55" x2="30" y2="65"/><line class="grid" x1="70" y1="55" x2="70" y2="65"/><line class="grid" x1="110" y1="55" x2="110" y2="65"/><line class="grid" x1="150" y1="55" x2="150" y2="65"/><line class="grid" x1="190" y1="55" x2="190" y2="65"/><line class="grid" x1="230" y1="55" x2="230" y2="65"/><line class="grid" x1="270" y1="55" x2="270" y2="65"/><line class="grid" x1="310" y1="55" x2="310" y2="65"/><line class="grid" x1="350" y1="55" x2="350" y2="65"/>
+<path class="crv" fill="none" d="M30 60 L230 60"/>
+<circle class="pt" cx="230" cy="60" r="6"/>
+<text class="lbl" x="26" y="82">0</text><text class="lbl" x="226" y="82">5</text>
+<text class="lbl" x="30" y="105">x &gt; 2: dot is empty — boundary is excluded</text>
+<line class="ax" x1="30" y1="130" x2="390" y2="130"/>
+<line class="grid" x1="30" y1="125" x2="30" y2="135"/><line class="grid" x1="70" y1="125" x2="70" y2="135"/><line class="grid" x1="150" y1="125" x2="150" y2="135"/><line class="grid" x1="190" y1="125" x2="190" y2="135"/><line class="grid" x1="230" y1="125" x2="230" y2="135"/><line class="grid" x1="270" y1="125" x2="270" y2="135"/><line class="grid" x1="310" y1="125" x2="310" y2="135"/><line class="grid" x1="350" y1="125" x2="350" y2="135"/>
+<path class="crv" fill="none" d="M104 130 A6 6 0 1 0 116 130 A6 6 0 1 0 104 130"/>
+<path class="crv" fill="none" d="M116 130 L390 130"/>
+<text class="lbl" x="26" y="152">0</text><text class="lbl" x="106" y="152">2</text>
+</svg><figcaption>The same logic: a solid dot means 'inclusive,' an empty dot means 'excluding.'</figcaption></figure>
+<p>And right away, the chapter's main practical skill: check every answer by plugging it back in. Take a number from your territory, plug it into the original inequality — it must yield a true statement. This is a free and foolproof error detector, and it will save us more than once.</p>
+<div class="box story"><div class="box-t">In the Margins</div><p>Engineers call this a safety margin: a bridge rated for 10 tons actually supports significantly more. The sign is not about when it will collapse, but about the territory where no one is obligated to find out.</p></div>
+
+<h3>The Only Difference from Equations</h3>
+<p>Let's return to the warm-up. You probably solved <span class="m">−2x &lt; 6</span> like this: divided by −2 and got <span class="m">x &lt; −3</span>. Let's check by plugging in a number: we will take <span class="m">x = −4</span> from this territory. The left side is <span class="m">−2 · (−4) = 8</span>. Is <span class="m">8 &lt; 6</span>? No. The territory was chosen incorrectly — the detector worked.</p>
+<p>What happened? Multiplying by −1 acts as a mirror for the number line, centered at zero. We had <span class="m">2 &lt; 5</span>; in the reflection, we get <span class="m">−2</span> and <span class="m">−5</span>, and now <span class="m">−2 &gt; −5</span>. Whichever number was further to the right ends up further to the left in the mirror. The order of numbers reverses — which means the comparison sign must reverse too.</p>
+<div class="formula">a &lt; b  ⇔  −a <b class="hl">&gt;</b> −b</div>
+<div class="box why"><div class="box-t">Why It Works</div><p>The Skeptic: '“Flip the sign” sounds like a magic spell. Prove it.' Fine. The statement <span class="m">a &lt; b</span> means that the difference <span class="m">b − a</span> is positive. Now look at the numbers <span class="m">−a</span> and <span class="m">−b</span>: their difference is <span class="m">(−a) − (−b) = b − a</span> — the exact same difference, which is still positive. And since <span class="m">(−a) − (−b)</span> is positive, <span class="m">−a</span> is greater than <span class="m">−b</span>. Flipping the sign is not a ritual; it is the arithmetic of differences.</p></div>
+<div class="box tool"><div class="box-t">Move: "The Sign Flip"</div><p>If you multiply or divide both sides of an inequality by a negative number, flip the inequality sign immediately. Addition and subtraction do not affect the sign: they shift both numbers by the same amount, preserving their order. Multiplying and dividing by positive numbers are also safe.</p></div>
+
+<div class="example"><div class="ex-t">Example 1 · Subscriptions and Balance</div>
+<p>You have 90 000 soums on your card. Every week, 12 000 is charged for subscriptions. You want to keep at least 30 000 on the card for emergencies. How many weeks can you go without refilling the card?</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want a formula for the balance:</span> after <span class="m">n</span> weeks, the card has <span class="m">90 000 − 12 000n</span>. The requirement of 'at least 30 000' gives us <span class="m">90 000 − 12 000n ≥ 30 000</span>.</div>
+<div class="step"><span class="step-why">We want to isolate the term with <span class="m">n</span>:</span> subtract 90 000 from both sides: <span class="m">−12 000n ≥ −60 000</span>. The sign stays put for now — subtraction does not affect it.</div>
+<div class="step"><span class="step-why">We want to get <span class="m">n</span> by itself:</span> divide by −12 000. Since this is division by a negative number, the sign flips according to the 'The Sign Flip' move: <span class="m">n ≤ 5</span>.</div>
+</div>
+<details class="hint"><summary>Why didn't the sign flip when we subtracted 90 000?</summary><p>Subtraction shifts both sides by the same distance to the left — their relative order does not change. A flip only occurs during multiplication or division by a negative number: only that reflects the line in a mirror.</p></details>
+<p>Answer: <strong>no more than 5 weeks</strong>. Check: at <span class="m">n = 5</span>, the remaining balance is exactly 30 000 — this works because the sign is non-strict. Looking back: we could have avoided negative numbers entirely. Move <span class="m">12 000n</span> to the right and 30 000 to the left: <span class="m">60 000 ≥ 12 000n</span>, which gives <span class="m">n ≤ 5</span> — the same answer without a single dangerous turn.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Forgetting to flip the sign is the number one trap in all of SAT algebra. The test makers know this, so the option with the unflipped sign is always among the choices. The antidote is also always with you: plug in a single number from your territory. Ten seconds, and the fake is exposed.</p></div>
+
+<div class="quiz" data-answer="c" id="ch5-quiz1-en">
+<div class="quiz-q">Solve: <span class="m">−4x &gt; 12</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-1e" value="a"><span>x &gt; −3</span></label>
+<label><input type="radio" name="q5-1e" value="b"><span>x &lt; 3</span></label>
+<label><input type="radio" name="q5-1e" value="c"><span>x &lt; −3</span></label>
+<label><input type="radio" name="q5-1e" value="d"><span>x &gt; 3</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Dividing by −4 is dividing by a negative number: the sign flipped. Check: x = −5 gives 20 &gt; 12 — true." data-no="Not quite. Either the sign was not flipped, or a minus sign was lost. Divide by −4 and flip the sign: x &lt; −3. Check by plugging in a value: x = −5 gives 20 on the left, and 20 &gt; 12 — true."></div>
+</div>
+
+<h3>Three Parts, One Operation</h3>
+<p>A lab report says: normal sodium is from 135 to 145 mmol/L. A mathematician writes this in a single line: <span class="m">135 ≤ Na ≤ 145</span>. This is a compound inequality: a value is sandwiched between two boundaries. It is read from the inside out: sodium is at least 135 and at most 145.</p>
+<p>Solving a compound inequality means isolating the variable in the middle by performing the same operation on all three parts at once.</p>
+
+<div class="example"><div class="ex-t">Example 2 · Free the Middle</div>
+<p>Solve: <span class="m">3 &lt; 2x − 1 ≤ 9</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to remove '−1' from the middle:</span> add 1 to all three parts: <span class="m">4 &lt; 2x ≤ 10</span>.</div>
+<div class="step"><span class="step-why">We want to isolate <span class="m">x</span>:</span> divide all three parts by 2 — write down this step yourself, then check.</div>
+</div>
+<details class="hint"><summary>Why is it allowed to add to all three parts?</summary><p>A compound inequality is just two regular inequalities glued together: <span class="m">3 &lt; 2x − 1</span> and <span class="m">2x − 1 ≤ 9</span>. Adding 1 is valid in each of them separately, so it is valid in their combination.</p></details>
+<details class="hint"><summary>Checking the last step</summary><p><span class="m">2 &lt; x ≤ 5</span>. Two is excluded (strict sign, empty dot), five is included (non-strict sign, solid dot).</p></details>
+<p>Answer: <strong>2 &lt; x ≤ 5</strong> — a segment with an empty dot at 2 and a solid dot at 5. And a warning for the future: if we had to divide by a negative number, both signs would flip at once — the mirror reflects the entire expression.</p></div>
+
+<div class="quiz" data-answer="a" id="ch5-quiz2-en">
+<div class="quiz-q">Solve: <span class="m">−2 ≤ 3x + 4 &lt; 10</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-2e" value="a"><span>−2 ≤ x &lt; 2</span></label>
+<label><input type="radio" name="q5-2e" value="b"><span>−2 &lt; x ≤ 2</span></label>
+<label><input type="radio" name="q5-2e" value="c"><span>−6 ≤ x &lt; 6</span></label>
+<label><input type="radio" name="q5-2e" value="d"><span>x ≥ −2</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Subtracted 4 from all three parts, divided by 3, and kept the strictness of each sign in its place." data-no="Not quite. Subtract 4 from all three parts: −6 ≤ 3x &lt; 6, then divide by 3. If you got −6 and 6, you forgot to divide. If the strictness of the signs got swapped, that's the second classic trap: a strict sign must stay strict on its end."></div>
+</div>
+
+<h3>Absolute Value Is Distance</h3>
+<p>The absolute value of a number is its distance to zero: <span class="m">|7| = 7</span> and <span class="m">|−7| = 7</span>, because both are seven steps away from zero. And <span class="m">|x − a|</span> is the distance from <span class="m">x</span> to the point <span class="m">a</span>. The true power of absolute value lies in this translation: when you see <span class="m">|x − a|</span>, read it as 'how far is <span class="m">x</span> from <span class="m">a</span>,' and half of the problems will be solved in your head, without calculations.</p>
+
+<div class="example"><div class="ex-t">Example 3 · Two Branches</div>
+<p>Solve: <span class="m">|x − 3| = 7</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to translate from the language of absolute value:</span> which points lie at a distance of 7 from point 3?</div>
+<div class="step"><span class="step-why">We go in both directions:</span> a step to the right — <span class="m">3 + 7 = 10</span>; a step to the left — <span class="m">3 − 7 = −4</span>. Formally, these are two branches: <span class="m">x − 3 = 7</span> or <span class="m">x − 3 = −7</span>.</div>
+</div>
+<p>Answer: <strong>x = 10 or x = −4</strong>. Check: <span class="m">|10 − 3| = 7</span>, <span class="m">|−4 − 3| = |−7| = 7</span>. Both points are correct.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>'And now, <span class="m">|x + 7| = −5</span>,' Count Gotcha whispers. 'Two branches, just like we learned: <span class="m">x = −2</span> and <span class="m">x = −12</span>. Both options are already printed in the test.' Don't rush. The left side represents a distance, and distance cannot be negative. An equation of the form <span class="m">|anything| = −5</span> has no solutions — and the correct option in such problems is called 'no solution.' Both of the Count's 'branches' lead to an abyss.</p></div>
+
+<div class="quiz" data-answer="d" id="ch5-quiz3-en">
+<div class="quiz-q">How many solutions does the equation <span class="m">|x + 7| = −5</span> have?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-3e" value="a"><span>two: x = −2 and x = −12</span></label>
+<label><input type="radio" name="q5-3e" value="b"><span>one: x = −12</span></label>
+<label><input type="radio" name="q5-3e" value="c"><span>infinitely many</span></label>
+<label><input type="radio" name="q5-3e" value="d"><span>none</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Absolute value is distance, and distance cannot equal −5. There is no solution." data-no="Count Gotcha is pleased. You started the 'two branches' machine without looking at the right side: absolute value is distance, and it cannot be negative. The equation has no solution."></div>
+</div>
+
+<h3>Corridor and Rays</h3>
+<p>Now, inequalities with absolute value. <span class="m">|x − a| ≤ r</span> is read: the distance from <span class="m">x</span> to <span class="m">a</span> is at most <span class="m">r</span>. In other words, <span class="m">x</span> is trapped in a corridor: from <span class="m">a − r</span> to <span class="m">a + r</span>.</p>
+<div class="formula">|x − <b class="hl">a</b>| ≤ <b class="hl2">r</b>  ⇔  <b class="hl">a</b> − <b class="hl2">r</b> ≤ x ≤ <b class="hl">a</b> + <b class="hl2">r</b></div>
+<ul class="legend"><li><span class="m">a</span> is the center of the corridor, the anchor point;</li><li><span class="m">r</span> is the radius: how far from the center you are allowed to go.</li></ul>
+<div class="box tool"><div class="box-t">Move: "The Therapeutic Window"</div><p>Any corridor in the world is an absolute value. The center is the average of the endpoints, and the radius is half the width: <span class="m">|x − center| ≤ radius</span>. The move works in both directions: from range to absolute value, and from absolute value to range.</p></div>
+
+<div class="example"><div class="ex-t">Example 4 · The Therapeutic Window</div>
+<p>A drug is effective and safe at a concentration from 10 to 20 mcg/mL. Write this condition as a single inequality.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want the center:</span> the average of the endpoints — <span class="m">(10 + 20) / 2 = 15</span>.</div>
+<div class="step"><span class="step-why">We want the radius:</span> half the width — <span class="m">(20 − 10) / 2 = 5</span>.</div>
+<div class="step"><span class="step-why">We assemble it using the 'The Therapeutic Window' move:</span> <span class="m">|C − 15| ≤ 5</span>.</div>
+</div>
+<p>Answer: <strong>|C − 15| ≤ 5</strong> — this was part (b) of the warm-up. If you wrote <span class="m">10 ≤ C ≤ 20</span> then, it is conceptually correct, but it uses two signs; absolute value packs the same meaning into one. By the way, every reference range on a lab report is just an absolute value inequality written for humans: sodium <span class="m">135 ≤ Na ≤ 145</span> is just <span class="m">|Na − 140| ≤ 5</span>.</p></div>
+
+<figure class="fig" id="ch5-fig2-en"><svg class="dia" viewBox="0 0 420 150" role="img" aria-label="Number line: concentration corridor from 10 to 20 centered at 15 with a radius of 5">
+<text class="lbl" x="150" y="34">|C − 15| ≤ 5</text>
+<line class="grid" x1="210" y1="58" x2="124" y2="58"/><line class="grid" x1="210" y1="58" x2="296" y2="58"/>
+<text class="lbl" x="156" y="52">5</text><text class="lbl" x="252" y="52">5</text>
+<line class="grid" x1="210" y1="58" x2="210" y2="90"/>
+<line class="ax" x1="30" y1="90" x2="390" y2="90"/>
+<line class="grid" x1="30" y1="85" x2="30" y2="95"/><line class="grid" x1="120" y1="85" x2="120" y2="95"/><line class="grid" x1="210" y1="85" x2="210" y2="95"/><line class="grid" x1="300" y1="85" x2="300" y2="95"/><line class="grid" x1="390" y1="85" x2="390" y2="95"/>
+<path class="crv" fill="none" d="M120 90 L300 90"/>
+<circle class="pt" cx="120" cy="90" r="5"/><circle class="pt" cx="300" cy="90" r="5"/>
+<text class="lbl" x="24" y="112">5</text><text class="lbl" x="112" y="112">10</text><text class="lbl" x="200" y="112">15</text><text class="lbl" x="292" y="112">20</text><text class="lbl" x="380" y="112">25</text>
+<text class="lbl" x="182" y="132">center</text>
+</svg><figcaption>The corridor <span class="m">|C − 15| ≤ 5</span>: center 15, with 5 in each direction, solid endpoints — non-strict sign.</figcaption></figure>
+
+<p>And what does <span class="m">|x − a| ≥ r</span> mean? The distance is at least <span class="m">r</span>: the point has escaped the corridor. This leaves two rays pointing outwards: <span class="m">x ≤ a − r</span> or <span class="m">x ≥ a + r</span>.</p>
+
+<div class="example"><div class="ex-t">Example 5 · Temperature Deviation</div>
+<p>A doctor is concerned by a body temperature deviation from 36.6 of at least one degree in either direction. Write the 'concerning' condition as an inequality and solve it.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to translate 'deviation of at least 1':</span> the distance from <span class="m">T</span> to 36.6 is at least 1, which is <span class="m">|T − 36.6| ≥ 1</span>.</div>
+<div class="step"><span class="step-why">We go outwards in both directions:</span> the right ray is <span class="m">T ≥ 37.6</span>. Can you find the left ray yourself?</div>
+</div>
+<details class="hint"><summary>Checking the left ray</summary><p><span class="m">T ≤ 36.6 − 1 = 35.6</span>. In total: <span class="m">T ≤ 35.6</span> or <span class="m">T ≥ 37.6</span> — hypothermia or fever.</p></details>
+<p>Answer: <strong>T ≤ 35.6 or T ≥ 37.6</strong>. Looking back: corridors and rays are complements of each other. The solutions to <span class="m">|T − 36.6| &lt; 1</span> and <span class="m">|T − 36.6| ≥ 1</span> together cover the entire number line and do not overlap anywhere — an excellent self-check: if your 'corridor' and 'rays' overlap, there's an error somewhere.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Confusing a corridor with rays means choosing the exact opposite set of numbers, and that option is always on the test. Use this guide: <span class="m">≤</span> — 'less than' — is sandwiched between, a corridor; <span class="m">≥</span> — 'greater than' — splits apart, rays. If in doubt, plug in a single point: the center <span class="m">a</span> must satisfy the corridor and fail the rays.</p></div>
+
+<div class="quiz" data-answer="b" id="ch5-quiz4-en">
+<div class="quiz-q">Solve: <span class="m">|x − 2| ≥ 5</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-4e" value="a"><span>−3 ≤ x ≤ 7</span></label>
+<label><input type="radio" name="q5-4e" value="b"><span>x ≤ −3 or x ≥ 7</span></label>
+<label><input type="radio" name="q5-4e" value="c"><span>x ≥ 7</span></label>
+<label><input type="radio" name="q5-4e" value="d"><span>−7 ≤ x ≤ 3</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! The distance from x to 2 is at least 5 — two rays extending outwards from the points −3 and 7." data-no="Not quite. The sign ≥ means 'escaped the corridor': rays pointing outward, not a segment inside. Test with the center: x = 2 gives |0| ≥ 5 — false, so 2 must not be part of the answer. The complete answer is x ≤ −3 or x ≥ 7."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Freeze-Frame</div><p>Close the screen and recall from memory: (1) at what exact moment does an inequality sign flip; (2) how <span class="m">|x − a| ≤ r</span> expands; (3) how <span class="m">|x − a| ≥ r</span> expands; (4) when a dot on the line is solid and when it is empty. Then look back and check — reread any discrepancies right now while the cost is low.</p></div>
+
+<h3>Inequalities on the Plane: The Half-Plane</h3>
+<p>Up until now, we lived on a line. Let's add a second variable: <span class="m">y = 2x + 1</span> is a line, and <span class="m">y ≤ 2x + 1</span> is the line plus all the territory beneath it. A line cuts the plane into two half-planes; the inequality selects one of them. The boundary rules are the same as for dots on the number line, just scaled up: a non-strict sign means the boundary is solid and included in the solution; a strict sign means the boundary is dashed and excluded.</p>
+<p>How do we know which side is ours? The test-point technique: pick any point not on the boundary — <span class="m">(0; 0)</span> is the easiest — and plug it in. If it's true, shade its side; if it's false, shade the opposite side.</p>
+
+<div class="example"><div class="ex-t">Example 6 · The Treatment Room Budget</div>
+<p>A pack of bandages costs 2 thousand soums, and a box of gloves costs 3 thousand. The budget is 12 thousand. Which purchases <span class="m">(x; y)</span> are allowed, if <span class="m">x</span> is bandages and <span class="m">y</span> is gloves?</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want a spending condition:</span> the amount spent is <span class="m">2x + 3y</span>, and this cannot exceed the budget: <span class="m">2x + 3y ≤ 12</span>.</div>
+<div class="step"><span class="step-why">We want the boundary:</span> draw the line <span class="m">2x + 3y = 12</span> using two points — <span class="m">(6; 0)</span> and <span class="m">(0; 4)</span>. The sign is non-strict, so the line is solid.</div>
+<div class="step"><span class="step-why">We want the side:</span> test <span class="m">(0; 0)</span>: <span class="m">0 ≤ 12</span> — true. We shade the side containing zero: buying nothing is definitely safe for the budget.</div>
+</div>
+<p>Answer: <strong>the half-plane below the line, including the line itself</strong>. In real life, we also have <span class="m">x ≥ 0</span> and <span class="m">y ≥ 0</span> — negative bandages haven't been invented yet. Having three conditions at once makes it a system, which is what the next section is about.</p></div>
+
+<figure class="fig" id="ch5-fig3-en"><svg class="dia" viewBox="0 0 420 300" role="img" aria-label="Coordinate plane: the half-plane of solutions to the inequality 2x plus 3y is at most 12, shaded on the side of the origin">
+<line class="grid" x1="100" y1="20" x2="100" y2="260"/><line class="grid" x1="160" y1="20" x2="160" y2="260"/><line class="grid" x1="220" y1="20" x2="220" y2="260"/><line class="grid" x1="280" y1="20" x2="280" y2="260"/><line class="grid" x1="340" y1="20" x2="340" y2="260"/>
+<line class="grid" x1="40" y1="200" x2="400" y2="200"/><line class="grid" x1="40" y1="140" x2="400" y2="140"/><line class="grid" x1="40" y1="80" x2="400" y2="80"/>
+<path class="fill" d="M40 260 L220 260 L40 140 Z"/>
+<line class="ax" x1="40" y1="260" x2="400" y2="260"/><line class="ax" x1="40" y1="260" x2="40" y2="20"/>
+<path class="crv" fill="none" d="M40 140 L220 260"/>
+<circle class="pt" cx="40" cy="260" r="4"/>
+<text class="lbl" x="52" y="250">(0; 0) — works</text>
+<text class="lbl" x="46" y="132">(0; 4)</text>
+<text class="lbl" x="206" y="282">(6; 0)</text>
+<text class="lbl" x="160" y="170">2x + 3y = 12</text>
+<text class="lbl" x="54" y="228">solutions</text>
+<text class="lbl" x="392" y="252">x</text><text class="lbl" x="48" y="30">y</text>
+<text class="lbl" x="96" y="278">2</text><text class="lbl" x="156" y="278">4</text>
+<text class="lbl" x="24" y="204">2</text><text class="lbl" x="24" y="144">4</text>
+</svg><figcaption>The boundary is solid — the sign is non-strict. The point <span class="m">(0; 0)</span> yielded a true statement, so its side is shaded; the conditions <span class="m">x ≥ 0</span> and <span class="m">y ≥ 0</span> restrict the half-plane to a triangle.</figcaption></figure>
+
+<div class="box desmos"><div class="box-t">The Lazy Genius: Desmos</div><p>I don't shade by hand. Just type <span class="m">2x + 3y ≤ 12</span> into Desmos — it will shade the correct half-plane and draw a dashed boundary if the sign is strict. Your job is not to color, but to read the picture: which side is shaded, and is the boundary included. On the paper test, though, nothing is faster than checking the point <span class="m">(0; 0)</span> anyway.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>A dashed boundary means that points on the line itself do not belong to the solution. The test's favorite question features a point sitting exactly on the dashed line: it looks like a solution, but it isn't. Before you answer about a point on the boundary, check the strictness of the sign.</p></div>
+
+<div class="quiz" data-answer="c" id="ch5-quiz5-en">
+<div class="quiz-q">What does the graph of the inequality <span class="m">y &gt; x − 2</span> look like?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-5e" value="a"><span>dashed boundary, shading below the line</span></label>
+<label><input type="radio" name="q5-5e" value="b"><span>solid boundary, shading above the line</span></label>
+<label><input type="radio" name="q5-5e" value="c"><span>dashed boundary, shading above the line</span></label>
+<label><input type="radio" name="q5-5e" value="d"><span>solid boundary, shading below the line</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! The sign is strict — dashed boundary; checking with point (0; 0): 0 &gt; −2 — true, and (0; 0) lies above the line." data-no="Not quite. There are two independent questions: strictness and side. The sign &gt; is strict, so the boundary is dashed. The side is determined by checking the point (0; 0): 0 &gt; 0 − 2 — true, which means we shade the side containing zero, which is above the line."></div>
+</div>
+
+<h3>Systems: Intersecting Territories</h3>
+<p>A system of inequalities is a set of several conditions that must be met simultaneously. The solution is the intersection of their territories: what survives after passing through all filters at once. Budgets, capacity, minimum doses — real-world problems are almost always multi-layered, as you saw in the bandages example.</p>
+<p>You can check whether a point belongs to the solution set without drawing anything: just plug it into each condition. If it fails even one, it is not a solution. On the SAT, this is an entire category of questions, and they are solved faster than they can be read.</p>
+
+<div class="quiz" data-answer="b" id="ch5-quiz6-en">
+<div class="quiz-q">Which point satisfies the system: <span class="m">y ≤ 2x + 1</span> and <span class="m">y &gt; −x + 4</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q5-6e" value="a"><span>(0; 0)</span></label>
+<label><input type="radio" name="q5-6e" value="b"><span>(2; 4)</span></label>
+<label><input type="radio" name="q5-6e" value="c"><span>(1; 5)</span></label>
+<label><input type="radio" name="q5-6e" value="d"><span>(3; 0)</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! (2; 4): the first condition gives 4 ≤ 5, true; the second gives 4 &gt; 2, true. Both filters are passed." data-no="Not quite. A point must pass both filters. (0; 0): 0 ≤ 1 — yes, but 0 &gt; 4 — no. (1; 5): 5 ≤ 3 — no. (3; 0): 0 ≤ 7 — yes, but 0 &gt; 1 — no. That leaves (2; 4): 4 ≤ 5 and 4 &gt; 2 — both are true."></div>
+</div>
+
+<p>The final skill is translating from human to math. Words are trickier than signs:</p>
+<table class="tbl"><thead><tr><th>Phrasing in the Problem</th><th>Sign</th></tr></thead><tbody>
+<tr><td>'at least 5,' 'minimum of 5,' 'no less than 5'</td><td><span class="m">x ≥ 5</span></td></tr>
+<tr><td>'no more than 5,' 'maximum of 5,' 'up to 5 inclusive'</td><td><span class="m">x ≤ 5</span></td></tr>
+<tr><td>'greater than 5,' 'exceeds 5'</td><td><span class="m">x &gt; 5</span></td></tr>
+<tr><td>'less than 5,' 'strictly below 5'</td><td><span class="m">x &lt; 5</span></td></tr>
+</tbody></table>
+<div class="box trap"><div class="box-t">SAT Trap</div><p>'"At least five," Count Gotcha inquires, "surely that means greater than five? Five itself doesn't count, right?" It does count. 'At least 5' allows exactly five: that's <span class="m">x ≥ 5</span>. But 'greater than 5' is <span class="m">x &gt; 5</span> — a different set, and on the SAT, both options sit side-by-side, differing by a single line under the sign.</p></div>
+
+<h3>Practice</h3>
+<p>The first few problems are routine; then the ideas start to combine, and near the end, you'll face the full level of a hard SAT module. Open the hints one at a time.</p>
+
+<div class="problem tier-a"><div class="pr-t">Problem 1 <span class="tier">Level A</span></div>
+<p>Solve: <span class="m">4x − 9 &lt; 7</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is to isolate <span class="m">x</span> on the left. Act exactly as you would with an equation.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Add 9, then divide by 4. Four is positive, so the sign stays put.</p></details>
+<details class="sol"><summary>Solution</summary><p>Add 9: <span class="m">4x &lt; 16</span>. Divide by 4: <span class="m">x &lt; 4</span>. Check: <span class="m">x = 0</span> yields <span class="m">−9 &lt; 7</span> — true. Answer: <strong>x &lt; 4</strong>, which on the number line is a ray pointing left with an empty dot at 4.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 2 <span class="tier">Level A</span></div>
+<p>Solve: <span class="m">5 − 2x ≤ 19</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>First, isolate the <span class="m">−2x</span> term: get rid of the five.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Next is division by −2 — remember the 'The Sign Flip' move.</p></details>
+<details class="sol"><summary>Solution</summary><p>Subtract 5: <span class="m">−2x ≤ 14</span>. Divide by −2, and using 'The Sign Flip' move, flip the sign: <span class="m">x ≥ −7</span>. Checking the boundary: <span class="m">x = −7</span> yields <span class="m">5 + 14 = 19 ≤ 19</span> — true, the boundary is included. Answer: <strong>x ≥ −7</strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 3 <span class="tier">Level A</span></div>
+<p>Solve: <span class="m">|x + 2| = 6</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Rewrite it mentally: <span class="m">|x − (−2)| = 6</span> — the distance from <span class="m">x</span> to the point −2 is 6.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Step 6 units to the right and 6 units to the left from −2 — or split it into two branches.</p></details>
+<details class="sol"><summary>Solution</summary><p>Branches: <span class="m">x + 2 = 6</span> gives <span class="m">x = 4</span>; <span class="m">x + 2 = −6</span> gives <span class="m">x = −8</span>. Check: <span class="m">|4 + 2| = 6</span>, <span class="m">|−8 + 2| = |−6| = 6</span>. Answer: <strong>x = 4 or x = −8</strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 4 <span class="tier">Level B</span></div>
+<p>Solve: <span class="m">−3 &lt; 2x + 5 ≤ 13</span>. State which endpoints are included in the answer.</p>
+<details class="hint"><summary>Hint 1</summary><p>Isolate the middle: perform one operation on all three parts simultaneously.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Subtract 5 from all three, then divide by 2. The strictness of each sign stays on its respective end.</p></details>
+<details class="sol"><summary>Solution</summary><p>Subtract 5: <span class="m">−8 &lt; 2x ≤ 8</span>. Divide by 2: <span class="m">−4 &lt; x ≤ 4</span>. The left endpoint −4 is excluded (strict sign, empty dot), the right endpoint 4 is included (non-strict, solid). Check: <span class="m">x = 4</span> yields <span class="m">13 ≤ 13</span> — true; <span class="m">x = −4</span> yields <span class="m">−3 &lt; −3</span> — false. Answer: <strong>−4 &lt; x ≤ 4</strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 5 <span class="tier">Level B</span></div>
+<p>The blood potassium reference range is 3.5 to 5.0 mmol/L. Write this condition as a single absolute value inequality.</p>
+<details class="hint"><summary>Hint 1</summary><p>You need two values: the center of the corridor and its radius.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The 'The Therapeutic Window' move: the center is the average of the endpoints, and the radius is half the width.</p></details>
+<details class="sol"><summary>Solution</summary><p>Center: <span class="m">(3.5 + 5.0) / 2 = 4.25</span>. Radius: <span class="m">(5.0 − 3.5) / 2 = 0.75</span>. Answer: <strong>|K − 4.25| ≤ 0.75</strong>. Checking the endpoints: <span class="m">4.25 − 0.75 = 3.5</span> and <span class="m">4.25 + 0.75 = 5.0</span> — the corridor checks out.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 6 <span class="tier">Level B</span></div>
+<p>According to the instructions, the daily dose of the drug is at most 60 mg per kg of body weight. The child weighs 18 kg, and the drug is given 3 times a day at <span class="m">x</span> mg per dose. (a) Write an inequality and find the allowed values of <span class="m">x</span>. (b) Is a single dose of 400 mg permissible?</p>
+<details class="hint"><summary>Hint 1</summary><p>First, calculate the daily limit in milligrams for this specific child.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>'At most' means <span class="m">≤</span>. The daily total is <span class="m">3x</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) Daily limit: <span class="m">60 · 18 = 1080</span> mg/day. Condition: <span class="m">3x ≤ 1080</span>, which gives <span class="m">x ≤ 360</span> mg per dose. (b) <span class="m">3 · 400 = 1200 &gt; 1080</span> — this is not allowed: it exceeds the daily maximum by 120 mg. Answer: <strong>x ≤ 360 mg; 400 mg per dose with 3 daily doses is not allowed</strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 7 <span class="tier">flashback · Chapter 2</span></div>
+<p>Solve: <span class="frac"><b>x + 1</b><i>2</i></span> − <span class="frac"><b>x − 3</b><i>5</i></span> ≥ 2.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is to get rid of the fractions in one go, just like in Chapter 2. What number will do that here?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Multiply both sides by 10. Ten is positive, so we don't touch the sign. Then expand the parentheses, keeping an eye on the minus sign in front of the second fraction.</p></details>
+<details class="sol"><summary>Solution</summary><p>We want to remove fractions: multiply both sides by 10 (since 10 is positive, the sign stays put): <span class="m">5(x + 1) − 2(x − 3) ≥ 20</span>. Expand: <span class="m">5x + 5 − 2x + 6 ≥ 20</span>, which simplifies to <span class="m">3x + 11 ≥ 20</span>. Subtract 11 and divide by 3: <span class="m">x ≥ 3</span>. Checking the boundary: at <span class="m">x = 3</span>, the left side is <span class="m">4/2 − 0/5 = 2 ≥ 2</span> — true. Answer: <strong>x ≥ 3</strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 8 <span class="tier">flashback · Chapter 4</span></div>
+<p>The region of allowed points is defined by the system: <span class="m">y ≤ x + 1</span> and <span class="m">y ≤ 7 − 2x</span>. Find the corner point of the region — where both boundaries intersect.</p>
+<details class="hint"><summary>Hint 1</summary><p>The boundaries are the lines <span class="m">y = x + 1</span> and <span class="m">y = 7 − 2x</span>. The corner is their intersection point, which means solving the system of equations from Chapter 4.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Both expressions equal the same <span class="m">y</span> — set them equal to each other.</p></details>
+<details class="sol"><summary>Solution</summary><p>Set them equal: <span class="m">x + 1 = 7 − 2x</span>, which means <span class="m">3x = 6</span> and <span class="m">x = 2</span>. Then <span class="m">y = 2 + 1 = 3</span>. Check in the second equation: <span class="m">7 − 4 = 3</span> — it matches. Answer: <strong>(2; 3)</strong>. Notice that for a region built from inequalities, we find the corners using equations — the old skill hasn't retired; it has just become a part of a new one.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 9 <span class="tier">Level C</span></div>
+<p>The number <span class="m">x</span> satisfies the condition <span class="m">|x − 4| ≤ 3</span>. What is the maximum value that the expression <span class="m">5 − 2x</span> can take?</p>
+<details class="hint"><summary>Hint 1</summary><p>First, turn the absolute value into a corridor for <span class="m">x</span>. Then ask yourself: what happens to the corridor when it is multiplied by −2?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>'The Sign Flip' also applies to compound inequalities — both signs flip at once. Multiply the corridor by −2, then add 5.</p></details>
+<details class="sol"><summary>Solution</summary><p>Corridor: <span class="m">1 ≤ x ≤ 7</span>. Multiply all parts by −2, flipping both signs: <span class="m">−14 ≤ −2x ≤ −2</span> — notice that the boundaries swapped places. Add 5: <span class="m">−9 ≤ 5 − 2x ≤ 3</span>. The maximum value is <strong>3</strong>, achieved at <span class="m">x = 1</span>: <span class="m">5 − 2 = 3</span>. The second way, without calculations: <span class="m">5 − 2x</span> decreases as <span class="m">x</span> increases, which means the maximum is at the left endpoint of the corridor, at <span class="m">x = 1</span>. The same answer in one line.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 10 · Spot the error <span class="tier">Level B</span></div>
+<p>A student solves <span class="m">12 − 5x &lt; 2</span> and writes: 'Subtract 12: <span class="m">−5x &lt; −10</span>. Divide by −5: <span class="m">x &lt; 2</span>. Done.' The solution looks smooth. Find the flaw, describe it in one sentence, and give the correct answer.</p>
+<details class="hint"><summary>Hint 1</summary><p>Run the answer through the detector: <span class="m">x = 0</span> is in '<span class="m">x &lt; 2</span>.' Plug it into the original inequality.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">12 &lt; 2</span> is false, which means the territory is incorrect. Now look at the student's final step: what did they do to the sign during division?</p></details>
+<details class="sol"><summary>Solution</summary><p>Flaw: dividing by −5 was done without flipping the sign. Correct: <span class="m">−5x &lt; −10</span>, divide by −5 and flip the sign: <span class="m">x &gt; 2</span>. Check: <span class="m">x = 3</span> yields <span class="m">12 − 15 = −3 &lt; 2</span> — true; <span class="m">x = 0</span> yields <span class="m">12 &lt; 2</span> — false, as it should be outside the boundary. Answer: <strong>x &gt; 2</strong>.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Chapter Boss: "Dosing Protocol"</div>
+<p>You're on the night shift. Your patient is a five-year-old girl, weight 18 kg, presenting with a fever. In your hands is the instruction insert for the syrup 'Febrocil' (30 mg of active ingredient per 1 mL): a single dose is 10 to 15 mg/kg; at most 4 doses per day; the daily dose is at most 50 mg/kg. The parents are looking at you. The instruction insert is a system of inequalities, and solving it is up to you.</p>
+<div class="problem tier-c"><div class="pr-t">Boss, Round 1 <span class="tier">Level C</span></div>
+<p>We plan for 4 doses per day, with a single dose of <span class="m">d</span> mg. (a) Write down all the restrictions on <span class="m">d</span> for this child. (b) Find the allowed range for <span class="m">d</span>. (c) Write the range using the 'The Therapeutic Window' move.</p>
+<details class="hint"><summary>Hint 1</summary><p>There are three restrictions, and all are about <span class="m">d</span>: the minimum per kg, the maximum per kg, and the daily ceiling divided by the number of doses.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Calculate <span class="m">10 · 18</span>, <span class="m">15 · 18</span>, and <span class="m">50 · 18 / 4</span> — and find the intersection of all conditions: what survives is what passes every filter.</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) Single dose: <span class="m">10 · 18 ≤ d ≤ 15 · 18</span>, which means <span class="m">180 ≤ d ≤ 270</span>. Daily ceiling: <span class="m">4d ≤ 50 · 18 = 900</span>, which means <span class="m">d ≤ 225</span>. (b) Intersection: the lower boundary is 180; there are two upper candidates, 270 and 225, and the stricter one wins: <span class="m">180 ≤ d ≤ 225</span>. The daily ceiling turned out to be stricter than the single-dose maximum — it is the bottleneck here. (c) Center <span class="m">(180 + 225)/2 = 202.5</span>, radius <span class="m">(225 − 180)/2 = 22.5</span>: <strong>|d − 202.5| ≤ 22.5</strong>.</p></details>
+</div>
+<div class="problem tier-c"><div class="pr-t">Boss, Round 2 <span class="tier">Level C</span></div>
+<p>(a) The syrup contains 30 mg per 1 mL. Translate the allowed range from Round 1 into milliliters per dose. (b) The family can administer the medication only 3 times a day. How will the range of <span class="m">d</span> change, and which restriction will stop being the bottleneck?</p>
+<details class="hint"><summary>Hint 1</summary><p>(a) Volume is dose divided by concentration: <span class="m">V = d / 30</span>. (b) Recalculate the daily filter: now there are 3 doses per day instead of 4.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>(b) A new ceiling follows from <span class="m">3d ≤ 900</span>. Compare it with the single-dose maximum of 270: which one is stricter now?</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) <span class="m">180 / 30 = 6</span> and <span class="m">225 / 30 = 7.5</span>: per dose — <strong>from 6 to 7.5 mL</strong>. (b) Now <span class="m">3d ≤ 900</span>, which means <span class="m">d ≤ 300</span>. This is weaker than the single-dose maximum of 270, so the 'at most 15 mg/kg' instruction itself becomes the bottleneck: the range expands to <span class="m">180 ≤ d ≤ 270</span>, or from 6 to 9 mL. Fewer doses mean a wider allowance for each: the system of inequalities answers questions you didn't even ask it.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">You can now</div>
+<ul class="powers">
+<li>solve linear inequalities and flip the sign when multiplying or dividing by a negative number — and prove why doing so is mathematically sound;</li>
+<li>represent solutions on a number line, correctly choosing between solid and empty dots;</li>
+<li>solve compound inequalities by performing operations on all three parts at once;</li>
+<li>translate any range to an absolute value and vice versa using the 'The Therapeutic Window' move;</li>
+<li>instantly distinguish between a corridor (<span class="m">≤</span>) and rays (<span class="m">≥</span>) in absolute value inequalities — and identify equations with no solution;</li>
+<li>shade a half-plane by testing the point <span class="m">(0; 0)</span> and choose a solid or dashed boundary based on the strictness of the sign;</li>
+<li>verify if a point satisfies a system of inequalities by plugging it into each condition;</li>
+<li>calculate a safe dosage range from a drug insert, finding the bottleneck among the constraints.</li>
+</ul>
+<p>Let's return to where we started: equality is a point, 'enough' is a territory. Now you know how to find the boundaries of this territory, decide whether they are included, and confidently live inside it — just like an elevator that doesn't know your weight, but knows its limit exactly.</p>
+<div class="cheat"><div class="cheat-t">Cheat sheet</div>
+<ul>
+<li><span class="m">a &lt; b ⇔ −a &gt; −b</span> — multiply or divide by a negative number: flip the sign;</li>
+<li><span class="m">a &lt; x ≤ b</span> — empty dot at <span class="m">a</span>, solid dot at <span class="m">b</span>;</li>
+<li><span class="m">|x − a| = r</span> ⇒ <span class="m">x = a − r</span> or <span class="m">x = a + r</span>; if <span class="m">r</span> is negative — no solution;</li>
+<li><span class="m">|x − a| ≤ r ⇔ a − r ≤ x ≤ a + r</span> — corridor with center <span class="m">a</span> and radius <span class="m">r</span>;</li>
+<li><span class="m">|x − a| ≥ r ⇔ x ≤ a − r</span> or <span class="m">x ≥ a + r</span> — rays pointing outward;</li>
+<li>strict sign — dashed boundary, non-strict — solid; choose the side by testing <span class="m">(0; 0)</span>;</li>
+<li>'at least <span class="m">a</span>' ⇔ <span class="m">x ≥ a</span>; 'at most <span class="m">a</span>' ⇔ <span class="m">x ≤ a</span>;</li>
+<li>check any answer by plugging in one number from your territory.</li>
+</ul></div>
+<div class="feynman"><div class="box-t">The Feynman Assignment</div>
+<p>Explain to an imaginary 12-year-old, without using the word 'absolute value' or 'inequality': (1) why multiplying by a negative number swaps the words 'greater than' and 'less than' and (2) what the expression <span class="m">|x − 5| ≤ 2</span> means.</p>
+<details class="sol"><summary>Model explanation</summary><p>(1) Imagine a mirror placed at zero on the number line. The number 2 is closer to the mirror, and the number 5 is further away. Look at their reflections: −2 and −5. The reflection of whichever was further to the right ends up further to the left — the mirror reverses the order. Multiplying everything by a minus sign is exactly like looking in the mirror, which is why 'greater than' and 'less than' swap places. (2) You are standing at the post labeled 5, and you have a leash of length 2. Where can you go? As far as 3 in one direction and 7 in the other. The expression <span class="m">|x − 5| ≤ 2</span> means: 'the distance from you to post 5 is at most two steps.' Everything from 3 to 7 is your territory.</p></details>
+</div>
+</div>
+</section>
+

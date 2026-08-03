@@ -1,0 +1,42 @@
+<section class="chapter" id="ch-25" data-ch="25" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 25 · QLS Extension</div><h2>Линейные модели и математика ML</h2><p class="ch-lede">Как связать матрицы, производные и статистику в первый настоящий предиктивный алгоритм.</p></header>
+<div class="hook"><p>Линейная регрессия выглядит скромно, но в ней уже есть весь цикл машинного обучения: признаки, параметры, предсказание, loss, оптимизация, проверка на новых данных и интерпретация с оговорками.</p></div>
+<h3>Модель и остатки</h3><p><span class="m">ŷ=Xβ</span>. Вектор β содержит коэффициенты, а остаток <span class="m">e=y−ŷ</span> — то, что модель не объяснила. Метод наименьших квадратов минимизирует <span class="m">MSE=(1/n)Σ(yᵢ−ŷᵢ)²</span>.</p>
+<div class="example"><div class="ex-t">Пример · Интерпретация</div><p>В модели давления <span class="m">ŷ=95+0.6·age−4·treatment</span> коэффициент 0.6 означает среднюю разницу 0.6 mmHg на год при фиксированном treatment. Это условная ассоциация, не автоматически причинный эффект.</p></div>
+<h3>Обобщение и regularization</h3><p>Train error оценивает подгонку знакомых данных; test error — перенос на новые. Слишком гибкая модель запоминает шум. Ridge добавляет <span class="m">λΣβⱼ²</span> и мягко уменьшает коэффициенты; Lasso добавляет <span class="m">λΣ|βⱼ|</span> и может занулять некоторые.</p>
+<div class="box trap"><div class="box-t">Утечка данных</div><p>Разделяй train/test до масштабирования и выбора признаков. Если test участвовал в подготовке модели, это уже не честная проверка. Для малых данных используй cross-validation, но сохраняй финальный независимый test.</p></div>
+<h3>От регрессии к классификации</h3><p>Логистическая регрессия превращает линейный score в вероятность: <span class="m">p=1/(1+e<sup>−z</sup>)</span>, где <span class="m">z=Xβ</span>. Порог переводит вероятность в класс, но выбор порога меняет чувствительность и специфичность.</p>
+<div class="formula">данные X → score Xβ → prediction → loss → gradient → обновлённые β</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Модель имеет почти нулевую train error, но большую test error. Наиболее вероятная проблема?</div><div class="quiz-opts"><label><input type="radio" name="q25ru-1" value="a"><span>Underfitting</span></label><label><input type="radio" name="q25ru-1" value="b"><span>Неверный размер матрицы</span></label><label><input type="radio" name="q25ru-1" value="c"><span>Overfitting</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: модель выучила training data, но плохо обобщает." data-no="Большой разрыв train–test при отличном train обычно указывает на overfitting."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · линейная регрессия без библиотек ML</div><pre>import numpy as np
+age = np.array([20, 30, 40, 50, 60.])
+y = np.array([108, 112, 121, 126, 132.])
+X = np.c_[np.ones(len(age)), age]
+beta = np.linalg.solve(X.T @ X, X.T @ y)
+prediction = X @ beta
+print(beta)
+print(((y - prediction)**2).mean())</pre></div>
+<div class="boss"><div class="boss-t">Финальный босс · Честный pipeline</div><p>У тебя 200 пациентов и 5 000 генов. Сформулируй порядок действий: split, preprocessing, feature selection, обучение, настройка и оценка. Где должна происходить каждая операция, чтобы test не утёк в модель?</p><details class="sol"><summary>Один корректный скелет</summary><p>Сначала отделить финальный test. Всё обучение preprocessing, отбор генов и подбор гиперпараметров выполнять только внутри training data, лучше внутри folds cross-validation. После выбора pipeline один раз оценить его на нетронутом test и сообщить метрику вместе с неопределённостью и ограничениями.</p></details></div>
+<div class="recap"><div class="recap-t">QLS-мост построен</div><ul class="powers"><li>видишь линейную модель как Xβ;</li><li>различаешь fit и generalization;</li><li>связываешь loss, gradient и regularization;</li><li>защищаешь оценку от data leakage.</li></ul></div>
+</section>
+<section class="chapter" id="ch-25-en" data-ch="25" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 25 · QLS Extension</div><h2>Linear models and the mathematics of ML</h2><p class="ch-lede">Connecting matrices, derivatives, and statistics into a real predictive algorithm.</p></header>
+<div class="hook"><p>Linear regression already contains the full machine-learning cycle: features, parameters, predictions, loss, optimization, evaluation on new data, and careful interpretation.</p></div>
+<h3>Model and residuals</h3><p><span class="m">ŷ=Xβ</span>. The vector β contains coefficients; <span class="m">e=y−ŷ</span> contains residuals. Least squares minimizes <span class="m">MSE=(1/n)Σ(yᵢ−ŷᵢ)²</span>.</p>
+<div class="example"><div class="ex-t">Example · Interpretation</div><p>In <span class="m">ŷ=95+0.6·age−4·treatment</span>, 0.6 is the average mmHg difference per year holding treatment fixed. It is a conditional association, not automatically a causal effect.</p></div>
+<h3>Generalization and regularization</h3><p>Training error measures fit to familiar data; test error measures transfer to new data. Ridge adds <span class="m">λΣβⱼ²</span> and shrinks coefficients; Lasso adds <span class="m">λΣ|βⱼ|</span> and may set some to zero.</p>
+<div class="box trap"><div class="box-t">Data leakage</div><p>Split train and test before scaling or feature selection. If test data shaped the model, it is no longer an honest evaluation. Cross-validation helps with small datasets, while a final test remains untouched.</p></div>
+<h3>From regression to classification</h3><p>Logistic regression maps a linear score to probability: <span class="m">p=1/(1+e<sup>−z</sup>)</span>, where <span class="m">z=Xβ</span>. A threshold creates classes, but changing it trades sensitivity against specificity.</p>
+<div class="formula">data X → score Xβ → prediction → loss → gradient → updated β</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">A model has almost zero training error but large test error. What is the likely problem?</div><div class="quiz-opts"><label><input type="radio" name="q25en-1" value="a"><span>Underfitting</span></label><label><input type="radio" name="q25en-1" value="b"><span>Wrong matrix shape</span></label><label><input type="radio" name="q25en-1" value="c"><span>Overfitting</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: the model learned training data but generalizes poorly." data-no="A large train–test gap with excellent training fit usually means overfitting."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · linear regression without ML libraries</div><pre>import numpy as np
+age = np.array([20, 30, 40, 50, 60.])
+y = np.array([108, 112, 121, 126, 132.])
+X = np.c_[np.ones(len(age)), age]
+beta = np.linalg.solve(X.T @ X, X.T @ y)
+prediction = X @ beta
+print(beta)
+print(((y - prediction)**2).mean())</pre></div>
+<div class="boss"><div class="boss-t">Final boss · An honest pipeline</div><p>You have 200 patients and 5,000 genes. Order split, preprocessing, feature selection, training, tuning, and evaluation so test data cannot leak into the model.</p><details class="sol"><summary>One valid skeleton</summary><p>Hold out final test data first. Learn preprocessing, gene selection, and hyperparameters using training data only, preferably inside cross-validation folds. Evaluate the chosen pipeline once on untouched test data and report the metric with uncertainty and limitations.</p></details></div>
+<div class="recap"><div class="recap-t">The QLS bridge is complete</div><ul class="powers"><li>see a linear model as Xβ;</li><li>separate fit from generalization;</li><li>connect loss, gradients, and regularization;</li><li>protect evaluation from data leakage.</li></ul></div>
+</section>

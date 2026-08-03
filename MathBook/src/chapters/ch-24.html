@@ -1,0 +1,40 @@
+<section class="chapter" id="ch-24" data-ch="24" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 24 · QLS Extension</div><h2>Статистический вывод, likelihood и Bayes</h2><p class="ch-lede">Как переходить от ограниченной выборки к осторожному утверждению о мире.</p></header>
+<div class="hook"><p>Данные шумны, а выборка конечна. Статистический вывод не устраняет неопределённость; он делает её измеримой и заставляет нас отделять наблюдение от силы доказательства.</p></div>
+<h3>Оценка и стандартная ошибка</h3><p>Оценка — число из выборки; параметр — неизвестное число популяции. При повторных выборках оценки меняются. Стандартная ошибка описывает этот разброс и обычно уменьшается примерно как <span class="m">1/√n</span>.</p>
+<div class="formula">примерный 95% CI = estimate ± 1.96 × SE</div>
+<p>Доверительный интервал — процедура, которая в долгой серии покрывает истинный параметр примерно в 95% случаев. Он не означает, что 95% пациентов лежат внутри интервала.</p>
+<h3>Тестирование гипотез</h3><p>p-value — вероятность получить такие же или более экстремальные данные <em>при условии</em>, что H₀ и модель верны. Это не вероятность истинности H₀ и не размер эффекта. До анализа важны гипотеза, уровень α и план множественных сравнений.</p>
+<h3>Likelihood и Bayes</h3><p>Likelihood <span class="m">L(θ|data)</span> рассматривает данные как фиксированные и сравнивает, какие θ лучше их объясняют. Байесовское обновление объединяет prior и likelihood:</p>
+<div class="formula">posterior ∝ likelihood × prior</div>
+<div class="example"><div class="ex-t">Пример · Редкая болезнь</div><p>Чувствительность 90%, ложноположительная доля 5%, распространённость 1%. Из 10 000 людей ожидаем 90 истинно положительных и 495 ложноположительных. Поэтому <span class="m">P(болезнь|+)=90/(90+495)≈15%</span>, а не 90%.</p></div>
+<div class="box trap"><div class="box-t">Не путай направления условия</div><p><span class="m">P(+|болезнь)</span> — чувствительность теста. Пациента интересует <span class="m">P(болезнь|+)</span>. Их связывает базовая частота; одно нельзя заменить другим.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">Исследование сообщает p=0.03. Какое утверждение корректно?</div><div class="quiz-opts"><label><input type="radio" name="q24ru-1" value="a"><span>Вероятность H₀ равна 3%</span></label><label><input type="radio" name="q24ru-1" value="b"><span>При H₀ такие или более экстремальные данные возникали бы примерно в 3% повторений</span></label><label><input type="radio" name="q24ru-1" value="c"><span>Эффект клинически важен с вероятностью 97%</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно. p-value условен на H₀ и не измеряет клиническую важность." data-no="p-value не является вероятностью гипотезы и не говорит о размере эффекта."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · Bayes через частоты</div><pre>population = 10000
+prevalence, sensitivity, fpr = .01, .90, .05
+true_positive = population * prevalence * sensitivity
+false_positive = population * (1-prevalence) * fpr
+ppv = true_positive / (true_positive + false_positive)
+print(ppv)</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>разделяешь estimate, parameter и SE;</li><li>правильно читаешь CI и p-value;</li><li>обновляешь вероятность с учётом базовой частоты.</li></ul></div>
+</section>
+<section class="chapter" id="ch-24-en" data-ch="24" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 24 · QLS Extension</div><h2>Statistical inference, likelihood, and Bayes</h2><p class="ch-lede">Moving from a limited sample to a cautious statement about the world.</p></header>
+<div class="hook"><p>Data are noisy and samples finite. Inference does not remove uncertainty; it quantifies it and separates an observation from the strength of evidence.</p></div>
+<h3>Estimates and standard errors</h3><p>An estimate comes from a sample; a parameter belongs to the population. Estimates vary across repeated samples. Standard error measures this variation and often decreases approximately as <span class="m">1/√n</span>.</p>
+<div class="formula">approximate 95% CI = estimate ± 1.96 × SE</div>
+<p>A confidence interval is a procedure that covers the true parameter in about 95% of repeated studies. It does not contain 95% of individual patients.</p>
+<h3>Hypothesis testing</h3><p>A p-value is the probability of equally or more extreme data <em>assuming</em> H₀ and the model. It is not the probability that H₀ is true or a measure of effect size.</p>
+<h3>Likelihood and Bayes</h3><p>Likelihood <span class="m">L(θ|data)</span> fixes the data and compares parameter values. Bayesian updating combines prior information with evidence:</p>
+<div class="formula">posterior ∝ likelihood × prior</div>
+<div class="example"><div class="ex-t">Example · Rare disease</div><p>With 90% sensitivity, 5% false-positive rate, and 1% prevalence, 10,000 people yield about 90 true positives and 495 false positives. Thus <span class="m">P(disease|+)=90/(90+495)≈15%</span>, not 90%.</p></div>
+<div class="box trap"><div class="box-t">Do not reverse the condition</div><p><span class="m">P(+|disease)</span> is sensitivity. A patient wants <span class="m">P(disease|+)</span>. The base rate connects them.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">A study reports p=0.03. Which statement is valid?</div><div class="quiz-opts"><label><input type="radio" name="q24en-1" value="a"><span>H₀ has a 3% probability</span></label><label><input type="radio" name="q24en-1" value="b"><span>Under H₀, equally or more extreme data would occur in about 3% of repetitions</span></label><label><input type="radio" name="q24en-1" value="c"><span>The effect is clinically important with 97% probability</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct. A p-value is conditional on H₀ and does not measure clinical importance." data-no="A p-value is neither a hypothesis probability nor an effect size."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · Bayes with counts</div><pre>population = 10000
+prevalence, sensitivity, fpr = .01, .90, .05
+true_positive = population * prevalence * sensitivity
+false_positive = population * (1-prevalence) * fpr
+ppv = true_positive / (true_positive + false_positive)
+print(ppv)</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>separate estimates, parameters, and SE;</li><li>read CIs and p-values correctly;</li><li>update probability using the base rate.</li></ul></div>
+</section>

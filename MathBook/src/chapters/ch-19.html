@@ -1,0 +1,44 @@
+<section class="chapter" id="ch-19" data-ch="19" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 19 · QLS Extension</div><h2>Векторы, матрицы и линейные системы</h2><p class="ch-lede">Как превратить таблицу биологических измерений в объект, с которым умеет работать алгоритм.</p></header>
+<div class="hook"><p>Один пациент — это не одно число. Возраст, давление, экспрессия генов, лабораторные показатели образуют <strong>вектор признаков</strong>. Если поставить векторы многих пациентов строками, получится матрица данных. Именно так таблица из клиники становится математикой.</p></div>
+<h3>Вектор — упорядоченный набор</h3>
+<p>Вектор <span class="m">x = (x₁,…,xₙ)</span> хранит и значения, и их порядок. Сумма считается покомпонентно, умножение на число меняет масштаб. Длина <span class="m">||x||₂ = √(Σxᵢ²)</span>, а скалярное произведение <span class="m">x·w = Σxᵢwᵢ</span> измеряет совпадение направлений и строит взвешенную сумму.</p>
+<div class="example"><div class="ex-t">Пример · Индекс риска</div><p>После стандартизации признаки пациента равны <span class="m">x=(0.5,−1,2)</span>, веса модели <span class="m">w=(0.4,0.2,0.3)</span>. Тогда score = <span class="m">x·w = 0.2−0.2+0.6 = 0.6</span>. Каждый вес показывает вклад соответствующего признака.</p></div>
+<div class="box trap"><div class="box-t">Важно</div><p>Нельзя складывать «годы», «мм рт. ст.» и «ммоль/л» как есть. Перед моделированием признаки обычно центрируют и масштабируют; иначе большая единица измерения может доминировать без биологической причины.</p></div>
+<h3>Матрица — набор линейных преобразований</h3>
+<p>Матрица <span class="m">A</span> размера <span class="m">m×n</span> переводит вектор из <span class="m">n</span> координат в <span class="m">m</span>. Произведение <span class="m">Ax</span> состоит из скалярных произведений строк A с x. Для <span class="m">AB</span> внутренние размеры обязаны совпасть; порядок обычно нельзя менять: <span class="m">AB ≠ BA</span>.</p>
+<div class="formula">A<sub>m×n</sub>x<sub>n×1</sub> = y<sub>m×1</sub> &nbsp;·&nbsp; (AB)<sub>ij</sub> = Σ<sub>k</sub>A<sub>ik</sub>B<sub>kj</sub></div>
+<h3>Система Ax=b</h3>
+<p>Метод Гаусса заменяет строки эквивалентными и приводит расширенную матрицу к ступенчатому виду. Единственное решение означает независимые ограничения; свободная переменная — бесконечно много решений; строка <span class="m">0=1</span> — несовместность.</p>
+<div class="example"><div class="ex-t">Пример · Смесь двух растворов</div><p><span class="m">x+y=10</span>, <span class="m">0.1x+0.3y=2</span>. Вычтем 0.1 первой строки из второй: <span class="m">0.2y=1</span>, значит <span class="m">y=5</span> и <span class="m">x=5</span>. Это и есть исключение Гаусса в бытовой форме.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">Матрица X имеет 120 строк-пациентов и 8 столбцов-признаков. Каков размер Xw, если w содержит 8 весов?</div><div class="quiz-opts"><label><input type="radio" name="q19ru-1" value="a"><span>8×1</span></label><label><input type="radio" name="q19ru-1" value="b"><span>120×1</span></label><label><input type="radio" name="q19ru-1" value="c"><span>120×8</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: для каждого из 120 пациентов получается один score." data-no="Проверь внутренние размеры: (120×8)(8×1) = 120×1."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · NumPy</div><pre>import numpy as np
+X = np.array([[0.5, -1, 2], [1, 0, -0.5]])
+w = np.array([0.4, 0.2, 0.3])
+print(X @ w)
+A = np.array([[1, 1], [.1, .3]])
+b = np.array([10, 2])
+print(np.linalg.solve(A, b))</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>проверяешь размеры до умножения;</li><li>читаешь Ax как преобразование данных;</li><li>решаешь небольшие системы исключением Гаусса.</li></ul></div>
+<div class="feynman"><div class="box-t">Объясни без формул</div><p>Почему строки матрицы данных удобно считать пациентами, а столбцы — признаками? Что изменится, если таблицу транспонировать?</p></div>
+</section>
+<section class="chapter" id="ch-19-en" data-ch="19" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 19 · QLS Extension</div><h2>Vectors, matrices, and linear systems</h2><p class="ch-lede">Turning a table of biological measurements into an object an algorithm can use.</p></header>
+<div class="hook"><p>A patient is not one number. Age, blood pressure, gene expression, and laboratory values form a <strong>feature vector</strong>. Stack many patient vectors as rows and you obtain a data matrix.</p></div>
+<h3>Vectors are ordered collections</h3><p>A vector <span class="m">x=(x₁,…,xₙ)</span> preserves both values and order. Addition is componentwise. Its Euclidean length is <span class="m">||x||₂=√(Σxᵢ²)</span>; the dot product <span class="m">x·w=Σxᵢwᵢ</span> is a weighted sum and a measure of directional agreement.</p>
+<div class="example"><div class="ex-t">Example · Risk score</div><p>For standardized features <span class="m">x=(0.5,−1,2)</span> and model weights <span class="m">w=(0.4,0.2,0.3)</span>, the score is <span class="m">x·w=0.6</span>. Each weight controls the contribution of one feature.</p></div>
+<div class="box trap"><div class="box-t">Important</div><p>Raw years, mmHg, and mmol/L should not be combined blindly. Features are commonly centered and scaled so measurement units do not dominate the biology.</p></div>
+<h3>Matrices are linear transformations</h3><p>An <span class="m">m×n</span> matrix maps an n-vector to an m-vector. Each entry of <span class="m">Ax</span> is the dot product of one row with x. Inner dimensions must match, and order matters: usually <span class="m">AB≠BA</span>.</p>
+<div class="formula">A<sub>m×n</sub>x<sub>n×1</sub> = y<sub>m×1</sub> &nbsp;·&nbsp; (AB)<sub>ij</sub> = Σ<sub>k</sub>A<sub>ik</sub>B<sub>kj</sub></div>
+<h3>The system Ax=b</h3><p>Gaussian elimination uses solution-preserving row operations. A pivot for every unknown gives a unique solution; a free variable gives infinitely many; a row equivalent to <span class="m">0=1</span> means no solution.</p>
+<div class="example"><div class="ex-t">Example · Mixing two solutions</div><p><span class="m">x+y=10</span> and <span class="m">0.1x+0.3y=2</span>. Subtract 0.1 times the first equation from the second: <span class="m">0.2y=1</span>, so <span class="m">x=y=5</span>.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">X has 120 patient rows and 8 feature columns. What is the shape of Xw when w has 8 weights?</div><div class="quiz-opts"><label><input type="radio" name="q19en-1" value="a"><span>8×1</span></label><label><input type="radio" name="q19en-1" value="b"><span>120×1</span></label><label><input type="radio" name="q19en-1" value="c"><span>120×8</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: one score is produced for each of 120 patients." data-no="Match the inner dimensions: (120×8)(8×1)=120×1."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · NumPy</div><pre>import numpy as np
+X = np.array([[0.5, -1, 2], [1, 0, -0.5]])
+w = np.array([0.4, 0.2, 0.3])
+print(X @ w)
+A = np.array([[1, 1], [.1, .3]])
+b = np.array([10, 2])
+print(np.linalg.solve(A, b))</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>check dimensions before multiplication;</li><li>read Ax as a data transformation;</li><li>solve small systems by elimination.</li></ul></div><div class="feynman"><div class="box-t">Explain without formulas</div><p>Why are patients naturally rows and features columns? What changes after transposition?</p></div>
+</section>

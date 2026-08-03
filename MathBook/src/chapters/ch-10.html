@@ -1,0 +1,720 @@
+<section class="chapter" id="ch-10" data-ch="10" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 10 · Продвинутая математика</div><h2>Функции — это машины</h2><p class="ch-lede">Автомат, который на одну кнопку выдаёт то колу, то носок, — не «непредсказуемый». Он сломан, и в этой разнице живёт половина раздела Advanced Math.</p></header>
+
+<div class="hook">
+<p>На кухне у твоей бабушки почти наверняка жила мясорубка. Мясо входит сверху, фарш выходит сбоку. Из одного и того же куска говядины — всегда один и тот же фарш. Не бывает так, что в понедельник машинка выдаёт фарш, а во вторник из того же куска — компот. Это не свойство характера мясорубки. Это её определение: она — машина.</p>
+<p>Теперь автомат с газировкой. Жмёшь кнопку «кола» — выпадает кола. Жмёшь ту же кнопку ещё раз — выпадает носок. Прохожий скажет: «загадочный автомат». Инженер скажет точнее: сломанный. Штуку, которая на один и тот же вход отвечает по-разному, нельзя откалибровать, с ней нельзя договориться, на неё нельзя выписать гарантийный талон.</p>
+<p>Математики рассуждают как инженер. Их машины называются функциями (function), и единственное требование к ним — та самая гарантия: одинаковый вход даёт одинаковый выход, всегда. Звучит как педантизм, пока не вспомнишь, на чём стоит твоя работа: если бы биохимический анализатор на одну и ту же плазму выдавал то 5, то 500, лабораторная диагностика закончилась бы к обеду.</p>
+<p>В этой главе мы разберём машину на части, научимся кормить её не только числами, но и целыми выражениями, склеим две машины в конвейер и — главный фокус — будем перевозить их графики по плоскости, не пересчитывая ни одной точки. В конце тебя ждёт босс: «Испорченный конвейер», который молча теряет пробирки. Найти дыру предстоит тебе.</p>
+</div>
+
+<div class="try-first">
+<p>Прежде чем читать дальше — честные десять минут вот на эту задачу. Если не выйдет, это отличный результат: будешь точно знать, где чешется.</p>
+<div class="problem tier-b"><div class="pr-t">Разминка <span class="tier">попробуй сначала</span></div>
+<p>Машина <span class="m">f</span> работает по правилу <span class="m">f(x) = x² − 6x + 11</span>. (а) Что выдаст машина на входе 3? (б) Самая нижняя точка графика <span class="m">f</span> — вершина — находится в <span class="m">(3; 2)</span>. Из <span class="m">f</span> собрали новую машину: <span class="m">g(x) = f(x − 2) + 3</span>. Где самая нижняя точка графика <span class="m">g</span>?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>В пункте (а) нет магии: подставь 3 вместо каждого <span class="m">x</span> и посчитай.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>В пункте (б) не угадывай направление по знаку. Проверь конкретной точкой: чему равно <span class="m">g(5)</span>?</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) <span class="m">f(3) = 9 − 18 + 11 = 2</span>. (б) <span class="m">g(5) = f(5 − 2) + 3 = f(3) + 3 = 2 + 3 = 5</span>. Вход 5 попадает ровно в бывшую вершину, и меньше пяти <span class="m">g</span> нигде не выдаёт: вершина <span class="m">g</span> — точка <span class="m">(5; 5)</span>. Вправо и вверх — хотя минус в скобках «выглядел» как влево. Почему внутри скобок всё наоборот — в разделе «Переезды графика».</p></details>
+</div>
+</div>
+
+<h3>Машина с гарантией</h3>
+<p>Запись <span class="m">f(x)</span> пугает ровно до момента, когда её переводят на человеческий. <span class="m">f</span> — имя машины. <span class="m">x</span> — то, что в неё положили. <span class="m">f(x)</span> — то, что из неё выпало. Вся строка <span class="m">f(x) = x² + 1</span> — это табличка на корпусе: «машина по имени f возводит вход в квадрат и прибавляет единицу».</p>
+
+<div class="box idea"><div class="box-t">Идея</div><p>Если запомнишь одно: функция — это машина с гарантией «одинаковый вход — одинаковый выход», а запись <span class="m">f(вход) = выход</span> — квитанция о том, что положили и что получили.</p></div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 440 140" role="img" aria-label="Схема машины: вход, правило, выход">
+<path class="crv" fill="none" d="M15 45 H115 V105 H15 Z"/>
+<text class="lbl" x="42" y="70">вход</text>
+<text class="lbl" x="40" y="92">x = 3</text>
+<line class="ax" x1="115" y1="75" x2="160" y2="75"/>
+<path class="fill" d="M160 69 L174 75 L160 81 Z"/>
+<path class="crv2" fill="none" d="M174 30 H296 V120 H174 Z"/>
+<text class="lbl" x="198" y="62">машина f</text>
+<text class="lbl" x="206" y="95">x² + 1</text>
+<line class="ax" x1="296" y1="75" x2="341" y2="75"/>
+<path class="fill" d="M341 69 L355 75 L341 81 Z"/>
+<path class="crv" fill="none" d="M355 45 H430 V105 H355 Z"/>
+<text class="lbl" x="370" y="70">выход</text>
+<text class="lbl" x="360" y="92">f(3) = 10</text>
+</svg><figcaption>Вход слева, правило внутри, выход справа. Одинаковый вход — всегда одинаковый выход.</figcaption></figure>
+
+<div class="box tool"><div class="box-t">Приём: „Машина“</div><p>Любой вопрос про функцию переводи в три слова: вход → правило → выход. «Найди <span class="m">f(3)</span>» значит: вход 3, какой выход? «Реши <span class="m">f(x) = 10</span>» значит: выход 10, какие входы его дают? Пока не перевёл вопрос на язык машины — не считай.</p></div>
+
+<p>У квитанции есть геометрический двойник. Запись <span class="m">f(2) = 7</span> — это точка на графике:</p>
+<div class="formula"><b class="hl">f</b>(2) = <b class="hl2">7</b></div>
+<ul class="legend"><li><span class="m">f</span> — имя машины;</li><li><span class="m">2</span> — вход, его откладываем по горизонтальной оси;</li><li><span class="m">7</span> — выход, его откладываем по вертикальной; вместе это точка <span class="m">(2; 7)</span> на графике <span class="m">f</span>.</li></ul>
+<p>График функции — это все квитанции сразу, наколотые на плоскость. Ничего больше в нём нет.</p>
+
+<div class="example"><div class="ex-t">Пример 1 · Доза от массы</div><p>Разовая доза парацетамола у детей — 15 мг на килограмм массы. Машина: <span class="m">D(m) = 15m</span>, где <span class="m">m</span> — масса в кг, выход — доза в мг. Найди <span class="m">D(12)</span> и скажи, что это значит.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим выход для входа 12, поэтому</span> подставляем: <span class="m">D(12) = 15 · 12 = 180</span>.</div>
+<div class="step"><span class="step-why">Хотим вернуть числу смысл:</span> ребёнку массой 12 кг положено 180 мг. На графике <span class="m">D</span> это точка <span class="m">(12; 180)</span>.</div>
+</div>
+<p>Ответ: <strong>180 мг</strong>. Взгляд назад: <span class="m">D(m) = 15m</span> — это прямая <span class="m">y = mx + b</span> из главы 3 с наклоном (slope) 15 и <span class="m">b = 0</span>: нет массы — нет дозы, удвоил массу — удвоил дозу. Функции не отменяют старых глав, они дают старым объектам имена.</p></div>
+
+<div class="box story"><div class="box-t">На полях</div><p>Запись <span class="m">f(x)</span> придумал Леонард Эйлер около 1734 года. До него о зависимостях писали абзацами: «величина, которая получается, если…». Эйлер сжал абзац до трёх символов — и внезапно машины стало можно вкладывать друг в друга, как матрёшки. Пол-главы впереди существует благодаря этой стенографии.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Машина <span class="m">f(x) = 3x − 4</span>. Чему равно <span class="m">f(5)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-1" value="a"><span>11</span></label>
+<label><input type="radio" name="q10-1" value="b"><span>15</span></label>
+<label><input type="radio" name="q10-1" value="c"><span>19</span></label>
+<label><input type="radio" name="q10-1" value="d"><span>1</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Вход 5, правило целиком: 3 · 5 − 4 = 11." data-no="Не совсем. Если вышло 15 — ты умножил 3 · 5 и бросил правило на середине: машина выполняет всю инструкцию, включая −4. Ответ 11."></div>
+</div>
+
+<h3>Машина не раздаёт скобки</h3>
+<p>Пока в машину кладут числа, всё мирно. SAT начинает зарабатывать очки, когда в машину кладут выражение: найди <span class="m">f(a + 1)</span>. Правило то же самое, и оно одно: вход подставляется целиком, в скобках, вместо каждого <span class="m">x</span>. Скобки — упаковка груза, и вскрывать её можно только после подстановки.</p>
+
+<div class="example"><div class="ex-t">Пример 2 · Вход в упаковке</div><p><span class="m">f(x) = x² + 3x</span>. Найди <span class="m">f(a + 1)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим накормить машину грузом <span class="m">a + 1</span>, поэтому</span> ставим его в скобках вместо каждого <span class="m">x</span>: <span class="m">f(a + 1) = (a + 1)² + 3(a + 1)</span>.</div>
+<div class="step"><span class="step-why">Хотим привести к читаемому виду, поэтому</span> раскрываем: <span class="m">a² + 2a + 1 + 3a + 3 = a² + 5a + 4</span>.</div>
+</div>
+<p>Тупик, в который тянет рука: написать <span class="m">f(a) + 1 = a² + 3a + 1</span> — мол, «прибавили единичку». Проверим на <span class="m">a = 1</span>: честное <span class="m">f(2) = 4 + 6 = 10</span>, а «ленивое» даёт <span class="m">4 + 1 = 5</span>. Расхождение вдвое — годится, чтобы запомнить навсегда.</p>
+<details class="hint"><summary>Почему здесь <span class="m">(a + 1)² = a² + 2a + 1</span>, а не <span class="m">a² + 1</span>?</summary><p>Потому что квадрат — это произведение скобки на саму себя: <span class="m">(a + 1)(a + 1)</span>. Перемножь по членам — средний член <span class="m">2a</span> появляется обязательно. Квадрат не раздаётся по слагаемым, и машина тут ни при чём: это правило алгебры, а не функций.</p></details>
+<p>Ответ: <strong><span class="m">a² + 5a + 4</span></strong>.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p><span class="m">f(a + 1) ≠ f(a) + 1</span>. Машина не «раздаёт» своё правило по кусочкам входа — она съедает вход целиком. Единственный способ узнать <span class="m">f(a + 1)</span> — подставить <span class="m">a + 1</span> в скобках вместо каждого <span class="m">x</span>. Среди вариантов ответа SAT «раздатый» вариант стоит всегда.</p></div>
+
+<p>Теперь с пропуском — достраивай сам. Пусть <span class="m">g(x) = 2x² − x</span>. Чему равно <span class="m">g(−x)</span>? Подставь <span class="m">(−x)</span> целиком, следи за знаками.</p>
+<details class="hint"><summary>Сверить ответ</summary><p><span class="m">g(−x) = 2(−x)² − (−x) = 2x² + x</span>. Заметь: это не то же самое, что <span class="m">−g(x) = −2x² + x</span>. Минус снаружи и минус внутри — разные операции; в разделе про отражения увидим обе на графике.</p></details>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q"><span class="m">f(x) = x² + 1</span>. Чему равно <span class="m">f(a + 2)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-2" value="a"><span><span class="m">a² + 5</span></span></label>
+<label><input type="radio" name="q10-2" value="b"><span><span class="m">a² + 4a + 5</span></span></label>
+<label><input type="radio" name="q10-2" value="c"><span><span class="m">a² + 4a + 4</span></span></label>
+<label><input type="radio" name="q10-2" value="d"><span><span class="m">a² + 3</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! (a + 2)² + 1 = a² + 4a + 4 + 1 = a² + 4a + 5." data-no="Не совсем. Если вышло a² + 5 — квадрат «розданно» по скобке: (a + 2)² — это (a + 2)(a + 2) = a² + 4a + 4, а не a² + 4. Если вышло a² + 4a + 4 — потерялось +1 из правила машины."></div>
+</div>
+
+<h3>Две задачи в одной букве</h3>
+<p>Вопросы «найди <span class="m">f(2)</span>» и «реши <span class="m">f(x) = 2</span>» выглядят как близнецы и означают противоположное. Первый — прямой ход машины: дан вход, посчитай выход. Второй — розыск: известен выход, найди все входы, которые его дают. По приёму «Машина»: в первом случае двойка входит, во втором — выходит.</p>
+<p>На графике эти два вопроса — два разных маршрута. «Найди <span class="m">f(2)</span>»: идёшь по горизонтальной оси до 2, поднимаешься до графика, считываешь высоту — ответ один, гарантия обязывает. «Реши <span class="m">f(x) = 2</span>»: идёшь по вертикальной оси до 2, ведёшь горизонтальную линию и смотришь, где она протыкает график, — ответов может быть несколько, и все нужны.</p>
+
+<div class="example"><div class="ex-t">Пример 3 · Машина в таблице</div><p>Функцию не обязательно задавать формулой — годится таблица квитанций:</p>
+<table class="tbl"><thead><tr><th><span class="m">x</span></th><th>−1</th><th>0</th><th>1</th><th>2</th><th>3</th></tr></thead><tbody><tr><td><span class="m">h(x)</span></td><td>7</td><td>5</td><td>3</td><td>2</td><td>5</td></tr></tbody></table>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим <span class="m">h(2)</span>, то есть выход для входа 2:</span> находим 2 в верхней строке, читаем под ним: <span class="m">h(2) = 2</span>. Совпадение входа с выходом — случайность, не закон.</div>
+<div class="step"><span class="step-why">Хотим решить <span class="m">h(x) = 5</span>, то есть найти входы с выходом 5:</span> ищем все пятёрки в нижней строке. Их две: над ними стоят <span class="m">x = 0</span> и <span class="m">x = 3</span>.</div>
+</div>
+<p>Ответ: <strong><span class="m">h(2) = 2</span>; уравнение <span class="m">h(x) = 5</span> имеет два решения: <span class="m">0</span> и <span class="m">3</span></strong>. Заметь: два разных входа с одинаковым выходом гарантию не нарушают. Мясорубке можно скармливать разные куски и получать одинаковый фарш — запрещено лишь из одного куска получать разное.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Перепутать <span class="m">f(2) = ?</span> и <span class="m">f(x) = 2</span> — значит пойти не по той оси. В задачах с графиком SAT кладёт оба числа рядом: и <span class="m">f(2)</span>, и решения <span class="m">f(x) = 2</span> найдутся среди вариантов. Перед тем как читать график, произнеси вслух: двойка — вход или выход?</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">По таблице из примера 3: чему равно решение уравнения <span class="m">h(x) = 7</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-3" value="a"><span>7</span></label>
+<label><input type="radio" name="q10-3" value="b"><span>3</span></label>
+<label><input type="radio" name="q10-3" value="c"><span>0</span></label>
+<label><input type="radio" name="q10-3" value="d"><span>−1</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Выход 7 даёт единственный вход: x = −1." data-no="Не та ось. «Реши h(x) = 7» значит: выход равен 7, найди вход. Семёрку ищем в нижней строке (среди выходов) и поднимаемся: x = −1. Ответ «7» — это чтение вопроса задом наперёд."></div>
+</div>
+
+<h3>Что нельзя класть в машину</h3>
+<p>У мясорубки есть паспорт: кости не совать. У функций паспорт называется областью определения (domain) — это список входов, на которых машина вообще способна отработать. В школьной и SAT-практике машину клинит от двух вещей: деления на ноль и квадратного корня из отрицательного числа. Всё остальное она переваривает.</p>
+
+<div class="example"><div class="ex-t">Пример 4 · Паспорт машины</div><p>Найди область определения <span class="m">f(x) = <span class="frac"><b>√(x − 1)</b><i>x − 6</i></span></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим уберечь корень, поэтому</span> требуем <span class="m">x − 1 ≥ 0</span>, то есть <span class="m">x ≥ 1</span>.</div>
+<div class="step"><span class="step-why">Хотим уберечь знаменатель, поэтому</span> требуем <span class="m">x − 6 ≠ 0</span>, то есть <span class="m">x ≠ 6</span>.</div>
+<div class="step"><span class="step-why">Хотим собрать паспорт воедино:</span> годятся все <span class="m">x ≥ 1</span>, кроме <span class="m">x = 6</span>.</div>
+</div>
+<p>Ответ: <strong><span class="m">x ≥ 1</span> и <span class="m">x ≠ 6</span></strong>.</p>
+<details class="hint"><summary>Почему шестёрку выгнали, хотя корень при <span class="m">x = 6</span> прекрасно считается?</summary><p>Потому что машина выполняет всю инструкцию. На входе 6 корень выдаст <span class="m">√5</span>, а вот делить на <span class="m">6 − 6 = 0</span> нечем: инструкция обрывается, выхода нет. Один запретный пункт в правиле бракует вход целиком.</p></details>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Возьмём <span class="m">r(x) = <span class="frac"><b>x² − 9</b><i>x − 3</i></span></span>. «Так это же сокращается до <span class="m">x + 3</span>!» — и правда, сокращается. Но у исходной машины в инструкции написано: «подели на <span class="m">x − 3</span>», и на входе 3 она делит ноль на ноль и клинит. Сокращённая версия — другая машина с другим паспортом. Область определения <span class="m">r</span> — все числа, кроме 3, и SAT спрашивает это прямым текстом.</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Какие входы принимает машина <span class="m">f(x) = √(6 − 2x)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-4" value="a"><span><span class="m">x ≥ 3</span></span></label>
+<label><input type="radio" name="q10-4" value="b"><span><span class="m">x ≥ −3</span></span></label>
+<label><input type="radio" name="q10-4" value="c"><span><span class="m">x ≤ 3</span></span></label>
+<label><input type="radio" name="q10-4" value="d"><span>все <span class="m">x</span>, кроме 3</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Под корнем нужно 6 − 2x ≥ 0, то есть 2x ≤ 6, то есть x ≤ 3." data-no="Под корнем должно стоять число ≥ 0: 6 − 2x ≥ 0. Перенеси: 2x ≤ 6, значит x ≤ 3. Если выбрал x ≥ 3 — знак перевернулся там, где для этого не было причин: на положительную двойку делить безопасно."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Стоп-кадр</div><p>Закрой экран и восстанови по памяти: 1) что означает запись <span class="m">f(5) = 8</span> на языке «вход — выход» и какой точке графика она соответствует; 2) какие два запретных входа бывают у машин из формул; 3) чем «найди <span class="m">f(2)</span>» отличается от «реши <span class="m">f(x) = 2</span>» и по какой оси начинается каждый маршрут. Потом открой и сверься.</p></div>
+
+<h3>Конвейер: машина кормит машину</h3>
+<p>В лаборатории пробирка не прыгает из вены в результат. Сначала центрифуга <span class="m">c</span>: кровь на входе, плазма на выходе. Потом анализатор <span class="m">a</span>: плазма на входе, число на выходе. Итог смены — <span class="m">a(c(кровь))</span>: выход одной машины стал входом другой. Это и называется композицией (composition) функций. Порядок нерушим: попробуй засунуть в анализатор цельную кровь — и поймёшь, почему изнутри наружу.</p>
+<p>Читается запись <span class="m">f(g(2))</span> так: скобки вскрываются с самой глубины. Сначала работает внутренняя машина <span class="m">g</span>, её выход едет по ленте в <span class="m">f</span>.</p>
+
+<div class="example"><div class="ex-t">Пример 5 · Две машины, одна лента</div><p><span class="m">f(x) = x²</span>, <span class="m">g(x) = 2x + 1</span>. Найди <span class="m">f(g(2))</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим узнать, что въедет в <span class="m">f</span>, поэтому</span> начинаем изнутри: <span class="m">g(2) = 2 · 2 + 1 = 5</span>.</div>
+<div class="step"><span class="step-why">Теперь у <span class="m">f</span> есть вход:</span> <span class="m">f(5) = 25</span>.</div>
+</div>
+<p>Ответ: <strong>25</strong>. Твоя очередь — тот же конвейер задом наперёд: чему равно <span class="m">g(f(2))</span>?</p>
+<details class="hint"><summary>Сверить ответ</summary><p><span class="m">f(2) = 4</span>, затем <span class="m">g(4) = 2 · 4 + 1 = 9</span>.</p></details>
+<p>Взгляд назад: <span class="m">25 ≠ 9</span>. Конвейер не переставляется: <span class="m">f(g(2))</span> и <span class="m">g(f(2))</span> — два разных маршрута с разными ответами. Центрифугировать пробирку после анализатора — идея того же качества.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q"><span class="m">f(x) = 2x</span>, <span class="m">g(x) = x + 3</span>. Чему равно <span class="m">f(g(2))</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-5" value="a"><span>10</span></label>
+<label><input type="radio" name="q10-5" value="b"><span>7</span></label>
+<label><input type="radio" name="q10-5" value="c"><span>5</span></label>
+<label><input type="radio" name="q10-5" value="d"><span>4</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Изнутри наружу: g(2) = 5, потом f(5) = 10." data-no="Порядок! Первым работает внутренний g: g(2) = 5, затем f(5) = 10. Если вышло 7 — ты запустил машины наоборот: это g(f(2)), другой конвейер. Если 5 — ты остановил ленту на полпути."></div>
+</div>
+
+<h3>Переезды графика</h3>
+<p>Теперь фокус, ради которого глава и затевалась: двигать график, не пересчитывая точек. Начнём с честной части. Всё, что дописано <em>снаружи</em> машины, читается как написано: <span class="m">f(x) + 3</span> прибавляет 3 к каждому выходу — весь график едет на 3 вверх; <span class="m">f(x) − 3</span> — вниз; <span class="m">2f(x)</span> удваивает каждый выход — график растягивается от горизонтальной оси по вертикали; <span class="m">−f(x)</span> меняет знак выхода — график отражается относительно оси <span class="m">x</span>.</p>
+<p>А вот <em>внутри</em> скобок мир зеркален. График <span class="m">y = f(x + 2)</span> сдвинут на 2 <strong>влево</strong>. Не вправо. Здесь Скептик откладывает чай: «Плюс — и влево? Докажи».</p>
+
+<div class="box why"><div class="box-t">Почему это работает</div><p>Возьмём <span class="m">g(x) = f(x + 2)</span> и спросим у неё пару квитанций: <span class="m">g(1) = f(3)</span>, <span class="m">g(−2) = f(0)</span>. Машина <span class="m">g</span> подглядывает на два шага вправо от того места, где стоит, — получает «будущее» оси <span class="m">x</span>. Всё, что у <span class="m">f</span> происходило в точке 3, у <span class="m">g</span> наступает уже в точке 1: каждое событие случается на 2 раньше, и картинка целиком съезжает влево. Скептик принят: это не мнемоника, это две строчки арифметики.</p></div>
+
+<div class="box tool"><div class="box-t">Приём: „Сдвиг наоборот“</div><p>Снаружи скобок читаем честно: <span class="m">+</span> вверх, <span class="m">−</span> вниз. Внутри скобок — наоборот: <span class="m">+</span> влево, <span class="m">−</span> вправо. Страховка, если сомневаешься: приравняй скобку к нулю. У <span class="m">f(x − 2)</span> скобка гаснет при <span class="m">x = 2</span> — значит, «старый ноль» переехал в 2, то есть вправо.</p></div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 440 300" role="img" aria-label="Парабола f и её сдвиги: f(x)+2 вверх, f(x+2) влево">
+<line class="grid" x1="158" y1="30" x2="158" y2="240"/>
+<line class="grid" x1="262" y1="30" x2="262" y2="240"/>
+<line class="grid" x1="35" y1="188" x2="410" y2="188"/>
+<line class="grid" x1="35" y1="136" x2="410" y2="136"/>
+<line class="ax" x1="30" y1="240" x2="415" y2="240"/>
+<line class="ax" x1="210" y1="240" x2="210" y2="25"/>
+<path class="crv" fill="none" d="M153 114 Q210 366 267 114"/>
+<path class="crv2" fill="none" d="M153 62 Q210 314 267 62"/>
+<path class="crv2" fill="none" d="M101 114 Q158 366 215 114"/>
+<circle class="pt" cx="210" cy="240" r="4"/>
+<circle class="pt" cx="210" cy="188" r="4"/>
+<circle class="pt" cx="158" cy="240" r="4"/>
+<text class="lbl" x="272" y="118">f</text>
+<text class="lbl" x="270" y="58">f(x)+2</text>
+<text class="lbl" x="52" y="102">f(x+2)</text>
+<text class="lbl" x="218" y="180">(0; 2)</text>
+<text class="lbl" x="118" y="262">(−2; 0)</text>
+<text class="lbl" x="216" y="262">(0; 0)</text>
+<text class="lbl" x="406" y="232">x</text>
+<text class="lbl" x="220" y="36">y</text>
+</svg><figcaption>Одна и та же парабола: <span class="m">+2</span> снаружи поднимает вершину в <span class="m">(0; 2)</span>, <span class="m">+2</span> внутри уводит её влево, в <span class="m">(−2; 0)</span>.</figcaption></figure>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Граф Подвох раскладывает варианты ответа. Для графика <span class="m">y = f(x + 5)</span> у него всегда наготове «сдвиг вправо на 5» — аккуратный, правдоподобный, стоит первым в списке. Плюс — направо, что тут думать. Настоящий ответ — влево: скобка <span class="m">x + 5</span> гаснет при <span class="m">x = −5</span>, туда и переехал старый ноль. Проверка одной точкой стоит десять секунд; согласие с Графом — целый балл.</p></div>
+
+<p>Сводим всё в один шаблон переезда:</p>
+<div class="formula">g(x) = f(x − <b class="hl">h</b>) + <b class="hl2">k</b></div>
+<ul class="legend"><li><span class="m">h</span> — сдвиг вправо на <span class="m">h</span> (внутри скобок, поэтому знак минус означает «вправо»);</li><li><span class="m">k</span> — сдвиг вверх на <span class="m">k</span> (снаружи, читается честно).</li></ul>
+
+<div class="example"><div class="ex-t">Пример 6 · Разминка, реванш</div><p>Вершина <span class="m">f</span> — точка <span class="m">(3; 2)</span>, <span class="m">g(x) = f(x − 2) + 3</span>. Где вершина <span class="m">g</span>?</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим прочитать переезд по приёму «Сдвиг наоборот»:</span> внутри <span class="m">x − 2</span> — вправо на 2; снаружи <span class="m">+3</span> — вверх на 3.</div>
+<div class="step"><span class="step-why">Хотим перевезти вершину вместе с графиком:</span> <span class="m">(3; 2) → (3 + 2; 2 + 3) = (5; 5)</span>.</div>
+</div>
+<p>Ответ: <strong><span class="m">(5; 5)</span></strong>. Если в разминке у тебя вышло <span class="m">(1; 5)</span> — ты прочитал минус в скобках как «влево»: это самый массовый неверный ход темы, и теперь у тебя есть страховка. Взгляд назад: проверка точкой — <span class="m">g(5) = f(3) + 3 = 2 + 3 = 5</span>; сходится, вершина легальна.</p></div>
+
+<p>Закрепи на чужих числах: вершина <span class="m">f</span> — <span class="m">(1; 4)</span>, та же формула <span class="m">g(x) = f(x − 2) + 3</span>. Куда переедет вершина?</p>
+<details class="hint"><summary>Сверить ответ</summary><p>Вправо на 2, вверх на 3: <span class="m">(3; 7)</span>.</p></details>
+
+<p>А теперь пауза — и посмотри, что мы только что купили. Вершинная форма параболы из главы 8, <span class="m">y = (x − h)² + k</span>, — это машина <span class="m">y = x²</span>, прогнанная через два переезда: вправо на <span class="m">h</span>, вверх на <span class="m">k</span>. Формула вершины была заклинанием. Стала следствием.</p>
+
+<p>Отражения добиваем той же логикой входов-выходов. Если <span class="m">f(2) = 5</span>, то у машины <span class="m">−f</span> в точке 2 выход <span class="m">−5</span>: график перевёрнут через ось <span class="m">x</span>. А у машины <span class="m">f(−x)</span> в точке 2 стоит <span class="m">f(−2)</span> — она показывает то, что у <span class="m">f</span> было с другой стороны: график отражён через ось <span class="m">y</span>. Минус снаружи бьёт по выходу, минус внутри — по входу; мы уже видели это в алгебре, когда <span class="m">g(−x)</span> и <span class="m">−g(x)</span> дали разные выражения.</p>
+
+<p>Медицинская версия переездов. Референсная машина дозы — <span class="m">D(m) = 15m</span>. Протокол «добавляй к любой рассчитанной дозе 30 мг» — это <span class="m">D(m) + 30</span>: график уехал вверх, наклон не тронут. А теперь ребёнок в гипсовой повязке массой 2 кг: весы показывают <span class="m">w</span>, честная масса — <span class="m">w − 2</span>, честная доза — <span class="m">D(w − 2)</span>. Минус внутри: график против показаний весов сдвинут вправо. Одна и та же прямая, два разных переезда — и оба различия видны до всякого счёта.</p>
+
+<div class="box desmos"><div class="box-t">Ленивый Гений: Desmos</div><p>Зачем перевозить руками то, что переезжает само. Вбей в Desmos первой строкой <span class="m">f(x) = x² − 6x + 11</span>, второй — <span class="m">y = f(x − 2) + 3</span>: Desmos понимает имена функций, и обе параболы встанут на экран — наведи курсор на нижнюю точку второй и увидишь <span class="m">(5; 5)</span> без единого вычисления. Композиции считаются так же нагло: добавь <span class="m">g(x) = 2x + 1</span> и набери <span class="m">f(g(2))</span> — Desmos ответит 6. Руками пересчитывать стоит один раз — чтобы знать, что машина не врёт. Дальше пусть работает она.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Вершина графика <span class="m">f</span> — точка <span class="m">(3; 5)</span>. Где вершина графика <span class="m">g(x) = f(x + 1) − 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-6" value="a"><span><span class="m">(4; 3)</span></span></label>
+<label><input type="radio" name="q10-6" value="b"><span><span class="m">(4; 7)</span></span></label>
+<label><input type="radio" name="q10-6" value="c"><span><span class="m">(2; 7)</span></span></label>
+<label><input type="radio" name="q10-6" value="d"><span><span class="m">(2; 3)</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно! Внутри +1 — влево: 3 → 2; снаружи −2 — вниз: 5 → 3." data-no="Внутри скобок — наоборот, снаружи — честно. Плюс 1 внутри уводит влево: 3 → 2. Минус 2 снаружи опускает: 5 → 3. Итог (2; 3). Если выбрал (4; 3) — тебя поймал сдвиг «по знаку»: проверь точкой, g(2) = f(3) − 2."></div>
+</div>
+
+<h3>Кусочные машины</h3>
+<p>Иногда в машину прошивают два правила и переключатель. Такая функция называется кусочной (piecewise function): например, <span class="m">h(x) = x²</span> при <span class="m">x &lt; 2</span> и <span class="m">h(x) = 3x − 1</span> при <span class="m">x ≥ 2</span>. Ветку выбирает вход, а не настроение: <span class="m">h(1) = 1</span> — сработало левое правило, <span class="m">h(4) = 11</span> — правое. Самое скользкое место — граница: <span class="m">h(2)</span> идёт по ветке с нестрогим знаком, <span class="m">h(2) = 3 · 2 − 1 = 5</span>.</p>
+<p>На графике кусочная машина выглядит как склейка: до <span class="m">x = 2</span> — дуга параболы, дальше — прямая. SAT спрашивает про неё редко и без жестокости: «чему равно <span class="m">f(−1)</span>» по картинке или «сколько решений у <span class="m">f(x) = 2</span>». Это те же два маршрута по осям из примера 3 — применённые к склейке. Новых идей ноль; паника не по тарифу.</p>
+
+<h3>Задачи</h3>
+
+<div class="problem tier-a"><div class="pr-t">Задача 1 <span class="tier">уровень А</span></div>
+<p><span class="m">f(x) = 4x − 7</span>. Найди <span class="m">f(3)</span>, <span class="m">f(0)</span> и <span class="m">f(−2)</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>«Найди <span class="m">f(3)</span>» — это «что выдаст машина на входе 3». Три входа — три квитанции.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>По приёму «Машина»: подставь число вместо каждого <span class="m">x</span>, следи за знаком в <span class="m">f(−2)</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">f(3) = 12 − 7 = 5</span>; <span class="m">f(0) = 0 − 7 = −7</span>; <span class="m">f(−2) = −8 − 7 = −15</span>. Заодно: <span class="m">f(0)</span> — это точка, где график режет вертикальную ось, — старый знакомый <span class="m">b</span> из главы 3.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 2 <span class="tier">уровень А</span></div>
+<p>Найди область определения машины <span class="m">g(x) = <span class="frac"><b>5</b><i>x² − 9</i></span></span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — не «решить», а найти входы, на которых машину клинит, и выбросить их из паспорта.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Клинит от деления на ноль: при каких <span class="m">x</span> знаменатель <span class="m">x² − 9</span> обращается в ноль?</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">x² − 9 = 0</span> при <span class="m">x = 3</span> и <span class="m">x = −3</span>. Область определения — все числа, кроме <span class="m">3</span> и <span class="m">−3</span>. Ловушка на минус-три рассчитана на тех, кто решает <span class="m">x² = 9</span> наполовину.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 3 <span class="tier">уровень А</span></div>
+<p><span class="m">f(x) = x² − 4</span>. Реши уравнение <span class="m">f(x) = 21</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Это розыск входа по выходу: какие <span class="m">x</span> дают на выходе 21? Сравни с вопросом «найди <span class="m">f(21)</span>» — он другой.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">x² − 4 = 21</span>. После переноса не забудь: у уравнения <span class="m">x² = 25</span> два корня.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">x² − 4 = 21</span>, значит <span class="m">x² = 25</span>, значит <span class="m">x = 5</span> или <span class="m">x = −5</span>. Оба входа дают выход 21 — гарантия машины этому не мешает. Для контраста: «найди <span class="m">f(21)</span>» дало бы одно число <span class="m">441 − 4 = 437</span>. Одна буква в формулировке — разные задачи.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 4 <span class="tier">уровень Б</span></div>
+<p><span class="m">f(x) = x² + 2x</span>. Найди <span class="m">f(a − 1)</span> и приведи к простейшему виду.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — накормить машину грузом <span class="m">a − 1</span> целиком, а не «поправить» готовый <span class="m">f(a)</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>По приёму «Машина»: <span class="m">(a − 1)² + 2(a − 1)</span> — и аккуратно раскрой.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">f(a − 1) = (a − 1)² + 2(a − 1) = a² − 2a + 1 + 2a − 2 = a² − 1</span>. Взгляд назад: правило раскладывается на множители, <span class="m">f(x) = x(x + 2)</span>, поэтому <span class="m">f(a − 1) = (a − 1)(a + 1) = a² − 1</span> — тот же ответ в одну строку. Красивое сокращение среднего члена — не везение, а разность квадратов в засаде.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 5 <span class="tier">уровень Б</span></div>
+<p><span class="m">f(x) = 3x − 5</span>, <span class="m">g(x) = x² + 1</span>. Найди <span class="m">f(g(2))</span> и <span class="m">g(f(2))</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Два конвейера, у каждого свой порядок. В <span class="m">f(g(2))</span> первым работает <span class="m">g</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Изнутри наружу: сначала посчитай внутренний выход, потом скорми его внешней машине.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">g(2) = 4 + 1 = 5</span>, дальше <span class="m">f(5) = 15 − 5 = 10</span>. Обратный маршрут: <span class="m">f(2) = 6 − 5 = 1</span>, дальше <span class="m">g(1) = 1 + 1 = 2</span>. Итого <span class="m">f(g(2)) = 10</span>, <span class="m">g(f(2)) = 2</span> — конвейер не переставляется.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 6 <span class="tier">флешбэк · глава 3</span></div>
+<p>Такси считает цену поездки машиной <span class="m">t(x) = 2x + 5</span>: <span class="m">x</span> — километры, выход — тысячи сумов. (а) Найди <span class="m">t(8)</span>. (б) Реши <span class="m">t(x) = 17</span>. (в) Что означают числа 5 и 2 на языке поездки?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Пункты (а) и (б) — два разных маршрута: в одном километры — вход, в другом деньги — выход.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Вспомни главу 3: в записи <span class="m">y = mx + b</span> у <span class="m">m</span> и <span class="m">b</span> есть имена и профессии.</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) <span class="m">t(8) = 16 + 5 = 21</span> — 21 тысяча сумов. (б) <span class="m">2x + 5 = 17</span>, значит <span class="m">2x = 12</span>, значит <span class="m">x = 6</span> км. (в) <span class="m">5 = t(0)</span> — посадочная плата: столько стоит сесть в машину и никуда не поехать; 2 — наклон (slope), цена каждого километра. Линейная функция из главы 3 всегда и была машиной — мы лишь узаконили брак.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 7 <span class="tier">флешбэк · глава 8</span></div>
+<p>Возьми машину <span class="m">y = x²</span>. Её график сдвинули на 4 вправо и на 1 вниз. Запиши формулу новой машины и назови вершину её графика.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — записать переезды в формулу: один сдвиг живёт внутри скобок, другой снаружи.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>По приёму «Сдвиг наоборот»: «вправо на 4» внутри скобок пишется со знаком минус.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">y = (x − 4)² − 1</span>, вершина <span class="m">(4; −1)</span> — это вершинная форма (vertex form) из главы 8, прочитанная как маршрут переезда. Проверка корнями: <span class="m">(x − 4)² = 1</span> даёт <span class="m">x = 3</span> и <span class="m">x = 5</span> — симметрично вокруг четвёрки, как и положено параболе.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 8 <span class="tier">уровень В</span></div>
+<p><span class="m">f(x) = (x − 4)(x + 2)</span>. График <span class="m">g</span> получен сдвигом графика <span class="m">f</span> на 3 вправо. Найди корни <span class="m">g</span> и вершину графика <span class="m">g</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала пойми саму <span class="m">f</span>: где её корни и где, по симметрии, вершина? Потом перевози всё хозяйство разом.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>«Вправо на 3» — это <span class="m">g(x) = f(x − 3)</span> по приёму «Сдвиг наоборот». Корни и вершина едут вместе с графиком.</p></details>
+<details class="sol"><summary>Решение</summary><p>Корни <span class="m">f</span>: <span class="m">4</span> и <span class="m">−2</span>. Вершина по симметрии посередине: <span class="m">x = 1</span>, <span class="m">f(1) = (−3)(3) = −9</span>, то есть <span class="m">(1; −9)</span>. Сдвиг на 3 вправо перевозит всё: корни <span class="m">g</span> — <span class="m">7</span> и <span class="m">1</span>, вершина — <span class="m">(4; −9)</span>. Проверка формулой: <span class="m">g(x) = f(x − 3) = (x − 7)(x − 1)</span> — корни читаются прямо из скобок, и они те же. Два пути, один ответ: хороший признак, что оба честные.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 9 <span class="tier">уровень Б · найди ошибку</span></div>
+<p>Задача из теста: вершина параболы <span class="m">y = x²</span> — точка <span class="m">(0; 0)</span>; где вершина графика <span class="m">y = f(x + 5)</span>, если <span class="m">f(x) = x²</span>? Решение с форума, которое Граф Подвох немедленно одобрил: «Плюс пять прибавляется к иксу, значит икс растёт, значит график уезжает вправо: вершина <span class="m">(5; 0)</span>». Найди ошибку и сформулируй её одним предложением.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Не спорь со словами — проверь числом: при каком входе скобка <span class="m">x + 5</span> обращается в ноль?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Приём «Сдвиг наоборот»: изменения внутри скобок действуют зеркально написанному.</p></details>
+<details class="sol"><summary>Решение</summary><p>Ошибка — в шаге «икс растёт, значит вправо»: изменение внутри скобок бьёт по входу и действует зеркально. Проверка: минимум <span class="m">(x + 5)²</span> достигается там, где скобка равна нулю, то есть при <span class="m">x = −5</span>. Вершина — <span class="m">(−5; 0)</span>, график сдвинут на 5 влево. Одним предложением: автор прочитал знак внутри скобок как направление, а внутри скобок направления перевёрнуты. Утешительный факт: и <span class="m">(5; 0)</span>, и <span class="m">(−5; 0)</span> стоят среди вариантов SAT — на этом решении форума Граф и зарабатывает.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Босс главы: «Испорченный конвейер»</div>
+<p>Ночная смена в лаборатории. Конвейер из двух машин: центрифуга <span class="m">g</span> принимает код пробирки и выдаёт код фракции; анализатор <span class="m">f</span> принимает код фракции и выдаёт результат. Обе машины прошиты таблицами — и у анализатора, как выяснится, не хватает одного картриджа. К утру нужно: посчитать выходы конвейера, найти вход по заданному выходу и вычислить, где конвейер молча теряет пробирки.</p>
+<table class="tbl"><thead><tr><th>вход <span class="m">x</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td><span class="m">g(x)</span></td><td>4</td><td>5</td><td>6</td><td>1</td><td>2</td></tr></tbody></table>
+<table class="tbl"><thead><tr><th>вход <span class="m">x</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>6</th></tr></thead><tbody><tr><td><span class="m">f(x)</span></td><td>0</td><td>5</td><td>7</td><td>2</td><td>9</td></tr></tbody></table>
+<div class="problem tier-c"><div class="pr-t">Раунд 1 <span class="tier">уровень В</span></div>
+<p>(а) Вычисли <span class="m">f(g(1))</span> и <span class="m">f(g(3))</span>. (б) Сравни <span class="m">f(g(4))</span> и <span class="m">g(f(4))</span>. (в) Реши уравнение <span class="m">f(g(x)) = 5</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Конвейер читается изнутри: сначала таблица <span class="m">g</span>, её выход неси во вход таблицы <span class="m">f</span>. В пункте (в) иди задом наперёд: какой вход <span class="m">f</span> даёт выход 5?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>По приёму «Машина», дважды: в (в) сперва найди нужный выход центрифуги, потом — пробирку, которая его даёт.</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) <span class="m">g(1) = 4</span>, <span class="m">f(4) = 2</span>, итого <span class="m">f(g(1)) = 2</span>. <span class="m">g(3) = 6</span>, <span class="m">f(6) = 9</span>, итого <span class="m">f(g(3)) = 9</span>. (б) <span class="m">g(4) = 1</span>, <span class="m">f(1) = 0</span>, значит <span class="m">f(g(4)) = 0</span>; в обратном порядке <span class="m">f(4) = 2</span>, <span class="m">g(2) = 5</span>, значит <span class="m">g(f(4)) = 5</span>. Ноль против пяти: порядок машин — не формальность. (в) Нужен выход 5 у анализатора: по таблице <span class="m">f</span> его даёт только вход 2. Значит требуется <span class="m">g(x) = 2</span>, а это только <span class="m">x = 5</span>. Ответ: <span class="m">x = 5</span>.</p></details>
+</div>
+<div class="problem tier-c"><div class="pr-t">Раунд 2 <span class="tier">уровень В</span></div>
+<p>(а) Какую пробирку конвейер <span class="m">f(g(x))</span> теряет и почему? Перечисли все рабочие входы конвейера — его область определения. (б) Привезли запасной анализатор с формулой <span class="m">f₂(x) = 2x − 3</span>. При каком входе конвейер <span class="m">f₂(g(x))</span> выдаст 9? (в) Чинит ли <span class="m">f₂</span> потерянную пробирку из пункта (а)?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Проследи каждый из пяти входов до конца ленты: у какого из них второй шаг упирается в дырку в таблице <span class="m">f</span>?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>В (б) собери уравнение <span class="m">2 · g(x) − 3 = 9</span> и реши его, как линейные уравнения из ранних глав; потом найди вход по выходу центрифуги.</p></details>
+<details class="sol"><summary>Решение</summary><p>(а) Вход 2: центрифуга даёт <span class="m">g(2) = 5</span>, но у анализатора <span class="m">f</span> входа 5 в таблице нет — нет картриджа, пробирка молча пропадает. Остальные входы проходят: <span class="m">1 → 4 → 2</span>, <span class="m">3 → 6 → 9</span>, <span class="m">4 → 1 → 0</span>, <span class="m">5 → 2 → 5</span>. Область определения конвейера — <span class="m">{1; 3; 4; 5}</span>: у склейки машин паспорт может быть уже, чем у каждой в отдельности. (б) <span class="m">2 · g(x) − 3 = 9</span>, значит <span class="m">2 · g(x) = 12</span>, значит <span class="m">g(x) = 6</span> — по таблице это только <span class="m">x = 3</span>. Ответ: <span class="m">x = 3</span>. (в) Да: <span class="m">f₂(5) = 10 − 3 = 7</span>. Машина-формула принимает любой вход, дырок в её таблице нет — конвейер с <span class="m">f₂</span> снова обрабатывает все пять пробирок. Смена сдана.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">Теперь ты умеешь</div>
+<ul class="powers">
+<li>вычисляешь <span class="m">f(3)</span> и <span class="m">f(a + 1)</span>, подставляя вход целиком в скобках — и ловишь за руку тех, кто «раздаёт» правило по слагаемым;</li>
+<li>различаешь «найди <span class="m">f(2)</span>» и «реши <span class="m">f(x) = 2</span>» и знаешь, с какой оси начинается каждый маршрут по графику;</li>
+<li>выписываешь паспорт машины: находишь область определения, отлавливая деление на ноль и корень из отрицательного — даже когда «всё сокращается»;</li>
+<li>прогоняешь вход через конвейер <span class="m">f(g(x))</span> изнутри наружу и не переставляешь машины местами;</li>
+<li>перевозишь график по правилу «снаружи — честно, внутри — наоборот» и находишь вершину <span class="m">g(x) = f(x − 2) + 3</span> без пересчёта;</li>
+<li>проверяешь любой сдвиг за десять секунд, приравнивая скобку к нулю или подставляя одну точку;</li>
+<li>читаешь кусочную функцию, выбирая ветку по входу, и не боишься границы между ветками.</li>
+</ul>
+<div class="cheat"><div class="cheat-t">Шпаргалка</div>
+<ul>
+<li><span class="m">f(a) = b</span> — вход <span class="m">a</span>, выход <span class="m">b</span>; точка <span class="m">(a; b)</span> на графике.</li>
+<li><span class="m">f(a + 1)</span> — подставить <span class="m">(a + 1)</span> целиком вместо каждого <span class="m">x</span>; это не <span class="m">f(a) + 1</span>.</li>
+<li><span class="m">f(x) + k</span> — вверх на <span class="m">k</span>; <span class="m">f(x) − k</span> — вниз; <span class="m">a·f(x)</span> — растяжение по вертикали; <span class="m">−f(x)</span> — отражение от оси <span class="m">x</span>; <span class="m">f(−x)</span> — от оси <span class="m">y</span>.</li>
+<li><span class="m">f(x + k)</span> — влево на <span class="m">k</span>; <span class="m">f(x − k)</span> — вправо; страховка: скобка равна нулю там, куда переехал старый ноль.</li>
+<li><span class="m">f(g(x))</span> — сначала <span class="m">g</span>, потом <span class="m">f</span>; порядок менять нельзя.</li>
+<li>Область определения: знаменатель <span class="m">≠ 0</span>, под корнем <span class="m">≥ 0</span>; сокращение дроби запретов не снимает.</li>
+</ul>
+</div>
+<div class="feynman"><div class="box-t">Задание Фейнмана</div>
+<p>Объясни воображаемому 12-летнему, почему график <span class="m">y = f(x + 5)</span> сдвинут влево, а не вправо, — без слов «подстановка» и «аргумент». Одна метафора, одна проверка числом.</p>
+<details class="sol"><summary>Образец объяснения</summary><p>Представь машину, которая рисует холм, и её жадную копию. Копия устроена так: стоя на отметке <span class="m">x</span>, она подглядывает на 5 шагов правее и рисует то, что настоящая машина нарисовала бы там. Настоящая вершина холма стоит на нуле. Копия, стоя на отметке <span class="m">−5</span>, подглядывает как раз в ноль — и рисует вершину прямо у себя, на <span class="m">−5</span>. Всё, что было правее, копия срисовывает раньше, чем положено, — весь холм съезжает влево. Проверка: у <span class="m">(x + 5)²</span> самое маленькое значение — ноль — получается при <span class="m">x = −5</span>, а не при <span class="m">5</span>.</p></details>
+</div>
+<p>И последнее. Мясорубка из начала главы так и осталась главным определением: машина с гарантией «одинаковый вход — одинаковый выход». Всё, что мы делали, — читали квитанции этой гарантии: по одной, по двум осям, через конвейер и после переезда. Автомат с носком остаётся сломанным. Твои машины — нет.</p>
+</div>
+</section>
+
+<section class="chapter" id="ch-10-en" data-ch="10" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 10 · Advanced Math</div><h2>Functions Are Machines</h2><p class="ch-lede">A vending machine that dispenses cola one time and a sock the next time you press the same button isn't "unpredictable." It's broken—and half of the Advanced Math section lives in that difference.</p></header>
+
+<div class="hook">
+<p>Your grandmother almost certainly had a meat grinder in her kitchen. Meat enters from the top, ground meat exits from the side. The same cut of beef always yields the same ground meat. It never happens that the machine outputs ground meat on Monday and fruit compote from the same cut on Tuesday. This isn't a personality trait of the meat grinder. It's its definition: it is a machine.</p>
+<p>Now, a soda vending machine. You press the "cola" button, and out rolls a cola. You press the same button again, and out rolls a sock. A passerby might say, "What a mysterious machine." An engineer would say it more accurately: "It's broken." A device that responds differently to the exact same input cannot be calibrated, reasoned with, or under warranty.</p>
+<p>Mathematicians think like engineers. Their machines are called functions, and the only requirement for them is that very guarantee: the same input yields the same output, always. It sounds like pedantry until you remember what your work relies on: if a biochemical analyzer gave either 5 or 500 for the exact same plasma, lab diagnostics would end by lunchtime.</p>
+<p>In this chapter, we will disassemble the machine, learn to feed it not just numbers but entire expressions, link two machines into a conveyor, and—the main trick—shift their graphs across the plane without recalculating a single point. At the end, the chapter boss awaits: "The Broken Conveyor," which silently loses test tubes. Finding the leak is up to you.</p>
+</div>
+
+<div class="try-first">
+<p>Before reading further, give this problem an honest ten minutes. If it doesn't work out, that is an excellent result: you will know exactly where it itches.</p>
+<div class="problem tier-b"><div class="pr-t">Warm-up <span class="tier">try it first</span></div>
+<p>The machine <span class="m">f</span> operates according to the rule <span class="m">f(x) = x² − 6x + 11</span>. (a) What will the machine output for an input of 3? (b) The lowest point of the graph of <span class="m">f</span>—the vertex—is at <span class="m">(3, 2)</span>. A new machine is built from <span class="m">f</span>: <span class="m">g(x) = f(x − 2) + 3</span>. Where is the lowest point of the graph of <span class="m">g</span>?</p>
+<details class="hint"><summary>Hint 1</summary><p>There is no magic in part (a): substitute 3 for every <span class="m">x</span> and calculate.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>In part (b), don't guess the direction by the sign. Check with a specific point: what is <span class="m">g(5)</span>?</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) <span class="m">f(3) = 9 − 18 + 11 = 2</span>. (b) <span class="m">g(5) = f(5 − 2) + 3 = f(3) + 3 = 2 + 3 = 5</span>. An input of 5 lands exactly on the former vertex, and <span class="m">g</span> never outputs anything less than 5: the vertex of <span class="m">g</span> is the point <span class="m">(5, 5)</span>. To the right and up—even though the minus inside the parentheses "looked" like it should go left. Why everything is backward inside the parentheses is explained in the "Graph Shifts" section.</p></details>
+</div>
+</div>
+
+<h3>A Machine with a Guarantee</h3>
+<p>The notation <span class="m">f(x)</span> is intimidating only until you translate it into plain English. <span class="m">f</span> is the name of the machine. <span class="m">x</span> is what you put into it. <span class="m">f(x)</span> is what fell out of it. The entire line <span class="m">f(x) = x² + 1</span> is just a nameplate on the machine's casing: "a machine named f squares the input and adds one."</p>
+
+<div class="box idea"><div class="box-t">Idea</div><p>If you remember one thing: a function is a machine with the guarantee "same input, same output," and the notation <span class="m">f(input) = output</span> is a receipt of what went in and what came out.</p></div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 440 140" role="img" aria-label="Machine diagram: input, rule, output">
+<path class="crv" fill="none" d="M15 45 H115 V105 H15 Z"/>
+<text class="lbl" x="42" y="70">input</text>
+<text class="lbl" x="40" y="92">x = 3</text>
+<line class="ax" x1="115" y1="75" x2="160" y2="75"/>
+<path class="fill" d="M160 69 L174 75 L160 81 Z"/>
+<path class="crv2" fill="none" d="M174 30 H296 V120 H174 Z"/>
+<text class="lbl" x="198" y="62">machine f</text>
+<text class="lbl" x="206" y="95">x² + 1</text>
+<line class="ax" x1="296" y1="75" x2="341" y2="75"/>
+<path class="fill" d="M341 69 L355 75 L341 81 Z"/>
+<path class="crv" fill="none" d="M355 45 H430 V105 H355 Z"/>
+<text class="lbl" x="370" y="70">output</text>
+<text class="lbl" x="360" y="92">f(3) = 10</text>
+</svg><figcaption>Input on the left, rule inside, output on the right. Same input, always the same output.</figcaption></figure>
+
+<div class="box tool"><div class="box-t">Move: "The Machine"</div><p>Translate any question about a function into three words: input → rule → output. "Find <span class="m">f(3)</span>" means: input is 3, what is the output? "Solve <span class="m">f(x) = 10</span>" means: output is 10, which inputs produce it? Don't start calculating until you have translated the question into the language of the machine.</p></div>
+
+<p>A receipt has a geometric twin. The equation <span class="m">f(2) = 7</span> is a point on the graph:</p>
+<div class="formula"><b class="hl">f</b>(2) = <b class="hl2">7</b></div>
+<ul class="legend"><li><span class="m">f</span> is the name of the machine;</li><li><span class="m">2</span> is the input, plotted on the horizontal axis;</li><li><span class="m">7</span> is the output, plotted on the vertical axis; together, they form the point <span class="m">(2, 7)</span> on the graph of <span class="m">f</span>.</li></ul>
+<p>The graph of a function is all the receipts at once, pinned to the plane. There is nothing more to it.</p>
+
+<div class="example"><div class="ex-t">Example 1 · Dose based on mass</div><p>A single pediatric dose of paracetamol is 15 mg per kilogram of body mass. The machine is <span class="m">D(m) = 15m</span>, where <span class="m">m</span> is the mass in kg and the output is the dose in mg. Find <span class="m">D(12)</span> and explain what it means.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want the output for an input of 12, so</span> we substitute: <span class="m">D(12) = 15 · 12 = 180</span>.</div>
+<div class="step"><span class="step-why">We want to give the number its meaning back:</span> a child weighing 12 kg requires 180 mg. On the graph of <span class="m">D</span>, this is the point <span class="m">(12, 180)</span>.</div>
+</div>
+<p>Answer: <strong>180 mg</strong>. Looking back: <span class="m">D(m) = 15m</span> is the line <span class="m">y = mx + b</span> from Chapter 3 with a slope of 15 and <span class="m">b = 0</span>: no mass, no dose; double the mass, double the dose. Functions don't cancel out old chapters—they give old objects new names.</p></div>
+
+<div class="box story"><div class="box-t">In the Margins</div><p>The notation <span class="m">f(x)</span> was invented by Leonhard Euler around 1734. Before him, relationships were written in paragraphs: "the quantity obtained if...". Euler compressed the paragraph into three characters—and suddenly, machines could be nested inside one another like Russian nesting dolls. Half of the chapter ahead exists because of this shorthand.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">The machine is <span class="m">f(x) = 3x − 4</span>. What is <span class="m">f(5)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-1e" value="a"><span>11</span></label>
+<label><input type="radio" name="q10-1e" value="b"><span>15</span></label>
+<label><input type="radio" name="q10-1e" value="c"><span>19</span></label>
+<label><input type="radio" name="q10-1e" value="d"><span>1</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! The input is 5, and the whole rule is: 3 · 5 − 4 = 11." data-no="Not quite. If you got 15, you multiplied 3 · 5 and stopped halfway: the machine executes the entire instruction, including the −4. The answer is 11."></div>
+</div>
+
+<h3>A Machine Doesn't Distribute Parentheses</h3>
+<p>As long as you feed numbers into the machine, everything is peaceful. The SAT starts scoring points when you feed it an expression: find <span class="m">f(a + 1)</span>. The rule remains exactly the same, and there is only one: the input is substituted as a whole, in parentheses, in place of every <span class="m">x</span>. The parentheses are the packaging of the cargo, and you can only open them after the substitution.</p>
+
+<div class="example"><div class="ex-t">Example 2 · Packaged Input</div><p><span class="m">f(x) = x² + 3x</span>. Find <span class="m">f(a + 1)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to feed the machine the cargo <span class="m">a + 1</span>, so</span> we place it in parentheses instead of every <span class="m">x</span>: <span class="m">f(a + 1) = (a + 1)² + 3(a + 1)</span>.</div>
+<div class="step"><span class="step-why">We want to simplify it to a readable form, so</span> we expand: <span class="m">a² + 2a + 1 + 3a + 3 = a² + 5a + 4</span>.</div>
+</div>
+<p>A common trap is to write <span class="m">f(a) + 1 = a² + 3a + 1</span>—as if we just "added one." Let's test this with <span class="m">a = 1</span>: the real <span class="m">f(2) = 4 + 6 = 10</span>, whereas the "lazy" version gives <span class="m">4 + 1 = 5</span>. A twofold discrepancy is enough to remember this forever.</p>
+<details class="hint"><summary>Why is <span class="m">(a + 1)² = a² + 2a + 1</span> here, and not <span class="m">a² + 1</span>?</summary><p>Because squaring means multiplying the parenthesis by itself: <span class="m">(a + 1)(a + 1)</span>. If you multiply term by term, the middle term <span class="m">2a</span> must appear. Powers do not distribute over addition, and this has nothing to do with the machine: it is a rule of algebra, not of functions.</p></details>
+<p>Answer: <strong><span class="m">a² + 5a + 4</span></strong>.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p><span class="m">f(a + 1) ≠ f(a) + 1</span>. The machine does not "distribute" its rule over parts of the input—it eats the input whole. The only way to find <span class="m">f(a + 1)</span> is to substitute <span class="m">a + 1</span> in parentheses in place of every <span class="m">x</span>. The SAT always includes the "distributed" option among its choices.</p></div>
+
+<p>Now try one with a blank—fill it in yourself. Let <span class="m">g(x) = 2x² − x</span>. What is <span class="m">g(−x)</span>? Substitute <span class="m">(−x)</span> as a whole, and watch the signs.</p>
+<details class="hint"><summary>Check answer</summary><p><span class="m">g(−x) = 2(−x)² − (−x) = 2x² + x</span>. Note: this is not the same as <span class="m">−g(x) = −2x² + x</span>. A minus on the outside and a minus on the inside are different operations; we will see both on the graph in the section on reflections.</p></details>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q"><span class="m">f(x) = x² + 1</span>. What is <span class="m">f(a + 2)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-2e" value="a"><span><span class="m">a² + 5</span></span></label>
+<label><input type="radio" name="q10-2e" value="b"><span><span class="m">a² + 4a + 5</span></span></label>
+<label><input type="radio" name="q10-2e" value="c"><span><span class="m">a² + 4a + 4</span></span></label>
+<label><input type="radio" name="q10-2e" value="d"><span><span class="m">a² + 3</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! (a + 2)² + 1 = a² + 4a + 4 + 1 = a² + 4a + 5." data-no="Not quite. If you got a² + 5, the square was distributed over the parenthesis: (a + 2)² is (a + 2)(a + 2) = a² + 4a + 4, not a² + 4. If you got a² + 4a + 4, the +1 from the machine's rule was lost."></div>
+</div>
+
+<h3>Two Problems in One Letter</h3>
+<p>The questions "find <span class="m">f(2)</span>" and "solve <span class="m">f(x) = 2</span>" look like twins but mean opposite things. The first is the machine's forward run: given the input, calculate the output. The second is an investigation: given the output, find all inputs that yield it. Using the "Machine" move: in the first case, the two goes in; in the second, it comes out.</p>
+<p>On a graph, these two questions are two different paths. "Find <span class="m">f(2)</span>": you go along the horizontal axis to 2, rise to the graph, and read the height—there is only one answer, as the guarantee dictates. "Solve <span class="m">f(x) = 2</span>": you go along the vertical axis to 2, draw a horizontal line, and see where it intersects the graph—there can be multiple answers, and all of them are required.</p>
+
+<div class="example"><div class="ex-t">Example 3 · A Machine in a Table</div><p>A function doesn't have to be defined by a formula—a table of receipts works just as well:</p>
+<table class="tbl"><thead><tr><th><span class="m">x</span></th><th>−1</th><th>0</th><th>1</th><th>2</th><th>3</th></tr></thead><tbody><tr><td><span class="m">h(x)</span></td><td>7</td><td>5</td><td>3</td><td>2</td><td>5</td></tr></tbody></table>
+<div class="steps">
+<div class="step"><span class="step-why">We want <span class="m">h(2)</span>, which is the output for an input of 2:</span> we find 2 in the top row and read below it: <span class="m">h(2) = 2</span>. The input and output matching is a coincidence, not a law.</div>
+<div class="step"><span class="step-why">We want to solve <span class="m">h(x) = 5</span>, which means finding the inputs with an output of 5:</span> we look for all the 5s in the bottom row. There are two of them, with <span class="m">x = 0</span> and <span class="m">x = 3</span> directly above them.</div>
+</div>
+<p>Answer: <strong><span class="m">h(2) = 2</span>; the equation <span class="m">h(x) = 5</span> has two solutions: <span class="m">0</span> and <span class="m">3</span></strong>. Note that two different inputs having the same output does not violate the guarantee. You can feed different cuts of meat into a grinder and get the same ground meat—it is only forbidden to get different outputs from the exact same cut.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Confusing <span class="m">f(2) = ?</span> with <span class="m">f(x) = 2</span> means going down the wrong axis. In graphing problems, the SAT will place both numbers nearby: both <span class="m">f(2)</span> and the solutions to <span class="m">f(x) = 2</span> will be among the choices. Before reading the graph, say aloud: is two the input or the output?</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Using the table in Example 3, what is the solution to the equation <span class="m">h(x) = 7</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-3e" value="a"><span>7</span></label>
+<label><input type="radio" name="q10-3e" value="b"><span>3</span></label>
+<label><input type="radio" name="q10-3e" value="c"><span>0</span></label>
+<label><input type="radio" name="q10-3e" value="d"><span>−1</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! An output of 7 yields a single input: x = −1." data-no="Wrong axis. 'Solve h(x) = 7' means the output is 7, find the input. We look for 7 in the bottom row (among the outputs) and look up: x = −1. The answer '7' comes from reading the question backward."></div>
+</div>
+
+<h3>What You Cannot Put into the Machine</h3>
+<p>A meat grinder has a manual: do not insert bones. For functions, this manual is called the domain—the list of inputs that the machine is actually capable of processing. In high school math and on the SAT, the machine jams on only two things: division by zero and the square root of a negative number. It can digest everything else.</p>
+
+<div class="example"><div class="ex-t">Example 4 · The Machine's Manual</div><p>Find the domain of the machine <span class="m">f(x) = <span class="frac"><b>√(x − 1)</b><i>x − 6</i></span></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to protect the root, so</span> we require <span class="m">x − 1 ≥ 0</span>, which means <span class="m">x ≥ 1</span>.</div>
+<div class="step"><span class="step-why">We want to protect the denominator, so</span> we require <span class="m">x − 6 ≠ 0</span>, which means <span class="m">x ≠ 6</span>.</div>
+<div class="step"><span class="step-why">We want to combine the manual requirements:</span> all <span class="m">x ≥ 1</span> are allowed, except <span class="m">x = 6</span>.</div>
+</div>
+<p>Answer: <strong><span class="m">x ≥ 1</span> and <span class="m">x ≠ 6</span></strong>.</p>
+<details class="hint"><summary>Why was six excluded when the root is perfectly fine at <span class="m">x = 6</span>?</summary><p>Because the machine executes the entire instruction. With an input of 6, the root outputs <span class="m">√5</span>, but we cannot divide by <span class="m">6 − 6 = 0</span>: the instruction breaks down, and there is no output. A single forbidden term in the rule disqualifies the entire input.</p></details>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Consider <span class="m">r(x) = <span class="frac"><b>x² − 9</b><i>x − 3</i></span></span>. "But this simplifies to <span class="m">x + 3</span>!"—and indeed, it does. However, the original machine's instructions say: "divide by <span class="m">x − 3</span>," and at an input of 3, it divides zero by zero and jams. The simplified version is a different machine with a different manual. The domain of <span class="m">r</span> is all numbers except 3, and the SAT asks about this directly.</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Which inputs does the machine <span class="m">f(x) = √(6 − 2x)</span> accept?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-4e" value="a"><span><span class="m">x ≥ 3</span></span></label>
+<label><input type="radio" name="q10-4e" value="b"><span><span class="m">x ≥ −3</span></span></label>
+<label><input type="radio" name="q10-4e" value="c"><span><span class="m">x ≤ 3</span></span></label>
+<label><input type="radio" name="q10-4e" value="d"><span>all <span class="m">x</span> except 3</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! Under the root, we need 6 − 2x ≥ 0, which means 2x ≤ 6, so x ≤ 3." data-no="The expression under the root must be ≥ 0: 6 − 2x ≥ 0. Move terms: 2x ≤ 6, which means x ≤ 3. If you chose x ≥ 3, the sign was flipped when there was no reason to do so: dividing by a positive 2 is safe."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Freeze-Frame</div><p>Cover the screen and recall from memory: 1) what the notation <span class="m">f(5) = 8</span> means in "input-output" terms and which point on the graph it corresponds to; 2) what two forbidden inputs formula-based machines can have; 3) how "find <span class="m">f(2)</span>" differs from "solve <span class="m">f(x) = 2</span>" and which axis each path begins on. Then uncover and check.</p></div>
+
+<h3>The Conveyor: A Machine Feeds a Machine</h3>
+<p>In a laboratory, a test tube doesn't jump directly from a vein into a result. First, the centrifuge <span class="m">c</span>: blood goes in, plasma comes out. Then, the analyzer <span class="m">a</span>: plasma goes in, a number comes out. The shift's final result is <span class="m">a(c(blood))</span>: the output of one machine has become the input of another. This is called a composition of functions. The order is absolute: try putting whole blood directly into the analyzer, and you will understand why we work from the inside out.</p>
+<p>The notation <span class="m">f(g(2))</span> is read like this: parentheses are opened from the very depth. First, the inner machine <span class="m">g</span> operates, and its output travels along the belt into <span class="m">f</span>.</p>
+
+<div class="example"><div class="ex-t">Example 5 · Two Machines, One Belt</div><p><span class="m">f(x) = x²</span>, <span class="m">g(x) = 2x + 1</span>. Find <span class="m">f(g(2))</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to find out what enters <span class="m">f</span>, so</span> we start from the inside: <span class="m">g(2) = 2 · 2 + 1 = 5</span>.</div>
+<div class="step"><span class="step-why">Now <span class="m">f</span> has its input:</span> <span class="m">f(5) = 25</span>.</div>
+</div>
+<p>Answer: <strong>25</strong>. Your turn—the same conveyor in reverse: what is <span class="m">g(f(2))</span>?</p>
+<details class="hint"><summary>Check answer</summary><p><span class="m">f(2) = 4</span>, then <span class="m">g(4) = 2 · 4 + 1 = 9</span>.</p></details>
+<p>Looking back: <span class="m">25 ≠ 9</span>. The conveyor cannot be rearranged: <span class="m">f(g(2))</span> and <span class="m">g(f(2))</span> are two different paths with different answers. Centrifuging a test tube after the analyzer is an idea of similar quality.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q"><span class="m">f(x) = 2x</span>, <span class="m">g(x) = x + 3</span>. What is <span class="m">f(g(2))</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-5e" value="a"><span>10</span></label>
+<label><input type="radio" name="q10-5e" value="b"><span>7</span></label>
+<label><input type="radio" name="q10-5e" value="c"><span>5</span></label>
+<label><input type="radio" name="q10-5e" value="d"><span>4</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! From the inside out: g(2) = 5, then f(5) = 10." data-no="Order matters! The inner machine g runs first: g(2) = 5, then f(5) = 10. If you got 7, you ran the machines in reverse: that is g(f(2)), a different conveyor. If you got 5, you stopped the belt halfway."></div>
+</div>
+
+<h3>Graph Shifts</h3>
+<p>Now, the trick that makes this whole chapter worthwhile: moving a graph without recalculating any points. Let's start with the straightforward part. Everything added <em>outside</em> the machine is read exactly as written: <span class="m">f(x) + 3</span> adds 3 to each output—the entire graph shifts up by 3; <span class="m">f(x) − 3</span> shifts it down; <span class="m">2f(x)</span> doubles every output—the graph stretches vertically away from the horizontal axis; <span class="m">−f(x)</span> flips the sign of the output—the graph is reflected across the <span class="m">x</span>-axis.</p>
+<p>But <em>inside</em> the parentheses, the world is mirrored. The graph of <span class="m">y = f(x + 2)</span> is shifted 2 units to the <strong>left</strong>. Not right. At this point, the Skeptic sets aside their tea: "Plus, and to the left? Prove it."</p>
+
+<div class="box why"><div class="box-t">Why It Works</div><p>Let's take <span class="m">g(x) = f(x + 2)</span> and ask it for a couple of receipts: <span class="m">g(1) = f(3)</span>, <span class="m">g(−2) = f(0)</span>. The machine <span class="m">g</span> peeks two steps to the right of where it stands—obtaining the "future" of the <span class="m">x</span>-axis. Everything that happened to <span class="m">f</span> at point 3 happens to <span class="m">g</span> already at point 1: every event occurs 2 steps earlier, and the entire picture shifts to the left. The Skeptic is satisfied: this is not a mnemonic device, it is two lines of arithmetic.</p></div>
+
+<div class="box tool"><div class="box-t">Move: "Shifts Go Backwards"</div><p>Outside the parentheses, read it straight: <span class="m">+</span> is up, <span class="m">−</span> is down. Inside the parentheses, it's backward: <span class="m">+</span> is left, <span class="m">−</span> is right. If you are ever in doubt, here is your insurance policy: set the parentheses to zero. For <span class="m">f(x − 2)</span>, the parenthesis vanishes at <span class="m">x = 2</span>—which means the "old zero" has moved to 2, which is to the right.</p></div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 440 300" role="img" aria-label="Parabola f and its shifts: f(x)+2 up, f(x+2) left">
+<line class="grid" x1="158" y1="30" x2="158" y2="240"/>
+<line class="grid" x1="262" y1="30" x2="262" y2="240"/>
+<line class="grid" x1="35" y1="188" x2="410" y2="188"/>
+<line class="grid" x1="35" y1="136" x2="410" y2="136"/>
+<line class="ax" x1="30" y1="240" x2="415" y2="240"/>
+<line class="ax" x1="210" y1="240" x2="210" y2="25"/>
+<path class="crv" fill="none" d="M153 114 Q210 366 267 114"/>
+<path class="crv2" fill="none" d="M153 62 Q210 314 267 62"/>
+<path class="crv2" fill="none" d="M101 114 Q158 366 215 114"/>
+<circle class="pt" cx="210" cy="240" r="4"/>
+<circle class="pt" cx="210" cy="188" r="4"/>
+<circle class="pt" cx="158" cy="240" r="4"/>
+<text class="lbl" x="272" y="118">f</text>
+<text class="lbl" x="270" y="58">f(x)+2</text>
+<text class="lbl" x="52" y="102">f(x+2)</text>
+<text class="lbl" x="218" y="180">(0, 2)</text>
+<text class="lbl" x="118" y="262">(−2, 0)</text>
+<text class="lbl" x="216" y="262">(0, 0)</text>
+<text class="lbl" x="406" y="232">x</text>
+<text class="lbl" x="220" y="36">y</text>
+</svg><figcaption>The exact same parabola: <span class="m">+2</span> on the outside raises the vertex to <span class="m">(0, 2)</span>, while <span class="m">+2</span> on the inside shifts it left to <span class="m">(−2, 0)</span>.</figcaption></figure>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Count Gotcha lays out the answer choices. For the graph of <span class="m">y = f(x + 5)</span>, he always has a "shift right by 5" waiting—neat, plausible, and listed first. Plus means right, what is there to think about? The actual answer is left: the parenthesis <span class="m">x + 5</span> vanishes at <span class="m">x = −5</span>, which is where the old zero has relocated. Testing a single point takes ten seconds; agreeing with the Count costs you a whole point.</p></div>
+
+<p>Let's combine everything into a single shift template:</p>
+<div class="formula">g(x) = f(x − <b class="hl">h</b>) + <b class="hl2">k</b></div>
+<ul class="legend"><li><span class="m">h</span> is the shift to the right by <span class="m">h</span> (inside the parentheses, so a minus sign means "right");</li><li><span class="m">k</span> is the shift upward by <span class="m">k</span> (outside, read straight).</li></ul>
+
+<div class="example"><div class="ex-t">Example 6 · Warm-up Rematch</div><p>The vertex of <span class="m">f</span> is the point <span class="m">(3, 2)</span>, and <span class="m">g(x) = f(x − 2) + 3</span>. Where is the vertex of <span class="m">g</span>?</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to read the shift using the "Shifts Go Backwards" move:</span> <span class="m">x − 2</span> on the inside means right by 2; <span class="m">+3</span> on the outside means up by 3.</div>
+<div class="step"><span class="step-why">We want to shift the vertex along with the graph:</span> <span class="m">(3, 2) → (3 + 2, 2 + 3) = (5, 5)</span>.</div>
+</div>
+<p>Answer: <strong><span class="m">(5, 5)</span></strong>. If you got <span class="m">(1, 5)</span> in the warm-up, you read the minus in the parentheses as "left": this is the most common mistake in this topic, and now you are protected. Looking back: checking with a point—<span class="m">g(5) = f(3) + 3 = 2 + 3 = 5</span>; it checks out, the vertex is valid.</p></div>
+
+<p>Try it with other numbers: the vertex of <span class="m">f</span> is <span class="m">(1, 4)</span>, and the formula is the same: <span class="m">g(x) = f(x − 2) + 3</span>. Where will the vertex shift?</p>
+<details class="hint"><summary>Check answer</summary><p>Right by 2, up by 3: <span class="m">(3, 7)</span>.</p></details>
+
+<p>Now pause for a moment and look at what we have just acquired. The vertex form of a parabola from Chapter 8, <span class="m">y = (x − h)² + k</span>, is simply the machine <span class="m">y = x²</span>, run through two shifts: right by <span class="m">h</span> and up by <span class="m">k</span>. The vertex formula used to be a magic spell. Now it is a logical consequence.</p>
+
+<p>We can handle reflections with the same input-output logic. If <span class="m">f(2) = 5</span>, then the machine <span class="m">−f</span> outputs <span class="m">−5</span> at point 2: the graph is flipped across the <span class="m">x</span>-axis. And the machine <span class="m">f(−x)</span> at point 2 processes <span class="m">f(−2)</span>—it displays what <span class="m">f</span> had on the other side: the graph is reflected across the <span class="m">y</span>-axis. A minus on the outside affects the output; a minus on the inside affects the input. We already saw this in algebra when <span class="m">g(−x)</span> and <span class="m">−g(x)</span> yielded different expressions.</p>
+
+<p>A medical take on graph shifts. Our reference dosage machine is <span class="m">D(m) = 15m</span>. A protocol that says "add 30 mg to any calculated dose" translates to <span class="m">D(m) + 30</span>: the graph has shifted upward, leaving the slope untouched. Now consider a child in a 2 kg plaster cast: the scale reads a weight of <span class="m">w</span>, so the actual mass is <span class="m">w − 2</span>, and the correct dose is <span class="m">D(w − 2)</span>. A minus on the inside: the graph is shifted to the right relative to the scale readings. The exact same line, two different shifts—and both differences are visible before doing any math.</p>
+
+<div class="box desmos"><div class="box-t">The Lazy Genius: Desmos</div><p>Why shift by hand when it can shift itself. Enter <span class="m">f(x) = x² − 6x + 11</span> on the first line in Desmos, and <span class="m">y = f(x − 2) + 3</span> on the second: Desmos understands function names, and both parabolas will appear on the screen—hover over the lowest point of the second one, and you will see <span class="m">(5, 5)</span> without a single calculation. Compositions are computed just as easily: add <span class="m">g(x) = 2x + 1</span> and type <span class="m">f(g(2))</span>—Desmos will output 6. Calculating by hand is worth doing once just to know that the machine doesn't lie. After that, let the machine do the work.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">The vertex of the graph of <span class="m">f</span> is the point <span class="m">(3, 5)</span>. Where is the vertex of the graph of <span class="m">g(x) = f(x + 1) − 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q10-6e" value="a"><span><span class="m">(4, 3)</span></span></label>
+<label><input type="radio" name="q10-6e" value="b"><span><span class="m">(4, 7)</span></span></label>
+<label><input type="radio" name="q10-6e" value="c"><span><span class="m">(2, 7)</span></span></label>
+<label><input type="radio" name="q10-6e" value="d"><span><span class="m">(2, 3)</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct! +1 on the inside means left: 3 → 2; −2 on the outside means down: 5 → 3." data-no="Inside the parentheses is backward; outside is straight. A plus 1 on the inside shifts it left: 3 → 2. A minus 2 on the outside shifts it down: 5 → 3. The result is (2, 3). If you chose (4, 3), you were caught by the sign of the shift: check with a point, g(2) = f(3) − 2."></div>
+</div>
+
+<h3>Piecewise Machines</h3>
+<p>Sometimes a machine is programmed with two rules and a switch. Such a function is called a piecewise function: for example, <span class="m">h(x) = x²</span> when <span class="m">x &lt; 2</span> and <span class="m">h(x) = 3x − 1</span> when <span class="m">x ≥ 2</span>. The input, not a whim, selects the branch: <span class="m">h(1) = 1</span>—the left rule is activated; <span class="m">h(4) = 11</span>—the right one. The trickiest part is the boundary: <span class="m">h(2)</span> follows the branch with the non-strict inequality, <span class="m">h(2) = 3 · 2 − 1 = 5</span>.</p>
+<p>On a graph, a piecewise machine looks like a patchwork: a parabolic curve up to <span class="m">x = 2</span>, and a straight line after. The SAT asks about them rarely and gently: "what is <span class="m">f(−1)</span>" from a diagram, or "how many solutions does <span class="m">f(x) = 2</span> have." These are the exact same two paths along the axes from Example 3—simply applied to the patchwork. No new ideas here; panic is uncalled for.</p>
+
+<h3>Problems</h3>
+
+<div class="problem tier-a"><div class="pr-t">Problem 1 <span class="tier">Level A</span></div>
+<p><span class="m">f(x) = 4x − 7</span>. Find <span class="m">f(3)</span>, <span class="m">f(0)</span>, and <span class="m">f(−2)</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>"Find <span class="m">f(3)</span>" means "what will the machine output for an input of 3." Three inputs mean three receipts.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Using the "Machine" move: substitute the number for every <span class="m">x</span>, and watch the sign in <span class="m">f(−2)</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">f(3) = 12 − 7 = 5</span>; <span class="m">f(0) = 0 − 7 = −7</span>; <span class="m">f(−2) = −8 − 7 = −15</span>. By the way: <span class="m">f(0)</span> is the point where the graph intersects the vertical axis—our old friend <span class="m">b</span> from Chapter 3.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 2 <span class="tier">Level A</span></div>
+<p>Find the domain of the machine <span class="m">g(x) = <span class="frac"><b>5</b><i>x² − 9</i></span></span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is not to "solve," but to find the inputs that jam the machine and exclude them from the manual.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>It jams when dividing by zero: for which values of <span class="m">x</span> does the denominator <span class="m">x² − 9</span> equal zero?</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">x² − 9 = 0</span> when <span class="m">x = 3</span> and <span class="m">x = −3</span>. The domain is all numbers except <span class="m">3</span> and <span class="m">−3</span>. The trap on negative three is designed for those who solve <span class="m">x² = 9</span> only halfway.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 3 <span class="tier">Level A</span></div>
+<p><span class="m">f(x) = x² − 4</span>. Solve the equation <span class="m">f(x) = 21</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>This is a search for the input given the output: which values of <span class="m">x</span> yield an output of 21? Compare this with the question "find <span class="m">f(21)</span>"—it is different.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">x² − 4 = 21</span>. After moving terms, don't forget: the equation <span class="m">x² = 25</span> has two roots.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">x² − 4 = 21</span>, which means <span class="m">x² = 25</span>, which means <span class="m">x = 5</span> or <span class="m">x = −5</span>. Both inputs yield an output of 21—the machine's guarantee does not prevent this. By contrast, "find <span class="m">f(21)</span>" would yield a single number: <span class="m">441 − 4 = 437</span>. One letter in the phrasing—entirely different problems.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 4 <span class="tier">Level B</span></div>
+<p><span class="m">f(x) = x² + 2x</span>. Find <span class="m">f(a − 1)</span> and simplify it to its simplest form.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is to feed the machine the cargo <span class="m">a − 1</span> as a whole, rather than trying to tweak the already completed <span class="m">f(a)</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Using the "Machine" move: <span class="m">(a − 1)² + 2(a − 1)</span>—then expand carefully.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">f(a − 1) = (a − 1)² + 2(a − 1) = a² − 2a + 1 + 2a − 2 = a² − 1</span>. Looking back: the rule factors as <span class="m">f(x) = x(x + 2)</span>, so <span class="m">f(a − 1) = (a − 1)(a + 1) = a² − 1</span>—the same answer in a single line. The neat cancellation of the middle term is not luck; it's a difference of squares lying in wait.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 5 <span class="tier">Level B</span></div>
+<p><span class="m">f(x) = 3x − 5</span>, <span class="m">g(x) = x² + 1</span>. Find <span class="m">f(g(2))</span> and <span class="m">g(f(2))</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Two conveyors, each with its own order. In <span class="m">f(g(2))</span>, <span class="m">g</span> operates first.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>From the inside out: first calculate the inner output, then feed it to the outer machine.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">g(2) = 4 + 1 = 5</span>, then <span class="m">f(5) = 15 − 5 = 10</span>. The reverse route: <span class="m">f(2) = 6 − 5 = 1</span>, then <span class="m">g(1) = 1 + 1 = 2</span>. In summary, <span class="m">f(g(2)) = 10</span> and <span class="m">g(f(2)) = 2</span>—the conveyor cannot be rearranged.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 6 <span class="tier">flashback · Chapter 3</span></div>
+<p>A taxi calculates the fare of a trip using the machine <span class="m">t(x) = 2x + 5</span>, where <span class="m">x</span> is the distance in kilometers and the output is the fare in thousands of soums. (a) Find <span class="m">t(8)</span>. (b) Solve <span class="m">t(x) = 17</span>. (c) What do the numbers 5 and 2 represent in the context of the trip?</p>
+<details class="hint"><summary>Hint 1</summary><p>Parts (a) and (b) are two different paths: in one, kilometers are the input; in the other, money is the output.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Recall Chapter 3: in the equation <span class="m">y = mx + b</span>, <span class="m">m</span> and <span class="m">b</span> have names and jobs.</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) <span class="m">t(8) = 16 + 5 = 21</span>—21 thousand soums. (b) <span class="m">2x + 5 = 17</span>, which means <span class="m">2x = 12</span>, which means <span class="m">x = 6</span> km. (c) <span class="m">5 = t(0)</span> is the base fare: how much it costs to get into the cab and go nowhere; 2 is the slope, the price of each kilometer. The linear function from Chapter 3 was always a machine—we have just legalized the marriage.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 7 <span class="tier">flashback · Chapter 8</span></div>
+<p>Take the machine <span class="m">y = x²</span>. Its graph was shifted 4 units to the right and 1 unit down. Write the formula of the new machine and state the vertex of its graph.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is to write the shifts into the formula: one shift lives inside the parentheses, and the other lives outside.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Using the "Shifts Go Backwards" move: "right by 4" is written with a minus sign inside the parentheses.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">y = (x − 4)² − 1</span>, and the vertex is <span class="m">(4, −1)</span>—this is the vertex form from Chapter 8, read as the path of the shift. Checking with the roots: <span class="m">(x − 4)² = 1</span> yields <span class="m">x = 3</span> and <span class="m">x = 5</span>—symmetrical around four, just as a parabola should be.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 8 <span class="tier">Level C</span></div>
+<p><span class="m">f(x) = (x − 4)(x + 2)</span>. The graph of <span class="m">g</span> is obtained by shifting the graph of <span class="m">f</span> to the right by 3. Find the roots of <span class="m">g</span> and the vertex of the graph of <span class="m">g</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>First, analyze <span class="m">f</span>: where are its roots, and where, by symmetry, is its vertex? Then shift everything at once.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>"Right by 3" means <span class="m">g(x) = f(x − 3)</span> using the "Shifts Go Backwards" move. The roots and the vertex shift along with the graph.</p></details>
+<details class="sol"><summary>Solution</summary><p>The roots of <span class="m">f</span> are <span class="m">4</span> and <span class="m">−2</span>. By symmetry, the vertex is in the middle: <span class="m">x = 1</span>, <span class="m">f(1) = (−3)(3) = −9</span>, which is the point <span class="m">(1, −9)</span>. Shifting 3 units to the right moves everything: the roots of <span class="m">g</span> are <span class="m">7</span> and <span class="m">1</span>, and the vertex is <span class="m">(4, −9)</span>. Verification by formula: <span class="m">g(x) = f(x − 3) = (x − 7)(x − 1)</span>—the roots can be read directly from the parentheses, and they are the same. Two paths, one answer: a good sign that both are correct.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 9 <span class="tier">Level B · Spot the error</span></div>
+<p>A test question: the vertex of the parabola <span class="m">y = x²</span> is the point <span class="m">(0, 0)</span>; where is the vertex of the graph of <span class="m">y = f(x + 5)</span> if <span class="m">f(x) = x²</span>? A forum solution, which Count Gotcha immediately approved, reads: "Plus five is added to x, which means x increases, which means the graph moves to the right: the vertex is <span class="m">(5, 0)</span>." Spot the error and explain it in a single sentence.</p>
+<details class="hint"><summary>Hint 1</summary><p>Don't argue with words—verify with a number: at what input does the parenthesis <span class="m">x + 5</span> equal zero?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The "Shifts Go Backwards" move: changes inside the parentheses act in a mirrored fashion to what is written.</p></details>
+<details class="sol"><summary>Solution</summary><p>The error is in the step "x increases, so it goes to the right": a change inside the parentheses affects the input and acts in a mirrored way. Verification: the minimum of <span class="m">(x + 5)²</span> is reached where the parenthesis is zero, which is at <span class="m">x = −5</span>. The vertex is <span class="m">(−5, 0)</span>, meaning the graph has shifted 5 units to the left. In a single sentence: the author read the sign inside the parentheses as the direction, but directions are reversed inside parentheses. A comforting fact: both <span class="m">(5, 0)</span> and <span class="m">(−5, 0)</span> are among the choices on the SAT—and that forum solution is exactly how Count Gotcha makes his living.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Chapter Boss: "The Broken Conveyor"</div>
+<p>A night shift at the lab. A conveyor of two machines: the centrifuge <span class="m">g</span> takes a test tube code and outputs a fraction code; the analyzer <span class="m">f</span> takes a fraction code and outputs a result. Both machines are programmed with tables—and, as it turns out, the analyzer is missing one cartridge. By morning, you need to: calculate the conveyor's outputs, find the input for a given output, and figure out where the conveyor is silently losing test tubes.</p>
+<table class="tbl"><thead><tr><th>input <span class="m">x</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td><span class="m">g(x)</span></td><td>4</td><td>5</td><td>6</td><td>1</td><td>2</td></tr></tbody></table>
+<table class="tbl"><thead><tr><th>input <span class="m">x</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>6</th></tr></thead><tbody><tr><td><span class="m">f(x)</span></td><td>0</td><td>5</td><td>7</td><td>2</td><td>9</td></tr></tbody></table>
+<div class="problem tier-c"><div class="pr-t">Round 1 <span class="tier">Level C</span></div>
+<p>(a) Calculate <span class="m">f(g(1))</span> and <span class="m">f(g(3))</span>. (b) Compare <span class="m">f(g(4))</span> and <span class="m">g(f(4))</span>. (c) Solve the equation <span class="m">f(g(x)) = 5</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>The conveyor is read from the inside out: first use table <span class="m">g</span>, then carry its output to the input of table <span class="m">f</span>. In part (c), work backward: which input to <span class="m">f</span> yields an output of 5?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Using the "Machine" move, twice: in (c), first find the required output of the centrifuge, then the test tube that produces it.</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) <span class="m">g(1) = 4</span>, <span class="m">f(4) = 2</span>, so <span class="m">f(g(1)) = 2</span>. <span class="m">g(3) = 6</span>, <span class="m">f(6) = 9</span>, so <span class="m">f(g(3)) = 9</span>. (b) <span class="m">g(4) = 1</span>, <span class="m">f(1) = 0</span>, which means <span class="m">f(g(4)) = 0</span>; in the reverse order, <span class="m">f(4) = 2</span>, <span class="m">g(2) = 5</span>, which means <span class="m">g(f(4)) = 5</span>. Zero versus five: the order of machines is not a formality. (c) We need an output of 5 from the analyzer: according to table <span class="m">f</span>, only an input of 2 yields it. Thus, we require <span class="m">g(x) = 2</span>, which is only <span class="m">x = 5</span>. Answer: <span class="m">x = 5</span>.</p></details>
+</div>
+<div class="problem tier-c"><div class="pr-t">Round 2 <span class="tier">Level C</span></div>
+<p>(a) Which test tube does the conveyor <span class="m">f(g(x))</span> lose and why? List all working inputs of the conveyor—its domain. (b) A spare analyzer with the formula <span class="m">f₂(x) = 2x − 3</span>. For which input will the conveyor <span class="m">f₂(g(x))</span> output 9? (c) Does <span class="m">f₂</span> fix the lost test tube from part (a)?</p>
+<details class="hint"><summary>Hint 1</summary><p>Trace each of the five inputs to the end of the belt: for which of them does the second step run into a hole in table <span class="m">f</span>?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>In (b), set up the equation <span class="m">2 · g(x) − 3 = 9</span> and solve it like the linear equations from the earlier chapters; then find the input using the output of the centrifuge.</p></details>
+<details class="sol"><summary>Solution</summary><p>(a) Input 2: the centrifuge yields <span class="m">g(2) = 5</span>, but the analyzer <span class="m">f</span> does not have an input of 5 in its table—there is no cartridge, and the test tube is silently lost. The other inputs make it through: <span class="m">1 → 4 → 2</span>, <span class="m">3 → 6 → 9</span>, <span class="m">4 → 1 → 0</span>, <span class="m">5 → 2 → 5</span>. The domain of the conveyor is <span class="m">{1, 3, 4, 5}</span>: a composite machine's manual can be narrower than the manual of either machine individually. (b) <span class="m">2 · g(x) − 3 = 9</span>, which means <span class="m">2 · g(x) = 12</span>, which means <span class="m">g(x) = 6</span>—according to the table, this only occurs when <span class="m">x = 3</span>. Answer: <span class="m">x = 3</span>. (c) Yes: <span class="m">f₂(5) = 10 − 3 = 7</span>. A formula-based machine accepts any input, so there are no holes in its table—the conveyor with <span class="m">f₂</span> handles all five test tubes again. Shift completed.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">You can now</div>
+<ul class="powers">
+<li>calculate <span class="m">f(3)</span> and <span class="m">f(a + 1)</span> by substituting the input as a whole in parentheses—and catch those who "distribute" the rule over the terms;</li>
+<li>distinguish between "find <span class="m">f(2)</span>" and "solve <span class="m">f(x) = 2</span>" and know which axis each path begins on;</li>
+<li>write out the machine's manual: find the domain by catching division by zero and roots of negatives—even when "everything simplifies";</li>
+<li>run an input through the conveyor <span class="m">f(g(x))</span> from the inside out and never swap the machines' positions;</li>
+<li>shift a graph using the rule "outside is straight, inside is backward" and find the vertex of <span class="m">g(x) = f(x − 2) + 3</span> without recalculating;</li>
+<li>verify any shift in ten seconds by setting the parentheses to zero or substituting a single point;</li>
+<li>read a piecewise function, selecting the branch based on the input, and handle the boundary between branches without fear.</li>
+</ul>
+<div class="cheat"><div class="cheat-t">Cheat sheet</div>
+<ul>
+<li><span class="m">f(a) = b</span>—input <span class="m">a</span>, output <span class="m">b</span>; point <span class="m">(a, b)</span> on the graph.</li>
+<li><span class="m">f(a + 1)</span>—substitute <span class="m">(a + 1)</span> as a whole instead of every <span class="m">x</span>; this is not <span class="m">f(a) + 1</span>.</li>
+<li><span class="m">f(x) + k</span>—up by <span class="m">k</span>; <span class="m">f(x) − k</span>—down; <span class="m">a·f(x)</span>—vertical stretch; <span class="m">−f(x)</span>—reflection across the <span class="m">x</span>-axis; <span class="m">f(−x)</span>—across the <span class="m">y</span>-axis.</li>
+<li><span class="m">f(x + k)</span>—left by <span class="m">k</span>; <span class="m">f(x − k)</span>—right; insurance: the parenthesis equals zero where the old zero has shifted.</li>
+<li><span class="m">f(g(x))</span>—first <span class="m">g</span>, then <span class="m">f</span>; the order cannot be changed.</li>
+<li>Domain: denominator <span class="m">≠ 0</span>, expression under the root <span class="m">≥ 0</span>; simplifying a fraction does not remove the restrictions.</li>
+</ul>
+</div>
+<div class="feynman"><div class="box-t">The Feynman Assignment</div>
+<p>Explain to an imaginary 12-year-old why the graph of <span class="m">y = f(x + 5)</span> is shifted to the left, not the right—without using the words "substitution" or "argument." Use one metaphor and one numerical verification.</p>
+<details class="sol"><summary>Model explanation</summary><p>Imagine a machine that draws a hill, and its impatient copy. The copy is designed like this: standing at position <span class="m">x</span>, it peeks 5 steps to the right and draws what the real machine would draw there. The real peak of the hill is at zero. The copy, standing at position <span class="m">−5</span>, peeks precisely at zero—and draws the peak right where it is standing, at <span class="m">−5</span>. Because the copy draws everything earlier than it should, the entire hill shifts to the left. Verification: for <span class="m">(x + 5)²</span>, the smallest value—zero—is obtained when <span class="m">x = −5</span>, not when <span class="m">5</span>.</p></details>
+</div>
+<p>And one last thing. The meat grinder from the beginning of the chapter remains our primary definition: a machine with the guarantee "same input, same output." All we did was read the receipts of this guarantee: along one axis, along two axes, through a conveyor, and after a shift. The vending machine that dispenses socks remains broken. Your machines do not.</p>
+</div>
+</section>
+

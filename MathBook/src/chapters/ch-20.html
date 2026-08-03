@@ -1,0 +1,38 @@
+<section class="chapter" id="ch-20" data-ch="20" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 20 · QLS Extension</div><h2>Собственные векторы и PCA</h2><p class="ch-lede">Как найти устойчивые направления в данных с тысячами коррелирующих признаков.</p></header>
+<div class="hook"><p>В транскриптомике генов много, но изменения часто движутся несколькими согласованными программами. PCA ищет направления, вдоль которых данные меняются сильнее всего, и показывает сложное облако в нескольких координатах.</p></div>
+<h3>Особые направления преобразования</h3><p>Собственный вектор <span class="m">v</span> матрицы A не поворачивается после преобразования: <span class="m">Av=λv</span>. Число λ говорит, насколько направление растянулось и сменило ли знак. Нулевой вектор не считается собственным.</p>
+<div class="example"><div class="ex-t">Пример</div><p>Для <span class="m">A=diag(3,0.5)</span> оси координат — собственные направления. Вдоль первой всё растягивается втрое, вдоль второй сжимается вдвое.</p></div>
+<h3>От ковариации к главным компонентам</h3><p>Сначала центрируем столбцы X. Ковариационная матрица <span class="m">C=XᵀX/(n−1)</span> описывает совместные изменения признаков. Её собственный вектор с наибольшим λ — PC1; следующий ортогональный — PC2. Доля <span class="m">λᵢ/Σλ</span> показывает объяснённую дисперсию.</p>
+<div class="box trap"><div class="box-t">Интерпретация без самообмана</div><p>PCA не знает диагнозов и не доказывает причинность. Компонента — линейная комбинация признаков; знак вектора условен, а сильный batch effect может стать PC1 вместо биологии.</p></div>
+<div class="formula">center X → C = XᵀX/(n−1) → Cv = λv → scores = Xv</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Что означает, что PC1 объясняет 62% дисперсии?</div><div class="quiz-opts"><label><input type="radio" name="q20ru-1" value="a"><span>Модель верна на 62%</span></label><label><input type="radio" name="q20ru-1" value="b"><span>62% пациентов относятся к одному классу</span></label><label><input type="radio" name="q20ru-1" value="c"><span>62% общей вариабельности приходится на это линейное направление</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно. Это доля вариабельности, а не точность и не размер класса." data-no="Explained variance описывает разброс данных вдоль направления, а не качество классификации."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · PCA вручную</div><pre>import numpy as np
+X = np.array([[2., 1.], [3., 2.], [4., 4.], [5., 5.]])
+Xc = X - X.mean(axis=0)
+C = np.cov(Xc, rowvar=False)
+values, vectors = np.linalg.eigh(C)
+order = values.argsort()[::-1]
+print(values[order] / values.sum())
+print(Xc @ vectors[:, order[:1]])</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>понимаешь Av=λv геометрически;</li><li>связываешь PCA с ковариацией;</li><li>не путаешь дисперсию с точностью модели.</li></ul></div>
+</section>
+<section class="chapter" id="ch-20-en" data-ch="20" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 20 · QLS Extension</div><h2>Eigenvectors and PCA</h2><p class="ch-lede">Finding stable directions in data with thousands of correlated features.</p></header>
+<div class="hook"><p>Transcriptomic datasets contain many genes, yet their changes often follow a few coordinated programs. PCA finds directions of greatest variation and projects a complex cloud into a few coordinates.</p></div>
+<h3>Special directions of a transformation</h3><p>An eigenvector <span class="m">v</span> does not change direction under A: <span class="m">Av=λv</span>. The eigenvalue λ gives the scale and possible sign reversal. The zero vector is excluded.</p>
+<div class="example"><div class="ex-t">Example</div><p>For <span class="m">A=diag(3,0.5)</span>, the coordinate axes are eigenvectors: one direction stretches threefold and the other contracts by half.</p></div>
+<h3>From covariance to principal components</h3><p>Center the columns of X. The covariance matrix <span class="m">C=XᵀX/(n−1)</span> describes joint variation. Its eigenvector with the largest λ is PC1; the next orthogonal direction is PC2. The ratio <span class="m">λᵢ/Σλ</span> is explained variance.</p>
+<div class="box trap"><div class="box-t">Interpret carefully</div><p>PCA does not know labels and cannot establish causality. A component is a linear combination; its sign is arbitrary, and a batch effect may become PC1 instead of biology.</p></div>
+<div class="formula">center X → C = XᵀX/(n−1) → Cv = λv → scores = Xv</div>
+<div class="quiz" data-answer="c"><div class="quiz-q">What does it mean when PC1 explains 62% of variance?</div><div class="quiz-opts"><label><input type="radio" name="q20en-1" value="a"><span>The model is 62% correct</span></label><label><input type="radio" name="q20en-1" value="b"><span>62% of patients belong to one class</span></label><label><input type="radio" name="q20en-1" value="c"><span>62% of total variability lies along this linear direction</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct. It is a share of variability, not accuracy or class size." data-no="Explained variance describes spread along a direction, not classification accuracy."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · PCA by hand</div><pre>import numpy as np
+X = np.array([[2., 1.], [3., 2.], [4., 4.], [5., 5.]])
+Xc = X - X.mean(axis=0)
+C = np.cov(Xc, rowvar=False)
+values, vectors = np.linalg.eigh(C)
+order = values.argsort()[::-1]
+print(values[order] / values.sum())
+print(Xc @ vectors[:, order[:1]])</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>interpret Av=λv geometrically;</li><li>connect PCA to covariance;</li><li>do not confuse variance with predictive accuracy.</li></ul></div>
+</section>

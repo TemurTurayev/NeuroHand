@@ -1,0 +1,38 @@
+<section class="chapter" id="ch-21" data-ch="21" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 21 · QLS Extension</div><h2>Производные, градиенты и оптимизация</h2><p class="ch-lede">Математика скорости изменения — от фармакокинетики до обучения модели.</p></header>
+<div class="hook"><p>Концентрация лекарства меняется во времени, а ошибка модели — при изменении параметров. Производная отвечает на один вопрос: что произойдёт с выходом при очень малом изменении входа?</p></div>
+<h3>Локальный наклон</h3><p><span class="m">f′(x)=lim<sub>h→0</sub>[f(x+h)−f(x)]/h</span>. Если <span class="m">f′&gt;0</span>, функция локально растёт; если <span class="m">f′&lt;0</span> — падает. Единицы производной — «единицы выхода на единицу входа».</p>
+<div class="example"><div class="ex-t">Пример · Элиминация препарата</div><p><span class="m">C(t)=100e<sup>−0.2t</sup></span>, поэтому <span class="m">C′(t)=−20e<sup>−0.2t</sup>=−0.2C(t)</span>. Скорость выведения пропорциональна текущей концентрации.</p></div>
+<h3>Несколько переменных</h3><p>Частная производная меняет одну координату, фиксируя остальные. Градиент <span class="m">∇L=(∂L/∂w₁,…)</span> указывает направление самого быстрого роста. Поэтому градиентный спуск идёт в противоположную сторону:</p>
+<div class="formula">w<sub>new</sub> = w<sub>old</sub> − η∇L(w)</div>
+<p>Слишком большой learning rate η перепрыгивает минимум; слишком маленький учится медленно. В точке минимума градиент равен нулю лишь как необходимый признак: это также может быть максимум или седло.</p>
+<div class="example"><div class="ex-t">Пример · Один шаг обучения</div><p>Если <span class="m">L(w)=(w−3)²</span>, то <span class="m">L′=2(w−3)</span>. При <span class="m">w=0, η=0.1</span>: новый вес <span class="m">0−0.1(−6)=0.6</span>, то есть ближе к минимуму w=3.</p></div>
+<div class="quiz" data-answer="a"><div class="quiz-q">Градиент loss в текущей точке равен (4, −2). В каком направлении делает шаг gradient descent?</div><div class="quiz-opts"><label><input type="radio" name="q21ru-1" value="a"><span>(−4, 2)</span></label><label><input type="radio" name="q21ru-1" value="b"><span>(4, −2)</span></label><label><input type="radio" name="q21ru-1" value="c"><span>(2, 4)</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: descent идёт против градиента." data-no="Градиент указывает самый быстрый подъём; для спуска нужен минус."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · численная производная</div><pre>def f(w): return (w - 3)**2
+def derivative(f, x, h=1e-5):
+    return (f(x + h) - f(x - h)) / (2*h)
+w, eta = 0.0, 0.1
+for _ in range(8):
+    w -= eta * derivative(f, w)
+    print(round(w, 4), round(f(w), 4))</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>читаешь производную как скорость и единицы;</li><li>собираешь частные производные в градиент;</li><li>понимаешь один шаг gradient descent.</li></ul></div>
+</section>
+<section class="chapter" id="ch-21-en" data-ch="21" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 21 · QLS Extension</div><h2>Derivatives, gradients, and optimization</h2><p class="ch-lede">The mathematics of change, from pharmacokinetics to model training.</p></header>
+<div class="hook"><p>Drug concentration changes with time, and model loss changes with its parameters. A derivative asks what happens to the output after a very small input change.</p></div>
+<h3>Local slope</h3><p><span class="m">f′(x)=lim<sub>h→0</sub>[f(x+h)−f(x)]/h</span>. Positive means local increase and negative means decrease. Its units are “output units per input unit.”</p>
+<div class="example"><div class="ex-t">Example · Drug elimination</div><p>For <span class="m">C(t)=100e<sup>−0.2t</sup></span>, <span class="m">C′(t)=−20e<sup>−0.2t</sup>=−0.2C(t)</span>. Elimination rate is proportional to current concentration.</p></div>
+<h3>Several variables</h3><p>A partial derivative changes one coordinate while holding the others fixed. The gradient <span class="m">∇L=(∂L/∂w₁,…)</span> points toward steepest increase, so gradient descent moves against it:</p>
+<div class="formula">w<sub>new</sub> = w<sub>old</sub> − η∇L(w)</div>
+<p>A large η can overshoot; a small one learns slowly. Zero gradient is necessary at a smooth minimum but may also indicate a maximum or saddle.</p>
+<div class="example"><div class="ex-t">Example · One training step</div><p>If <span class="m">L(w)=(w−3)²</span>, then <span class="m">L′=2(w−3)</span>. At <span class="m">w=0, η=0.1</span>, the new weight is <span class="m">0.6</span>, closer to the minimum at 3.</p></div>
+<div class="quiz" data-answer="a"><div class="quiz-q">The loss gradient is (4, −2). In which direction does gradient descent move?</div><div class="quiz-opts"><label><input type="radio" name="q21en-1" value="a"><span>(−4, 2)</span></label><label><input type="radio" name="q21en-1" value="b"><span>(4, −2)</span></label><label><input type="radio" name="q21en-1" value="c"><span>(2, 4)</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: descent moves against the gradient." data-no="The gradient points uphill; descent needs its negative."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · numerical derivative</div><pre>def f(w): return (w - 3)**2
+def derivative(f, x, h=1e-5):
+    return (f(x + h) - f(x - h)) / (2*h)
+w, eta = 0.0, 0.1
+for _ in range(8):
+    w -= eta * derivative(f, w)
+    print(round(w, 4), round(f(w), 4))</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>read a derivative as rate with units;</li><li>assemble partial derivatives into a gradient;</li><li>understand one gradient-descent step.</li></ul></div>
+</section>

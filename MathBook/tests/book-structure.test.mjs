@@ -12,16 +12,29 @@ import {
 
 const current = await readFile(new URL('../kniga.html', import.meta.url), 'utf8');
 
-test('current publication is the reviewed 19-chapter baseline', () => {
+test('legacy chapters remain unchanged inside the 26-chapter publication', async () => {
+  const legacy = (
+    await Promise.all(
+      Array.from({ length: 19 }, (_, index) =>
+        readFile(
+          new URL(
+            `../src/chapters/ch-${String(index).padStart(2, '0')}.html`,
+            import.meta.url,
+          ),
+          'utf8',
+        ),
+      ),
+    )
+  ).join('');
   assert.equal(
-    sha256(current),
-    '69d9b7392df0288866f086bff1a583f7d8b6c084657dc587eb964f6ba2247bda',
+    sha256(legacy),
+    'dc985a393b7f0243447d9626cdc089318aec537d65f9dbe9a26e2589aa923c36',
   );
   const pairs = extractChapterPairs(current);
-  assert.equal(pairs.length, 19);
+  assert.equal(pairs.length, 26);
   assert.deepEqual(
     pairs.map((pair) => pair.number),
-    Array.from({ length: 19 }, (_, index) => index),
+    Array.from({ length: 26 }, (_, index) => index),
   );
   assert.match(pairs[12].ru, /Статистика: искусство не быть обманутым/);
   assert.match(pairs[13].en, /Probability/);

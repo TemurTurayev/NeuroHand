@@ -1,0 +1,37 @@
+<section class="chapter" id="ch-23" data-ch="23" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 23 · QLS Extension</div><h2>Случайные величины и распределения</h2><p class="ch-lede">Как описывать не отдельный исход, а весь механизм неопределённости.</p></header>
+<div class="hook"><p>Вероятность из главы 13 отвечала на события. Теперь случайная величина присваивает каждому исходу число — количество мутаций, время выживания или уровень экспрессии — и позволяет изучать весь спектр возможных значений.</p></div>
+<h3>Распределение, ожидание, дисперсия</h3><p>Дискретная величина имеет вероятности <span class="m">P(X=x)</span>; непрерывная — плотность, где вероятность равна площади интервала. Для непрерывной X вероятность одной точной точки равна нулю.</p>
+<div class="formula">E[X]=ΣxP(X=x) &nbsp;·&nbsp; Var(X)=E[(X−μ)²] &nbsp;·&nbsp; SD=√Var</div>
+<p>Ожидание — долгосрочный центр, не обязательно возможный исход. Дисперсия измеряет квадрат отклонения и имеет квадратные единицы; SD возвращает исходные единицы.</p>
+<h3>Четыре рабочих распределения</h3>
+<table class="tbl"><thead><tr><th>Распределение</th><th>Когда применять</th><th>Параметры</th></tr></thead><tbody><tr><td>Bernoulli</td><td>один успех/неуспех</td><td>p</td></tr><tr><td>Binomial</td><td>число успехов в n независимых попытках</td><td>n,p</td></tr><tr><td>Poisson</td><td>число редких событий на интервал</td><td>λ</td></tr><tr><td>Normal</td><td>непрерывная симметричная вариация</td><td>μ,σ</td></tr></tbody></table>
+<div class="example"><div class="ex-t">Пример · Число ответивших</div><p>Если вероятность ответа на терапию 0.3 и пациенты независимы, то <span class="m">X~Binomial(10,0.3)</span>. <span class="m">E[X]=np=3</span>, <span class="m">Var=np(1−p)=2.1</span>. Это не обещает ровно три ответа в каждой группе.</p></div>
+<div class="box trap"><div class="box-t">Условия важнее формулы</div><p>Binomial требует фиксированное n, одинаковое p, два исхода и независимость. Если пациенты влияют друг на друга или p меняется, привычная формула может быть неверна.</p></div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Какое распределение естественно для числа новых мутаций на фиксированном участке при редких независимых событиях?</div><div class="quiz-opts"><label><input type="radio" name="q23ru-1" value="a"><span>Normal</span></label><label><input type="radio" name="q23ru-1" value="b"><span>Bernoulli</span></label><label><input type="radio" name="q23ru-1" value="c"><span>Poisson</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: Poisson моделирует число редких событий на интервал." data-no="Нужно распределение счётчика событий, а не одного бинарного исхода."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · симуляция</div><pre>import numpy as np
+rng = np.random.default_rng(7)
+x = rng.binomial(n=10, p=.3, size=10000)
+print(x.mean(), x.var())
+y = rng.poisson(lam=2.5, size=10000)
+print(y.mean(), y.var())</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>различаешь событие, случайную величину и распределение;</li><li>интерпретируешь E, Var и SD;</li><li>выбираешь базовое распределение по механизму данных.</li></ul></div>
+</section>
+<section class="chapter" id="ch-23-en" data-ch="23" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 23 · QLS Extension</div><h2>Random variables and distributions</h2><p class="ch-lede">Describing an entire mechanism of uncertainty rather than one outcome.</p></header>
+<div class="hook"><p>A random variable assigns a number to every outcome: mutation count, survival time, or expression level. Its distribution describes the full range of possible values.</p></div>
+<h3>Distribution, expectation, variance</h3><p>A discrete variable has probabilities <span class="m">P(X=x)</span>. A continuous variable has a density, and interval probability is area; any exact point has probability zero.</p>
+<div class="formula">E[X]=ΣxP(X=x) &nbsp;·&nbsp; Var(X)=E[(X−μ)²] &nbsp;·&nbsp; SD=√Var</div>
+<p>Expectation is a long-run center, not necessarily a possible outcome. Variance has squared units; SD returns to the original units.</p>
+<h3>Four working distributions</h3><table class="tbl"><thead><tr><th>Distribution</th><th>Use</th><th>Parameters</th></tr></thead><tbody><tr><td>Bernoulli</td><td>one success/failure</td><td>p</td></tr><tr><td>Binomial</td><td>successes in n independent trials</td><td>n,p</td></tr><tr><td>Poisson</td><td>rare-event count per interval</td><td>λ</td></tr><tr><td>Normal</td><td>continuous symmetric variation</td><td>μ,σ</td></tr></tbody></table>
+<div class="example"><div class="ex-t">Example · Number of responders</div><p>With independent patients and response probability 0.3, <span class="m">X~Binomial(10,0.3)</span>. Then <span class="m">E[X]=3</span> and <span class="m">Var=2.1</span>; this does not guarantee exactly three responses.</p></div>
+<div class="box trap"><div class="box-t">Conditions before formulas</div><p>Binomial requires fixed n, equal p, two outcomes, and independence. Dependence or varying probabilities break the simple model.</p></div>
+<div class="quiz" data-answer="c"><div class="quiz-q">Which distribution naturally models rare independent mutation counts in a fixed genomic region?</div><div class="quiz-opts"><label><input type="radio" name="q23en-1" value="a"><span>Normal</span></label><label><input type="radio" name="q23en-1" value="b"><span>Bernoulli</span></label><label><input type="radio" name="q23en-1" value="c"><span>Poisson</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: Poisson models rare-event counts per interval." data-no="You need a count distribution, not one binary outcome."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · simulation</div><pre>import numpy as np
+rng = np.random.default_rng(7)
+x = rng.binomial(n=10, p=.3, size=10000)
+print(x.mean(), x.var())
+y = rng.poisson(lam=2.5, size=10000)
+print(y.mean(), y.var())</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>separate events, random variables, and distributions;</li><li>interpret E, Var, and SD;</li><li>choose a basic distribution from the data-generating mechanism.</li></ul></div>
+</section>

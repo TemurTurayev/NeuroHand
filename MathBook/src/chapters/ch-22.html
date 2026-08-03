@@ -1,0 +1,40 @@
+<section class="chapter" id="ch-22" data-ch="22" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 22 · QLS Extension</div><h2>Интегралы, ODE и численные методы</h2><p class="ch-lede">От мгновенной скорости к накопленному эффекту и динамике живых систем.</p></header>
+<div class="hook"><p>Производная говорит, как быстро меняется система сейчас. Интеграл собирает эти маленькие изменения во времени. Дифференциальное уравнение связывает состояние системы со скоростью его изменения.</p></div>
+<h3>Интеграл как накопление</h3><p>Определённый интеграл <span class="m">∫<sub>a</sub><sup>b</sup>f(t)dt</span> — предел суммы маленьких площадей. Он учитывает знак: область ниже оси вычитается. Фундаментальная теорема связывает две половины анализа: если <span class="m">F′=f</span>, то интеграл равен <span class="m">F(b)−F(a)</span>.</p>
+<div class="example"><div class="ex-t">Пример · AUC</div><p>Площадь под кривой концентрации <span class="m">C(t)</span> — лекарственная экспозиция. Для <span class="m">C(t)=100e<sup>−0.2t</sup></span> от 0 до бесконечности AUC = <span class="m">100/0.2=500</span> концентрация·час.</p></div>
+<h3>Обыкновенные дифференциальные уравнения</h3><p>Модель <span class="m">dN/dt=rN</span> даёт экспоненциальный рост <span class="m">N=N₀e<sup>rt</sup></span>. Логистическая модель <span class="m">dN/dt=rN(1−N/K)</span> добавляет ёмкость среды K: рост замедляется у предела.</p>
+<div class="formula">новое состояние ≈ старое состояние + шаг × текущая скорость</div>
+<p>Это метод Эйлера: <span class="m">y<sub>k+1</sub>=y<sub>k</sub>+h f(t<sub>k</sub>,y<sub>k</sub>)</span>. Меньший h обычно точнее, но требует больше шагов; слишком крупный может сделать динамику нестабильной.</p>
+<div class="box trap"><div class="box-t">Проверка модели</div><p>ODE — идеализация. Проверяй единицы, начальные условия, сохранение неотрицательности и чувствительность к шагу. Красивый график ещё не означает корректную биологию.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">Если скорость инфузии постоянна и равна 5 mg/h в течение 3 часов, чему равен интеграл скорости?</div><div class="quiz-opts"><label><input type="radio" name="q22ru-1" value="a"><span>5 mg</span></label><label><input type="radio" name="q22ru-1" value="b"><span>15 mg</span></label><label><input type="radio" name="q22ru-1" value="c"><span>15 mg/h</span></label></div><button class="quiz-check" type="button">Проверить</button><div class="quiz-fb" data-ok="Верно: скорость × время = количество, 5×3=15 mg." data-no="Следи за единицами: (mg/h)×h даёт mg."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · логистический рост</div><pre>r, K, h = 0.8, 1000, 0.05
+N = 20.0
+trajectory = []
+for step in range(200):
+    N += h * r * N * (1 - N/K)
+    trajectory.append(N)
+print(round(trajectory[-1], 2))
+# Повтори с h=1.0 и сравни устойчивость.</pre></div>
+<div class="recap"><div class="recap-t">После главы</div><ul class="powers"><li>читаешь интеграл как накопление с единицами;</li><li>узнаёшь экспоненциальную и логистическую ODE;</li><li>понимаешь идею метода Эйлера.</li></ul></div>
+</section>
+<section class="chapter" id="ch-22-en" data-ch="22" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 22 · QLS Extension</div><h2>Integrals, ODEs, and numerical methods</h2><p class="ch-lede">From instantaneous rates to accumulated effects and living-system dynamics.</p></header>
+<div class="hook"><p>A derivative describes change now. An integral accumulates small changes over time. A differential equation connects a system's state to its rate of change.</p></div>
+<h3>Integration as accumulation</h3><p>The definite integral <span class="m">∫<sub>a</sub><sup>b</sup>f(t)dt</span> is the limit of small signed areas. The fundamental theorem links differentiation and integration: if <span class="m">F′=f</span>, the integral is <span class="m">F(b)−F(a)</span>.</p>
+<div class="example"><div class="ex-t">Example · AUC</div><p>Area under a concentration curve measures drug exposure. For <span class="m">C(t)=100e<sup>−0.2t</sup></span> from zero to infinity, AUC is <span class="m">100/0.2=500</span> concentration·hours.</p></div>
+<h3>Ordinary differential equations</h3><p><span class="m">dN/dt=rN</span> gives exponential growth <span class="m">N=N₀e<sup>rt</sup></span>. Logistic growth <span class="m">dN/dt=rN(1−N/K)</span> adds carrying capacity K and slows near the limit.</p>
+<div class="formula">new state ≈ old state + step × current rate</div>
+<p>Euler's method is <span class="m">y<sub>k+1</sub>=y<sub>k</sub>+h f(t<sub>k</sub>,y<sub>k</sub>)</span>. A smaller h is usually more accurate but costs more steps; a large h can be unstable.</p>
+<div class="box trap"><div class="box-t">Model check</div><p>An ODE is an idealization. Check units, initial conditions, non-negativity, and sensitivity to step size. A smooth plot is not proof of sound biology.</p></div>
+<div class="quiz" data-answer="b"><div class="quiz-q">A constant infusion rate is 5 mg/h for 3 hours. What is the integral of the rate?</div><div class="quiz-opts"><label><input type="radio" name="q22en-1" value="a"><span>5 mg</span></label><label><input type="radio" name="q22en-1" value="b"><span>15 mg</span></label><label><input type="radio" name="q22en-1" value="c"><span>15 mg/h</span></label></div><button class="quiz-check" type="button">Check</button><div class="quiz-fb" data-ok="Correct: rate × time = amount, 5×3=15 mg." data-no="Track the units: (mg/h)×h gives mg."></div></div>
+<div class="py-lab"><div class="box-t">Python mini-lab · logistic growth</div><pre>r, K, h = 0.8, 1000, 0.05
+N = 20.0
+trajectory = []
+for step in range(200):
+    N += h * r * N * (1 - N/K)
+    trajectory.append(N)
+print(round(trajectory[-1], 2))
+# Repeat with h=1.0 and compare stability.</pre></div>
+<div class="recap"><div class="recap-t">After this chapter</div><ul class="powers"><li>read an integral as accumulation with units;</li><li>recognize exponential and logistic ODEs;</li><li>understand the idea of Euler's method.</li></ul></div>
+</section>

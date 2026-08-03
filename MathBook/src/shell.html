@@ -4,7 +4,7 @@
 <style>
 :root{
   --paper:#F6F5F0; --ink:#22303C; --grid:#C4D5E3; --blue:#2456A6; --red:#9E3B32;
-  --green:#2F6B4A; --hl:#F6E9BE; --amber:#A87D1F; --slate:#24303F; --pencil:#5B6B7A;
+  --green:#2F6B4A; --hl:#F6E9BE; --amber:#A87D1F; --violet:#6B4FA3; --slate:#24303F; --pencil:#5B6B7A;
   --gold:#E8C87A; --gridA:rgba(196,213,227,.38); --white:#FDFDFB;
   --serif:Charter,'Bitstream Charter',Georgia,'Times New Roman',serif;
   --sans:-apple-system,'SF Pro Text','Segoe UI','Helvetica Neue',Arial,sans-serif;
@@ -78,12 +78,13 @@ sup,sub{line-height:0}
 svg.map{display:block;min-width:700px;width:100%;height:auto}
 .map .ln{fill:none;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;opacity:.92}
 .map .ln.b{stroke:var(--blue)}.map .ln.a{stroke:var(--amber)}.map .ln.g{stroke:var(--green)}
-.map .ln.r{stroke:var(--red)}.map .ln.k{stroke:var(--ink);stroke-width:5}
+.map .ln.r{stroke:var(--red)}.map .ln.q{stroke:var(--violet)}.map .ln.k{stroke:var(--ink);stroke-width:5}
 .map .ln.dash{stroke-dasharray:2 9;stroke-width:3.5}
 .stn{cursor:pointer}
 .stn circle{fill:#fff;stroke-width:3.5;stroke:var(--ink)}
 .lg-b .stn circle{stroke:var(--blue)}.lg-a .stn circle{stroke:var(--amber)}
-.lg-g .stn circle{stroke:var(--green)}.lg-r .stn circle{stroke:var(--red)}
+.lg-g .stn circle{stroke:var(--green)}.lg-r .stn circle{stroke:var(--red)}.lg-q .stn circle{stroke:var(--violet)}
+.qls-title{font:800 13px var(--sans);letter-spacing:.12em;text-transform:uppercase;fill:var(--violet)}
 .stn .n{font:700 11px var(--sans);fill:var(--ink);text-anchor:middle}
 .stn .t{font:10.5px var(--sans);fill:var(--pencil);text-anchor:middle}
 .stn .chk{stroke:#fff;stroke-width:2.6;fill:none;visibility:hidden}
@@ -334,10 +335,10 @@ body[data-lang="en"] .chapter.done .ch-head::before{content:"EXPERIMENT COMPLETE
   <div class="cov-eyebrow"><span class="l-ru">Серия «Матемагия» · Лабораторный журнал · Тираж: 1 экземпляр</span><span class="l-en">The Mathemagic Series · A Laboratory Journal · Print run: 1 copy</span></div>
   <h1><span class="l-ru">Математика<br>под микроскопом</span><span class="l-en">Mathematics<br>Under the Microscope</span></h1>
   <p class="cov-sub l-ru">Полный курс — от числовой смекалки до тригонометрии и стратегии Digital SAT
-  (цель: Math 650–700, суммарно 1300+). Восемнадцать опытов, один гримуар, ноль скуки.
+  (цель: Math 650–700, суммарно 1300+), а затем — мост к Quantitative Life Science. Двадцать шесть опытов, ноль скуки.
   Ошибка здесь — не приговор, а данные.</p>
   <p class="cov-sub l-en">The full course — from number sense to trigonometry and Digital SAT strategy
-  (target: Math 650–700, 1300+ total). Eighteen experiments, one grimoire, zero boredom.
+  (target: Math 650–700, 1300+ total), followed by a bridge to Quantitative Life Science. Twenty-six experiments, zero boredom.
   Here, a mistake is not a verdict — it is data.</p>
   <div class="exlibris">
     <span class="l-ru">Из лабораторных записей <b>Т.&nbsp;Тураева</b></span><span class="l-en">From the laboratory notes of <b>T.&nbsp;Turayev</b></span>
@@ -386,12 +387,26 @@ body[data-lang="en"] .chapter.done .ch-head::before{content:"EXPERIMENT COMPLETE
       <g class="stn" data-go="ch-18" transform="translate(710,276)"><circle r="9"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="3.5">§</text><text class="t" y="26">Гримуар</text></g>
     </g>
   </svg>
+  <svg class="map qls-map" viewBox="0 0 780 180" role="img" aria-label="QLS Extension">
+    <text class="qls-title" x="70" y="32">QLS Extension</text>
+    <path class="ln q" d="M70 94 L710 94"/>
+    <g class="lg-q">
+      <g class="stn" data-go="ch-19" transform="translate(90,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">19</text><text class="t" y="34">Матрицы</text></g>
+      <g class="stn" data-go="ch-20" transform="translate(190,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">20</text><text class="t" y="34">PCA</text></g>
+      <g class="stn" data-go="ch-21" transform="translate(290,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">21</text><text class="t" y="34">Производные</text></g>
+      <g class="stn" data-go="ch-22" transform="translate(390,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">22</text><text class="t" y="34">ОДУ</text></g>
+      <g class="stn" data-go="ch-23" transform="translate(490,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">23</text><text class="t" y="34">Распределения</text></g>
+      <g class="stn" data-go="ch-24" transform="translate(590,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">24</text><text class="t" y="34">Вывод</text></g>
+      <g class="stn" data-go="ch-25" transform="translate(690,94)"><circle r="11"/><path class="chk" d="M-4.5 .5 L-1.5 3.5 L5 -4"/><text class="n" y="4">25</text><text class="t" y="34">Модели</text></g>
+    </g>
+  </svg>
   </div>
   <div class="maplegend">
     <span><i style="background:var(--blue)"></i><span class="l-ru">Алгебра</span><span class="l-en">Algebra</span></span>
     <span><i style="background:var(--amber)"></i><span class="l-ru">Продвинутая математика</span><span class="l-en">Advanced Math</span></span>
     <span><i style="background:var(--green)"></i><span class="l-ru">Анализ данных</span><span class="l-en">Data Analysis</span></span>
     <span><i style="background:var(--red)"></i><span class="l-ru">Геометрия и тригонометрия</span><span class="l-en">Geometry &amp; Trigonometry</span></span>
+    <span><i style="background:var(--violet)"></i>QLS Extension</span>
   </div>
 
   <ol id="toc"></ol>
@@ -436,7 +451,7 @@ ru:{map:'Карта',hubTab:'Карта курса',bookTitle:'Математи�
   qstat:function(a,b){return 'Проверки гипотез: '+a+' / '+b},
   prog:function(pc,d,t){return 'Журнал заполнен на '+pc+'% · опытов завершено: '+d+' из '+t},
   dayx:'День X',
-  stn:{'ch-0':'Старт','ch-1':'Числа','ch-2':'Иксы','ch-3':'Прямые','ch-4':'Системы','ch-5':'Неравенства','ch-6':'Степени','ch-7':'Экспонента','ch-8':'Парабола','ch-9':'Многочлены','ch-10':'Функции','ch-11':'Проценты','ch-12':'Статистика','ch-13':'Вероятность','ch-14':'Треугольники','ch-15':'Круги','ch-16':'Тригонометрия','ch-18':'Гримуар'}},
+  stn:{'ch-0':'Старт','ch-1':'Числа','ch-2':'Иксы','ch-3':'Прямые','ch-4':'Системы','ch-5':'Неравенства','ch-6':'Степени','ch-7':'Экспонента','ch-8':'Парабола','ch-9':'Многочлены','ch-10':'Функции','ch-11':'Проценты','ch-12':'Статистика','ch-13':'Вероятность','ch-14':'Треугольники','ch-15':'Круги','ch-16':'Тригонометрия','ch-18':'Гримуар','ch-19':'Матрицы','ch-20':'PCA','ch-21':'Производные','ch-22':'ОДУ','ch-23':'Распределения','ch-24':'Вывод','ch-25':'Модели'}},
 en:{map:'Map',hubTab:'Course map',bookTitle:'Mathematics Under the Microscope · Course Map',
   chapter:'Chapter',back:'← Back',fwd:'Forward →',course:'Course map',
   stampBtn:'Stamp it: experiment complete',next:'Next station →',
@@ -445,7 +460,7 @@ en:{map:'Map',hubTab:'Course map',bookTitle:'Mathematics Under the Microscope ·
   qstat:function(a,b){return 'Hypothesis checks: '+a+' / '+b},
   prog:function(pc,d,t){return 'Journal '+pc+'% complete · experiments finished: '+d+' of '+t},
   dayx:'Day X',
-  stn:{'ch-0':'Start','ch-1':'Numbers','ch-2':'The X’s','ch-3':'Lines','ch-4':'Systems','ch-5':'Inequalities','ch-6':'Exponents','ch-7':'Growth & Decay','ch-8':'The Parabola','ch-9':'Polynomials','ch-10':'Functions','ch-11':'Percents','ch-12':'Statistics','ch-13':'Probability','ch-14':'Triangles','ch-15':'Circles','ch-16':'Trigonometry','ch-18':'Grimoire'}}
+  stn:{'ch-0':'Start','ch-1':'Numbers','ch-2':'The X’s','ch-3':'Lines','ch-4':'Systems','ch-5':'Inequalities','ch-6':'Exponents','ch-7':'Growth & Decay','ch-8':'The Parabola','ch-9':'Polynomials','ch-10':'Functions','ch-11':'Percents','ch-12':'Statistics','ch-13':'Probability','ch-14':'Triangles','ch-15':'Circles','ch-16':'Trigonometry','ch-18':'Grimoire','ch-19':'Matrices','ch-20':'PCA','ch-21':'Derivatives','ch-22':'ODEs','ch-23':'Distributions','ch-24':'Inference','ch-25':'Models'}}
 };
 function T(){return I18N[state.lang]}
 
@@ -462,6 +477,7 @@ function domColor(n){
   if(n>=6&&n<=10)return 'var(--amber)';
   if(n>=11&&n<=13)return 'var(--green)';
   if(n>=14&&n<=16)return 'var(--red)';
+  if(n>=19&&n<=25)return 'var(--violet)';
   return 'var(--ink)';
 }
 allSecs.forEach(function(c){

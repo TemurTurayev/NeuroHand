@@ -47,3 +47,37 @@ export function extractChapterPairs(html) {
       return { ...pair, combined: pair.ru + pair.en };
     });
 }
+
+export function splitBook(sourceHtml) {
+  const sections = chapterSections(sourceHtml);
+  if (sections.length === 0) {
+    throw new Error('Book contains no chapter sections');
+  }
+  const firstStart = sourceHtml.indexOf(sections[0].html);
+  const mainEnd = sourceHtml.indexOf('</main>', firstStart);
+  if (firstStart < 0 || mainEnd < 0) {
+    throw new Error('Cannot isolate chapter range from book shell');
+  }
+  const chapters = new Map(
+    extractChapterPairs(sourceHtml).map((pair) => [pair.number, pair.combined]),
+  );
+  return {
+    shell:
+      sourceHtml.slice(0, firstStart) +
+      '<!--CHAPTERS-->' +
+      sourceHtml.slice(mainEnd),
+    chapters,
+  };
+}
+
+export function buildBook(shell, chapterFiles) {
+  const marker = '<!--CHAPTERS-->';
+  if ((shell.match(/<!--CHAPTERS-->/g) ?? []).length !== 1) {
+    throw new Error('Shell must contain exactly one CHAPTERS marker');
+  }
+  const body = [...chapterFiles]
+    .sort((left, right) => left.number - right.number)
+    .map((chapter) => chapter.html)
+    .join('');
+  return shell.replace(marker, body);
+}

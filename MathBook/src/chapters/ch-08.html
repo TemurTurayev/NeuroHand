@@ -1,0 +1,936 @@
+<section class="chapter" id="ch-8" data-ch="8" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 8 · Продвинутая математика</div><h2>Парабола: кривая Вселенной</h2><p class="ch-lede">Одна кривая описывает и то, как падает камень, и то, как мы слушаем далёкие галактики.</p></header>
+
+<div class="hook">
+<p>Плюнь арбузной косточкой. Подбрось мяч. Пусти струю из фонтана. Урони мел с ладони так, чтобы он летел вперёд. Каждый раз воздух рисует одну и ту же кривую — и, что почти неприлично, её уравнение помещается в одну строку. Не в толстый справочник, не в компьютерную модель. В строку.</p>
+<p>Галилей заметил это первым: снаряд летит не по дуге окружности, как думали до него, и не по ломаной из «полёта» и «падения». Он летит по <em>параболе</em> (parabola). Всегда. Скорость, угол, масса меняют размах кривой — но не её породу.</p>
+<p>А теперь фокус пострашнее. Возьми ту же самую кривую и разверни её вокруг оси, как гончар разворачивает глину. Получится параболическая чаша. И у этой чаши есть волшебное свойство: любой луч, пришедший параллельно её оси — свет далёкой звезды, радиосигнал спутника, — отразившись, соберётся в одну-единственную точку. Эту точку называют фокусом (focus). Спутниковая тарелка, автомобильная фара, зеркало телескопа — все они параболы, поставленные ловить.</p>
+<p>Так что одна кривая отвечает сразу на два вопроса: как вещи падают — и как мы слышим космос. Когда это по-настоящему уляжется в голове, лучшее, что можно сделать, — помолчать секунду. А потом научиться считать её. Этим и займёмся.</p>
+</div>
+
+<div class="try-first">
+<p>Прежде чем я покажу инструменты — повозись сам. Честно, минут пять-десять, с бумагой. Не подглядывай вперёд.</p>
+<div class="problem tier-b"><div class="pr-t">Разминка перед боем</div>
+<p>Мяч бросили вертикально вверх. Его высота (в метрах) через <span class="m">t</span> секунд равна <span class="m">h = −5t<sup>2</sup> + 20t</span>.</p>
+<p>Два вопроса: <b>(1)</b> В какие моменты мяч находится на земле (<span class="m">h = 0</span>)? <b>(2)</b> Какой <em>наибольшей</em> высоты он достигнет?</p>
+<p>Первый вопрос ты, скорее всего, взломаешь. Со вторым будет труднее: подставлять <span class="m">t = 1, 2, 3…</span> и смотреть, где число побольше, — можно, но откуда уверенность, что между двумя целыми не спрятался пик повыше? Запомни это ощущение. К концу главы у тебя будет приём, дающий вершину за один ход.</p>
+</div>
+</div>
+
+<div class="box idea"><div class="box-t">Идея</div><p>Если запомнишь одно: <b>парабола — это график, где спрятан <em>квадрат</em> переменной</b> (<span class="m">x<sup>2</sup></span>), и у неё всегда есть одна поворотная точка — вершина, где движение разворачивается.</p></div>
+
+<h3>С чего всё начинается: квадратное уравнение</h3>
+
+<p>Линейное уравнение (глава 5) описывало прямую: постоянный шаг, ни разворотов, ни изгибов. Стоит добавить <span class="m">x<sup>2</sup></span> — и мир искривляется. Общий вид того, что мы теперь решаем:</p>
+
+<div class="formula"><b class="hl">a</b>x<sup>2</sup> + bx + c = 0</div>
+<ul class="legend"><li><span class="m">a</span> — коэффициент при квадрате; <b>обязан быть не равен нулю</b> (иначе квадрата нет и это снова прямая)</li><li><span class="m">b</span> — при первой степени</li><li><span class="m">c</span> — свободный член</li></ul>
+
+<p>«Решить» — значит найти такие <span class="m">x</span>, при которых левая часть обращается в ноль. Геометрически: где парабола <span class="m">y = ax<sup>2</sup> + bx + c</span> пересекает ось <span class="m">Ox</span>. Таких точек может быть две, одна или ни одной — и это не случайность, а закон, к которому мы придём.</p>
+
+<h3>Первый ключ: разложение на множители</h3>
+
+<p>Аналогия. Число <span class="m">6</span> можно записать как <span class="m">2 · 3</span>. Если тебе скажут «произведение двух чисел равно нулю», ты мгновенно поймёшь: хотя бы одно из них — ноль. Иначе никак: два ненулевых множителя дают ненулевое произведение. Это и есть весь секрет.</p>
+
+<div class="box tool"><div class="box-t">Приём: «Правило нулевого произведения»</div><p>Если <span class="m">A · B = 0</span>, то <span class="m">A = 0</span> <b>или</b> <span class="m">B = 0</span>. Поэтому наша стратегия: превратить <span class="m">ax<sup>2</sup> + bx + c</span> в произведение двух скобок — и приравнять каждую к нулю по отдельности.</p></div>
+
+<div class="example"><div class="ex-t">Пример 1 · Трёхчлен с <span class="m">a = 1</span></div><p>Реши <span class="m">x<sup>2</sup> − 5x + 6 = 0</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим два числа, чьё произведение даёт <span class="m">c = 6</span>, а сумма — <span class="m">−(−5) = 5</span>… то есть их сумма равна <span class="m">5</span>, произведение <span class="m">6</span>.</span> Перебираем пары для шестёрки: <span class="m">1·6, 2·3</span>. Сумма <span class="m">2 + 3 = 5</span> — попали. Знаки: оба должны быть отрицательными, чтобы сумма была <span class="m">−5</span>, а произведение <span class="m">+6</span>. Значит <span class="m">−2</span> и <span class="m">−3</span>.</div>
+<div class="step"><span class="step-why">Собираем множители:</span> <span class="m">x<sup>2</sup> − 5x + 6 = (x − 2)(x − 3)</span>.</div>
+<div class="step"><span class="step-why">Применяем правило нулевого произведения:</span> <span class="m">x − 2 = 0</span> или <span class="m">x − 3 = 0</span>.</div>
+</div>
+<p>Ответ: <strong>x = 2</strong> или <strong>x = 3</strong>. Взгляд назад: раскрой скобки <span class="m">(x − 2)(x − 3)</span> обратно — получишь <span class="m">x<sup>2</sup> − 5x + 6</span>. Разложение всегда можно проверить перемножением; это бесплатная страховка.</p>
+</div>
+
+<details class="hint"><summary>Почему сумма — это <span class="m">−b</span>, а произведение — <span class="m">c</span>?</summary><p>Раскрой <span class="m">(x − p)(x − q) = x<sup>2</sup> − (p + q)x + pq</span>. Сравни с <span class="m">x<sup>2</sup> + bx + c</span>: коэффициент при <span class="m">x</span> равен <span class="m">−(p + q)</span>, а свободный член <span class="m">pq</span>. Отсюда сумма корней <span class="m">p + q = −b</span>, произведение <span class="m">pq = c</span> (когда <span class="m">a = 1</span>). Это Виет, к которому мы вернёмся в конце.</p></details>
+
+<div class="example"><div class="ex-t">Пример 2 · Когда <span class="m">a &gt; 1</span> (метод группировки)</div><p>Реши <span class="m">2x<sup>2</sup> + 7x + 3 = 0</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">С единицей впереди было легко. Здесь <span class="m">a = 2</span> мешает. Хотим свести задачу к знакомой:</span> ищем два числа с произведением <span class="m">a · c = 2 · 3 = 6</span> и суммой <span class="m">b = 7</span>. Это <span class="m">1</span> и <span class="m">6</span>.</div>
+<div class="step"><span class="step-why">Разбиваем средний член на эти два куска:</span> <span class="m">2x<sup>2</sup> + x + 6x + 3</span>.</div>
+<div class="step"><span class="step-why">Группируем по парам и выносим общее:</span> <span class="m">x(2x + 1) + 3(2x + 1)</span>. Скобка <span class="m">(2x + 1)</span> общая — выносим её: <span class="m">(2x + 1)(x + 3)</span>.</div>
+<div class="step"><span class="step-why">Нулевое произведение:</span> <span class="m">2x + 1 = 0</span> даёт <span class="m">x = −<span class="frac"><b>1</b><i>2</i></span></span>; <span class="m">x + 3 = 0</span> даёт <span class="m">x = −3</span>.</div>
+</div>
+<p>Ответ: <strong>x = −<span class="frac"><b>1</b><i>2</i></span></strong> или <strong>x = −3</strong>.</p>
+</div>
+
+<div class="box story"><div class="box-t">На полях</div><p>Приём «сумма и произведение» — это Виет наоборот. Ты не ищешь корни через формулу, а <em>угадываешь</em> их, зная, что должно сойтись. У опытного человека для «красивых» коэффициентов это занимает секунды — глаз сам ловит пару. Тренируется, как устный счёт.</p></div>
+
+<h3>Два особых лица разложения</h3>
+
+<p><b>Разность квадратов.</b> Есть узор, который надо узнавать мгновенно, как своё имя:</p>
+<div class="formula"><b class="hl">a<sup>2</sup> − b<sup>2</sup></b> = (a − b)(a + b)</div>
+<p>Проверка перемножением: <span class="m">(a − b)(a + b) = a<sup>2</sup> + ab − ab − b<sup>2</sup> = a<sup>2</sup> − b<sup>2</sup></span>. Средние члены гасят друг друга. Поэтому <span class="m">x<sup>2</sup> − 9 = (x − 3)(x + 3)</span>, и корни сразу <span class="m">x = 3</span> и <span class="m">x = −3</span>.</p>
+
+<p><b>Вынесение общего множителя.</b> Если у всех членов есть общий кусок — вынеси его первым делом, до всякого угадывания. <span class="m">3x<sup>2</sup> − 12x = 3x(x − 4)</span>. Корни: <span class="m">3x = 0</span> (то есть <span class="m">x = 0</span>) или <span class="m">x − 4 = 0</span> (то есть <span class="m">x = 4</span>).</p>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Граф Подвох обожает уравнения без свободного члена, вроде <span class="m">3x<sup>2</sup> = 12x</span>. Он шепчет: «Раздели обе части на <span class="m">3x</span> — получишь <span class="m">x = 4</span>, вот и ответ». Деля на <span class="m">x</span>, ты <b>стираешь корень <span class="m">x = 0</span></b> — ведь именно его и убивает деление. Никогда не дели на переменную. Переноси всё в одну часть и выноси множитель: <span class="m">3x<sup>2</sup> − 12x = 0 → 3x(x − 4) = 0</span>, корни <span class="m">0</span> и <span class="m">4</span>.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Сколько корней у уравнения <span class="m">x<sup>2</sup> − 7x = 0</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-1" value="a"><span>Один: <span class="m">x = 7</span></span></label>
+<label><input type="radio" name="q8-1" value="b"><span>Ни одного</span></label>
+<label><input type="radio" name="q8-1" value="c"><span>Один: <span class="m">x = 0</span></span></label>
+<label><input type="radio" name="q8-1" value="d"><span>Два: <span class="m">x = 0</span> и <span class="m">x = 7</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Выносим x: x(x − 7) = 0, отсюда два корня — 0 и 7." data-no="Тебя поймал Граф Подвох: наверняка ты разделил на x и потерял корень x = 0. Выноси множитель — x(x − 7) = 0 — и получишь оба корня."></div>
+</div>
+
+<h3>Второй ключ: извлечение корня (и потерянный минус)</h3>
+
+<p>Когда уравнение выглядит как «что-то в квадрате равно числу», не нужно ни угадывать множители, ни возиться. Достаточно извлечь корень. Но здесь прячется самая знаменитая ошибка школьной алгебры.</p>
+
+<div class="box idea"><div class="box-t">Идея</div><p><span class="m">x<sup>2</sup> = k</span> означает <span class="m">x = +√k</span> <b>и</b> <span class="m">x = −√k</span>. Оба. Ведь и <span class="m">3<sup>2</sup></span>, и <span class="m">(−3)<sup>2</sup></span> дают <span class="m">9</span> — квадрат стирает знак, а мы должны его восстановить в обе стороны.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p><span class="m">x<sup>2</sup> = 9</span> → <span class="m">x = 3</span>. Один ответ. Так делает половина экзаменующихся, и Граф Подвох на это рассчитывает: среди вариантов у SAT почти всегда стоит и «правильно-но-наполовину» число, и полный ответ. Правильно: <span class="m">x = ±3</span>. Приучи руку писать <b>плюс-минус</b> в тот же миг, как извлекаешь корень.</p></div>
+
+<div class="example"><div class="ex-t">Пример 3 · Извлечение корня</div><p>Реши <span class="m">2x<sup>2</sup> − 50 = 0</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим оставить квадрат в одиночестве:</span> переносим <span class="m">50</span>: <span class="m">2x<sup>2</sup> = 50</span>.</div>
+<div class="step"><span class="step-why">Делим на <span class="m">2</span> (на число делить можно — оно не ноль):</span> <span class="m">x<sup>2</sup> = 25</span>.</div>
+<div class="step"><span class="step-why">Извлекаем корень — и сразу оба знака:</span> <span class="m">x = ±5</span>.</div>
+</div>
+<p>Ответ: <strong>x = 5</strong> или <strong>x = −5</strong>.</p>
+</div>
+
+<div class="example"><div class="ex-t">Пример 4 · Квадрат скобки (дострой сам)</div><p>Реши <span class="m">(x − 4)<sup>2</sup> = 9</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Здесь в квадрат возведена целая скобка. Тот же приём — извлекаем корень с двумя знаками:</span> <span class="m">x − 4 = ±3</span>.</div>
+<div class="step"><span class="step-why">Разбираем два случая отдельно.</span> Случай «плюс»: <span class="m">x − 4 = 3 → x = 7</span>. Случай «минус»: <span class="m">x − 4 = −3 → x = ?</span></div>
+</div>
+<details class="hint"><summary>Досчитай второй случай</summary><p><span class="m">x − 4 = −3</span> → прибавляем <span class="m">4</span> к обеим частям → <span class="m">x = 1</span>. Ответ целиком: <strong>x = 7</strong> или <strong>x = 1</strong>. Проверка: <span class="m">(7 − 4)<sup>2</sup> = 9</span> ✓ и <span class="m">(1 − 4)<sup>2</sup> = (−3)<sup>2</sup> = 9</span> ✓.</p></details>
+</div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Реши <span class="m">x<sup>2</sup> = 16</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-2" value="a"><span><span class="m">x = 4</span></span></label>
+<label><input type="radio" name="q8-2" value="b"><span><span class="m">x = ±4</span></span></label>
+<label><input type="radio" name="q8-2" value="c"><span><span class="m">x = 8</span></span></label>
+<label><input type="radio" name="q8-2" value="d"><span><span class="m">x = ±8</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. И +4, и −4 в квадрате дают 16." data-no="Если выбрал 4 — потерял минус (самая частая ошибка). Если 8 — перепутал корень с делением пополам: √16 = 4, а не 8."></div>
+</div>
+
+<h3>Три формы одной параболы — и что каждая выдаёт даром</h3>
+
+<p>Вот главная мысль всей главы. Одна и та же парабола записывается тремя способами, и <em>каждая запись сама, бесплатно, отвечает на свой вопрос</em>. Умный человек не решает — он выбирает форму, где ответ уже виден.</p>
+
+<table class="tbl"><thead><tr><th>Форма</th><th>Вид</th><th>Что выдаёт даром</th></tr></thead><tbody>
+<tr><td>Стандартная</td><td><span class="m">y = ax<sup>2</sup> + bx + c</span></td><td>Пересечение с <span class="m">Oy</span>: это <span class="m">c</span> (при <span class="m">x = 0</span>)</td></tr>
+<tr><td>Факторизованная</td><td><span class="m">y = a(x − p)(x − q)</span></td><td>Корни (пересечения с <span class="m">Ox</span>): <span class="m">p</span> и <span class="m">q</span></td></tr>
+<tr><td>Вершинная</td><td><span class="m">y = a(x − h)<sup>2</sup> + k</span></td><td>Вершина: точка <span class="m">(h; k)</span></td></tr>
+</tbody></table>
+
+<div class="box tool"><div class="box-t">Приём: «Что форма выдаёт бесплатно»</div><p>Спрашивают про пересечение с осью <span class="m">Oy</span> — смотри на <span class="m">c</span> в стандартной форме. Спрашивают про корни — нужна факторизованная. Спрашивают про максимум, минимум, вершину — нужна вершинная. <b>Сначала реши, что у тебя спрашивают, потом выбери форму, где это уже написано.</b> Половина задач SAT на параболы — это проверка, узнаёшь ли ты нужную форму.</p></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">В какой точке парабола <span class="m">y = 2(x + 1)(x − 4)</span> пересекает ось <span class="m">Oy</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-7" value="a"><span><span class="m">(0; −4)</span></span></label>
+<label><input type="radio" name="q8-7" value="b"><span><span class="m">(0; −8)</span></span></label>
+<label><input type="radio" name="q8-7" value="c"><span><span class="m">(0; 4)</span></span></label>
+<label><input type="radio" name="q8-7" value="d"><span><span class="m">(−1; 0)</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Пересечение с Oy — это x = 0: y = 2·(0 + 1)·(0 − 4) = 2·1·(−4) = −8." data-no="Ось Oy — это x = 0, а не готовый ответ из скобок. Числа −1 и 4 — это КОРНИ (пересечения с Ox). Подставь x = 0: y = 2·1·(−4) = −8."></div>
+</div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 300" role="img" aria-label="Анатомия параболы: вершина, ось симметрии, два корня и пересечение с осью Y">
+<line class="grid" x1="90" y1="30" x2="90" y2="270"/>
+<line class="grid" x1="130" y1="30" x2="130" y2="270"/>
+<line class="grid" x1="170" y1="30" x2="170" y2="270"/>
+<line class="grid" x1="250" y1="30" x2="250" y2="270"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="270"/>
+<line class="grid" x1="330" y1="30" x2="330" y2="270"/>
+<line class="ax" x1="40" y1="150" x2="400" y2="150"/>
+<line class="ax" x1="210" y1="30" x2="210" y2="285"/>
+<path class="crv" fill="none" d="M90 50 L98 73.2 L106 94.8 L114 114.8 L122 133.2 L130 150 L138 165.2 L146 178.8 L154 190.8 L162 201.2 L170 210 L178 217.2 L186 222.8 L194 226.8 L202 229.2 L210 230 L218 229.2 L226 226.8 L234 222.8 L242 217.2 L250 210 L258 201.2 L266 190.8 L274 178.8 L282 165.2 L290 150 L298 133.2 L306 114.8 L314 94.8 L322 73.2 L330 50"/>
+<circle class="pt" cx="130" cy="150" r="4"/>
+<circle class="pt" cx="290" cy="150" r="4"/>
+<circle class="pt" cx="210" cy="230" r="4"/>
+<text class="lbl" x="98" y="140">корень p = −2</text>
+<text class="lbl" x="256" y="140">корень q = 2</text>
+<text class="lbl" x="216" y="248">вершина (0; −4)</text>
+<text class="lbl" x="216" y="60">ось симметрии</text>
+</svg><figcaption>Анатомия параболы <span class="m">y = x<sup>2</sup> − 4</span>: два корня <span class="m">±2</span> (где кривая режет <span class="m">Ox</span>), вершина <span class="m">(0; −4)</span> — самая нижняя точка, и вертикальная ось симметрии через неё. Тут ось <span class="m">Oy</span> совпала с осью симметрии, поэтому пересечение с <span class="m">Oy</span> тоже <span class="m">−4</span>.</figcaption></figure>
+
+<div class="example"><div class="ex-t">Пример 5 · Переход стандартная → факторизованная → вершинная</div><p>Дана <span class="m">y = x<sup>2</sup> − 6x + 5</span>. Найди пересечение с <span class="m">Oy</span>, корни и вершину.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Пересечение с <span class="m">Oy</span> уже даром — это <span class="m">c</span>:</span> <span class="m">c = 5</span>, точка <span class="m">(0; 5)</span>.</div>
+<div class="step"><span class="step-why">Корни — раскладываем на множители. Ищем пару с суммой <span class="m">6</span> и произведением <span class="m">5</span>:</span> это <span class="m">1</span> и <span class="m">5</span>. Значит <span class="m">y = (x − 1)(x − 5)</span>, корни <span class="m">p = 1</span>, <span class="m">q = 5</span>.</div>
+<div class="step"><span class="step-why">Вершина по <span class="m">x</span> — это середина между корнями (парабола симметрична!):</span> <span class="m">x = <span class="frac"><b>1 + 5</b><i>2</i></span> = 3</span>. Подставляем: <span class="m">y = 3<sup>2</sup> − 6·3 + 5 = 9 − 18 + 5 = −4</span>. Вершина <span class="m">(3; −4)</span>.</div>
+<div class="step"><span class="step-why">Записываем вершинную форму (даёт вершину даром):</span> <span class="m">y = (x − 3)<sup>2</sup> − 4</span>.</div>
+</div>
+<p>Ответ: пересечение с <span class="m">Oy</span> в <span class="m">(0; 5)</span>, корни <span class="m">1</span> и <span class="m">5</span>, вершина <span class="m">(3; −4)</span>. Взгляд назад: раскрой <span class="m">(x − 3)<sup>2</sup> − 4 = x<sup>2</sup> − 6x + 9 − 4 = x<sup>2</sup> − 6x + 5</span> — вернулись к исходной. Три формы — один зверь.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Вершинная форма <span class="m">y = (x − 3)<sup>2</sup> + 2</span> даёт вершину <span class="m">(3; 2)</span> — со знаком <b>плюс три</b>. Не <span class="m">(−3; 2)</span>! Внутри скобки стоит <span class="m">(x − h)</span>, поэтому <span class="m">h = +3</span>. Граф Подвох ставит <span class="m">−3</span> первым в списке ответов ровно потому, что минус в скобке гипнотизирует. Проверь себя вопросом: «при каком <span class="m">x</span> скобка обнуляется?» — при <span class="m">x = 3</span>. Вот и координата вершины.</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Где вершина параболы <span class="m">y = (x − 3)<sup>2</sup> + 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-5" value="a"><span><span class="m">(−3; 2)</span></span></label>
+<label><input type="radio" name="q8-5" value="b"><span><span class="m">(3; −2)</span></span></label>
+<label><input type="radio" name="q8-5" value="c"><span><span class="m">(3; 2)</span></span></label>
+<label><input type="radio" name="q8-5" value="d"><span><span class="m">(−3; −2)</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Скобка (x − 3) обнуляется при x = 3, а + 2 снаружи — это k. Вершина (3; 2)." data-no="Классическая ловушка со знаком. Внутри стоит (x − h), поэтому h = +3, а не −3. Спроси: при каком x скобка равна нулю? При x = 3. Вершина (3; 2)."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Стоп-кадр</div><p>Закрой экран. Не подглядывая, восстанови по памяти: три формы параболы, и что каждая выдаёт даром. Потом — правило нулевого произведения одной фразой. Не вспомнилось хотя бы одно — вернись на две секции назад, это несущие балки всей главы.</p></div>
+
+<h3>Вершина за один ход: <span class="m">x = −b/2a</span></h3>
+
+<p>Считать середину между корнями удобно, когда корни есть. А если парабола вовсе не пересекает <span class="m">Ox</span> (корней нет), вершина всё равно существует. Нужна формула, работающая всегда.</p>
+
+<div class="box tool"><div class="box-t">Приём: «Вершина = −b/2a»</div><p>У параболы <span class="m">y = ax<sup>2</sup> + bx + c</span> координата вершины по <span class="m">x</span> равна <span class="m">x = −<span class="frac"><b>b</b><i>2a</i></span></span>. Подставь это <span class="m">x</span> в уравнение — получишь <span class="m">y</span>-координату. Работает всегда, есть корни или нет.</p></div>
+
+<div class="box why"><div class="box-t">Почему это работает</div><p>Парабола симметрична относительно вертикали через вершину. Корни (когда они есть) — это <span class="m">x = <span class="frac"><b>−b ± √D</b><i>2a</i></span></span> из формулы, которую увидим ниже. Их середина — полусумма — равна <span class="m">−<span class="frac"><b>b</b><i>2a</i></span></span>: слагаемые с <span class="m">±√D</span> взаимно уничтожаются. Середина корней и есть ось симметрии, а на ней сидит вершина. Формула держится на симметрии, а не на существовании корней, — поэтому годится всегда.</p></div>
+
+<div class="example"><div class="ex-t">Пример 6 · Возвращаемся к брошенному мячу</div><p>Та самая разминка: <span class="m">h = −5t<sup>2</sup> + 20t</span>. Когда мяч на земле и какова наибольшая высота?</p>
+<div class="steps">
+<div class="step"><span class="step-why">«На земле» — это <span class="m">h = 0</span>, ищем корни. Выносим общий множитель:</span> <span class="m">−5t(t − 4) = 0</span>, значит <span class="m">t = 0</span> (бросок) или <span class="m">t = 4</span> (падение).</div>
+<div class="step"><span class="step-why">Наибольшая высота — это <span class="m">y</span>-координата вершины. Сначала момент вершины по приёму «−b/2a»:</span> здесь <span class="m">a = −5</span>, <span class="m">b = 20</span>, значит <span class="m">t = −<span class="frac"><b>20</b><i>2·(−5)</i></span> = −<span class="frac"><b>20</b><i>−10</i></span> = 2</span> секунды.</div>
+<div class="step"><span class="step-why">Теперь высота в этот момент — подставляем <span class="m">t = 2</span>:</span> <span class="m">h = −5·2<sup>2</sup> + 20·2 = −20 + 40 = 20</span> метров.</div>
+</div>
+<p>Ответ: на земле в <span class="m">t = 0</span> и <span class="m">t = 4</span> с; наибольшая высота <strong>20 м</strong> в момент <span class="m">t = 2</span> с. Заметь красивое: вершина ровно посередине между <span class="m">0</span> и <span class="m">4</span>. Подстановка целых чисел этого не гарантировала — а формула дала пик мгновенно.</p>
+</div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 260" role="img" aria-label="Траектория брошенного мяча с максимумом на высоте 20 метров в момент 2 секунды">
+<line class="grid" x1="130" y1="30" x2="130" y2="210"/>
+<line class="grid" x1="210" y1="30" x2="210" y2="210"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="210"/>
+<line class="grid" x1="370" y1="30" x2="370" y2="210"/>
+<line class="ax" x1="50" y1="210" x2="405" y2="210"/>
+<line class="ax" x1="50" y1="20" x2="50" y2="225"/>
+<path class="crv" fill="none" d="M50 210 L66 175.8 L82 145.2 L98 118.2 L114 94.8 L130 75 L146 58.8 L162 46.2 L178 37.2 L194 31.8 L210 30 L226 31.8 L242 37.2 L258 46.2 L274 58.8 L290 75 L306 94.8 L322 118.2 L338 145.2 L354 175.8 L370 210"/>
+<path class="crv2" fill="none" d="M210 30 L210 210"/>
+<circle class="pt" cx="210" cy="30" r="4"/>
+<circle class="pt" cx="50" cy="210" r="4"/>
+<circle class="pt" cx="370" cy="210" r="4"/>
+<text class="lbl" x="150" y="26">вершина: h = 20 м</text>
+<text class="lbl" x="214" y="228">t = 2</text>
+<text class="lbl" x="356" y="228">t = 4</text>
+<text class="lbl" x="10" y="35">h</text>
+<text class="lbl" x="392" y="205">t</text>
+</svg><figcaption>Полёт мяча <span class="m">h = −5t<sup>2</sup> + 20t</span>. Вершина — наивысшая точка — стоит ровно над серединой между вылетом (<span class="m">t = 0</span>) и приземлением (<span class="m">t = 4</span>). Пунктир — ось симметрии.</figcaption></figure>
+
+<h3>Ветви вверх или вниз: знак <span class="m">a</span> решает всё</h3>
+
+<p>Одна буква — <span class="m">a</span> — задаёт характер параболы. Если <span class="m">a &gt; 0</span>, ветви смотрят вверх, у параболы есть <b>дно</b> — минимум. Если <span class="m">a &lt; 0</span>, ветви смотрят вниз, у неё есть <b>потолок</b> — максимум. Запомни через образ: <span class="m">a &gt; 0</span> — это улыбка (чашка держит воду), <span class="m">a &lt; 0</span> — это грусть (чашка перевёрнута).</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 240" role="img" aria-label="Две параболы: слева ветви вверх с минимумом, справа ветви вниз с максимумом">
+<line class="ax" x1="30" y1="120" x2="190" y2="120"/>
+<line class="ax" x1="110" y1="30" x2="110" y2="215"/>
+<path class="crv" fill="none" d="M42.8 63.3 L48.4 83.5 L54 102 L59.6 118.7 L65.2 133.7 L70.8 146.9 L76.4 158.3 L82 168 L87.6 175.9 L93.2 182.1 L98.8 186.5 L104.4 189.1 L110 190 L115.6 189.1 L121.2 186.5 L126.8 182.1 L132.4 175.9 L138 168 L143.6 158.3 L149.2 146.9 L154.8 133.7 L160.4 118.7 L166 102 L171.6 83.5 L177.2 63.3"/>
+<circle class="pt" cx="110" cy="190" r="4"/>
+<text class="lbl" x="40" y="205">a &gt; 0: минимум</text>
+<line class="ax" x1="230" y1="120" x2="390" y2="120"/>
+<line class="ax" x1="310" y1="30" x2="310" y2="215"/>
+<path class="crv2" fill="none" d="M242.8 176.7 L248.4 156.5 L254 138 L259.6 121.3 L265.2 106.3 L270.8 93.1 L276.4 81.7 L282 72 L287.6 64.1 L293.2 57.9 L298.8 53.5 L304.4 50.9 L310 50 L315.6 50.9 L321.2 53.5 L326.8 57.9 L332.4 64.1 L338 72 L343.6 81.7 L349.2 93.1 L354.8 106.3 L360.4 121.3 L366 138 L371.6 156.5 L377.2 176.7"/>
+<circle class="pt" cx="310" cy="50" r="4"/>
+<text class="lbl" x="240" y="205">a &lt; 0: максимум</text>
+</svg><figcaption>Слева <span class="m">y = x<sup>2</sup></span> (<span class="m">a &gt; 0</span>) — «улыбка» с минимумом в вершине. Справа <span class="m">y = −x<sup>2</sup></span> (<span class="m">a &lt; 0</span>) — «грусть» с максимумом. Знак <span class="m">a</span> — это всё, что нужно, чтобы сказать, минимум там или максимум.</figcaption></figure>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>«Найди <em>максимальное значение</em> функции <span class="m">y = −(x − 5)<sup>2</sup> + 7</span>». Максимальное <b>значение</b> — это <span class="m">y</span>-координата вершины, то есть <span class="m">7</span>. Граф Подвох услужливо подсовывает <span class="m">5</span> — это <span class="m">x</span>-координата, то место, <em>где</em> достигается максимум, а не сам максимум. Различай два вопроса: «при каком <span class="m">x</span>?» → ответ <span class="m">h</span> (тут <span class="m">5</span>); «чему равно значение / высота / выручка?» → ответ <span class="m">k</span> (тут <span class="m">7</span>). И раз <span class="m">a = −1 &lt; 0</span> — это действительно максимум, а не минимум.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">У функции <span class="m">y = −2(x − 3)<sup>2</sup> + 8</span> есть максимальное значение. Чему оно равно?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-3" value="a"><span><span class="m">8</span></span></label>
+<label><input type="radio" name="q8-3" value="b"><span><span class="m">3</span></span></label>
+<label><input type="radio" name="q8-3" value="c"><span><span class="m">−2</span></span></label>
+<label><input type="radio" name="q8-3" value="d"><span>Максимума нет, только минимум</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. a = −2 меньше нуля — ветви вниз, значит максимум; его значение — это y-координата вершины, то есть 8." data-no="Максимальное ЗНАЧЕНИЕ — это k (здесь 8). Число 3 — это x вершины (где достигается), а не сам максимум. Вариант «нет максимума» неверен: a отрицателен, ветви смотрят вниз."></div>
+</div>
+
+<h3>Медицина: доза с оптимумом</h3>
+
+<p>Перевёрнутая парабола — не только про мячи. В фармакологии эффект многих веществ растёт с дозой лишь до предела: сначала польза прибавляется, потом включается токсичность, и кривая заворачивает вниз. Это буквально <span class="m">a &lt; 0</span>. Найти дозу максимального эффекта — значит найти вершину.</p>
+
+<div class="example"><div class="ex-t">Пример 7 · Доза максимального эффекта</div><p>В модельном эксперименте терапевтический эффект препарата описан как <span class="m">E = −2d<sup>2</sup> + 12d − 10</span>, где <span class="m">d</span> — доза (мг/кг), а <span class="m">E</span> — эффект в условных единицах. При какой дозе эффект наибольший и чему он равен?</p>
+<div class="steps">
+<div class="step"><span class="step-why"><span class="m">a = −2 &lt; 0</span> — кривая заворачивает вниз, максимум есть. Ищем дозу-вершину по «−b/2a»:</span> <span class="m">d = −<span class="frac"><b>12</b><i>2·(−2)</i></span> = −<span class="frac"><b>12</b><i>−4</i></span> = 3</span> мг/кг.</div>
+<div class="step"><span class="step-why">Сам максимальный эффект — подставляем <span class="m">d = 3</span>:</span> <span class="m">E = −2·9 + 12·3 − 10 = −18 + 36 − 10 = 8</span> единиц.</div>
+</div>
+<p>Ответ: наибольший эффект <strong>8 единиц при дозе 3 мг/кг</strong>. Взгляд назад: приравняв <span class="m">E = 0</span>, найдёшь дозы, где эффекта нет вовсе — <span class="m">−2d<sup>2</sup> + 12d − 10 = 0</span>, то есть <span class="m">d<sup>2</sup> − 6d + 5 = 0 → (d − 1)(d − 5) = 0 → d = 1</span> и <span class="m">d = 5</span>. Ниже <span class="m">1</span> и выше <span class="m">5</span> модель уходит в минус — намёк, что за пиком лежит зона токсичности. Вершина <span class="m">3</span> — ровно посередине между <span class="m">1</span> и <span class="m">5</span>, как и положено.</p>
+</div>
+
+<h3>Дискриминант: сколько будет корней, ещё до того как их искать</h3>
+
+<p>Иногда важен не сам корень, а <em>сколько</em> их. Прямая пересечёт параболу в двух точках, одной или ни в одной? У лекарства будет две дозы с нулевым эффектом или одна пограничная? На это отвечает одно число под корнем — дискриминант (discriminant).</p>
+
+<div class="formula">D = <b class="hl">b<sup>2</sup> − 4ac</b></div>
+<ul class="legend"><li><span class="m">D &gt; 0</span> — <b>два</b> различных корня (парабола режет <span class="m">Ox</span> в двух точках)</li><li><span class="m">D = 0</span> — <b>ровно один</b> корень (парабола касается <span class="m">Ox</span> вершиной)</li><li><span class="m">D &lt; 0</span> — <b>ни одного</b> вещественного корня (парабола висит целиком над или под осью)</li></ul>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>«Ровно одно решение» — это <span class="m">D = 0</span>, а <b>не</b> <span class="m">D &lt; 0</span>. Граф Подвох меняет их местами: при <span class="m">D &lt; 0</span> решений <em>ноль</em>, а не одно. Мнемоника: <b>ноль под корнем — один корень</b> (плюс-минус ноля не раздваивает). Отрицательное под корнем — вещественных корней нет вовсе.</p></div>
+
+<div class="example"><div class="ex-t">Пример 8 · «При каком <span class="m">k</span> ровно одно решение?»</div><p>При каком значении <span class="m">k</span> уравнение <span class="m">x<sup>2</sup> + kx + 9 = 0</span> имеет ровно одно решение?</p>
+<div class="steps">
+<div class="step"><span class="step-why">«Ровно одно» — это условие <span class="m">D = 0</span>. Записываем дискриминант:</span> здесь <span class="m">a = 1</span>, <span class="m">b = k</span>, <span class="m">c = 9</span>, значит <span class="m">D = k<sup>2</sup> − 4·1·9 = k<sup>2</sup> − 36</span>.</div>
+<div class="step"><span class="step-why">Приравниваем к нулю:</span> <span class="m">k<sup>2</sup> − 36 = 0 → k<sup>2</sup> = 36</span>.</div>
+<div class="step"><span class="step-why">Извлекаем корень — и не теряем минус!</span> <span class="m">k = ±6</span>.</div>
+</div>
+<p>Ответ: <strong>k = 6</strong> или <strong>k = −6</strong>. Оба годятся: и <span class="m">x<sup>2</sup> + 6x + 9 = (x + 3)<sup>2</sup></span>, и <span class="m">x<sup>2</sup> − 6x + 9 = (x − 3)<sup>2</sup></span> — точные квадраты, у каждого один корень. Заметил, как задача про дискриминант сама превратилась в «извлеки корень, помни про <span class="m">±</span>»? Ловушки главы держатся за руки.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Сколько вещественных корней у <span class="m">x<sup>2</sup> + 4x + 4 = 0</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-4" value="a"><span>Два</span></label>
+<label><input type="radio" name="q8-4" value="b"><span>Ни одного</span></label>
+<label><input type="radio" name="q8-4" value="c"><span>Ровно один</span></label>
+<label><input type="radio" name="q8-4" value="d"><span>Бесконечно много</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. D = 16 − 16 = 0 — ровно один корень (это (x + 2)², корень x = −2)." data-no="Считаем D = b² − 4ac = 4² − 4·1·4 = 16 − 16 = 0. Ноль под корнем — ровно ОДИН корень. Ни одного было бы при D меньше нуля."></div>
+</div>
+
+<div class="box desmos"><div class="box-t">Ленивый Гений: Desmos</div><p>Забей в Desmos <span class="m">y = x<sup>2</sup> + kx + 9</span> и добавь ползунок для <span class="m">k</span> (Desmos сам предложит, когда увидит незнакомую букву). Тяни ползунок и смотри, как парабола скользит вверх-вниз относительно оси <span class="m">Ox</span>. Есть <em>ровно два</em> положения ползунка, где кривая <b>касается</b> оси одной точкой, — это <span class="m">k = 6</span> и <span class="m">k = −6</span>, наш <span class="m">D = 0</span>. А ещё: наведи курсор на точку пересечения с осью — Desmos подсветит серую точку, кликни, и он выдаст координаты корня. Кликни по нижней точке кривой — получишь вершину. Инструмент чинит тебе интуицию бесплатно: «ровно одно решение» — это буквально «парабола только-только коснулась».</p></div>
+
+<h3>Формула корней и полный квадрат (эскиз вывода)</h3>
+
+<p>Когда множители не угадываются, есть тяжёлая артиллерия — формула, работающая для любого квадратного уравнения:</p>
+
+<div class="formula">x = <span class="frac"><b class="hl">−b ± √(b<sup>2</sup> − 4ac)</b><i>2a</i></span></div>
+
+<p>Под корнем сидит наш знакомый <span class="m">D</span>. Отсюда прямо видно всё: <span class="m">±</span> даёт два корня, если <span class="m">D &gt; 0</span>; при <span class="m">D = 0</span> плюс-минус ноля сливаются в один; при <span class="m">D &lt; 0</span> корень из отрицательного не берётся — вещественных решений нет. Формула и дискриминант — одно и то же знание, записанное с разной подробностью.</p>
+
+<div class="box why"><div class="box-t">Почему это работает (полный квадрат, эскиз)</div><p>Формула не падает с неба — она рождается из приёма «выделение полного квадрата» (completing the square). Идея: любую параболу можно силой превратить в «точный квадрат плюс остаток». Коротко, для <span class="m">ax<sup>2</sup> + bx + c = 0</span>: делим на <span class="m">a</span>, переносим свободный член, добавляем к обеим частям <span class="m">(<span class="frac"><b>b</b><i>2a</i></span>)<sup>2</sup></span> — ровно столько, чтобы слева собрался квадрат скобки <span class="m">(x + <span class="frac"><b>b</b><i>2a</i></span>)<sup>2</sup></span>. Дальше это уже «квадрат равен числу» — извлекаем корень с <span class="m">±</span>, и после упрощения выпадает та самая формула. Заметь: последний шаг вывода — это Пример 3, «извлеки корень, помни про минус». Вся тяжёлая формула стоит на приёме из середины главы.</p></div>
+
+<div class="example"><div class="ex-t">Пример 9 · Формула в деле (дострой сам)</div><p>Реши <span class="m">2x<sup>2</sup> + 3x − 2 = 0</span> по формуле.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Выписываем коэффициенты:</span> <span class="m">a = 2</span>, <span class="m">b = 3</span>, <span class="m">c = −2</span>.</div>
+<div class="step"><span class="step-why">Считаем дискриминант первым — он и скажет, сколько корней:</span> <span class="m">D = 3<sup>2</sup> − 4·2·(−2) = 9 + 16 = 25</span>. Положителен — два корня, и <span class="m">√25 = 5</span> красиво.</div>
+<div class="step"><span class="step-why">Подставляем в формулу:</span> <span class="m">x = <span class="frac"><b>−3 ± 5</b><i>2·2</i></span> = <span class="frac"><b>−3 ± 5</b><i>4</i></span></span>. Досчитай оба случая.</div>
+</div>
+<details class="hint"><summary>Досчитай два корня</summary><p>«Плюс»: <span class="m">x = <span class="frac"><b>−3 + 5</b><i>4</i></span> = <span class="frac"><b>2</b><i>4</i></span> = <span class="frac"><b>1</b><i>2</i></span></span>. «Минус»: <span class="m">x = <span class="frac"><b>−3 − 5</b><i>4</i></span> = <span class="frac"><b>−8</b><i>4</i></span> = −2</span>. Ответ: <strong>x = <span class="frac"><b>1</b><i>2</i></span></strong> или <strong>x = −2</strong>. Проверка разложением: <span class="m">(2x − 1)(x + 2) = 0</span> — сходится.</p></details>
+</div>
+
+<h3>Виет как экспресс-проверка</h3>
+
+<p>Последний приём — не для нахождения корней, а для их <em>проверки</em> за секунду. Мы уже видели половину: сумма и произведение корней прячутся прямо в коэффициентах.</p>
+
+<div class="formula">x<sub>1</sub> + x<sub>2</sub> = <b class="hl">−b/a</b>,   x<sub>1</sub> · x<sub>2</sub> = <b class="hl2">c/a</b></div>
+
+<div class="box tool"><div class="box-t">Приём: «Виет для проверки»</div><p>Нашёл два корня — сложи их и перемножь. Сумма обязана дать <span class="m">−b/a</span>, произведение — <span class="m">c/a</span>. Не сошлось — где-то ошибка, ищи её. Это дешёвая страховка, которую делают в уме за пару секунд, и она ловит арифметические промахи, пропущенные минусы и перепутанные знаки.</p></div>
+
+<div class="example"><div class="ex-t">Пример 10 · Проверяем корни Виетом</div><p>Для <span class="m">x<sup>2</sup> − 7x + 12 = 0</span> кто-то заявил, что корни <span class="m">3</span> и <span class="m">4</span>. Проверь, не решая заново.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Здесь <span class="m">a = 1</span>, значит сумма должна быть <span class="m">−b = 7</span>, произведение <span class="m">c = 12</span>.</span> Проверяем предъявленные корни: <span class="m">3 + 4 = 7</span> ✓, <span class="m">3 · 4 = 12</span> ✓.</div>
+</div>
+<p>Ответ: обе проверки прошли — корни <strong>3</strong> и <strong>4</strong> верны. За две секунды, без разложения и без формулы.</p>
+</div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Не решая уравнение, по Виету определи корни <span class="m">x<sup>2</sup> − 3x − 10 = 0</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-6" value="a"><span><span class="m">5</span> и <span class="m">−2</span></span></label>
+<label><input type="radio" name="q8-6" value="b"><span><span class="m">−5</span> и <span class="m">2</span></span></label>
+<label><input type="radio" name="q8-6" value="c"><span><span class="m">5</span> и <span class="m">2</span></span></label>
+<label><input type="radio" name="q8-6" value="d"><span><span class="m">−5</span> и <span class="m">−2</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Сумма = −b = 3 и произведение = c = −10: пара 5 и −2 даёт 5 + (−2) = 3, 5·(−2) = −10." data-no="Проверь оба условия сразу. Нужна сумма +3 и произведение −10. Пара −5 и 2: сумма −3 (не тот знак). Пара 5 и 2: произведение +10 (не тот знак). Только 5 и −2 проходят оба."></div>
+</div>
+
+<h3>Задачи</h3>
+
+<div class="problem tier-a"><div class="pr-t">Задача 1 <span class="tier">уровень А</span></div>
+<p>Реши разложением на множители: <span class="m">x<sup>2</sup> + 7x + 10 = 0</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — записать левую часть как произведение двух скобок <span class="m">(x + …)(x + …)</span>, чтобы применить правило нулевого произведения.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Приём «сумма и произведение»: ищи два числа с произведением <span class="m">10</span> и суммой <span class="m">7</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Пара с произведением <span class="m">10</span> и суммой <span class="m">7</span> — это <span class="m">2</span> и <span class="m">5</span>. Значит <span class="m">(x + 2)(x + 5) = 0</span>, откуда <span class="m">x = −2</span> или <span class="m">x = −5</span>. Проверка Виетом: сумма <span class="m">−2 + (−5) = −7 = −b</span> ✓, произведение <span class="m">(−2)(−5) = 10 = c</span> ✓.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 2 <span class="tier">уровень А</span></div>
+<p>Реши: <span class="m">5x<sup>2</sup> − 20 = 0</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Здесь нет члена с первой степенью — значит, метод извлечения корня короче, чем разложение. Оставь квадрат в одиночестве.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>После <span class="m">x<sup>2</sup> = …</span> помни: корень даёт <b>два</b> знака.</p></details>
+<details class="sol"><summary>Решение</summary><p>Переносим: <span class="m">5x<sup>2</sup> = 20</span>, делим на <span class="m">5</span>: <span class="m">x<sup>2</sup> = 4</span>, извлекаем корень с обоими знаками: <span class="m">x = ±2</span>. Ответ: <strong>x = 2</strong> или <strong>x = −2</strong>. (Можно было и разложить как разность квадратов: <span class="m">5(x<sup>2</sup> − 4) = 5(x − 2)(x + 2)</span> — тот же результат.)</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 3 <span class="tier">уровень Б</span></div>
+<p>Перепиши <span class="m">y = x<sup>2</sup> + 8x + 11</span> в вершинной форме и назови координаты вершины.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Цель — записать выражение как <span class="m">(x − h)<sup>2</sup> + k</span>, чтобы вершина <span class="m">(h; k)</span> прочиталась даром. Понадобится выделение полного квадрата.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Половина от <span class="m">8</span> — это <span class="m">4</span>; значит квадрат будет <span class="m">(x + 4)<sup>2</sup></span>. Но <span class="m">(x + 4)<sup>2</sup> = x<sup>2</sup> + 8x + 16</span> — на <span class="m">16</span>, а у нас <span class="m">11</span>. Скомпенсируй разницу.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">x<sup>2</sup> + 8x + 11 = (x<sup>2</sup> + 8x + 16) − 16 + 11 = (x + 4)<sup>2</sup> − 5</span>. Вершинная форма: <span class="m">y = (x + 4)<sup>2</sup> − 5</span>, вершина <strong>(−4; −5)</strong>. Внимание к знаку: в скобке <span class="m">(x + 4)</span> обнуляется при <span class="m">x = −4</span> — вот откуда минус в координате. Проверка приёмом «−b/2a»: <span class="m">x = −<span class="frac"><b>8</b><i>2</i></span> = −4</span> ✓.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 4 <span class="tier">уровень Б</span></div>
+<p>Мяч летит по закону <span class="m">h = −5t<sup>2</sup> + 30t</span> (метры, секунды). Найди наибольшую высоту и оба момента, когда мяч на высоте <span class="m">25</span> м.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Наибольшая высота — это <span class="m">y</span> вершины. Момент вершины бери приёмом «−b/2a», потом подставь.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Для «высота <span class="m">= 25</span>» составь <span class="m">−5t<sup>2</sup> + 30t = 25</span>, перенеси всё в одну часть и раздели на общий множитель, чтобы упростить перед разложением.</p></details>
+<details class="sol"><summary>Решение</summary><p>Вершина: <span class="m">t = −<span class="frac"><b>30</b><i>2·(−5)</i></span> = 3</span> с, высота <span class="m">h = −5·9 + 30·3 = −45 + 90 = 45</span> м — наибольшая. Теперь <span class="m">h = 25</span>: <span class="m">−5t<sup>2</sup> + 30t = 25 → −5t<sup>2</sup> + 30t − 25 = 0</span>. Делим на <span class="m">−5</span>: <span class="m">t<sup>2</sup> − 6t + 5 = 0 → (t − 1)(t − 5) = 0</span>. Ответ: наибольшая высота <strong>45 м</strong>; на <span class="m">25</span> м мяч бывает дважды — на подъёме в <strong>t = 1 с</strong> и на спуске в <strong>t = 5 с</strong>. (Красиво: <span class="m">1</span> и <span class="m">5</span> симметричны относительно вершины <span class="m">3</span>.)</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 5 <span class="tier">уровень Б</span></div>
+<p>Магазин продаёт <span class="m">x</span> единиц товара; прибыль (в тысячах) равна <span class="m">R = −2x<sup>2</sup> + 40x − 150</span>. При каком объёме прибыль наибольшая и чему она равна? При каких объёмах прибыль равна нулю (точки безубыточности)?</p>
+<details class="hint"><summary>Подсказка 1</summary><p><span class="m">a = −2 &lt; 0</span> — ветви вниз, максимум существует. Наибольшая прибыль — это <span class="m">y</span> вершины.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Безубыточность — это <span class="m">R = 0</span>. Раздели уравнение на <span class="m">−2</span>, чтобы получить простой трёхчлен с <span class="m">a = 1</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Вершина: <span class="m">x = −<span class="frac"><b>40</b><i>2·(−2)</i></span> = 10</span>, прибыль <span class="m">R = −2·100 + 40·10 − 150 = −200 + 400 − 150 = 50</span> (тыс.) — наибольшая при <strong>10 единицах</strong>. Безубыточность: <span class="m">−2x<sup>2</sup> + 40x − 150 = 0</span>, делим на <span class="m">−2</span>: <span class="m">x<sup>2</sup> − 20x + 75 = 0 → (x − 5)(x − 15) = 0</span>. Ответ: <strong>максимум 50 тыс. при x = 10</strong>; ноль прибыли при <strong>x = 5</strong> и <strong>x = 15</strong>. Меньше <span class="m">5</span> и больше <span class="m">15</span> — в убыток.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 6 <span class="tier">флешбэк · глава 7</span></div>
+<p>Культура бактерий удваивается каждый час: <span class="m">N = 100 · 2<sup>t</sup></span>, где <span class="m">t</span> — часы. Через сколько часов колония достигнет <span class="m">1600</span> клеток?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Здесь квадрата нет — это экспоненциальная модель из главы 7. Раздели обе части на <span class="m">100</span>, чтобы обнажить чистую степень двойки.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Тебе нужно <span class="m">2<sup>t</sup> = 16</span>. Спроси: в какую степень возвести <span class="m">2</span>, чтобы вышло <span class="m">16</span>?</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">100 · 2<sup>t</sup> = 1600 → 2<sup>t</sup> = 16</span>. Поскольку <span class="m">16 = 2<sup>4</sup></span>, получаем <span class="m">t = 4</span> часа. Ответ: <strong>4 часа</strong>. Разница пород: у параболы переменная <em>в основании</em> (<span class="m">t<sup>2</sup></span>) и рост-разворот; у экспоненты переменная <em>в показателе</em> (<span class="m">2<sup>t</sup></span>) и рост без разворота, всё круче и круче. Не путай их: это два разных зверя.</p></details>
+</div>
+
+<div class="problem flashback tier-c"><div class="pr-t">Задача 7 <span class="tier">флешбэк · глава 4</span></div>
+<p>Найди точки пересечения прямой <span class="m">y = x + 4</span> и параболы <span class="m">y = x<sup>2</sup> − 2x</span> (это система из главы 4, только вторая строка теперь кривая).</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Как и в главе 4 — метод подстановки. В точке пересечения оба <span class="m">y</span> равны, значит можно приравнять правые части.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Из <span class="m">x<sup>2</sup> − 2x = x + 4</span> собери квадратное уравнение (всё в одну часть) и разложи на множители.</p></details>
+<details class="sol"><summary>Решение</summary><p>Приравниваем: <span class="m">x<sup>2</sup> − 2x = x + 4 → x<sup>2</sup> − 3x − 4 = 0 → (x − 4)(x + 1) = 0</span>, значит <span class="m">x = 4</span> или <span class="m">x = −1</span>. Возвращаем <span class="m">x</span> в удобную (линейную) строку <span class="m">y = x + 4</span>: при <span class="m">x = 4</span> получаем <span class="m">y = 8</span>; при <span class="m">x = −1</span> получаем <span class="m">y = 3</span>. Ответ: пересечения в точках <strong>(4; 8)</strong> и <strong>(−1; 3)</strong>. Геометрически прямая режет параболу в двух местах — потому квадратное уравнение и дало два корня.</p></details>
+</div>
+
+<div class="problem flashback tier-c"><div class="pr-t">Задача 8 <span class="tier">Найди ошибку · уровень В</span></div>
+<p>Граф Подвох принёс «решение». Оно выглядит гладко. Найди изъян и сформулируй его.</p>
+<p><b>Задача:</b> реши <span class="m">(x − 2)<sup>2</sup> = 9</span>.</p>
+<p><b>«Решение» Графа:</b> «Извлекаю корень из обеих частей: <span class="m">x − 2 = 3</span>. Прибавляю <span class="m">2</span>: <span class="m">x = 5</span>. Проверяю: <span class="m">(5 − 2)<sup>2</sup> = 3<sup>2</sup> = 9</span> — сходится. Значит <span class="m">x = 5</span>. Единственный ответ.»</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Проверка Графа честная, но она подтверждает лишь <em>один</em> корень. Вопрос не «верен ли <span class="m">5</span>», а «все ли корни найдены».</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Вспомни ловушку про потерянный минус. Что даёт извлечение корня из обеих частей на самом деле?</p></details>
+<details class="sol"><summary>Решение</summary><p>Изъян — <b>потерян второй корень</b>. Извлекая корень, Граф написал только <span class="m">x − 2 = 3</span>, забыв про <span class="m">x − 2 = −3</span>. Правильно: <span class="m">x − 2 = ±3</span>. Отсюда <span class="m">x = 5</span> (случай «плюс») <b>и</b> <span class="m">x = −1</span> (случай «минус»). Проверка второго: <span class="m">(−1 − 2)<sup>2</sup> = (−3)<sup>2</sup> = 9</span> ✓. Коварство «решения» в том, что подстановка одного корня всегда пройдёт — она не умеет ловить <em>пропущенный</em> корень. Полный ответ: <strong>x = 5</strong> и <strong>x = −1</strong>. Мораль: как только видишь корень — сразу пиши <span class="m">±</span>, до всякой проверки.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 9 <span class="tier">уровень В</span></div>
+<p>При каком значении <span class="m">k</span> уравнение <span class="m">x<sup>2</sup> − kx + 16 = 0</span> имеет ровно одно решение? Найди все такие <span class="m">k</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>«Ровно одно решение» — это условие на дискриминант. Какое именно?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">D = 0</span>. Здесь <span class="m">b = −k</span>, поэтому <span class="m">b<sup>2</sup> = (−k)<sup>2</sup> = k<sup>2</sup></span>. И не потеряй минус при извлечении корня.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">D = (−k)<sup>2</sup> − 4·1·16 = k<sup>2</sup> − 64</span>. Условие <span class="m">D = 0</span>: <span class="m">k<sup>2</sup> − 64 = 0 → k<sup>2</sup> = 64 → k = ±8</span>. Ответ: <strong>k = 8</strong> или <strong>k = −8</strong>. Проверка: при <span class="m">k = 8</span> имеем <span class="m">x<sup>2</sup> − 8x + 16 = (x − 4)<sup>2</sup></span> — один корень; при <span class="m">k = −8</span> имеем <span class="m">x<sup>2</sup> + 8x + 16 = (x + 4)<sup>2</sup></span> — тоже один. Граф Подвох тут расставил две ловушки сразу: перепутать <span class="m">D = 0</span> с <span class="m">D &lt; 0</span> и потерять <span class="m">k = −8</span>. Ты обошёл обе.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Босс главы: «Фонтан в парке»</div>
+<p>В центральном парке Ташкента новый фонтан: струя воды вылетает из форсунки у самой земли, выгибается красивой дугой и падает обратно на землю. Инженер оставил тебе три факта о полёте струи (высота <span class="m">h</span> в метрах как функция горизонтального расстояния <span class="m">x</span> в метрах):</p>
+<ul>
+<li>струя вылетает из земли: при <span class="m">x = 0</span> высота <span class="m">h = 0</span>;</li>
+<li>струя падает на землю на расстоянии <span class="m">6</span> м: при <span class="m">x = 6</span> высота <span class="m">h = 0</span>;</li>
+<li>на отметке <span class="m">x = 2</span> м струя проходит на высоте <span class="m">4</span> м.</li>
+</ul>
+<p>Восстанови уравнение струи и ответь: какова наибольшая высота фонтана и на каком расстоянии от форсунки она достигается? Затем — вторая, коварная часть про касание.</p>
+
+<div class="problem tier-c"><div class="pr-t">Босс, часть 1 <span class="tier">уровень В</span></div>
+<p>Найди уравнение <span class="m">h(x)</span>, максимальную высоту струи и расстояние, на котором она достигается.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Два факта — это корни (там, где <span class="m">h = 0</span>). Какая из трёх форм параболы выдаёт корни даром? Начни с неё, с одной неизвестной <span class="m">a</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Запиши <span class="m">h = a·x·(x − 6)</span> — корни <span class="m">0</span> и <span class="m">6</span> уже встроены. Третий факт (<span class="m">x = 2, h = 4</span>) подставь, чтобы найти <span class="m">a</span>. Дальше вершина посередине корней или по «−b/2a».</p></details>
+<details class="sol"><summary>Решение</summary><p><b>Шаг 1 — форма под вопрос.</b> Корни <span class="m">0</span> и <span class="m">6</span> даёт факторизованная форма: <span class="m">h = a·x·(x − 6)</span>. Осталась одна неизвестная — <span class="m">a</span>.</p>
+<p><b>Шаг 2 — третий факт находит <span class="m">a</span>.</b> Подставляем <span class="m">x = 2, h = 4</span>: <span class="m">4 = a·2·(2 − 6) = a·2·(−4) = −8a</span>, откуда <span class="m">a = −<span class="frac"><b>1</b><i>2</i></span></span>. Отрицательный <span class="m">a</span> — струя выгибается вниз, как ей и положено. Уравнение: <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>x(x − 6)</span>, или в стандартном виде <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x</span>.</p>
+<p><b>Шаг 3 — вершина.</b> Она посередине между корнями <span class="m">0</span> и <span class="m">6</span>: <span class="m">x = 3</span> м. (Тем же выйдет «−b/2a»: <span class="m">−<span class="frac"><b>3</b><i>2·(−1/2)</i></span> = −<span class="frac"><b>3</b><i>−1</i></span> = 3</span>.) Высота: <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>·9 + 3·3 = −4{,}5 + 9 = 4{,}5</span> м.</p>
+<p><b>Ответ:</b> уравнение <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x</span>; наибольшая высота струи <strong>4,5 м</strong>, достигается на расстоянии <strong>3 м</strong> от форсунки — ровно на полпути к точке падения. Не перепутай, что чему: <span class="m">3</span> — это <em>где</em>, <span class="m">4,5</span> — это <em>сколько</em>.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Босс, часть 2 <span class="tier">уровень В</span></div>
+<p>Мимо фонтана натянули прямой тросик подсветки по закону <span class="m">y = x + k</span> (наклон фиксирован, высота <span class="m">k</span> регулируется). При каком <span class="m">k</span> тросик <em>едва касается</em> струи <span class="m">y = −<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x</span> — в ровно одной точке?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>«Касается в одной точке» — это система «прямая = парабола» с ровно одним решением. Чем задаётся «ровно одно решение»?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Приравняй правые части, собери квадратное уравнение относительно <span class="m">x</span> и потребуй <span class="m">D = 0</span>. Умножь на <span class="m">−2</span>, чтобы избавиться от дроби.</p></details>
+<details class="sol"><summary>Решение</summary><p>В точке касания высоты равны: <span class="m">−<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x = x + k</span>. Переносим всё влево: <span class="m">−<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 2x − k = 0</span>. Умножаем на <span class="m">−2</span> (чтобы убрать дробь и минус впереди): <span class="m">x<sup>2</sup> − 4x + 2k = 0</span>.</p>
+<p>Касание — ровно один корень — значит <span class="m">D = 0</span>: <span class="m">D = (−4)<sup>2</sup> − 4·1·(2k) = 16 − 8k = 0 → k = 2</span>.</p>
+<p><b>Ответ:</b> <strong>k = 2</strong>. Проверка: при <span class="m">k = 2</span> уравнение <span class="m">x<sup>2</sup> − 4x + 4 = (x − 2)<sup>2</sup> = 0</span> даёт единственный <span class="m">x = 2</span>; точка касания <span class="m">(2; 4)</span> — прямая <span class="m">y = x + 2</span> в <span class="m">x = 2</span> даёт <span class="m">4</span>, и струя там же на высоте <span class="m">4</span>. Тросик целует струю в одной точке. Ты только что использовал сразу три навыка главы — выбор формы под вопрос, дискриминант, разложение — плюс подстановку из главы 4. Босс повержен.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">Теперь ты умеешь</div>
+<ul class="powers">
+<li><b>Решать</b> квадратное уравнение тремя путями — разложением, извлечением корня (всегда с <span class="m">±</span>) и формулой корней — и выбирать самый короткий под конкретное уравнение.</li>
+<li><b>Читать</b> три формы параболы и брать даром то, что спрашивают: <span class="m">c</span> — пересечение с <span class="m">Oy</span>, корни <span class="m">p, q</span> — из скобок, вершину <span class="m">(h; k)</span> — из вершинной формы.</li>
+<li><b>Находить</b> вершину за один ход по <span class="m">x = −b/2a</span> и отличать максимум от минимума по знаку <span class="m">a</span> — в контексте высоты мяча, выручки, дозы лекарства.</li>
+<li><b>Определять</b> число корней по дискриминанту <span class="m">D</span>, не решая уравнения, и решать задачи «при каком <span class="m">k</span> ровно одно решение» через <span class="m">D = 0</span> (в том числе — когда прямая касается параболы).</li>
+<li><b>Проверять</b> найденные корни Виетом за пару секунд — сумма даёт <span class="m">−b/a</span>, произведение <span class="m">c/a</span>.</li>
+<li><b>Обходить</b> ловушки Графа Подвоха: потерянный минус, вершина со знаком плюс, «значение против места» максимума, <span class="m">D = 0</span> против <span class="m">D &lt; 0</span>.</li>
+</ul>
+
+<div class="cheat"><div class="cheat-t">Шпаргалка</div><ul>
+<li><span class="m">ax<sup>2</sup> + bx + c = 0</span> — общий вид (обязательно <span class="m">a ≠ 0</span>).</li>
+<li><span class="m">A · B = 0 ⇒ A = 0</span> или <span class="m">B = 0</span> — правило нулевого произведения.</li>
+<li><span class="m">a<sup>2</sup> − b<sup>2</sup> = (a − b)(a + b)</span> — разность квадратов.</li>
+<li><span class="m">x<sup>2</sup> = k ⇒ x = ±√k</span> — извлечение корня, оба знака.</li>
+<li>Три формы: <span class="m">ax<sup>2</sup> + bx + c</span> (даёт <span class="m">c</span>) · <span class="m">a(x − p)(x − q)</span> (даёт корни) · <span class="m">a(x − h)<sup>2</sup> + k</span> (даёт вершину).</li>
+<li><span class="m">x<sub>верш</sub> = −<span class="frac"><b>b</b><i>2a</i></span></span> — координата вершины; <span class="m">a &gt; 0</span> минимум, <span class="m">a &lt; 0</span> максимум.</li>
+<li><span class="m">D = b<sup>2</sup> − 4ac</span>: <span class="m">D &gt; 0</span> — два корня, <span class="m">D = 0</span> — один, <span class="m">D &lt; 0</span> — ни одного.</li>
+<li><span class="m">x = <span class="frac"><b>−b ± √D</b><i>2a</i></span></span> — формула корней.</li>
+<li><span class="m">x<sub>1</sub> + x<sub>2</sub> = −<span class="frac"><b>b</b><i>a</i></span></span>, <span class="m">x<sub>1</sub>x<sub>2</sub> = <span class="frac"><b>c</b><i>a</i></span></span> — Виет для проверки.</li>
+</ul></div>
+
+<div class="feynman"><div class="box-t">Задание Фейнмана</div><p>Объясни воображаемому 12-летнему, без единого мудрёного слова: почему у уравнения <span class="m">x<sup>2</sup> = 9</span> два ответа, а не один? И почему «выключатель ноля» (произведение равно нулю) помогает найти корни?</p>
+<details class="sol"><summary>Образец объяснения</summary><p>«Смотри. Квадрат — это когда число умножают само на себя. Плюс на плюс даёт плюс: <span class="m">3 × 3 = 9</span>. Но и минус на минус тоже даёт плюс: <span class="m">(−3) × (−3) = 9</span>. Значит и тройка, и минус-тройка после возведения в квадрат превращаются в девятку — квадрат "забывает" знак. Поэтому, разгадывая обратно, мы обязаны вспомнить оба: и <span class="m">3</span>, и <span class="m">−3</span>. Забыть минус — всё равно что найти одного из двух близнецов и уйти.</p><p>А про ноль так. Если я перемножил два числа и получил ноль — значит, хотя бы одно из них было нулём. По-другому никак: два ненулевых числа дадут не ноль. Поэтому, когда у нас <span class="m">(x − 2)(x − 3) = 0</span>, мы говорим: одна из скобок — ноль. Либо <span class="m">x = 2</span>, либо <span class="m">x = 3</span>. Мы разбили одну трудную задачу на две лёгкие — как найти, какой из двух выключателей погасил свет».</p></details>
+</div>
+</div>
+
+</section>
+
+<section class="chapter" id="ch-8-en" data-ch="8" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 8 · Advanced Math</div><h2>The Parabola: The Universe's Favorite Curve</h2><p class="ch-lede">A single curve describes both how a stone falls and how we listen to distant galaxies.</p></header>
+
+<div class="hook">
+<p>Spit a watermelon seed. Toss a ball. Shoot a stream of water from a fountain. Drop a piece of chalk so that it travels forward. Each time, the air traces the exact same curve—and, almost indecently, its equation fits in a single line. Not a thick reference book, not a computer model. A single line.</p>
+<p>Galileo was the first to notice: a projectile does not travel along a circular arc, as people thought before him, nor along a jagged path of "climb" and "fall". It travels along a <em>parabola</em>. Always. Speed, angle, and mass change the scale of the curve—but not its nature.</p>
+<p>Now for a wilder trick. Take that exact same curve and spin it around its axis, the way a potter spins clay. You get a parabolic bowl. And this bowl has a magical property: any ray coming in parallel to its axis—the light of a distant star, a radio signal from a satellite—will reflect and gather at a single point. This point is called the focus. A satellite dish, a car headlight, a telescope mirror—they are all parabolas built to catch things.</p>
+<p>So a single curve answers two questions at once: how things fall, and how we hear the universe. Once this truly sinks in, the best thing to do is to pause for a second. And then learn how to calculate it. That is what we will do.</p>
+</div>
+
+<div class="try-first">
+<p>Before I show you the tools, play around with it yourself. Seriously, spend five or ten minutes with a piece of paper. Don't peek ahead.</p>
+<div class="problem tier-b"><div class="pr-t">Warm-up before the battle</div>
+<p>A ball is thrown vertically upward. Its height (in meters) after <span class="m">t</span> seconds is <span class="m">h = −5t<sup>2</sup> + 20t</span>.</p>
+<p>Two questions: <b>(1)</b> At what times is the ball on the ground (<span class="m">h = 0</span>)? <b>(2)</b> What is the <em>maximum</em> height it will reach?</p>
+<p>You will likely crack the first question. The second one will be trickier: you can plug in <span class="m">t = 1, 2, 3…</span> and see which number is larger, but how can you be sure a higher peak isn't hidden between two integers? Remember this feeling. By the end of this chapter, you will have a move that gives you the vertex in a single step.</p>
+</div>
+</div>
+
+<div class="box idea"><div class="box-t">Idea</div><p>If you remember one thing: <b>a parabola is a graph that hides the <em>square</em> of a variable</b> (<span class="m">x<sup>2</sup></span>), and it always has a single turning point—the vertex, where the motion reverses.</p></div>
+
+<h3>Where It All Begins: The Quadratic Equation</h3>
+
+<p>A linear equation (Chapter 5) described a straight line: a constant step, no turns, no curves. Add <span class="m">x<sup>2</sup></span>, and the world bends. Here is the general form of what we are now solving:</p>
+
+<div class="formula"><b class="hl">a</b>x<sup>2</sup> + bx + c = 0</div>
+<ul class="legend"><li><span class="m">a</span> — the coefficient of the squared term; <b>must not be zero</b> (otherwise there is no square, and it is a straight line again)</li><li><span class="m">b</span> — the coefficient of the linear term</li><li><span class="m">c</span> — the constant term</li></ul>
+
+<p>To "solve" means to find values of <span class="m">x</span> that make the left side zero. Geometrically: where the parabola <span class="m">y = ax<sup>2</sup> + bx + c</span> intersects the <span class="m">Ox</span>-axis. There can be two, one, or zero such points—and this is not a coincidence, but a law we will soon discover.</p>
+
+<h3>The First Key: Factoring</h3>
+
+<p>An analogy. The number <span class="m">6</span> can be written as <span class="m">2 · 3</span>. If you are told "the product of two numbers is zero," you instantly realize that at least one of them must be zero. There is no other way: two non-zero factors always yield a non-zero product. That is the entire secret.</p>
+
+<div class="box tool"><div class="box-t">Move: "The Zero Product Rule"</div><p>If <span class="m">A · B = 0</span>, then <span class="m">A = 0</span> <b>or</b> <span class="m">B = 0</span>. Therefore, our strategy is to turn <span class="m">ax<sup>2</sup> + bx + c</span> into a product of two sets of parentheses—and set each to zero separately.</p></div>
+
+<div class="example"><div class="ex-t">Example 1 · Trinomial with <span class="m">a = 1</span></div><p>Solve <span class="m">x<sup>2</sup> − 5x + 6 = 0</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want two numbers whose product is <span class="m">c = 6</span> and whose sum is <span class="m">−(−5) = 5</span>... that is, their sum is <span class="m">5</span> and product is <span class="m">6</span>.</span> We test pairs for six: <span class="m">1·6, 2·3</span>. The sum <span class="m">2 + 3 = 5</span>—we have a match. Signs: both must be negative so that the sum is <span class="m">−5</span> and the product is <span class="m">+6</span>. That means <span class="m">−2</span> and <span class="m">−3</span>.</div>
+<div class="step"><span class="step-why">Assemble the factors:</span> <span class="m">x<sup>2</sup> − 5x + 6 = (x − 2)(x − 3)</span>.</div>
+<div class="step"><span class="step-why">Apply the zero product rule:</span> <span class="m">x − 2 = 0</span> or <span class="m">x − 3 = 0</span>.</div>
+</div>
+<p>Answer: <strong>x = 2</strong> or <strong>x = 3</strong>. Looking back: expand the parentheses <span class="m">(x − 2)(x − 3)</span> back out—you get <span class="m">x<sup>2</sup> − 5x + 6</span>. You can always check factoring by multiplying; it is free insurance.</p>
+</div>
+
+<details class="hint"><summary>Why is the sum <span class="m">−b</span> and the product <span class="m">c</span>?</summary><p>Expand <span class="m">(x − p)(x − q) = x<sup>2</sup> − (p + q)x + pq</span>. Compare this with <span class="m">x<sup>2</sup> + bx + c</span>: the coefficient of <span class="m">x</span> is <span class="m">−(p + q)</span>, and the constant term is <span class="m">pq</span>. Thus, the sum of the roots is <span class="m">p + q = −b</span>, and the product is <span class="m">pq = c</span> (when <span class="m">a = 1</span>). This is Vieta, which we will return to at the end.</p></details>
+
+<div class="example"><div class="ex-t">Example 2 · When <span class="m">a &gt; 1</span> (grouping method)</div><p>Solve <span class="m">2x<sup>2</sup> + 7x + 3 = 0</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">With a leading coefficient of one, it was easy. Here, <span class="m">a = 2</span> gets in the way. We want to reduce this to a familiar problem:</span> we look for two numbers with a product of <span class="m">a · c = 2 · 3 = 6</span> and a sum of <span class="m">b = 7</span>. These are <span class="m">1</span> and <span class="m">6</span>.</div>
+<div class="step"><span class="step-why">Split the middle term into these two pieces:</span> <span class="m">2x<sup>2</sup> + x + 6x + 3</span>.</div>
+<div class="step"><span class="step-why">Group by pairs and factor out the common term:</span> <span class="m">x(2x + 1) + 3(2x + 1)</span>. The binomial <span class="m">(2x + 1)</span> is common—we factor it out: <span class="m">(2x + 1)(x + 3)</span>.</div>
+<div class="step"><span class="step-why">Zero product:</span> <span class="m">2x + 1 = 0</span> gives <span class="m">x = −<span class="frac"><b>1</b><i>2</i></span></span>; <span class="m">x + 3 = 0</span> gives <span class="m">x = −3</span>.</div>
+</div>
+<p>Answer: <strong>x = −<span class="frac"><b>1</b><i>2</i></span></strong> or <strong>x = −3</strong>.</p>
+</div>
+
+<div class="box story"><div class="box-t">In the Margins</div><p>The "sum and product" move is Vieta in reverse. You don't find the roots through the formula; you <em>guess</em> them, knowing how they must match. For an experienced person with "nice" coefficients, this takes seconds—the eye catches the pair automatically. It is trained just like mental arithmetic.</p></div>
+
+<h3>Two Special Faces of Factoring</h3>
+
+<p><b>Difference of squares.</b> There is a pattern you must recognize instantly, like your own name:</p>
+<div class="formula"><b class="hl">a<sup>2</sup> − b<sup>2</sup></b> = (a − b)(a + b)</div>
+<p>Checking by multiplying: <span class="m">(a − b)(a + b) = a<sup>2</sup> + ab − ab − b<sup>2</sup> = a<sup>2</sup> − b<sup>2</sup></span>. The middle terms cancel each other out. Therefore, <span class="m">x<sup>2</sup> − 9 = (x − 3)(x + 3)</span>, and the roots are instantly <span class="m">x = 3</span> and <span class="m">x = −3</span>.</p>
+
+<p><b>Factoring out a common term.</b> If all terms share a common piece, pull it out first, before any guessing. <span class="m">3x<sup>2</sup> − 12x = 3x(x − 4)</span>. The roots are <span class="m">3x = 0</span> (meaning <span class="m">x = 0</span>) or <span class="m">x − 4 = 0</span> (meaning <span class="m">x = 4</span>).</p>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Count Gotcha loves equations without a constant term, like <span class="m">3x<sup>2</sup> = 12x</span>. He whispers: "Divide both sides by <span class="m">3x</span>—you get <span class="m">x = 4</span>, and there is your answer." By dividing by <span class="m">x</span>, you <b>erase the root <span class="m">x = 0</span></b>—because that is exactly what division kills. Never divide by a variable. Move everything to one side and factor: <span class="m">3x<sup>2</sup> − 12x = 0 → 3x(x − 4) = 0</span>, roots are <span class="m">0</span> and <span class="m">4</span>.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">How many roots does the equation <span class="m">x<sup>2</sup> − 7x = 0</span> have?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-1e" value="a"><span>One: <span class="m">x = 7</span></span></label>
+<label><input type="radio" name="q8-1e" value="b"><span>None</span></label>
+<label><input type="radio" name="q8-1e" value="c"><span>One: <span class="m">x = 0</span></span></label>
+<label><input type="radio" name="q8-1e" value="d"><span>Two: <span class="m">x = 0</span> and <span class="m">x = 7</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. Factoring out x: x(x − 7) = 0, which gives two roots: 0 and 7." data-no="Count Gotcha caught you: you probably divided by x and lost the root x = 0. Factor it out—x(x − 7) = 0—to get both roots."></div>
+</div>
+
+<h3>The Second Key: Taking the Square Root (and the Lost Minus)</h3>
+
+<p>When an equation looks like "something squared equals a number," there is no need to guess factors or fuss. It is enough to take the square root. But here lies the most famous mistake in school algebra.</p>
+
+<div class="box idea"><div class="box-t">Idea</div><p><span class="m">x<sup>2</sup> = k</span> means <span class="m">x = +√k</span> <b>and</b> <span class="m">x = −√k</span>. Both. After all, both <span class="m">3<sup>2</sup></span> and <span class="m">(−3)<sup>2</sup></span> yield <span class="m">9</span>—the square erases the sign, and we must restore it in both directions.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p><span class="m">x<sup>2</sup> = 9</span> → <span class="m">x = 3</span>. One answer. Half of all test-takers do this, and Count Gotcha counts on it: the SAT choices almost always include both the "half-correct" number and the complete answer. The correct way is: <span class="m">x = ±3</span>. Train your hand to write <b>plus-minus</b> the very instant you take a square root.</p></div>
+
+<div class="example"><div class="ex-t">Example 3 · Taking the Square Root</div><p>Solve <span class="m">2x<sup>2</sup> − 50 = 0</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to isolate the squared term:</span> move <span class="m">50</span>: <span class="m">2x<sup>2</sup> = 50</span>.</div>
+<div class="step"><span class="step-why">Divide by <span class="m">2</span> (we can divide by a number—it is not zero):</span> <span class="m">x<sup>2</sup> = 25</span>.</div>
+<div class="step"><span class="step-why">Take the square root—using both signs immediately:</span> <span class="m">x = ±5</span>.</div>
+</div>
+<p>Answer: <strong>x = 5</strong> or <strong>x = −5</strong>.</p>
+</div>
+
+<div class="example"><div class="ex-t">Example 4 · Squared Binomial (complete it yourself)</div><p>Solve <span class="m">(x − 4)<sup>2</sup> = 9</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Here, an entire set of parentheses is squared. Same move—take the square root with both signs:</span> <span class="m">x − 4 = ±3</span>.</div>
+<div class="step"><span class="step-why">Split into two separate cases.</span> The "plus" case: <span class="m">x − 4 = 3 → x = 7</span>. The "minus" case: <span class="m">x − 4 = −3 → x = ?</span></div>
+</div>
+<details class="hint"><summary>Solve the second case</summary><p><span class="m">x − 4 = −3</span> → add <span class="m">4</span> to both sides → <span class="m">x = 1</span>. The full answer: <strong>x = 7</strong> or <strong>x = 1</strong>. Check: <span class="m">(7 − 4)<sup>2</sup> = 9</span> ✓ and <span class="m">(1 − 4)<sup>2</sup> = (−3)<sup>2</sup> = 9</span> ✓.</p></details>
+</div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Solve <span class="m">x<sup>2</sup> = 16</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-2e" value="a"><span><span class="m">x = 4</span></span></label>
+<label><input type="radio" name="q8-2e" value="b"><span><span class="m">x = ±4</span></span></label>
+<label><input type="radio" name="q8-2e" value="c"><span><span class="m">x = 8</span></span></label>
+<label><input type="radio" name="q8-2e" value="d"><span><span class="m">x = ±8</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. Both +4 and −4 squared yield 16." data-no="If you chose 4, you lost the minus sign (the most common mistake). If you chose 8, you confused the square root with dividing by two: √16 = 4, not 8."></div>
+</div>
+
+<h3>Three Forms of One Parabola—and What Each Gives You for Free</h3>
+
+<p>Here is the central idea of the entire chapter. The exact same parabola can be written in three different ways, and <em>each version answers its own question for free</em>. A smart person doesn't solve—they choose the form where the answer is already visible.</p>
+
+<table class="tbl"><thead><tr><th>Form</th><th>Appearance</th><th>What it gives for free</th></tr></thead><tbody>
+<tr><td>Standard</td><td><span class="m">y = ax<sup>2</sup> + bx + c</span></td><td>y-intercept: <span class="m">c</span> (when <span class="m">x = 0</span>)</td></tr>
+<tr><td>Factored</td><td><span class="m">y = a(x − p)(x − q)</span></td><td>Roots (intersections with the <span class="m">Ox</span>-axis): <span class="m">p</span> and <span class="m">q</span></td></tr>
+<tr><td>Vertex</td><td><span class="m">y = a(x − h)<sup>2</sup> + k</span></td><td>Vertex: point <span class="m">(h; k)</span></td></tr>
+</tbody></table>
+
+<div class="box tool"><div class="box-t">Move: "What Each Form Gives You for Free"</div><p>If they ask for the y-intercept, look at <span class="m">c</span> in the standard form. If they ask for the roots, you need the factored form. If they ask for the maximum, minimum, or vertex, you need the vertex form. <b>First decide what they are asking for, then choose the form where it is already written.</b> Half of the SAT parabola questions are just testing whether you recognize the right form.</p></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">At what point does the parabola <span class="m">y = 2(x + 1)(x − 4)</span> intersect the <span class="m">Oy</span>-axis?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-7e" value="a"><span><span class="m">(0; −4)</span></span></label>
+<label><input type="radio" name="q8-7e" value="b"><span><span class="m">(0; −8)</span></span></label>
+<label><input type="radio" name="q8-7e" value="c"><span><span class="m">(0; 4)</span></span></label>
+<label><input type="radio" name="q8-7e" value="d"><span><span class="m">(−1; 0)</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. The intersection with the Oy-axis is where x = 0: y = 2·(0 + 1)·(0 − 4) = 2·1·(−4) = −8." data-no="The Oy-axis is where x = 0, not a ready-made answer from the parentheses. The numbers −1 and 4 are the ROOTS (intersections with the Ox-axis). Plug in x = 0: y = 2·1·(−4) = −8."></div>
+</div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 300" role="img" aria-label="Parabola anatomy: vertex, axis of symmetry, two roots, and y-intercept">
+<line class="grid" x1="90" y1="30" x2="90" y2="270"/>
+<line class="grid" x1="130" y1="30" x2="130" y2="270"/>
+<line class="grid" x1="170" y1="30" x2="170" y2="270"/>
+<line class="grid" x1="250" y1="30" x2="250" y2="270"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="270"/>
+<line class="grid" x1="330" y1="30" x2="330" y2="270"/>
+<line class="ax" x1="40" y1="150" x2="400" y2="150"/>
+<line class="ax" x1="210" y1="30" x2="210" y2="285"/>
+<path class="crv" fill="none" d="M90 50 L98 73.2 L106 94.8 L114 114.8 L122 133.2 L130 150 L138 165.2 L146 178.8 L154 190.8 L162 201.2 L170 210 L178 217.2 L186 222.8 L194 226.8 L202 229.2 L210 230 L218 229.2 L226 226.8 L234 222.8 L242 217.2 L250 210 L258 201.2 L266 190.8 L274 178.8 L282 165.2 L290 150 L298 133.2 L306 114.8 L314 94.8 L322 73.2 L330 50"/>
+<circle class="pt" cx="130" cy="150" r="4"/>
+<circle class="pt" cx="290" cy="150" r="4"/>
+<circle class="pt" cx="210" cy="230" r="4"/>
+<text class="lbl" x="98" y="140">root p = −2</text>
+<text class="lbl" x="256" y="140">root q = 2</text>
+<text class="lbl" x="216" y="248">vertex (0; −4)</text>
+<text class="lbl" x="216" y="60">axis of symmetry</text>
+</svg><figcaption>Anatomy of the parabola <span class="m">y = x<sup>2</sup> − 4</span>: two roots <span class="m">±2</span> (where the curve cuts the <span class="m">Ox</span>-axis), the vertex <span class="m">(0; −4)</span>—the lowest point, and the vertical axis of symmetry passing through it. Here, the <span class="m">Oy</span>-axis coincides with the axis of symmetry, which is why the y-intercept is also <span class="m">−4</span>.</figcaption></figure>
+
+<div class="example"><div class="ex-t">Example 5 · Transition standard → factored → vertex</div><p>Given <span class="m">y = x<sup>2</sup> − 6x + 5</span>. Find the y-intercept, roots, and vertex.</p>
+<div class="steps">
+<div class="step"><span class="step-why">The y-intercept is already free—it is <span class="m">c</span>:</span> <span class="m">c = 5</span>, the point <span class="m">(0; 5)</span>.</div>
+<div class="step"><span class="step-why">Roots—we factor the expression. We look for a pair with a sum of <span class="m">6</span> and a product of <span class="m">5</span>:</span> these are <span class="m">1</span> and <span class="m">5</span>. Thus <span class="m">y = (x − 1)(x − 5)</span>, roots <span class="m">p = 1</span>, <span class="m">q = 5</span>.</div>
+<div class="step"><span class="step-why">The x-coordinate of the vertex is the midpoint between the roots (the parabola is symmetric!):</span> <span class="m">x = <span class="frac"><b>1 + 5</b><i>2</i></span> = 3</span>. We plug it in: <span class="m">y = 3<sup>2</sup> − 6·3 + 5 = 9 − 18 + 5 = −4</span>. The vertex is <span class="m">(3; −4)</span>.</div>
+<div class="step"><span class="step-why">Write the vertex form (which yields the vertex for free):</span> <span class="m">y = (x − 3)<sup>2</sup> − 4</span>.</div>
+</div>
+<p>Answer: y-intercept at <span class="m">(0; 5)</span>, roots <span class="m">1</span> and <span class="m">5</span>, vertex <span class="m">(3; −4)</span>. Looking back: expand <span class="m">(x − 3)<sup>2</sup> − 4 = x<sup>2</sup> − 6x + 9 − 4 = x<sup>2</sup> − 6x + 5</span>—we are back to the original. Three forms, same beast.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>The vertex form <span class="m">y = (x − 3)<sup>2</sup> + 2</span> yields the vertex <span class="m">(3; 2)</span>—with a <b>positive three</b>. Not <span class="m">(−3; 2)</span>. Inside the parentheses is <span class="m">(x − h)</span>, so <span class="m">h = +3</span>. Count Gotcha puts <span class="m">−3</span> first in the list of answers precisely because the minus inside the parentheses is hypnotic. Test yourself: "what value of <span class="m">x</span> makes the parentheses zero?"—it is <span class="m">x = 3</span>. That is your vertex coordinate.</p></div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Where is the vertex of the parabola <span class="m">y = (x − 3)<sup>2</sup> + 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-5e" value="a"><span><span class="m">(−3; 2)</span></span></label>
+<label><input type="radio" name="q8-5e" value="b"><span><span class="m">(3; −2)</span></span></label>
+<label><input type="radio" name="q8-5e" value="c"><span><span class="m">(3; 2)</span></span></label>
+<label><input type="radio" name="q8-5e" value="d"><span><span class="m">(−3; −2)</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. The expression (x − 3) becomes zero when x = 3, and the + 2 on the outside is k. The vertex is (3; 2)." data-no="A classic sign trap. Inside is (x − h), so h = +3, not −3. Ask yourself: what value of x makes the expression inside parentheses zero? That is x = 3. The vertex is (3; 2)."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Freeze-Frame</div><p>Close the screen. Without peeking, reconstruct from memory: the three forms of the parabola and what each yields for free. Then, state the zero product rule in a single sentence. If you can't remember even one of these, go back two sections—these are the load-bearing beams of the entire chapter.</p></div>
+
+<h3>The Vertex in One Move: <span class="m">x = −b/2a</span></h3>
+
+<p>Calculating the midpoint between the roots is convenient when roots exist. But if the parabola does not cross the <span class="m">Ox</span>-axis at all (no roots), the vertex still exists. We need a formula that works every time.</p>
+
+<div class="box tool"><div class="box-t">Move: "Vertex = −b/2a"</div><p>For the parabola <span class="m">y = ax<sup>2</sup> + bx + c</span>, the x-coordinate of the vertex is <span class="m">x = −<span class="frac"><b>b</b><i>2a</i></span></span>. Plug this <span class="m">x</span> into the equation to get the <span class="m">y</span>-coordinate. It works every time, whether roots exist or not.</p></div>
+
+<div class="box why"><div class="box-t">Why It Works</div><p>The parabola is symmetric with respect to the vertical line through the vertex. The roots (when they exist) are <span class="m">x = <span class="frac"><b>−b ± √D</b><i>2a</i></span></span> from the quadratic formula we will see below. Their midpoint—the average—is <span class="m">−<span class="frac"><b>b</b><i>2a</i></span></span>, since the terms with <span class="m">±√D</span> cancel each other out. The midpoint of the roots is the axis of symmetry, and the vertex sits on it. The formula relies on symmetry, not on the existence of roots, which is why it is always valid.</p></div>
+
+<div class="example"><div class="ex-t">Example 6 · Returning to the Thrown Ball</div><p>That same warm-up: <span class="m">h = −5t<sup>2</sup> + 20t</span>. When is the ball on the ground, and what is the maximum height?</p>
+<div class="steps">
+<div class="step"><span class="step-why">"On the ground" means <span class="m">h = 0</span>, so we look for the roots. Factor out the common term:</span> <span class="m">−5t(t − 4) = 0</span>, which means <span class="m">t = 0</span> (launch) or <span class="m">t = 4</span> (landing).</div>
+<div class="step"><span class="step-why">The maximum height is the y-coordinate of the vertex. First, find the time of the vertex using the "−b/2a" move:</span> here <span class="m">a = −5</span> and <span class="m">b = 20</span>, so <span class="m">t = −<span class="frac"><b>20</b><i>2·(−5)</i></span> = −<span class="frac"><b>20</b><i>−10</i></span> = 2</span> seconds.</div>
+<div class="step"><span class="step-why">Now find the height at this moment by plugging in <span class="m">t = 2</span>:</span> <span class="m">h = −5·2<sup>2</sup> + 20·2 = −20 + 40 = 20</span> meters.</div>
+</div>
+<p>Answer: on the ground at <span class="m">t = 0</span> and <span class="m">t = 4</span> s; maximum height <strong>20 m</strong> at <span class="m">t = 2</span> s. Notice how elegant: the vertex is exactly halfway between <span class="m">0</span> and <span class="m">4</span>. Plugging in integers did not guarantee finding this—but the formula gave the peak instantly.</p>
+</div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 260" role="img" aria-label="Trajectory of a thrown ball with a maximum height of 20 meters at 2 seconds">
+<line class="grid" x1="130" y1="30" x2="130" y2="210"/>
+<line class="grid" x1="210" y1="30" x2="210" y2="210"/>
+<line class="grid" x1="290" y1="30" x2="290" y2="210"/>
+<line class="grid" x1="370" y1="30" x2="370" y2="210"/>
+<line class="ax" x1="50" y1="210" x2="405" y2="210"/>
+<line class="ax" x1="50" y1="20" x2="50" y2="225"/>
+<path class="crv" fill="none" d="M50 210 L66 175.8 L82 145.2 L98 118.2 L114 94.8 L130 75 L146 58.8 L162 46.2 L178 37.2 L194 31.8 L210 30 L226 31.8 L242 37.2 L258 46.2 L274 58.8 L290 75 L306 94.8 L322 118.2 L338 145.2 L354 175.8 L370 210"/>
+<path class="crv2" fill="none" d="M210 30 L210 210"/>
+<circle class="pt" cx="210" cy="30" r="4"/>
+<circle class="pt" cx="50" cy="210" r="4"/>
+<circle class="pt" cx="370" cy="210" r="4"/>
+<text class="lbl" x="150" y="26">vertex: h = 20 m</text>
+<text class="lbl" x="214" y="228">t = 2</text>
+<text class="lbl" x="356" y="228">t = 4</text>
+<text class="lbl" x="10" y="35">h</text>
+<text class="lbl" x="392" y="205">t</text>
+</svg><figcaption>Flight of a ball <span class="m">h = −5t<sup>2</sup> + 20t</span>. The vertex—the highest point—stands exactly above the midpoint between launch (<span class="m">t = 0</span>) and landing (<span class="m">t = 4</span>). The dashed line is the axis of symmetry.</figcaption></figure>
+
+<h3>Branches Up or Down: The Sign of <span class="m">a</span> Decides Everything</h3>
+
+<p>A single letter—<span class="m">a</span>—determines the character of the parabola. If <span class="m">a &gt; 0</span>, the branches point up; the parabola has a <b>bottom</b>—a minimum. If <span class="m">a &lt; 0</span>, the branches point down; it has a <b>ceiling</b>—a maximum. Remember it through this image: <span class="m">a &gt; 0</span> is a smile (the cup holds water), <span class="m">a &lt; 0</span> is a frown (the cup is turned over).</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 240" role="img" aria-label="Two parabolas: on the left, branches pointing up with a minimum; on the right, branches pointing down with a maximum">
+<line class="ax" x1="30" y1="120" x2="190" y2="120"/>
+<line class="ax" x1="110" y1="30" x2="110" y2="215"/>
+<path class="crv" fill="none" d="M42.8 63.3 L48.4 83.5 L54 102 L59.6 118.7 L65.2 133.7 L70.8 146.9 L76.4 158.3 L82 168 L87.6 175.9 L93.2 182.1 L98.8 186.5 L104.4 189.1 L110 190 L115.6 189.1 L121.2 186.5 L126.8 182.1 L132.4 175.9 L138 168 L143.6 158.3 L149.2 146.9 L154.8 133.7 L160.4 118.7 L166 102 L171.6 83.5 L177.2 63.3"/>
+<circle class="pt" cx="110" cy="190" r="4"/>
+<text class="lbl" x="40" y="205">a &gt; 0: minimum</text>
+<line class="ax" x1="230" y1="120" x2="390" y2="120"/>
+<line class="ax" x1="310" y1="30" x2="310" y2="215"/>
+<path class="crv2" fill="none" d="M242.8 176.7 L248.4 156.5 L254 138 L259.6 121.3 L265.2 106.3 L270.8 93.1 L276.4 81.7 L282 72 L287.6 64.1 L293.2 57.9 L298.8 53.5 L304.4 50.9 L310 50 L315.6 50.9 L321.2 53.5 L326.8 57.9 L332.4 64.1 L338 72 L343.6 81.7 L349.2 93.1 L354.8 106.3 L360.4 121.3 L366 138 L371.6 156.5 L377.2 176.7"/>
+<circle class="pt" cx="310" cy="50" r="4"/>
+<text class="lbl" x="240" y="205">a &lt; 0: maximum</text>
+</svg><figcaption>On the left, <span class="m">y = x<sup>2</sup></span> (<span class="m">a &gt; 0</span>)—a "smile" with a minimum at the vertex. On the right, <span class="m">y = −x<sup>2</sup></span> (<span class="m">a &lt; 0</span>)—a "frown" with a maximum. The sign of <span class="m">a</span> is all you need to determine whether there is a minimum or a maximum.</figcaption></figure>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>"Find the <em>maximum value</em> of the function <span class="m">y = −(x − 5)<sup>2</sup> + 7</span>." The maximum <b>value</b> is the y-coordinate of the vertex, which is <span class="m">7</span>. Count Gotcha helpfully offers <span class="m">5</span>—which is the x-coordinate, the place <em>where</em> the maximum is reached, not the maximum itself. Distinguish between two questions: "for what value of <span class="m">x</span>?" → the answer is <span class="m">h</span> (here, <span class="m">5</span>); "what is the value / height / revenue?" → the answer is <span class="m">k</span> (here, <span class="m">7</span>). And since <span class="m">a = −1 &lt; 0</span>, this is indeed a maximum, not a minimum.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">The function <span class="m">y = −2(x − 3)<sup>2</sup> + 8</span> has a maximum value. What is it?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-3e" value="a"><span><span class="m">8</span></span></label>
+<label><input type="radio" name="q8-3e" value="b"><span><span class="m">3</span></span></label>
+<label><input type="radio" name="q8-3e" value="c"><span><span class="m">−2</span></span></label>
+<label><input type="radio" name="q8-3e" value="d"><span>There is no maximum, only a minimum</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. Since a = −2 is less than zero, the branches point down, meaning there is a maximum; its value is the y-coordinate of the vertex, which is 8." data-no="The maximum VALUE is k (here, 8). The number 3 is the x-coordinate of the vertex (where it is reached), not the maximum itself. The 'no maximum' option is incorrect: a is negative, so the branches point down."></div>
+</div>
+
+<h3>Medicine: The Optimal Dose</h3>
+
+<p>An upside-down parabola is not just about balls. In pharmacology, the effect of many substances grows with the dose only up to a point: first, the benefit increases, then toxicity kicks in, and the curve bends downward. This is literally <span class="m">a &lt; 0</span>. Finding the dose of maximum effect means finding the vertex.</p>
+
+<div class="example"><div class="ex-t">Example 7 · Dose of Maximum Effect</div><p>In a model experiment, the therapeutic effect of a drug is described as <span class="m">E = −2d<sup>2</sup> + 12d − 10</span>, where <span class="m">d</span> is the dose (mg/kg) and <span class="m">E</span> is the effect in arbitrary units. At what dose is the effect greatest, and what is it equal to?</p>
+<div class="steps">
+<div class="step"><span class="step-why"><span class="m">a = −2 &lt; 0</span>—the curve bends down, so a maximum exists. We find the peak dose using the "−b/2a" move:</span> <span class="m">d = −<span class="frac"><b>12</b><i>2·(−2)</i></span> = −<span class="frac"><b>12</b><i>−4</i></span> = 3</span> mg/kg.</div>
+<div class="step"><span class="step-why">The maximum effect itself—plug in <span class="m">d = 3</span>:</span> <span class="m">E = −2·9 + 12·3 − 10 = −18 + 36 − 10 = 8</span> units.</div>
+</div>
+<p>Answer: the maximum effect is <strong>8 units at a dose of 3 mg/kg</strong>. Looking back: by setting <span class="m">E = 0</span>, you will find the doses where there is no effect at all—<span class="m">−2d<sup>2</sup> + 12d − 10 = 0</span>, which is <span class="m">d<sup>2</sup> − 6d + 5 = 0 → (d − 1)(d − 5) = 0 → d = 1</span> and <span class="m">d = 5</span>. Below <span class="m">1</span> and above <span class="m">5</span>, the model goes negative—a hint that the toxicity zone lies beyond the peak. The vertex <span class="m">3</span> is exactly halfway between <span class="m">1</span> and <span class="m">5</span>, as it should be.</p>
+</div>
+
+<h3>The Discriminant: How Many Roots, Before You Even Look for Them</h3>
+
+<div class="formula">D = <b class="hl">b<sup>2</sup> − 4ac</b></div>
+<ul class="legend"><li><span class="m">D &gt; 0</span> — <b>two</b> distinct roots (the parabola cuts the <span class="m">Ox</span>-axis at two points)</li><li><span class="m">D = 0</span> — <b>exactly one</b> root (the parabola touches the <span class="m">Ox</span>-axis with its vertex)</li><li><span class="m">D &lt; 0</span> — <b>no</b> real roots (the parabola floats entirely above or below the axis)</li></ul>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>"Exactly one solution" means <span class="m">D = 0</span>, <b>not</b> <span class="m">D &lt; 0</span>. Count Gotcha swaps them: when <span class="m">D &lt; 0</span>, there are <em>zero</em> solutions, not one. Mnemonic: <b>zero under the radical—one root</b> (plus-minus zero does not split). A negative number under the radical—no real roots at all.</p></div>
+
+<div class="example"><div class="ex-t">Example 8 · "For what <span class="m">k</span> is there exactly one solution?"</div><p>For what value of <span class="m">k</span> does the equation <span class="m">x<sup>2</sup> + kx + 9 = 0</span> have exactly one solution?</p>
+<div class="steps">
+<div class="step"><span class="step-why">"Exactly one" means <span class="m">D = 0</span>. We write down the discriminant:</span> here <span class="m">a = 1</span>, <span class="m">b = k</span>, and <span class="m">c = 9</span>, which means <span class="m">D = k<sup>2</sup> − 4·1·9 = k<sup>2</sup> − 36</span>.</div>
+<div class="step"><span class="step-why">Set it equal to zero:</span> <span class="m">k<sup>2</sup> − 36 = 0 → k<sup>2</sup> = 36</span>.</div>
+<div class="step"><span class="step-why">Take the square root—and don't lose the minus sign:</span> <span class="m">k = ±6</span>.</div>
+</div>
+<p>Answer: <strong>k = 6</strong> or <strong>k = −6</strong>. Both work: both <span class="m">x<sup>2</sup> + 6x + 9 = (x + 3)<sup>2</sup></span> and <span class="m">x<sup>2</sup> − 6x + 9 = (x − 3)<sup>2</sup></span> are perfect squares, each having one root. Notice how the discriminant problem itself turned into "take the square root, remember the <span class="m">±</span>"? The traps in this chapter hold hands.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">How many real roots does <span class="m">x<sup>2</sup> + 4x + 4 = 0</span> have?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-4e" value="a"><span>Two</span></label>
+<label><input type="radio" name="q8-4e" value="b"><span>None</span></label>
+<label><input type="radio" name="q8-4e" value="c"><span>Exactly one</span></label>
+<label><input type="radio" name="q8-4e" value="d"><span>Infinitely many</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. D = 16 − 16 = 0—exactly one root (this is (x + 2)², with root x = −2)." data-no="We calculate D = b² − 4ac = 4² − 4·1·4 = 16 − 16 = 0. Zero under the root means exactly ONE root. It would be none if D were less than zero."></div>
+</div>
+
+<div class="box desmos"><div class="box-t">The Lazy Genius: Desmos</div><p>Type <span class="m">y = x<sup>2</sup> + kx + 9</span> into Desmos and add a slider for <span class="m">k</span> (Desmos will suggest this automatically when it sees an unfamiliar letter). Drag the slider and watch how the parabola slides up and down relative to the <span class="m">Ox</span>-axis. There are <em>exactly two</em> positions of the slider where the curve <b>touches</b> the axis at a single point—these are <span class="m">k = 6</span> and <span class="m">k = −6</span>, our <span class="m">D = 0</span>. Also, hover the cursor over the intersection point with the axis—Desmos will highlight a gray dot, click it, and it will give you the coordinates of the root. Click the lowest point of the curve—you get the vertex. The tool fixes your intuition for free: "exactly one solution" is literally "the parabola just barely touched."</p></div>
+
+<h3>The Quadratic Formula and Completing the Square (Derivation Sketch)</h3>
+
+<p>When factors cannot be guessed, there is heavy artillery—a formula that works for any quadratic equation:</p>
+
+<div class="formula">x = <span class="frac"><b class="hl">−b ± √(b<sup>2</sup> − 4ac)</b><i>2a</i></span></div>
+
+<p>Under the radical sits our familiar <span class="m">D</span>. From here, everything is visible: the <span class="m">±</span> yields two roots if <span class="m">D &gt; 0</span>; when <span class="m">D = 0</span>, the plus-minus of zero merges into one; when <span class="m">D &lt; 0</span>, you cannot take the square root of a negative number—there are no real solutions. The formula and the discriminant are the exact same knowledge, written with different levels of detail.</p>
+
+<div class="box why"><div class="box-t">Why It Works (Completing the Square, Sketch)</div><p>The formula doesn't drop from the sky—it is born from the "completing the square" move. The idea: any parabola can be forced into a "perfect square plus a remainder." Briefly, for <span class="m">ax<sup>2</sup> + bx + c = 0</span>: divide by <span class="m">a</span>, move the constant term, and add <span class="m">(<span class="frac"><b>b</b><i>2a</i></span>)<sup>2</sup></span> to both sides—exactly enough so that the perfect square of a binomial <span class="m">(x + <span class="frac"><b>b</b><i>2a</i></span>)<sup>2</sup></span> is formed on the left. From there, it is just "a square equals a number"—take the root with <span class="m">±</span>, and after simplification, the quadratic formula drops out. Notice: the last step of the derivation is Example 3, "take the root, remember the minus." The entire heavy formula stands on a move from the middle of the chapter.</p></div>
+
+<div class="example"><div class="ex-t">Example 9 · The Formula in Action (complete it yourself)</div><p>Solve <span class="m">2x<sup>2</sup> + 3x − 2 = 0</span> using the formula.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Write down the coefficients:</span> <span class="m">a = 2</span>, <span class="m">b = 3</span>, <span class="m">c = −2</span>.</div>
+<div class="step"><span class="step-why">Calculate the discriminant first—it will tell you the number of roots:</span> <span class="m">D = 3<sup>2</sup> − 4·2·(−2) = 9 + 16 = 25</span>. It is positive—two roots, and <span class="m">√25 = 5</span> works out nicely.</div>
+<div class="step"><span class="step-why">Plug them into the formula:</span> <span class="m">x = <span class="frac"><b>−3 ± 5</b><i>2·2</i></span> = <span class="frac"><b>−3 ± 5</b><i>4</i></span></span>. Work out both cases.</div>
+</div>
+<details class="hint"><summary>Calculate both roots</summary><p>The "plus" case: <span class="m">x = <span class="frac"><b>−3 + 5</b><i>4</i></span> = <span class="frac"><b>2</b><i>4</i></span> = <span class="frac"><b>1</b><i>2</i></span></span>. The "minus" case: <span class="m">x = <span class="frac"><b>−3 − 5</b><i>4</i></span> = <span class="frac"><b>−8</b><i>4</i></span> = −2</span>. Answer: <strong>x = <span class="frac"><b>1</b><i>2</i></span></strong> or <strong>x = −2</strong>. Check by factoring: <span class="m">(2x − 1)(x + 2) = 0</span>—it matches.</p></details>
+</div>
+
+<h3>Vieta as an Instant Check</h3>
+
+<p>The final move is not for finding roots, but for <em>checking</em> them in a second. We have already seen half of it: the sum and the product of the roots are hidden directly in the coefficients.</p>
+
+<div class="formula">x<sub>1</sub> + x<sub>2</sub> = <b class="hl">−b/a</b>,   x<sub>1</sub> · x<sub>2</sub> = <b class="hl2">c/a</b></div>
+
+<div class="box tool"><div class="box-t">Move: "Vieta as a Check"</div><p>Once you find two roots, add them and multiply them. The sum must equal <span class="m">−b/a</span>, and the product must equal <span class="m">c/a</span>. If they don't match, there is a mistake somewhere; go find it. This is a cheap insurance policy you can run in your head in a couple of seconds, and it catches arithmetic slips, dropped minus signs, and swapped signs.</p></div>
+
+<div class="example"><div class="ex-t">Example 10 · Checking Roots with Vieta</div><p>For <span class="m">x<sup>2</sup> − 7x + 12 = 0</span>, someone claimed the roots are <span class="m">3</span> and <span class="m">4</span>. Check this without resolving the equation.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Here, <span class="m">a = 1</span>, so the sum must be <span class="m">−b = 7</span> and the product must be <span class="m">c = 12</span>.</span> We check the proposed roots: <span class="m">3 + 4 = 7</span> ✓, <span class="m">3 · 4 = 12</span> ✓.</div>
+</div>
+<p>Answer: both checks passed—the roots <strong>3</strong> and <strong>4</strong> are correct. Done in two seconds, without factoring and without the formula.</p>
+</div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Without solving the equation, use Vieta to determine the roots of <span class="m">x<sup>2</sup> − 3x − 10 = 0</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q8-6e" value="a"><span><span class="m">5</span> and <span class="m">−2</span></span></label>
+<label><input type="radio" name="q8-6e" value="b"><span><span class="m">−5</span> and <span class="m">2</span></span></label>
+<label><input type="radio" name="q8-6e" value="c"><span><span class="m">5</span> and <span class="m">2</span></span></label>
+<label><input type="radio" name="q8-6e" value="d"><span><span class="m">−5</span> and <span class="m">−2</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. Sum = −b = 3 and product = c = −10: the pair 5 and −2 gives 5 + (−2) = 3 and 5·(−2) = −10." data-no="Check both conditions at once. You need a sum of +3 and a product of −10. The pair −5 and 2: sum −3 (wrong sign). The pair 5 and 2: product +10 (wrong sign). Only 5 and −2 satisfy both."></div>
+</div>
+
+<h3>Problems</h3>
+
+<div class="problem tier-a"><div class="pr-t">Problem 1 <span class="tier">Level A</span></div>
+<p>Solve by factoring: <span class="m">x<sup>2</sup> + 7x + 10 = 0</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is to write the left side as a product of two binomials <span class="m">(x + …)(x + …)</span> to apply the zero product rule.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The "sum and product" move: look for two numbers with a product of <span class="m">10</span> and a sum of <span class="m">7</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>The pair with a product of <span class="m">10</span> and a sum of <span class="m">7</span> is <span class="m">2</span> and <span class="m">5</span>. Thus <span class="m">(x + 2)(x + 5) = 0</span>, which gives <span class="m">x = −2</span> or <span class="m">x = −5</span>. Check with Vieta: sum <span class="m">−2 + (−5) = −7 = −b</span> ✓, product <span class="m">(−2)(−5) = 10 = c</span> ✓.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 2 <span class="tier">Level A</span></div>
+<p>Solve: <span class="m">5x<sup>2</sup> − 20 = 0</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>There is no first-power term here—which means taking the square root is shorter than factoring. Isolate the squared term.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Once you have <span class="m">x<sup>2</sup> = …</span>, remember: the root yields <b>two</b> signs.</p></details>
+<details class="sol"><summary>Solution</summary><p>Move the term: <span class="m">5x<sup>2</sup> = 20</span>, divide by <span class="m">5</span>: <span class="m">x<sup>2</sup> = 4</span>, take the square root with both signs: <span class="m">x = ±2</span>. Answer: <strong>x = 2</strong> or <strong>x = −2</strong>. (You could also factor it as a difference of squares: <span class="m">5(x<sup>2</sup> − 4) = 5(x − 2)(x + 2)</span>—same result.)</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 3 <span class="tier">Level B</span></div>
+<p>Rewrite <span class="m">y = x<sup>2</sup> + 8x + 11</span> in vertex form and state the coordinates of the vertex.</p>
+<details class="hint"><summary>Hint 1</summary><p>The goal is to write the expression as <span class="m">(x − h)<sup>2</sup> + k</span>, so the vertex <span class="m">(h; k)</span> can be read for free. You will need to complete the square.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Half of <span class="m">8</span> is <span class="m">4</span>; so the square will be <span class="m">(x + 4)<sup>2</sup></span>. But <span class="m">(x + 4)<sup>2</sup> = x<sup>2</sup> + 8x + 16</span>—which has <span class="m">16</span>, whereas we have <span class="m">11</span>. Compensate for the difference.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">x<sup>2</sup> + 8x + 11 = (x<sup>2</sup> + 8x + 16) − 16 + 11 = (x + 4)<sup>2</sup> − 5</span>. Vertex form: <span class="m">y = (x + 4)<sup>2</sup> − 5</span>, vertex <strong>(−4; −5)</strong>. Pay attention to the sign: the expression in parentheses <span class="m">(x + 4)</span> becomes zero when <span class="m">x = −4</span>—that is where the negative coordinate comes from. Check with the "−b/2a" move: <span class="m">x = −<span class="frac"><b>8</b><i>2</i></span> = −4</span> ✓.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 4 <span class="tier">Level B</span></div>
+<p>A ball flies according to the law <span class="m">h = −5t<sup>2</sup> + 30t</span> (meters, seconds). Find the maximum height and both times when the ball is at a height of <span class="m">25</span> m.</p>
+<details class="hint"><summary>Hint 1</summary><p>The maximum height is the y-coordinate of the vertex. Find the time of the vertex using the "−b/2a" move, then plug it in.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>For "height <span class="m">= 25</span>", write the equation <span class="m">−5t<sup>2</sup> + 30t = 25</span>, move everything to one side, and divide by a common factor to simplify it before factoring.</p></details>
+<details class="sol"><summary>Solution</summary><p>Vertex: <span class="m">t = −<span class="frac"><b>30</b><i>2·(−5)</i></span> = 3</span> s, height <span class="m">h = −5·9 + 30·3 = −45 + 90 = 45</span> m—the maximum. Now, <span class="m">h = 25</span>: <span class="m">−5t<sup>2</sup> + 30t = 25 → −5t<sup>2</sup> + 30t − 25 = 0</span>. Divide by <span class="m">−5</span>: <span class="m">t<sup>2</sup> − 6t + 5 = 0 → (t − 1)(t − 5) = 0</span>. Answer: maximum height <strong>45 m</strong>; the ball is at <span class="m">25</span> m twice—on the way up at <strong>t = 1 s</strong> and on the way down at <strong>t = 5 s</strong>. (Nicely symmetric: <span class="m">1</span> and <span class="m">5</span> are symmetric around the vertex <span class="m">3</span>.)</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 5 <span class="tier">Level B</span></div>
+<p>A store sells <span class="m">x</span> units of a product; profit (in thousands) is <span class="m">R = −2x<sup>2</sup> + 40x − 150</span>. At what volume is the profit greatest, and what is it equal to? At what volumes is the profit equal to zero (break-even points)?</p>
+<details class="hint"><summary>Hint 1</summary><p><span class="m">a = −2 &lt; 0</span>—branches point down, so a maximum exists. The maximum profit is the y-coordinate of the vertex.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Break-even is <span class="m">R = 0</span>. Divide the equation by <span class="m">−2</span> to get a simple trinomial with <span class="m">a = 1</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>Vertex: <span class="m">x = −<span class="frac"><b>40</b><i>2·(−2)</i></span> = 10</span>, profit <span class="m">R = −2·100 + 40·10 − 150 = −200 + 400 − 150 = 50</span> (thousand)—maximum at <strong>10 units</strong>. Break-even: <span class="m">−2x<sup>2</sup> + 40x − 150 = 0</span>, divide by <span class="m">−2</span>: <span class="m">x<sup>2</sup> − 20x + 75 = 0 → (x − 5)(x − 15) = 0</span>. Answer: <strong>maximum of 50 thousand at x = 10</strong>; zero profit at <strong>x = 5</strong> and <strong>x = 15</strong>. Fewer than <span class="m">5</span> or more than <span class="m">15</span> results in a loss.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 6 <span class="tier">flashback · Chapter 7</span></div>
+<p>A bacterial culture doubles every hour: <span class="m">N = 100 · 2<sup>t</sup></span>, where <span class="m">t</span> is hours. After how many hours will the colony reach <span class="m">1600</span> cells?</p>
+<details class="hint"><summary>Hint 1</summary><p>There is no square here—this is an exponential model from Chapter 7. Divide both sides by <span class="m">100</span> to expose a pure power of two.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>You need <span class="m">2<sup>t</sup> = 16</span>. Ask: to what power must you raise <span class="m">2</span> to get <span class="m">16</span>?</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">100 · 2<sup>t</sup> = 1600 → 2<sup>t</sup> = 16</span>. Since <span class="m">16 = 2<sup>4</sup></span>, we get <span class="m">t = 4</span> hours. Answer: <strong>4 hours</strong>. The difference in breeds: a parabola has the variable <em>in the base</em> (<span class="m">t<sup>2</sup></span>) and features a growth-turnaround; an exponential function has the variable <em>in the exponent</em> (<span class="m">2<sup>t</sup></span>) and grows without turning, getting steeper and steeper. Don't confuse them: they are two different beasts.</p></details>
+</div>
+
+<div class="problem flashback tier-c"><div class="pr-t">Problem 7 <span class="tier">flashback · Chapter 4</span></div>
+<p>Find the intersection points of the line <span class="m">y = x + 4</span> and the parabola <span class="m">y = x<sup>2</sup> − 2x</span> (this is a system from Chapter 4, only the second row is now a curve).</p>
+<details class="hint"><summary>Hint 1</summary><p>Just as in Chapter 4—use the substitution method. At the point of intersection, both <span class="m">y</span>-values are equal, which means you can set the right sides equal to each other.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>From <span class="m">x<sup>2</sup> − 2x = x + 4</span>, form a quadratic equation (move everything to one side) and factor it.</p></details>
+<details class="sol"><summary>Solution</summary><p>Set them equal: <span class="m">x<sup>2</sup> − 2x = x + 4 → x<sup>2</sup> − 3x − 4 = 0 → (x − 4)(x + 1) = 0</span>, which means <span class="m">x = 4</span> or <span class="m">x = −1</span>. Substitute <span class="m">x</span> back into the convenient (linear) equation <span class="m">y = x + 4</span>: for <span class="m">x = 4</span> we get <span class="m">y = 8</span>; for <span class="m">x = −1</span> we get <span class="m">y = 3</span>. Answer: intersections at points <strong>(4; 8)</strong> and <strong>(−1; 3)</strong>. Geometrically, the line cuts the parabola in two places—which is why the quadratic equation yielded two roots.</p></details>
+</div>
+
+<div class="problem flashback tier-c"><div class="pr-t">Problem 8 <span class="tier">Spot the error · Level C</span></div>
+<p>Count Gotcha brought a "solution." It looks smooth. Find the flaw and explain it.</p>
+<p><b>Problem:</b> solve <span class="m">(x − 2)<sup>2</sup> = 9</span>.</p>
+<p><b>Count's "Solution":</b> "I take the square root of both sides: <span class="m">x − 2 = 3</span>. I add <span class="m">2</span>: <span class="m">x = 5</span>. I check it: <span class="m">(5 − 2)<sup>2</sup> = 3<sup>2</sup> = 9</span>—it matches. Therefore, <span class="m">x = 5</span> is the only answer."</p>
+<details class="hint"><summary>Hint 1</summary><p>The Count's check is honest, but it only confirms <em>one</em> root. The question is not whether 5 is correct, but whether all roots have been found.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Remember the trap of the lost minus. What does taking the square root of both sides actually yield?</p></details>
+<details class="sol"><summary>Solution</summary><p>The flaw is that <b>the second root is lost</b>. When taking the root, the Count only wrote <span class="m">x − 2 = 3</span>, forgetting <span class="m">x − 2 = −3</span>. The correct way is: <span class="m">x − 2 = ±3</span>. From here, we get <span class="m">x = 5</span> (the "plus" case) <b>and</b> <span class="m">x = −1</span> (the "minus" case). Checking the second root: <span class="m">(−1 − 2)<sup>2</sup> = (−3)<sup>2</sup> = 9</span> ✓. The sneakiness of this "solution" is that plugging in a single root will always pass—it cannot detect a <em>missed</em> root. The full answer: <strong>x = 5</strong> and <strong>x = −1</strong>. Moral: as soon as you see a root, write <span class="m">±</span> immediately, before any checking.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 9 <span class="tier">Level C</span></div>
+<p>For what value of <span class="m">k</span> does the equation <span class="m">x<sup>2</sup> − kx + 16 = 0</span> have exactly one solution? Find all such values of <span class="m">k</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>"Exactly one solution" is a condition on the discriminant. Which one is it?</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">D = 0</span>. Here <span class="m">b = −k</span>, so <span class="m">b<sup>2</sup> = (−k)<sup>2</sup> = k<sup>2</sup></span>. And do not lose the minus sign when taking the square root.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">D = (−k)<sup>2</sup> − 4·1·16 = k<sup>2</sup> − 64</span>. The condition <span class="m">D = 0</span>: <span class="m">k<sup>2</sup> − 64 = 0 → k<sup>2</sup> = 64 → k = ±8</span>. Answer: <strong>k = 8</strong> or <strong>k = −8</strong>. Check: when <span class="m">k = 8</span> we have <span class="m">x<sup>2</sup> − 8x + 16 = (x − 4)<sup>2</sup></span>—one root; when <span class="m">k = −8</span> we have <span class="m">x<sup>2</sup> + 8x + 16 = (x + 4)<sup>2</sup></span>—also one. Count Gotcha set two traps here at once: confusing <span class="m">D = 0</span> with <span class="m">D &lt; 0</span>, and losing <span class="m">k = −8</span>. You bypassed both.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Chapter Boss: "Park Fountain"</div>
+<p>There is a new fountain in the central park of Tashkent: a stream of water shoots from a nozzle at ground level, arches beautifully, and falls back to the ground. The engineer left you three facts about the stream's flight (with height <span class="m">h</span> in meters as a function of the horizontal distance <span class="m">x</span> in meters):</p>
+<ul>
+<li>the stream shoots from the ground: at <span class="m">x = 0</span>, the height is <span class="m">h = 0</span>;</li>
+<li>the stream hits the ground at a distance of <span class="m">6</span> m: at <span class="m">x = 6</span>, the height is <span class="m">h = 0</span>;</li>
+<li>at <span class="m">x = 2</span> m, the stream passes through a height of <span class="m">4</span> m.</li>
+</ul>
+<p>Reconstruct the equation of the stream and answer: what is the maximum height of the fountain, and at what distance from the nozzle is it reached? Then, the second, devious part about touching.</p>
+
+<div class="problem tier-c"><div class="pr-t">Boss, Part 1 <span class="tier">Level C</span></div>
+<p>Find the equation <span class="m">h(x)</span>, the maximum height of the stream, and the distance at which it is reached.</p>
+<details class="hint"><summary>Hint 1</summary><p>Two facts are roots (where <span class="m">h = 0</span>). Which of the three forms of the parabola yields roots for free? Start with it, with one unknown <span class="m">a</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Write <span class="m">h = a·x·(x − 6)</span>—the roots <span class="m">0</span> and <span class="m">6</span> are already built-in. Substitute the third fact (<span class="m">x = 2, h = 4</span>) to find <span class="m">a</span>. Then, find the vertex either halfway between the roots or using "−b/2a".</p></details>
+<details class="sol"><summary>Solution</summary><p><b>Step 1—Choose form under question.</b> The roots <span class="m">0</span> and <span class="m">6</span> are given by the factored form: <span class="m">h = a·x·(x − 6)</span>. One unknown remains: <span class="m">a</span>.</p>
+<p><b>Step 2—Third fact finds <span class="m">a</span>.</b> Substituting <span class="m">x = 2, h = 4</span>: <span class="m">4 = a·2·(2 − 6) = a·2·(−4) = −8a</span>, which gives <span class="m">a = −<span class="frac"><b>1</b><i>2</i></span></span>. A negative <span class="m">a</span> makes sense—the stream arches downward, as it should. The equation is <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>x(x − 6)</span>, or in standard form: <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x</span>.</p>
+<p><b>Step 3—Vertex.</b> It is halfway between the roots <span class="m">0</span> and <span class="m">6</span>: <span class="m">x = 3</span> m. (The "−b/2a" move yields the same: <span class="m">−<span class="frac"><b>3</b><i>2·(−1/2)</i></span> = −<span class="frac"><b>3</b><i>−1</i></span> = 3</span>.) Height: <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>·9 + 3·3 = −4.5 + 9 = 4.5</span> m.</p>
+<p><b>Answer:</b> equation is <span class="m">h = −<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x</span>; the maximum height of the stream is <strong>4.5 m</strong>, reached at a distance of <strong>3 m</strong> from the nozzle—exactly halfway to the landing point. Don't mix up which is which: <span class="m">3</span> is <em>where</em>, <span class="m">4.5</span> is <em>how much</em>.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Boss, Part 2 <span class="tier">Level C</span></div>
+<p>A straight wire for lighting is stretched past the fountain according to the equation <span class="m">y = x + k</span> (the slope is fixed, and the height <span class="m">k</span> is adjustable). For what value of <span class="m">k</span> does the wire <em>just barely touch</em> the stream <span class="m">y = −<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x</span>—in exactly one point?</p>
+<details class="hint"><summary>Hint 1</summary><p>"Touches at a single point" is a system "line = parabola" with exactly one solution. What determines "exactly one solution"?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Set the right sides equal, gather the terms into a quadratic equation in <span class="m">x</span>, and require <span class="m">D = 0</span>. Multiply by <span class="m">−2</span> to get rid of the fraction.</p></details>
+<details class="sol"><summary>Solution</summary><p>At the point of contact, the heights are equal: <span class="m">−<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 3x = x + k</span>. Move everything to the left: <span class="m">−<span class="frac"><b>1</b><i>2</i></span>x<sup>2</sup> + 2x − k = 0</span>. Multiply by <span class="m">−2</span> (to eliminate the fraction and the leading minus): <span class="m">x<sup>2</sup> − 4x + 2k = 0</span>.</p>
+<p>Touching—exactly one root—means <span class="m">D = 0</span>: <span class="m">D = (−4)<sup>2</sup> − 4·1·(2k) = 16 − 8k = 0 → k = 2</span>.</p>
+<p><b>Answer:</b> <strong>k = 2</strong>. Check: when <span class="m">k = 2</span>, the equation <span class="m">x<sup>2</sup> − 4x + 4 = (x − 2)<sup>2</sup> = 0</span> yields the single root <span class="m">x = 2</span>; the point of contact is <span class="m">(2; 4)</span>—the line <span class="m">y = x + 2</span> at <span class="m">x = 2</span> yields <span class="m">4</span>, and the stream is at height <span class="m">4</span> at the same point. The wire kisses the stream at a single point. You have just used three skills of the chapter at once—choosing the form for the question, the discriminant, and factoring—plus the substitution from Chapter 4. The boss is defeated.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">You can now</div>
+<ul class="powers">
+<li><b>Solve</b> a quadratic equation in three ways—factoring, taking the square root (always with <span class="m">±</span>), and using the quadratic formula—and choose the shortest route for a given equation.</li>
+<li><b>Read</b> the three forms of the parabola and get what you need for free: <span class="m">c</span> is the y-intercept, the roots <span class="m">p, q</span> are in the parentheses, and the vertex <span class="m">(h; k)</span> is in the vertex form.</li>
+<li><b>Find</b> the vertex in a single move using <span class="m">x = −b/2a</span> and distinguish a maximum from a minimum by the sign of <span class="m">a</span>—whether in the context of a ball's height, revenue, or a drug's dose.</li>
+<li><b>Determine</b> the number of roots using the discriminant <span class="m">D</span> without solving the equation, and solve "for what value of <span class="m">k</span> is there exactly one solution" problems using <span class="m">D = 0</span> (including when a line touches a parabola).</li>
+<li><b>Check</b> your roots with Vieta in a couple of seconds—the sum must equal <span class="m">−b/a</span> and the product <span class="m">c/a</span>.</li>
+<li><b>Bypass</b> Count Gotcha's traps: the lost minus, the vertex with a positive sign, the maximum value vs. its location, and <span class="m">D = 0</span> vs. <span class="m">D &lt; 0</span>.</li>
+</ul>
+
+<div class="cheat"><div class="cheat-t">Cheat sheet</div><ul>
+<li><span class="m">ax<sup>2</sup> + bx + c = 0</span>—general form (must have <span class="m">a ≠ 0</span>).</li>
+<li><span class="m">A · B = 0 ⇒ A = 0</span> or <span class="m">B = 0</span>—the zero product rule.</li>
+<li><span class="m">a<sup>2</sup> − b<sup>2</sup> = (a − b)(a + b)</span>—difference of squares.</li>
+<li><span class="m">x<sup>2</sup> = k ⇒ x = ±√k</span>—taking the square root, both signs.</li>
+<li>Three forms: <span class="m">ax<sup>2</sup> + bx + c</span> (gives <span class="m">c</span>) · <span class="m">a(x − p)(x − q)</span> (gives roots) · <span class="m">a(x − h)<sup>2</sup> + k</span> (gives vertex).</li>
+<li><span class="m">x<sub>vertex</sub> = −<span class="frac"><b>b</b><i>2a</i></span></span>—vertex coordinate; <span class="m">a &gt; 0</span> is a minimum, <span class="m">a &lt; 0</span> is a maximum.</li>
+<li><span class="m">D = b<sup>2</sup> − 4ac</span>: <span class="m">D &gt; 0</span>—two roots, <span class="m">D = 0</span>—one root, <span class="m">D &lt; 0</span>—no roots.</li>
+<li><span class="m">x = <span class="frac"><b>−b ± √D</b><i>2a</i></span></span>—the quadratic formula.</li>
+<li><span class="m">x<sub>1</sub> + x<sub>2</sub> = −<span class="frac"><b>b</b><i>a</i></span></span>, <span class="m">x<sub>1</sub>x<sub>2</sub> = <span class="frac"><b>c</b><i>a</i></span></span>—Vieta as a check.</li>
+</ul></div>
+
+<div class="feynman"><div class="box-t">The Feynman Assignment</div><p>Explain to an imaginary 12-year-old, without using a single fancy word: why does the equation <span class="m">x<sup>2</sup> = 9</span> have two answers, not one? And how does the "zero switch" (a product equaling zero) help us find roots?</p>
+<details class="sol"><summary>Model explanation</summary><p>"Look. Squaring a number means multiplying it by itself. A positive times a positive gives a positive: <span class="m">3 × 3 = 9</span>. But a negative times a negative also gives a positive: <span class="m">(−3) × (−3) = 9</span>. This means both 3 and −3 turn into 9 when squared—the square "forgets" the sign. So, when solving backward, we have to remember both: <span class="m">3</span> and <span class="m">−3</span>. Forgetting the negative is like finding only one of two twins and walking away.</p><p>And here is how zero works. If I multiply two numbers and get zero, it means at least one of them had to be zero. There is no other way: multiplying any two non-zero numbers will never give you zero. So when we have <span class="m">(x − 2)(x − 3) = 0</span>, we say: one of the parentheses must be zero. Either <span class="m">x = 2</span>, or <span class="m">x = 3</span>. We have split one hard problem into two easy ones—just like figuring out which of two switches turned off the lights."</p></details>
+</div>
+</div>
+
+</section>
+

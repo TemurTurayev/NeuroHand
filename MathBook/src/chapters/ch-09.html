@@ -1,0 +1,768 @@
+<section class="chapter" id="ch-9" data-ch="9" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 9 · Продвинутая математика</div><h2>Многочлены и дроби с иксами</h2><p class="ch-lede">Как разрезать секрет на пять частей так, чтобы три любые открыли сейф, а две — молчали.</p></header>
+
+<div class="hook">
+<p>В банке пять директоров и один сейф. Правило параноика: сейф открывается, если собрались <strong>любые трое</strong> из пяти. Но никакие <strong>двое</strong> не должны узнать код, даже если сговорятся. Звучит как приказ разрезать ключ на пять третей — так, чтобы каждая треть была бесполезна, а любые три сложились в целый ключ. Разрезать физический ключ так нельзя. А число — можно.</p>
+<p>Фокус: спрячь код не в ключе, а в <em>кривой</em>. Через две точки проходит бесконечно много парабол — двух директоров мало, чтобы восстановить кривую. Через три точки парабола проходит ровно одна. Дай каждому директору по одной точке кривой, а сам код спрячь там, где кривая пересекает секретную вертикаль <span class="m">x = 0</span> — это её свободный член. Двое видят две точки и не знают ничего. Трое видят три — и парабола, а с ней и код, определяются однозначно.</p>
+<p>Это не выдумка автора, а <strong>схема Шамира</strong> (Shamir's Secret Sharing, 1979). И та же самая математика объясняет, почему поцарапанный CD всё-таки играет, а надорванный QR-код всё-таки читается: данные записаны как значения многочлена с запасом лишних точек, и потерянные точки восстанавливаются по уцелевшим — это <strong>коды Рида — Соломона</strong> (Reed–Solomon).</p>
+<p>Чтобы владеть этим, нужна беглость в двух вещах: в многочленах (их корни, множители, форма графика) и в дробях с иксами (их сокращение и уравнения). Ровно об этом глава. В конце тебя ждёт босс <strong>«Хранители сейфа»</strong> — ты восстановишь секрет по трём точкам и докажешь, что двух точек не хватит никому и никогда.</p>
+</div>
+
+<div class="try-first">
+<p>Прежде чем читать дальше — честно повозись минут пять-десять. Не подсматривай в разгадку, пока не упрёшься.</p>
+<div class="problem tier-b"><div class="pr-t">Задача-разминка <span class="tier">попробуй сначала</span></div>
+<p>Лаборант снял три точки калибровочной кривой (концентрация → сигнал): <span class="m">(1; 4)</span>, <span class="m">(2; 9)</span>, <span class="m">(3; 16)</span>. Кривая — многочлен второй степени <span class="m">p(x) = ax² + bx + c</span>.</p>
+<p><b>(а)</b> Найди <span class="m">a</span>, <span class="m">b</span>, <span class="m">c</span> и значение фонового сигнала <span class="m">p(0)</span>.<br><b>(б)</b> А теперь представь, что точка <span class="m">(3; 16)</span> потерялась. Сколько парабол проходит через оставшиеся две точки <span class="m">(1; 4)</span> и <span class="m">(2; 9)</span>?</p>
+<details class="sol"><summary>Разгадка (открой после попытки)</summary><p>Подставляя три точки, получаем систему; из неё <span class="m">a = 1</span>, <span class="m">b = 2</span>, <span class="m">c = 1</span>, то есть <span class="m">p(x) = (x + 1)²</span>, и фон <span class="m">p(0) = 1</span>. Проверка: <span class="m">(1+1)² = 4</span>, <span class="m">(2+1)² = 9</span>, <span class="m">(3+1)² = 16</span> — сходится. По двум же точкам парабол <strong>бесконечно много</strong>: одно уравнение остаётся свободным, и <span class="m">c</span> можно подогнать под любое число. Именно на этом стоит и схема Шамира, и весь секрет главы. Механику разберём ниже — вернись сюда, когда прочтёшь про системы у босса.</p></details>
+</div>
+</div>
+
+<div class="box idea"><div class="box-t">Идея</div><p>Если запомнишь одно: <strong>«корень» и «множитель» — это один и тот же факт, записанный двумя способами.</strong> Знаешь корень <span class="m">k</span> — значит, знаешь множитель <span class="m">(x − k)</span>, и наоборот. Вся первая половина главы вырастает из этой фразы.</p></div>
+
+<h3>1. Многочлен: степень и старший коэффициент</h3>
+<p>Многочлен (polynomial) — это сумма слагаемых вида «число, умноженное на <span class="m">x</span> в целой неотрицательной степени». Например, <span class="m">p(x) = 2x³ − 5x² + 5x + 4</span>. Аналогия: это как число, записанное по разрядам, только вместо «десятков» и «сотен» — степени <span class="m">x</span>.</p>
+<p>Две характеристики называют паспортом многочлена. <strong>Степень</strong> (degree) — самая большая степень с ненулевым коэффициентом; она задаёт «класс тяжести» и форму графика. <strong>Старший коэффициент</strong> (leading coefficient) — число при этой самой большой степени; он решает, куда уходят «хвосты» графика. У <span class="m">2x³ − 5x² + 5x + 4</span> степень 3, старший коэффициент 2.</p>
+<p>Складывать и вычитать многочлены — значит собирать подобные слагаемые (одинаковая степень к одинаковой). Умножать — раскрывать скобки «каждый на каждого».</p>
+
+<div class="example"><div class="ex-t">Пример 1 · Арифметика многочленов</div>
+<p>Даны <span class="m">p(x) = 2x³ − x + 4</span> и <span class="m">q(x) = x³ + 3x² − 5</span>. Найди <span class="m">p + q</span>, а также произведение <span class="m">(2x + 1)(x² − 3x + 4)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим собрать подобные:</span> складываем коэффициенты при равных степенях. Кубы: <span class="m">2 + 1 = 3</span>. Квадраты: только <span class="m">3</span>. Первые степени: <span class="m">−1</span>. Свободные: <span class="m">4 − 5 = −1</span>.</div>
+<div class="step"><span class="step-why">Записываем сумму:</span> <span class="m">p + q = 3x³ + 3x² − x − 1</span>. Степень 3, старший коэффициент 3.</div>
+<div class="step"><span class="step-why">Хотим умножить «каждый на каждого»:</span> <span class="m">2x·(x² − 3x + 4) = 2x³ − 6x² + 8x</span>, затем <span class="m">1·(x² − 3x + 4) = x² − 3x + 4</span>.</div>
+<div class="step"><span class="step-why">Собираем подобные:</span> <span class="m">2x³ + (−6 + 1)x² + (8 − 3)x + 4 = 2x³ − 5x² + 5x + 4</span>.</div>
+</div>
+<p>Ответ: <strong><span class="m">p + q = 3x³ + 3x² − x − 1</span></strong>; произведение <strong><span class="m">2x³ − 5x² + 5x + 4</span></strong>. Взгляд назад: степень произведения (3) равна сумме степеней сомножителей (1 + 2). Это общее правило — удобная проверка, что ничего не потерял.</p>
+</div>
+
+<h3>2. Корень = множитель = точка пересечения</h3>
+<p>Аналогия: разложить многочлен на множители — как разложить число на простые. <span class="m">30 = 2·3·5</span>; и как только видишь множитель, видишь и «делится нацело». С многочленами то же, только «делимость» связана с корнями.</p>
+<p>Числовой пример. Возьмём <span class="m">p(x) = x³ − 7x + 6</span>. Подставим <span class="m">x = 1</span>: <span class="m">1 − 7 + 6 = 0</span>. Значит, единица — корень. И действительно, многочлен раскладывается как <span class="m">(x − 1)(x + 3)(x − 2)</span> — множитель <span class="m">(x − 1)</span> присутствует ровно потому, что <span class="m">x = 1</span> обнуляет <span class="m">p</span>. Простыми словами: <em>корень — это то, что обнуляет; множитель — это то, из чего собрано. Обнуляет — значит входит множителем.</em></p>
+
+<div class="box tool"><div class="box-t">Приём: «Корень ↔ множитель»</div><p>Для любого многочлена <span class="m">p(x)</span> три утверждения — это одно и то же, сказанное по-разному:</p>
+<ul>
+<li><span class="m">p(k) = 0</span> (число <span class="m">k</span> — корень);</li>
+<li><span class="m">(x − k)</span> делит <span class="m">p(x)</span> нацело (это множитель);</li>
+<li>график <span class="m">y = p(x)</span> пересекает ось <span class="m">x</span> в точке <span class="m">x = k</span> (это x-пересечение, x-intercept).</li>
+</ul>
+<p>Формально это <strong>теорема о множителе</strong> (factor theorem). Держи её как готовый переводчик: дали корень — пиши множитель; дали множитель — читай корень; дали график — снимай корни прямо с оси.</p></div>
+
+<div class="example"><div class="ex-t">Пример 2 · От множителя к корням</div>
+<p>Известно, что <span class="m">(x − 1)</span> — множитель <span class="m">p(x) = x³ − 7x + 6</span>. Разложи до конца и выпиши все корни.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим понизить степень:</span> раз <span class="m">(x − 1)</span> — множитель, делим и получаем <span class="m">p(x) = (x − 1)(x² + x − 6)</span>.</div>
+<div class="step"><span class="step-why">Хотим добить квадратный множитель:</span> раскладываем трёхчлен <span class="m">x² + x − 6 = (x + 3)(x − 2)</span> (ищем два числа с суммой <span class="m">+1</span> и произведением <span class="m">−6</span>: это <span class="m">+3</span> и <span class="m">−2</span>).</div>
+<div class="step"><span class="step-why">Читаем корни через приём «Корень ↔ множитель»:</span> из <span class="m">(x − 1)(x + 3)(x − 2)</span> сразу видно <span class="m">x = 1</span>, <span class="m">x = −3</span>, <span class="m">x = 2</span>.</div>
+</div>
+<details class="hint"><summary>Почему <span class="m">(x + 3)</span> даёт корень <span class="m">−3</span>, а не <span class="m">+3</span>?</summary><p>Множитель обнуляется, когда скобка равна нулю: <span class="m">x + 3 = 0</span> при <span class="m">x = −3</span>. Знак корня всегда <em>противоположен</em> знаку в скобке. Это самая частая описка на экзамене.</p></details>
+<p>Ответ: корни <strong><span class="m">−3, 1, 2</span></strong>. Взгляд назад: сумма корней <span class="m">−3 + 1 + 2 = 0</span> совпала с тем, что в <span class="m">p</span> нет слагаемого <span class="m">x²</span> (его коэффициент 0). Это не совпадение, а быстрый способ поймать ошибку в разложении.</p>
+</div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">У многочлена <span class="m">p(x)</span> есть множитель <span class="m">(x + 3)</span>. Что из этого верно наверняка?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-2" value="a"><span><span class="m">p(3) = 0</span></span></label>
+<label><input type="radio" name="q9-2" value="b"><span><span class="m">p(−3) = 0</span></span></label>
+<label><input type="radio" name="q9-2" value="c"><span><span class="m">p(0) = −3</span></span></label>
+<label><input type="radio" name="q9-2" value="d"><span>график не пересекает ось <span class="m">x</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Множитель (x + 3) обнуляется при x = −3, значит это корень: p(−3) = 0." data-no="Тебя поймал знак. Множитель (x + 3) равен нулю при x = −3, а не при x = +3. Корень всегда противоположен знаку в скобке."></div>
+</div>
+
+<h3>3. Теорема об остатке: не дели — подставляй</h3>
+<p>Аналогия: делишь <span class="m">17</span> на <span class="m">5</span> — получаешь <span class="m">3</span> и в остатке <span class="m">2</span>, то есть <span class="m">17 = 5·3 + 2</span>. У многочленов деление устроено так же: <span class="m">p(x) = (x − k)·q(x) + r</span>, где остаток <span class="m">r</span> — уже просто число (степень остатка меньше степени делителя, а делитель первой степени).</p>
+<p>Теперь фокус ленивого гения. Подставим в это равенство <span class="m">x = k</span>. Скобка <span class="m">(x − k)</span> обнулится, всё слагаемое с <span class="m">q(x)</span> исчезнет — и останется <span class="m">p(k) = r</span>. То есть остаток можно узнать, <em>вообще не деля</em>: просто подставь <span class="m">k</span>.</p>
+
+<div class="formula">p(x) = (x − k)·q(x) + <b class="hl">r</b>,   где   <b class="hl2">r = p(k)</b></div>
+<ul class="legend"><li><span class="m">k</span> — число, на <span class="m">(x − k)</span> делим;</li><li><span class="m">r = p(k)</span> — остаток, он же значение многочлена в точке <span class="m">k</span>.</li></ul>
+
+<div class="box why"><div class="box-t">Почему это работает</div><p>Скептик требует доказательства, а не фокуса. Пожалуйста: равенство <span class="m">p(x) = (x − k)·q(x) + r</span> верно при <em>всех</em> <span class="m">x</span>, в том числе при <span class="m">x = k</span>. Подставляем: <span class="m">p(k) = (k − k)·q(k) + r = 0·q(k) + r = r</span>. Доказано в одну строку. Это <strong>теорема об остатке</strong> (remainder theorem), а теорема о множителе — её частный случай: если остаток <span class="m">r = p(k) = 0</span>, то деление ровное и <span class="m">(x − k)</span> — множитель.</p></div>
+
+<div class="example"><div class="ex-t">Пример 3 · Остаток без деления</div>
+<p>Найди остаток от деления <span class="m">p(x) = x³ − 4x² + 2x + 7</span> на <span class="m">(x − 2)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Не хотим делить уголком:</span> по теореме об остатке остаток равен <span class="m">p(2)</span>.</div>
+<div class="step"><span class="step-why">Подставляем <span class="m">x = 2</span>:</span> <span class="m">8 − 16 + 4 + 7 = 3</span>.</div>
+</div>
+<p>Ответ: остаток <strong>3</strong>. Взгляд назад: значит, <span class="m">(x − 2)</span> <em>не</em> множитель (остаток не ноль). Пятнадцать секунд вместо колонки деления.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Граф Подвох (деадпан): «В задаче сказано „остаток при делении <span class="m">p(x)</span> на <span class="m">x − 2</span> равен 5“. Раз делят на <span class="m">x − 2</span>, ответ, разумеется, 2 или −2». Не поддавайся. Фраза «остаток при делении на <span class="m">x − 2</span> равен 5» на языке экзамена значит ровно <span class="m">p(2) = 5</span> — и точка. Никакого деления не требуется; тебе уже подарили значение функции в точке <span class="m">x = 2</span>. Это самая частая маскировка теоремы об остатке на SAT.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Чему равен остаток от деления <span class="m">p(x) = x³ − 2x + 5</span> на <span class="m">(x − 1)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-1" value="a"><span><span class="m">4</span></span></label>
+<label><input type="radio" name="q9-1" value="b"><span><span class="m">0</span></span></label>
+<label><input type="radio" name="q9-1" value="c"><span><span class="m">5</span></span></label>
+<label><input type="radio" name="q9-1" value="d"><span><span class="m">−4</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. p(1) = 1 − 2 + 5 = 4 — это и есть остаток." data-no="Не совсем. Остаток — это p(1), а не свободный член 5 и не ноль. Считаем: 1 − 2 + 5 = 4."></div>
+</div>
+
+<h3>4. Форма графика: кратность корня и хвосты</h3>
+<p>Корни говорят, <em>где</em> график встречает ось. Но у встречи бывает два характера. Аналогия из клиники: одни показатели <em>прокалывают</em> норму насквозь (был ниже — стал выше), другие лишь <em>касаются</em> границы и отскакивают обратно. За это отвечает <strong>кратность корня</strong> (multiplicity) — сколько раз множитель повторяется.</p>
+<ul>
+<li><strong>Нечётная кратность</strong> (множитель в первой, третьей степени…): график <em>пересекает</em> ось, меняя знак.</li>
+<li><strong>Чётная кратность</strong> (квадрат, четвёртая степень…): график <em>касается</em> оси и разворачивается, не меняя знак.</li>
+</ul>
+<p>Числовой пример: <span class="m">p(x) = (x + 2)(x − 1)²</span>. Корень <span class="m">−2</span> простой (кратность 1) — пересекает. Корень <span class="m">1</span> двойной (кратность 2) — касается. Раскроем: <span class="m">p(x) = x³ − 3x + 2</span>.</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="График кубического многочлена: пересекает ось в точке x равно минус два и касается оси в точке x равно один">
+<line class="ax" x1="45" y1="140" x2="380" y2="140"/>
+<line class="ax" x1="210" y1="30" x2="210" y2="255"/>
+<line class="grid" x1="100" y1="30" x2="100" y2="255"/>
+<line class="grid" x1="265" y1="30" x2="265" y2="255"/>
+<path class="crv" fill="none" d="M83.5 205 L100 140 L127.5 78 L155 60 L182.5 73 L210 100 L237.5 128 L265 140 L292.5 123 L320 60 L331 22"/>
+<circle class="pt" cx="100" cy="140" r="4"/>
+<circle class="pt" cx="265" cy="140" r="4"/>
+<text class="lbl" x="62" y="162">x = −2: пересекает</text>
+<text class="lbl" x="252" y="162">x = 1: касается</text>
+</svg><figcaption>Кубический <span class="m">y = (x + 2)(x − 1)²</span>. В простом корне <span class="m">−2</span> линия прошивает ось; в двойном корне <span class="m">1</span> лишь дотрагивается и уходит вверх — знак не меняется.</figcaption></figure>
+
+<p>А что происходит на самых краях, при огромных <span class="m">|x|</span>? Там правит один-единственный старший член: остальные слагаемые рядом с ним ничтожны. Это <strong>поведение на бесконечности</strong> (end behavior), и оно зависит лишь от двух вещей — <em>чётности степени</em> и <em>знака старшего коэффициента</em>.</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 210" role="img" aria-label="Две панели поведения на бесконечности: чётная степень с положительным старшим коэффициентом даёт оба конца вверх, нечётная степень даёт левый конец вниз и правый вверх">
+<line class="ax" x1="55" y1="105" x2="160" y2="105"/>
+<line class="ax" x1="107" y1="40" x2="107" y2="170"/>
+<path class="crv" fill="none" d="M60 48 Q107 210 155 48"/>
+<text class="lbl" x="58" y="192">чётная, старший плюс</text>
+<line class="ax" x1="258" y1="105" x2="365" y2="105"/>
+<line class="ax" x1="311" y1="40" x2="311" y2="170"/>
+<path class="crv2" fill="none" d="M262 172 C 292 122, 330 82, 362 30"/>
+<text class="lbl" x="256" y="192">нечётная, старший плюс</text>
+</svg><figcaption>Слева: чётная степень при плюсе — оба хвоста вверх (парабола-«улыбка»). Справа: нечётная степень при плюсе — слева вниз, справа вверх. Смени знак старшего коэффициента — и каждая картинка перевернётся сверху вниз.</figcaption></figure>
+
+<table class="tbl"><thead><tr><th>Степень</th><th>Старший коэф.</th><th>Левый хвост</th><th>Правый хвост</th></tr></thead>
+<tbody>
+<tr><td>чётная</td><td>плюс</td><td>вверх</td><td>вверх</td></tr>
+<tr><td>чётная</td><td>минус</td><td>вниз</td><td>вниз</td></tr>
+<tr><td>нечётная</td><td>плюс</td><td>вниз</td><td>вверх</td></tr>
+<tr><td>нечётная</td><td>минус</td><td>вверх</td><td>вниз</td></tr>
+</tbody></table>
+
+<div class="box desmos"><div class="box-t">Ленивый Гений: Desmos</div><p>Не веришь про касание и пересечение — вбей в Desmos <span class="m">y = (x + 2)(x − 1)²</span> и покрути. Хочешь проверить своё разложение на множители? Построй исходный многочлен и произведение скобок одной командой: если линии слились в одну — разложил верно. Корни считываешь прямо с точек пересечения оси, а кратность видишь глазами: прошил или коснулся.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Как ведёт себя график <span class="m">p(x) = −3x⁴ + x − 8</span> при <span class="m">x → −∞</span> и <span class="m">x → +∞</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-4" value="a"><span>оба хвоста вверх</span></label>
+<label><input type="radio" name="q9-4" value="b"><span>слева вниз, справа вверх</span></label>
+<label><input type="radio" name="q9-4" value="c"><span>слева вверх, справа вниз</span></label>
+<label><input type="radio" name="q9-4" value="d"><span>оба хвоста вниз</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Степень 4 чётная, старший коэффициент −3 отрицательный → оба хвоста вниз." data-no="Смотри только на старший член −3x⁴. Степень чётная, коэффициент отрицательный — оба конца смотрят вниз. Слагаемые x и −8 на бесконечности не значат ничего."></div>
+</div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Как график <span class="m">p(x) = (x − 2)²(x + 1)</span> ведёт себя вблизи <span class="m">x = 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-5" value="a"><span>касается оси и разворачивается</span></label>
+<label><input type="radio" name="q9-5" value="b"><span>пересекает ось, меняя знак</span></label>
+<label><input type="radio" name="q9-5" value="c"><span>имеет вертикальную асимптоту</span></label>
+<label><input type="radio" name="q9-5" value="d"><span>имеет разрыв</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Множитель (x − 2) в квадрате — кратность 2, чётная, значит касание." data-no="Кратность корня x = 2 равна 2 (множитель в квадрате). Чётная кратность — это касание, а не пересечение. Асимптоты и разрывы бывают у дробей, а не у многочленов."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Стоп-кадр</div><p>Закрой экран и восстанови по памяти три вещи: (1) как звучит теорема об остатке в одну фразу; (2) чем касание оси отличается от пересечения и какая кратность за что отвечает; (3) почему <span class="frac"><b>x² + 4</b><i>x</i></span> нельзя превратить в <span class="m">x + 4</span>. Если хоть одно буксует — вернись на пару абзацев вверх, это фундамент второй половины главы.</p></div>
+
+<h3>5. Дроби с иксами: сокращай только множители</h3>
+<p>Рациональное выражение (rational expression) — это дробь, где сверху и снизу многочлены. Первое правило — не про арифметику, а про безопасность: знаменатель не имеет права быть нулём. <strong>Область определения</strong> (domain) — все <span class="m">x</span>, кроме тех, что обнуляют знаменатель.</p>
+<p>Сокращать дробь — значит делить числитель и знаменатель на <em>один и тот же множитель</em>. Ключевое слово — множитель, то есть то, что <em>умножается</em>. Слагаемое — то, что <em>прибавляется</em> — сокращать нельзя. Разберём преступление века.</p>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Граф Подвох предъявляет: <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">= x + 4</span>. «Внизу <span class="m">x</span>, вверху <span class="m">x²</span> — сокращаю, остаётся <span class="m">x</span>, а четвёрка едет следом». Это неверно, и вот почему. Разделить дробь на слагаемые можно так: <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">=</span> <span class="frac"><b>x²</b><i>x</i></span> <span class="m">+</span> <span class="frac"><b>4</b><i>x</i></span> <span class="m">= x +</span> <span class="frac"><b>4</b><i>x</i></span>. Четвёрка тоже делится на <span class="m">x</span> — её нельзя оставить целой. Правильный ответ <span class="m">x +</span> <span class="frac"><b>4</b><i>x</i></span>, и он не упрощается дальше: <span class="m">x² + 4</span> не раскладывается на множители над вещественными числами, значит <span class="m">x</span> просто не является его множителем. Запомни клятву: <strong>сокращаю только то, что перемножено, никогда — то, что сложено.</strong></p></div>
+
+<div class="example"><div class="ex-t">Пример 4 · Законное сокращение (флешбэк на разложение)</div>
+<p>Упрости <span class="frac"><b>x² − 9</b><i>x² + 7x + 12</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим увидеть множители, а не слагаемые:</span> раскладываем верх и низ. Числитель — разность квадратов: <span class="m">x² − 9 = (x − 3)(x + 3)</span>. Знаменатель: два числа с суммой <span class="m">7</span> и произведением <span class="m">12</span> — это <span class="m">3</span> и <span class="m">4</span>, значит <span class="m">(x + 3)(x + 4)</span>.</div>
+<div class="step"><span class="step-why">Теперь есть общий множитель <span class="m">(x + 3)</span> — вот его и сокращаем:</span> <span class="frac"><b>(x − 3)(x + 3)</b><i>(x + 3)(x + 4)</i></span> <span class="m">=</span> <span class="frac"><b>x − 3</b><i>x + 4</i></span>.</div>
+</div>
+<details class="hint"><summary>Почему здесь сокращать <em>можно</em>, а в ловушке — нельзя?</summary><p>Потому что <span class="m">(x + 3)</span> здесь честно <em>перемножен</em> и сверху, и снизу — это множитель. В ловушке же <span class="m">x</span> в числителе не был множителем всего <span class="m">x² + 4</span>: там он умножался только на часть. Разница между «умножено на всё» и «умножено на кусок» — и есть вся суть.</p></details>
+<p>Ответ: <strong><span class="frac"><b>x − 3</b><i>x + 4</i></span></strong>, при <span class="m">x ≠ −3</span> и <span class="m">x ≠ −4</span>. Взгляд назад: область определения снимаем с <em>исходного</em> знаменателя, а не с упрощённого — точка <span class="m">x = −3</span> исчезла из записи, но остаётся запретной.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Во что упрощается <span class="frac"><b>x² + 9</b><i>x</i></span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-3" value="a"><span><span class="m">x + 9</span></span></label>
+<label><input type="radio" name="q9-3" value="b"><span><span class="m">x + 3</span></span></label>
+<label><input type="radio" name="q9-3" value="c"><span>не сокращается (можно лишь переписать как <span class="m">x +</span> <span class="frac"><b>9</b><i>x</i></span>)</span></label>
+<label><input type="radio" name="q9-3" value="d"><span><span class="m">9x</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. x — не множитель всего числителя, сократить нечего; можно только разбить на x + 9/x." data-no="Это фирменная ловушка. x² + 9 не раскладывается, x не является его множителем, поэтому «сократить x» нельзя. Девятка тоже делилась бы на x."></div>
+</div>
+
+<p>Умножение и деление дробей с иксами — как с обычными дробями. Умножаем — верх на верх, низ на низ, а раскладывать на множители лучше <em>до</em> перемножения, чтобы сразу сократить. Делим — переворачиваем вторую дробь и умножаем.</p>
+
+<div class="example"><div class="ex-t">Пример 5 · Умножение и деление</div>
+<p><b>(а)</b> Упрости <span class="frac"><b>x² − 1</b><i>x + 2</i></span> <span class="m">·</span> <span class="frac"><b>x + 2</b><i>x − 1</i></span>.  <b>(б)</b> Упрости <span class="frac"><b>x</b><i>x − 2</i></span> <span class="m">÷</span> <span class="frac"><b>x²</b><i>x² − 4</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">(а) хотим сокращать до умножения:</span> <span class="m">x² − 1 = (x − 1)(x + 1)</span>. Множитель <span class="m">(x + 2)</span> есть и сверху одной дроби, и снизу другой; <span class="m">(x − 1)</span> — тоже пара. Всё это уходит, остаётся <span class="m">x + 1</span>.</div>
+<div class="step"><span class="step-why">(б) хотим убрать деление:</span> переворачиваем вторую дробь: <span class="frac"><b>x</b><i>x − 2</i></span> <span class="m">·</span> <span class="frac"><b>x² − 4</b><i>x²</i></span>.</div>
+<div class="step"><span class="step-why">Раскладываем и сокращаем:</span> <span class="m">x² − 4 = (x − 2)(x + 2)</span>. Уходит <span class="m">(x − 2)</span>, а из <span class="m">x</span> и <span class="m">x²</span> остаётся <span class="m">x</span> внизу: получаем <span class="frac"><b>x + 2</b><i>x</i></span>.</div>
+</div>
+<p>Ответ: <b>(а)</b> <strong><span class="m">x + 1</span></strong>; <b>(б)</b> <strong><span class="frac"><b>x + 2</b><i>x</i></span></strong>. Область: в (б) запретны <span class="m">x = 0</span> и <span class="m">x = ±2</span> — все знаменатели, что встречались по дороге.</p>
+</div>
+
+<div class="example"><div class="ex-t">Пример 6 · Сложение и многоэтажная дробь</div>
+<p><b>(а)</b> Сложи <span class="frac"><b>1</b><i>x</i></span> <span class="m">+</span> <span class="frac"><b>1</b><i>x + 2</i></span>.  <b>(б)</b> Упрости комплексную дробь <span class="frac"><b>1 +</b><i>…</i></span> — точнее, <span class="frac"><b>1 + 1/x</b><i>1 − 1/x²</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">(а) хотим общий знаменатель:</span> он равен <span class="m">x(x + 2)</span>. Приводим: <span class="frac"><b>x + 2</b><i>x(x+2)</i></span> <span class="m">+</span> <span class="frac"><b>x</b><i>x(x+2)</i></span> <span class="m">=</span> <span class="frac"><b>2x + 2</b><i>x(x+2)</i></span>.</div>
+<div class="step"><span class="step-why">Выносим множитель, вдруг сократится:</span> <span class="m">2x + 2 = 2(x + 1)</span>. Общего с низом нет, оставляем <span class="frac"><b>2(x + 1)</b><i>x(x + 2)</i></span>.</div>
+<div class="step"><span class="step-why">(б) хотим убить «дробь в дроби» — домножаем всё на <span class="m">x²</span>:</span> верх <span class="m">x²(1 + 1/x) = x² + x</span>; низ <span class="m">x²(1 − 1/x²) = x² − 1</span>.</div>
+<div class="step"><span class="step-why">Раскладываем и сокращаем:</span> <span class="frac"><b>x² + x</b><i>x² − 1</i></span> <span class="m">=</span> <span class="frac"><b>x(x + 1)</b><i>(x − 1)(x + 1)</i></span> <span class="m">=</span> <span class="frac"><b>x</b><i>x − 1</i></span>.</div>
+</div>
+<p>Ответ: <b>(а)</b> <strong><span class="frac"><b>2(x + 1)</b><i>x(x + 2)</i></span></strong>; <b>(б)</b> <strong><span class="frac"><b>x</b><i>x − 1</i></span></strong>. Взгляд назад: приём «домножить всю комплексную дробь на общий знаменатель мелких дробей» превращает четырёхэтажную конструкцию в обычную за один ход — держи его наготове.</p>
+</div>
+
+<h3>6. Уравнения с дробями и корнями: подставь и проверь</h3>
+<p>Здесь прячется самая коварная ловушка всей главы. Когда мы умножаем уравнение на знаменатель или возводим обе части в квадрат, мы иногда <em>добавляем</em> решения, которых в исходном уравнении не было. Их называют <strong>посторонними корнями</strong> (extraneous solutions). Аналогия: возведение в квадрат — как ксерокс, который иногда подрисовывает лишнюю строчку; сверять надо с оригиналом.</p>
+
+<div class="box tool"><div class="box-t">Приём: «Подставь и проверь»</div><p>Любой кандидат в корни, полученный после (1) умножения на выражение с <span class="m">x</span> или (2) возведения в степень, <strong>обязан</strong> пройти подстановку в <em>исходное</em> уравнение. Кандидат, который обнуляет знаменатель или не сходится по знаку после корня, — посторонний, его вычёркивают. Это не перестраховка, а часть решения: без проверки задача не решена.</p></div>
+
+<div class="example"><div class="ex-t">Пример 7 · Рациональное уравнение с проверкой</div>
+<p>Реши <span class="frac"><b>1</b><i>x − 1</i></span> <span class="m">+</span> <span class="frac"><b>1</b><i>x + 1</i></span> <span class="m">=</span> <span class="frac"><b>2</b><i>x² − 1</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим избавиться от дробей — умножаем на общий знаменатель</span> <span class="m">(x − 1)(x + 1) = x² − 1</span>: слева получаем <span class="m">(x + 1) + (x − 1) = 2x</span>, справа <span class="m">2</span>.</div>
+<div class="step"><span class="step-why">Решаем простое:</span> <span class="m">2x = 2</span>, значит <span class="m">x = 1</span>.</div>
+<div class="step"><span class="step-why">Обязательно проверяем по приёму «Подставь и проверь»:</span> при <span class="m">x = 1</span> знаменатель <span class="m">x − 1 = 0</span>. Деление на ноль запрещено — <span class="m">x = 1</span> посторонний.</div>
+</div>
+<p>Ответ: <strong>решений нет</strong>. Взгляд назад: если бы мы поверили алгебре и написали <span class="m">x = 1</span>, ответ был бы ровно тем, что Граф Подвох положил в варианты. Проверка — не формальность, она сменила ответ.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>На SAT посторонний корень <em>всегда</em> лежит среди вариантов ответа. Если, решая уравнение с дробью или квадратным корнем, ты получил два числа — не радуйся, что нашёл «оба»: проверь каждое подстановкой. Очень часто правильный ответ — только одно из них, а иногда, как выше, вообще «нет решений». Граф Подвох живёт именно этой невнимательностью.</p></div>
+
+<div class="example"><div class="ex-t">Пример 8 · Радикальное уравнение</div>
+<p>Реши <span class="m">√(x + 2) = x</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим убрать корень — возводим обе части в квадрат:</span> <span class="m">x + 2 = x²</span>.</div>
+<div class="step"><span class="step-why">Собираем квадратное:</span> <span class="m">x² − x − 2 = 0</span>, то есть <span class="m">(x − 2)(x + 1) = 0</span>. Кандидаты: <span class="m">x = 2</span> и <span class="m">x = −1</span>.</div>
+<div class="step"><span class="step-why">«Подставь и проверь» в оригинал:</span> <span class="m">√(2 + 2) = √4 = 2 = x</span> — годится. А <span class="m">√(−1 + 2) = √1 = 1</span>, но правая часть <span class="m">x = −1</span>; <span class="m">1 ≠ −1</span> — посторонний.</div>
+</div>
+<p>Ответ: <strong><span class="m">x = 2</span></strong>. Взгляд назад: посторонний <span class="m">x = −1</span> возник потому, что квадрат «не помнит» знак — он приравнял <span class="m">1</span> и <span class="m">−1</span>. Арифметический корень всегда неотрицателен, поэтому правая часть обязана быть <span class="m">≥ 0</span>; уже отсюда видно, что отрицательный кандидат обречён.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Решая <span class="frac"><b>x</b><i>x − 4</i></span> <span class="m">=</span> <span class="frac"><b>4</b><i>x − 4</i></span> <span class="m">+ 2</span>, после умножения на <span class="m">(x − 4)</span> получаем единственного кандидата <span class="m">x = 4</span>. Сколько решений у уравнения?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-6" value="a"><span>одно: <span class="m">x = 4</span></span></label>
+<label><input type="radio" name="q9-6" value="b"><span>два</span></label>
+<label><input type="radio" name="q9-6" value="c"><span>ни одного</span></label>
+<label><input type="radio" name="q9-6" value="d"><span>бесконечно много</span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. При x = 4 знаменатель x − 4 = 0 — кандидат посторонний, значит решений нет." data-no="Подставь x = 4 в исходное: знаменатель обнуляется, деление запрещено. Единственный кандидат оказался посторонним — решений нет."></div>
+</div>
+
+<h3>7. Задачи</h3>
+
+<div class="problem tier-a"><div class="pr-t">Задача 1 <span class="tier">уровень А</span></div>
+<p>Даны <span class="m">p(x) = 3x² − x + 2</span> и <span class="m">q(x) = x² + 4x − 5</span>. Найди <span class="m">p − q</span>, назови степень и старший коэффициент.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Вычесть многочлен — значит вычесть каждый его коэффициент из соответствующего. Следи за знаками у всех слагаемых <span class="m">q</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Собирай подобные по степеням: квадраты с квадратами, иксы с иксами, числа с числами.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">p − q = (3 − 1)x² + (−1 − 4)x + (2 − (−5)) = 2x² − 5x + 7</span>. Степень <strong>2</strong>, старший коэффициент <strong>2</strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 2 <span class="tier">уровень А</span></div>
+<p>Найди остаток от деления <span class="m">p(x) = 2x³ − 3x² + x − 4</span> на <span class="m">(x − 2)</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Не бери деление уголком. Вспомни, что остаток — это значение функции в точке.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>По теореме об остатке остаток равен <span class="m">p(2)</span>. Просто подставь 2.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">p(2) = 2·8 − 3·4 + 2 − 4 = 16 − 12 + 2 − 4 = 2</span>. Остаток <strong>2</strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-a"><div class="pr-t">Задача 3 <span class="tier">флешбэк · глава 8</span></div>
+<p>Упрости <span class="frac"><b>x² − 5x + 6</b><i>x² − 9</i></span> и укажи область определения.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сокращать можно только множители — значит, сначала разложи и верх, и низ.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Числитель: два числа с суммой <span class="m">−5</span> и произведением <span class="m">6</span>. Знаменатель — разность квадратов.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">x² − 5x + 6 = (x − 2)(x − 3)</span>, <span class="m">x² − 9 = (x − 3)(x + 3)</span>. Сокращаем общий множитель <span class="m">(x − 3)</span>: получаем <strong><span class="frac"><b>x − 2</b><i>x + 3</i></span></strong>, при <span class="m">x ≠ 3</span> и <span class="m">x ≠ −3</span>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 4 <span class="tier">уровень Б</span></div>
+<p>Известно, что <span class="m">(x − 2)</span> — множитель <span class="m">p(x) = x³ − 4x² + x + 6</span>. Найди все корни.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала подтверди множитель: по приёму «Корень ↔ множитель» должно быть <span class="m">p(2) = 0</span>. Затем понизь степень делением.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>После деления на <span class="m">(x − 2)</span> останется квадратный трёхчлен — разложи его как в главе 8.</p></details>
+<details class="sol"><summary>Решение</summary><p>Проверка: <span class="m">p(2) = 8 − 16 + 2 + 6 = 0</span> — множитель настоящий. Делим: <span class="m">p(x) = (x − 2)(x² − 2x − 3) = (x − 2)(x − 3)(x + 1)</span>. Корни: <strong><span class="m">−1, 2, 3</span></strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 5 <span class="tier">уровень Б</span></div>
+<p>Реши <span class="m">√(3x + 1) = x − 1</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Возведи обе части в квадрат, чтобы убрать корень, — и приготовься проверять: квадрат «не помнит» знак.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>После возведения получишь квадратное уравнение. Каждый кандидат прогони через приём «Подставь и проверь» в исходное.</p></details>
+<details class="sol"><summary>Решение</summary><p>Квадрат: <span class="m">3x + 1 = x² − 2x + 1</span> → <span class="m">x² − 5x = 0</span> → <span class="m">x(x − 5) = 0</span>. Кандидаты <span class="m">x = 0</span> и <span class="m">x = 5</span>. Проверка: <span class="m">x = 0</span>: <span class="m">√1 = 1</span>, а <span class="m">x − 1 = −1</span>; <span class="m">1 ≠ −1</span> — посторонний. <span class="m">x = 5</span>: <span class="m">√16 = 4 = 5 − 1</span> — годится. Ответ <strong><span class="m">x = 5</span></strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 6 <span class="tier">флешбэк · глава 6</span></div>
+<p>Упрости <span class="frac"><b>(2x³)² · x⁴</b><i>x⁵</i></span> (считай <span class="m">x ≠ 0</span>).</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Правила степеней: <span class="m">(ab)ⁿ = aⁿbⁿ</span>, <span class="m">(xᵐ)ⁿ = x^{mn}</span>, при делении степени с одинаковым основанием вычитаются.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Сначала возведи <span class="m">(2x³)²</span>, потом умножь на <span class="m">x⁴</span>, в конце вычти степень знаменателя.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">(2x³)² = 4x⁶</span>; числитель <span class="m">4x⁶ · x⁴ = 4x^{10}</span>; делим на <span class="m">x⁵</span>: <span class="m">4x^{10−5} = 4x⁵</span>. Ответ <strong><span class="m">4x⁵</span></strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 7 <span class="tier">уровень Б</span></div>
+<p>Упрости комплексную дробь <span class="frac"><b>1/x − 1/3</b><i>x − 3</i></span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала приведи верхнюю мелкую разность <span class="m">1/x − 1/3</span> к одной дроби с общим знаменателем <span class="m">3x</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Заметь, что <span class="m">3 − x = −(x − 3)</span> — этот множитель сократится с нижним <span class="m">(x − 3)</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">1/x − 1/3 =</span> <span class="frac"><b>3 − x</b><i>3x</i></span>. Делим на <span class="m">(x − 3)</span>: <span class="frac"><b>3 − x</b><i>3x</i></span> <span class="m">·</span> <span class="frac"><b>1</b><i>x − 3</i></span> <span class="m">=</span> <span class="frac"><b>−(x − 3)</b><i>3x(x − 3)</i></span> <span class="m">= −</span><span class="frac"><b>1</b><i>3x</i></span>. Ответ <strong>−<span class="frac"><b>1</b><i>3x</i></span></strong>, при <span class="m">x ≠ 0</span> и <span class="m">x ≠ 3</span>.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 8 <span class="tier">уровень В</span></div>
+<p>При делении <span class="m">p(x) = x³ + kx² − 4x + 12</span> на <span class="m">(x − 2)</span> остаток равен нулю. Найди <span class="m">k</span> и все корни <span class="m">p</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>«Остаток при делении на <span class="m">(x − 2)</span> равен нулю» — это зашифрованное условие. Переведи его через теорему об остатке в равенство про <span class="m">p(2)</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Из <span class="m">p(2) = 0</span> найди <span class="m">k</span>. Затем, зная множитель <span class="m">(x − 2)</span>, раздели и разложи оставшийся трёхчлен.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">p(2) = 8 + 4k − 8 + 12 = 4k + 12 = 0</span> → <span class="m">k = −3</span>. Тогда <span class="m">p(x) = x³ − 3x² − 4x + 12 = (x − 2)(x² − x − 6) = (x − 2)(x − 3)(x + 2)</span>. Корни: <strong><span class="m">−2, 2, 3</span></strong>.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 9 <span class="tier">уровень В</span></div>
+<p>Реши <span class="frac"><b>x</b><i>x − 1</i></span> <span class="m">−</span> <span class="frac"><b>1</b><i>x + 1</i></span> <span class="m">=</span> <span class="frac"><b>2</b><i>x² − 1</i></span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Заметь, что <span class="m">x² − 1 = (x − 1)(x + 1)</span> — это и есть общий знаменатель. Сразу выпиши запретные <span class="m">x</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Домножь всё на <span class="m">(x − 1)(x + 1)</span>, реши полученное — и обязательно сверь корни с запретным списком по приёму «Подставь и проверь».</p></details>
+<details class="sol"><summary>Решение</summary><p>Запретны <span class="m">x = 1</span> и <span class="m">x = −1</span>. Домножаем на <span class="m">(x − 1)(x + 1)</span>: слева <span class="m">x(x + 1) − (x − 1) = x² + x − x + 1 = x² + 1</span>, справа <span class="m">2</span>. Тогда <span class="m">x² + 1 = 2</span> → <span class="m">x² = 1</span> → <span class="m">x = ±1</span>. Но оба значения запретны — посторонние. Ответ: <strong>решений нет</strong>. Именно <span class="m">x = 1</span> или <span class="m">x = −1</span> Граф Подвох положит в варианты.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 10 · Найди ошибку <span class="tier">уровень Б</span></div>
+<p>Ученик упрощает <span class="frac"><b>x² + 4</b><i>x</i></span> так:</p>
+<p><em>«<span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">=</span> <span class="frac"><b>x²</b><i>x</i></span> <span class="m">+ 4 = x + 4</span>».</em></p>
+<p>Найди и точно сформулируй изъян. Каков правильный результат?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Разбивать дробь на слагаемые по числителю можно. Но следи: делить на <span class="m">x</span> нужно <em>каждое</em> слагаемое, а не только первое.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Проверь на числе. Возьми <span class="m">x = 2</span>: чему равна исходная дробь и чему — «ответ» <span class="m">x + 4</span>?</p></details>
+<details class="sol"><summary>Решение</summary><p>Изъян в шаге <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">=</span> <span class="frac"><b>x²</b><i>x</i></span> <span class="m">+ 4</span>: второе слагаемое тоже делится на <span class="m">x</span>, поэтому должно быть <span class="frac"><b>4</b><i>x</i></span>, а не <span class="m">4</span>. Ученик «сократил через слагаемое», бросив четвёрку целой. Правильно: <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">= x +</span> <span class="frac"><b>4</b><i>x</i></span>, и это не упрощается дальше (<span class="m">x</span> — не множитель числителя <span class="m">x² + 4</span>). Числовая проверка при <span class="m">x = 2</span>: исходное <span class="m">= 8/2 = 4</span>; «ответ» <span class="m">x + 4 = 6</span>. Не сходится — значит, ошибка подтверждена.</p></details>
+</div>
+
+<div class="boss">
+<div class="boss-t">Босс главы: «Хранители сейфа»</div>
+<p>Пять директоров, один сейф, код спрятан в квадратичном многочлене <span class="m">p(x) = ax² + bx + c</span>. Секрет — это свободный член <span class="m">c = p(0)</span> (значение кривой на секретной вертикали). Каждому директору выдали по одной точке кривой. Сегодня явились трое.</p>
+<p>Директор A принёс <span class="m">(1; 12)</span>, директор B — <span class="m">(2; 21)</span>, директор C — <span class="m">(3; 34)</span>. Открой сейф — то есть найди код <span class="m">c</span>. А затем докажи параноику из совета, что двое директоров код не вскроют.</p>
+
+<div class="problem tier-c"><div class="pr-t">Босс, часть 1 <span class="tier">уровень В</span></div>
+<p>По трём точкам <span class="m">(1; 12)</span>, <span class="m">(2; 21)</span>, <span class="m">(3; 34)</span> восстанови <span class="m">p(x) = ax² + bx + c</span> и назови код <span class="m">c</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Каждая точка даёт уравнение: подставь её <span class="m">x</span> и приравняй <span class="m">ax² + bx + c</span> к её <span class="m">y</span>. Получишь систему из трёх уравнений с тремя неизвестными <span class="m">a, b, c</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Вычитай уравнения попарно, чтобы убрать <span class="m">c</span>: разности дадут два уравнения только с <span class="m">a</span> и <span class="m">b</span>. Из них найди <span class="m">a</span>, потом <span class="m">b</span>, в конце <span class="m">c</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Система:<br><span class="m">a + b + c = 12</span><br><span class="m">4a + 2b + c = 21</span><br><span class="m">9a + 3b + c = 34</span>.<br>Второе минус первое: <span class="m">3a + b = 9</span>. Третье минус второе: <span class="m">5a + b = 13</span>. Их разность: <span class="m">2a = 4</span> → <span class="m">a = 2</span>. Тогда <span class="m">b = 9 − 6 = 3</span>, а <span class="m">c = 12 − 2 − 3 = 7</span>. Итого <span class="m">p(x) = 2x² + 3x + 7</span>, код <strong><span class="m">c = 7</span></strong>. Проверка по третьей точке: <span class="m">2·9 + 3·3 + 7 = 18 + 9 + 7 = 34</span> — сейф открыт.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Босс, часть 2 <span class="tier">уровень В</span></div>
+<p>Явились только A и B: точки <span class="m">(1; 12)</span> и <span class="m">(2; 21)</span>. Докажи, что кода узнать нельзя — предъяви две <em>разные</em> параболы через эти точки с <em>разными</em> свободными членами.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Две точки дают лишь два уравнения на три неизвестных. Одно неизвестное остаётся свободным — выбери <span class="m">a</span> сам и посмотри, что будет с <span class="m">c</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Из двух уравнений выведи связь <span class="m">3a + b = 9</span>. Подставь, скажем, <span class="m">a = 2</span>, затем <span class="m">a = 1</span> — сравни получившиеся <span class="m">c</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Условия: <span class="m">a + b + c = 12</span> и <span class="m">4a + 2b + c = 21</span>. Вычитание даёт <span class="m">3a + b = 9</span> — одно уравнение на две буквы, значит <span class="m">a</span> свободна.<br>Возьмём <span class="m">a = 2</span>: <span class="m">b = 3</span>, <span class="m">c = 7</span> — парабола <span class="m">2x² + 3x + 7</span>.<br>Возьмём <span class="m">a = 1</span>: <span class="m">b = 6</span>, <span class="m">c = 5</span> — парабола <span class="m">x² + 6x + 5</span>.<br>Обе проходят через <span class="m">(1; 12)</span> и <span class="m">(2; 21)</span> (проверь!), но коды разные: <strong>7</strong> и <strong>5</strong>. А можно взять <span class="m">a = 0</span> — выйдет прямая с <span class="m">c = 3</span>. Раз по двум точкам <span class="m">c</span> может быть любым, двое директоров не знают о секрете ничего. Ровно это гарантирует безопасность схемы Шамира — и ровно это ты нащупал ещё в задаче-разминке.</p></details>
+</div>
+</div>
+
+<div class="recap">
+<div class="recap-t">Теперь ты умеешь</div>
+<ul class="powers">
+<li>складываешь, вычитаешь и умножаешь многочлены и с ходу называешь степень и старший коэффициент;</li>
+<li>переводишь между «корень», «множитель» и «точка пересечения оси» в обе стороны по приёму «Корень ↔ множитель»;</li>
+<li>находишь остаток от деления на <span class="m">(x − k)</span> одной подстановкой <span class="m">p(k)</span> — не деля уголком;</li>
+<li>читаешь форму графика: по кратности отличаешь касание от пересечения, по степени и знаку — куда уходят хвосты;</li>
+<li>сокращаешь дроби с иксами только по множителям и не попадаешься на «сокращение через плюс»;</li>
+<li>складываешь, умножаешь, делишь дроби с иксами и распутываешь многоэтажные комплексные дроби;</li>
+<li>решаешь рациональные и радикальные уравнения и вычищаешь посторонние корни приёмом «Подставь и проверь»;</li>
+<li>восстанавливаешь квадратичный секрет по трём точкам и доказываешь, что двух не хватит.</li>
+</ul>
+<p>Вернёмся к тому, с чего начали: <strong>корень и множитель — один факт в двух одеждах</strong>, а сокращать в дроби можно только множители — никогда слагаемые. Если удержишь в голове эти две фразы, половину ловушек SAT ты обезвредишь ещё до того, как возьмёшь карандаш.</p>
+<div class="cheat"><div class="cheat-t">Шпаргалка</div>
+<ul>
+<li><span class="m">p(k) = 0 ⟺ (x − k)</span> — множитель <span class="m">⟺ x = k</span> — точка пересечения оси;</li>
+<li><span class="m">p(x) = (x − k)q(x) + r</span>, остаток <span class="m">r = p(k)</span> (теорема об остатке);</li>
+<li>кратность чётная — касание оси; нечётная — пересечение;</li>
+<li>хвосты: чётная степень — оба одинаково; нечётная — врозь; знак старшего коэф. переворачивает картинку;</li>
+<li><span class="frac"><b>a·c</b><i>b·c</i></span> <span class="m">=</span> <span class="frac"><b>a</b><i>b</i></span> (сокращаем <em>множитель</em> <span class="m">c</span>); <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">= x +</span> <span class="frac"><b>4</b><i>x</i></span>, а <strong>не</strong> <span class="m">x + 4</span>;</li>
+<li>умножил на знаменатель или возвёл в квадрат — «Подставь и проверь» каждый корень в оригинал.</li>
+</ul></div>
+<div class="feynman"><div class="box-t">Задание Фейнмана</div><p>Объясни воображаемому 12-летнему, без слова «многочлен» и вообще без жаргона: почему двум директорам нельзя доверить код, а троим — можно. Уложись в три-четыре предложения и приведи бытовую картинку.</p>
+<details class="sol"><summary>Образец объяснения</summary><p>Представь, что код — это высота, на которой ровная горка встречает воображаемую стенку. Через две вбитые в землю палочки можно провести сколько угодно разных горок — и каждая упрётся в стенку на своей высоте, так что по двум палочкам высоту не угадать. А вот через три палочки ровная горка проходит только одна — и высота у стенки становится единственной. Поэтому двое видят две палочки и не знают ничего, а трое — сразу знают код.</p></details></div>
+</div>
+</section>
+
+<section class="chapter" id="ch-9-en" data-ch="9" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 9 · Advanced Math</div><h2>Polynomials and Fractions with X in Them</h2><p class="ch-lede">How to divide a secret into five parts so that any three will unlock the safe, but any two remain silent.</p></header>
+
+<div class="hook">
+<p>Five directors share a bank vault. The paranoia rule: the safe opens only when <strong>any three</strong> of the five gather. But no <strong>two</strong> should be able to figure out the code, even if they conspire. This sounds like an order to cut a key into five thirds—so that each third is useless on its own, but any three combine into the whole key. You cannot cut a physical key this way. But you can do it to a number.</p>
+<p>The trick: hide the code not in a key, but in a <em>curve</em>. Infinitely many parabolas pass through two points—two directors are not enough to reconstruct the curve. Only one unique parabola passes through three points. Give each director one point on the curve, and hide the code itself where the curve intersects the secret vertical axis <span class="m">x = 0</span> — its constant term. Two see two points and know nothing. Three see three — and the parabola, along with the code, is uniquely determined.</p>
+<p>This is not the author's invention, but <strong>Shamir's Secret Sharing scheme</strong> (1979). The very same math explains why a scratched CD still plays and a torn QR code can still be read: data is recorded as polynomial values with a backup of extra points, and the lost points are reconstructed from the surviving ones — these are <strong>Reed–Solomon codes</strong>.</p>
+<p>To master this, you need fluency in two things: polynomials (their roots, factors, and graph shapes) and fractions with x in them (simplifying them and solving their equations). That is exactly what this chapter is about. At the end, the chapter boss <strong>"The Safe Keepers"</strong> awaits — you will reconstruct the secret from three points and prove that two points will never be enough for anyone.</p>
+</div>
+
+<div class="try-first">
+<p>Before reading further, spend five to ten minutes wrestling with this. Don't peek at the solution until you get stuck.</p>
+<div class="problem tier-b"><div class="pr-t">Warm-up Problem <span class="tier">try it first</span></div>
+<p>A lab assistant took three points from a calibration curve (concentration → signal): <span class="m">(1; 4)</span>, <span class="m">(2; 9)</span>, and <span class="m">(3; 16)</span>. The curve is a second-degree polynomial <span class="m">p(x) = ax² + bx + c</span>.</p>
+<p><b>(a)</b> Find <span class="m">a</span>, <span class="m">b</span>, <span class="m">c</span>, and the background signal value <span class="m">p(0)</span>.<br><b>(b)</b> Now imagine the point <span class="m">(3; 16)</span> is lost. How many parabolas pass through the remaining two points, <span class="m">(1; 4)</span> and <span class="m">(2; 9)</span>?</p>
+<details class="sol"><summary>Solution (open after trying)</summary><p>Plugging in the three points gives a system; from it, we get <span class="m">a = 1</span>, <span class="m">b = 2</span>, <span class="m">c = 1</span>, meaning <span class="m">p(x) = (x + 1)²</span>, and the background signal <span class="m">p(0) = 1</span>. Verification: <span class="m">(1+1)² = 4</span>, <span class="m">(2+1)² = 9</span>, and <span class="m">(3+1)² = 16</span> — it works. But through two points, there are <strong>infinitely many</strong> parabolas: one equation remains free, so <span class="m">c</span> can be adjusted to any value. This is exactly what Shamir's scheme and the secret of this chapter rely on. We will analyze the mechanics below — come back here once you read about systems in the boss section.</p></details>
+</div>
+</div>
+
+<div class="box idea"><div class="box-t">Idea</div><p>If you remember one thing: <strong>"root" and "factor" are the same fact written in two different ways.</strong> If you know the root <span class="m">k</span>, you know the factor <span class="m">(x − k)</span>, and vice versa. The entire first half of the chapter grows out of this single sentence.</p></div>
+
+<h3>1. Polynomials: Degree and Leading Coefficient</h3>
+<p>A polynomial is a sum of terms in the form "a number multiplied by <span class="m">x</span> raised to a non-negative integer power." For example, <span class="m">p(x) = 2x³ − 5x² + 5x + 4</span>. Think of it as a number written out by digit place values, except instead of tens and hundreds, we have powers of <span class="m">x</span>.</p>
+<p>Two characteristics serve as a polynomial's passport. The <strong>degree</strong> is the highest power with a non-zero coefficient; it determines the 'weight class' and the shape of the graph. The <strong>leading coefficient</strong> is the number in front of this highest power; it decides where the ends of the graph go. For <span class="m">2x³ − 5x² + 5x + 4</span>, the degree is 3 and the leading coefficient is 2.</p>
+<p>Adding and subtracting polynomials means combining like terms (matching power with power). Multiplying means expanding parentheses by multiplying every term by every other term.</p>
+
+<div class="example"><div class="ex-t">Example 1 · Polynomial Arithmetic</div>
+<p>Given <span class="m">p(x) = 2x³ − x + 4</span> and <span class="m">q(x) = x³ + 3x² − 5</span>. Find <span class="m">p + q</span>, as well as the product <span class="m">(2x + 1)(x² − 3x + 4)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">To combine like terms:</span> we add the coefficients of matching powers. Cubes: <span class="m">2 + 1 = 3</span>. Squares: only <span class="m">3</span>. First powers: <span class="m">−1</span>. Constant terms: <span class="m">4 − 5 = −1</span>.</div>
+<div class="step"><span class="step-why">Write down the sum:</span> <span class="m">p + q = 3x³ + 3x² − x − 1</span>. The degree is 3, and the leading coefficient is 3.</div>
+<div class="step"><span class="step-why">To multiply every term by every other term:</span> <span class="m">2x·(x² − 3x + 4) = 2x³ − 6x² + 8x</span>, and then <span class="m">1·(x² − 3x + 4) = x² − 3x + 4</span>.</div>
+<div class="step"><span class="step-why">Combine like terms:</span> <span class="m">2x³ + (−6 + 1)x² + (8 − 3)x + 4 = 2x³ − 5x² + 5x + 4</span>.</div>
+</div>
+<p>Answer: <strong><span class="m">p + q = 3x³ + 3x² − x − 1</span></strong>; product: <strong><span class="m">2x³ − 5x² + 5x + 4</span></strong>. Looking back: the degree of the product (3) equals the sum of the degrees of the factors (1 + 2). This is a general rule — a handy way to check that you haven't missed anything.</p>
+</div>
+
+<h3>2. Root = Factor = Intersection Point</h3>
+<p>An analogy: factoring a polynomial is like factoring a number into primes. In <span class="m">30 = 2·3·5</span>, as soon as you see a factor, you see that it divides evenly. It is the same with polynomials, only "divisibility" is connected to roots.</p>
+<p>A concrete example. Take <span class="m">p(x) = x³ − 7x + 6</span>. Plug in <span class="m">x = 1</span>: <span class="m">1 − 7 + 6 = 0</span>. This means 1 is a root. And indeed, the polynomial factors as <span class="m">(x − 1)(x + 3)(x − 2)</span> — the factor <span class="m">(x − 1)</span> is present precisely because <span class="m">x = 1</span> zeroes it out. In plain terms: <em>a root is what zeroes it out; a factor is what it is built from. If it zeroes it out, it must be a factor.</em></p>
+
+<div class="box tool"><div class="box-t">Move: "Root ↔ Factor"</div><p>For any polynomial <span class="m">p(x)</span>, these three statements mean exactly the same thing, just expressed differently:</p>
+<ul>
+<li><span class="m">p(k) = 0</span> (the number <span class="m">k</span> is a root);</li>
+<li><span class="m">(x − k)</span> divides <span class="m">p(x)</span> evenly (it is a factor);</li>
+<li>the graph of <span class="m">y = p(x)</span> intersects the x-axis at <span class="m">x = k</span> (the x-intercept).</li>
+</ul>
+<p>Formally, this is the <strong>factor theorem</strong>. Use it as a quick translator: if you are given a root, write the factor; if you are given a factor, find the root; if you are given a graph, read the roots directly off the x-axis.</p></div>
+
+<div class="example"><div class="ex-t">Example 2 · From Factor to Roots</div>
+<p>Given that <span class="m">(x − 1)</span> is a factor of <span class="m">p(x) = x³ − 7x + 6</span>. Factor it completely and find all the roots.</p>
+<div class="steps">
+<div class="step"><span class="step-why">To lower the degree:</span> since <span class="m">(x − 1)</span> is a factor, we divide to get <span class="m">p(x) = (x − 1)(x² + x − 6)</span>.</div>
+<div class="step"><span class="step-why">To factor the remaining quadratic:</span> we factor the trinomial <span class="m">x² + x − 6 = (x + 3)(x − 2)</span> (we look for two numbers that sum to <span class="m">+1</span> and multiply to <span class="m">−6</span>: these are <span class="m">+3</span> and <span class="m">−2</span>).</div>
+<div class="step"><span class="step-why">Read the roots using the "Root ↔ Factor" move:</span> from <span class="m">(x − 1)(x + 3)(x − 2)</span> we can immediately see <span class="m">x = 1</span>, <span class="m">x = −3</span>, <span class="m">x = 2</span>.</div>
+</div>
+<details class="hint"><summary>Why does <span class="m">(x + 3)</span> give a root of <span class="m">−3</span> instead of <span class="m">+3</span>?</summary><p>A factor becomes zero when the expression inside the parentheses equals zero: <span class="m">x + 3 = 0</span> at <span class="m">x = −3</span>. The sign of the root is always <em>opposite</em> to the sign in the parentheses. This is the most common sign error on the exam.</p></details>
+<p>Answer: roots <strong><span class="m">−3, 1, 2</span></strong>. Looking back: the sum of the roots <span class="m">−3 + 1 + 2 = 0</span> matches the fact that <span class="m">p</span> has no <span class="m">x²</span> term (its coefficient is 0). This is no accident; it is a quick way to catch an error in your factoring.</p>
+</div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">A polynomial <span class="m">p(x)</span> has a factor of <span class="m">(x + 3)</span>. Which of the following must be true?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-2e" value="a"><span><span class="m">p(3) = 0</span></span></label>
+<label><input type="radio" name="q9-2e" value="b"><span><span class="m">p(−3) = 0</span></span></label>
+<label><input type="radio" name="q9-2e" value="c"><span><span class="m">p(0) = −3</span></span></label>
+<label><input type="radio" name="q9-2e" value="d"><span>the graph does not intersect the <span class="m">x</span>-axis</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. The factor (x + 3) becomes zero when x = −3, which means it is a root: p(−3) = 0." data-no="You got tripped up by the sign. The factor (x + 3) equals zero when x = −3, not when x = +3. The root always has the opposite sign of the value in the parentheses."></div>
+</div>
+
+<h3>3. The Remainder Theorem: Don't Divide, Just Plug It In</h3>
+<p>An analogy: dividing <span class="m">17</span> by <span class="m">5</span> gives <span class="m">3</span> with a remainder of <span class="m">2</span>, so <span class="m">17 = 5·3 + 2</span>. Polynomial division is structured the same way: <span class="m">p(x) = (x − k)·q(x) + r</span>, where the remainder <span class="m">r</span> is just a number (since the degree of the remainder must be lower than the degree of the divisor, and the divisor is of degree 1).</p>
+<p>Now, here is the Lazy Genius trick. Let's plug <span class="m">x = k</span> into this equation. The parentheses <span class="m">(x − k)</span> will zero out, the entire term containing <span class="m">q(x)</span> will disappear, and we are left with <span class="m">p(k) = r</span>. This means you can find the remainder <em>without dividing at all</em>: just plug in <span class="m">k</span>.</p>
+
+<div class="formula">p(x) = (x − k)·q(x) + <b class="hl">r</b>,   where   <b class="hl2">r = p(k)</b></div>
+<ul class="legend"><li><span class="m">k</span> — the number we divide by in <span class="m">(x − k)</span>;</li><li><span class="m">r = p(k)</span> — the remainder, which is also the value of the polynomial at <span class="m">k</span>.</li></ul>
+
+<div class="box why"><div class="box-t">Why It Works</div><p>The Skeptic demands a proof, not a trick. Here it is: the equation <span class="m">p(x) = (x − k)·q(x) + r</span> is true for <em>all</em> values of <span class="m">x</span>, including <span class="m">x = k</span>. Plugging it in: <span class="m">p(k) = (k − k)·q(k) + r = 0·q(k) + r = r</span>. Proven in a single line. This is the <strong>remainder theorem</strong>, and the factor theorem is just a special case: if the remainder <span class="m">r = p(k) = 0</span>, then it divides evenly and <span class="m">(x − k)</span> is a factor.</p></div>
+
+<div class="example"><div class="ex-t">Example 3 · Remainder Without Division</div>
+<p>Find the remainder when <span class="m">p(x) = x³ − 4x² + 2x + 7</span> is divided by <span class="m">(x − 2)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We don't want to use long division:</span> by the remainder theorem, the remainder is <span class="m">p(2)</span>.</div>
+<div class="step"><span class="step-why">Plug in <span class="m">x = 2</span>:</span> <span class="m">8 − 16 + 4 + 7 = 3</span>.</div>
+</div>
+<p>Answer: remainder is <strong>3</strong>. Looking back: this means <span class="m">(x − 2)</span> is <em>not</em> a factor (since the remainder is not zero). Fifteen seconds instead of long division.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Count Gotcha (deadpan): "The problem says: 'the remainder when <span class="m">p(x)</span> is divided by <span class="m">x − 2</span> is 5.' Since they are dividing by <span class="m">x − 2</span>, the answer must be 2 or −2." Don't fall for it. On the exam, the phrase 'the remainder when divided by <span class="m">x − 2</span> is 5' means exactly <span class="m">p(2) = 5</span>—period. No division is required; they have already handed you the value of the function at <span class="m">x = 2</span>. This is the most common way the remainder theorem is disguised on the SAT.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">What is the remainder when <span class="m">p(x) = x³ − 2x + 5</span> is divided by <span class="m">(x − 1)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-1e" value="a"><span><span class="m">4</span></span></label>
+<label><input type="radio" name="q9-1e" value="b"><span><span class="m">0</span></span></label>
+<label><input type="radio" name="q9-1e" value="c"><span><span class="m">5</span></span></label>
+<label><input type="radio" name="q9-1e" value="d"><span><span class="m">−4</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. p(1) = 1 − 2 + 5 = 4—this is the remainder." data-no="Not quite. The remainder is p(1), not the constant term 5, and not zero. We calculate: 1 − 2 + 5 = 4."></div>
+</div>
+
+<h3>4. Graph Shape: Root Multiplicity and Tails</h3>
+<p>Roots tell us <em>where</em> the graph meets the axis. But this meeting can have two different characters. A clinical analogy: some indicators <em>puncture</em> the normal range straight through (going from below to above), while others only <em>touch</em> the boundary and bounce back. The key to this is <strong>root multiplicity</strong>—how many times a factor is repeated.</p>
+<ul>
+<li><strong>Odd multiplicity</strong> (factor raised to the 1st, 3rd power, etc.): the graph <em>crosses</em> the axis, changing sign.</li>
+<li><strong>Even multiplicity</strong> (squared, 4th power, etc.): the graph <em>touches</em> the axis and turns around without changing sign.</li>
+</ul>
+<p>A numerical example: <span class="m">p(x) = (x + 2)(x − 1)²</span>. The root <span class="m">−2</span> is simple (multiplicity 1)—it crosses. The root <span class="m">1</span> is double (multiplicity 2)—it touches. Let's expand: <span class="m">p(x) = x³ − 3x + 2</span>.</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Graph of a cubic polynomial: crosses the axis at x equals minus two and touches the axis at x equals one">
+<line class="ax" x1="45" y1="140" x2="380" y2="140"/>
+<line class="ax" x1="210" y1="30" x2="210" y2="255"/>
+<line class="grid" x1="100" y1="30" x2="100" y2="255"/>
+<line class="grid" x1="265" y1="30" x2="265" y2="255"/>
+<path class="crv" fill="none" d="M83.5 205 L100 140 L127.5 78 L155 60 L182.5 73 L210 100 L237.5 128 L265 140 L292.5 123 L320 60 L331 22"/>
+<circle class="pt" cx="100" cy="140" r="4"/>
+<circle class="pt" cx="265" cy="140" r="4"/>
+<text class="lbl" x="62" y="162">x = −2: crosses</text>
+<text class="lbl" x="252" y="162">x = 1: touches</text>
+</svg><figcaption>Cubic <span class="m">y = (x + 2)(x − 1)²</span>. At the simple root <span class="m">−2</span>, the line pierces the axis; at the double root <span class="m">1</span>, it only touches it and goes back up—the sign does not change.</figcaption></figure>
+
+<p>What happens at the very edges, for huge values of <span class="m">|x|</span>? There, a single leading term rules: the other terms are insignificant compared to it. This is the <strong>end behavior</strong>, and it depends on only two things—whether the <em>degree is even or odd</em> and the <em>sign of the leading coefficient</em>.</p>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 210" role="img" aria-label="Two panels of end behavior: an even degree with a positive leading coefficient has both ends pointing up, an odd degree has the left end pointing down and the right end pointing up">
+<line class="ax" x1="55" y1="105" x2="160" y2="105"/>
+<line class="ax" x1="107" y1="40" x2="107" y2="170"/>
+<path class="crv" fill="none" d="M60 48 Q107 210 155 48"/>
+<text class="lbl" x="58" y="192">even, positive leading</text>
+<line class="ax" x1="258" y1="105" x2="365" y2="105"/>
+<line class="ax" x1="311" y1="40" x2="311" y2="170"/>
+<path class="crv2" fill="none" d="M262 172 C 292 122, 330 82, 362 30"/>
+<text class="lbl" x="256" y="192">odd, positive leading</text>
+</svg><figcaption>Left: even degree with a positive leading coefficient—both tails point up (a smiley-face parabola). Right: odd degree with a positive leading coefficient—left tail down, right tail up. Flip the sign of the leading coefficient, and each graph flips upside down.</figcaption></figure>
+
+<table class="tbl"><thead><tr><th>Degree</th><th>Leading Coeff.</th><th>Left Tail</th><th>Right Tail</th></tr></thead>
+<tbody>
+<tr><td>even</td><td>positive</td><td>up</td><td>up</td></tr>
+<tr><td>even</td><td>negative</td><td>down</td><td>down</td></tr>
+<tr><td>odd</td><td>positive</td><td>down</td><td>up</td></tr>
+<tr><td>odd</td><td>negative</td><td>up</td><td>down</td></tr>
+</tbody></table>
+
+<div class="box desmos"><div class="box-t">The Lazy Genius: Desmos</div><p>Don't believe the rules about touching and crossing? Plug <span class="m">y = (x + 2)(x − 1)²</span> into Desmos and play around with it. Want to check your factoring? Plot the original polynomial and the factored expression at the same time: if the lines merge into one, you factored it correctly. Read the roots directly from the x-intercepts, and see the multiplicity with your own eyes: did it cross through or just touch?</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">How does the graph of <span class="m">p(x) = −3x⁴ + x − 8</span> behave as <span class="m">x → −∞</span> and <span class="m">x → +∞</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-4e" value="a"><span>both tails point up</span></label>
+<label><input type="radio" name="q9-4e" value="b"><span>left tail down, right tail up</span></label>
+<label><input type="radio" name="q9-4e" value="c"><span>left tail up, right tail down</span></label>
+<label><input type="radio" name="q9-4e" value="d"><span>both tails point down</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. The degree 4 is even, and the leading coefficient −3 is negative → both tails point down." data-no="Look only at the leading term, −3x⁴. The degree is even and the coefficient is negative, so both ends point down. The terms x and −8 mean nothing on the scale of infinity."></div>
+</div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">How does the graph of <span class="m">p(x) = (x − 2)²(x + 1)</span> behave near <span class="m">x = 2</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-5e" value="a"><span>touches the axis and turns around</span></label>
+<label><input type="radio" name="q9-5e" value="b"><span>crosses the axis, changing sign</span></label>
+<label><input type="radio" name="q9-5e" value="c"><span>has a vertical asymptote</span></label>
+<label><input type="radio" name="q9-5e" value="d"><span>has a discontinuity</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. The factor (x − 2) is squared—multiplicity 2 is even, which means it touches the axis." data-no="The multiplicity of the root x = 2 is 2 (the factor is squared). An even multiplicity means a touch, not a cross. Asymptotes and discontinuities happen with fractions, not polynomials."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Freeze-Frame</div><p>Look away from the screen and recall three things from memory: (1) how the remainder theorem sounds in a single sentence; (2) how touching the axis differs from crossing it, and which multiplicity corresponds to which behavior; (3) why <span class="frac"><b>x² + 4</b><i>x</i></span> cannot be turned into <span class="m">x + 4</span>. If you struggle with any of these, go back a few paragraphs—they are the foundation for the second half of this chapter.</p></div>
+
+<h3>5. Fractions with X: Cancel Only Factors</h3>
+<p>A rational expression is a fraction with a polynomial on top and on the bottom. The first rule is not about arithmetic, but safety: the denominator is not allowed to be zero. The <strong>domain</strong> consists of all <span class="m">x</span> except those that make the denominator zero.</p>
+<p>Canceling in a fraction means dividing the numerator and the denominator by the <em>same factor</em>. The key word is factor—that is, something being <em>multiplied</em>. You cannot cancel a term—something being <em>added</em>. Let's analyze the crime of the century.</p>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Count Gotcha claims: <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">= x + 4</span>. "There is <span class="m">x</span> on the bottom and <span class="m">x²</span> on top—I cancel them, leaving <span class="m">x</span>, and the four just tags along." This is wrong, and here is why. We can split the fraction into terms like this: <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">=</span> <span class="frac"><b>x²</b><i>x</i></span> <span class="m">+</span> <span class="frac"><b>4</b><i>x</i></span> <span class="m">= x +</span> <span class="frac"><b>4</b><i>x</i></span>. The four must also be divided by <span class="m">x</span>—you cannot leave it untouched. The correct result is <span class="m">x +</span> <span class="frac"><b>4</b><i>x</i></span>, and it cannot be simplified further: <span class="m">x² + 4</span> cannot be factored over the real numbers, which means <span class="m">x</span> is not a factor of the numerator. Remember the oath: <strong>only cancel what is multiplied, never what is added.</strong></p></div>
+
+<div class="example"><div class="ex-t">Example 4 · Legal Cancellation (flashback on factoring)</div>
+<p>Simplify <span class="frac"><b>x² − 9</b><i>x² + 7x + 12</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">To see factors rather than terms:</span> we factor the top and bottom. The numerator is a difference of squares: <span class="m">x² − 9 = (x − 3)(x + 3)</span>. The denominator: two numbers with a sum of <span class="m">7</span> and a product of <span class="m">12</span>—these are <span class="m">3</span> and <span class="m">4</span>, so <span class="m">(x + 3)(x + 4)</span>.</div>
+<div class="step"><span class="step-why">Now we have a common factor <span class="m">(x + 3)</span>—so we cancel it:</span> <span class="frac"><b>(x − 3)(x + 3)</b><i>(x + 3)(x + 4)</i></span> <span class="m">=</span> <span class="frac"><b>x − 3</b><i>x + 4</i></span>.</div>
+</div>
+<details class="hint"><summary>Why is cancelling allowed <em>here</em>, but not in the trap?</summary><p>Because <span class="m">(x + 3)</span> is multiplied on both the top and bottom—it is a factor. In the trap, however, <span class="m">x</span> in the numerator was not a factor of the entire expression <span class="m">x² + 4</span>: it was only multiplied by a part of it. The difference between "multiplied by the whole thing" and "multiplied by just a piece" is the entire point.</p></details>
+<p>Answer: <strong><span class="frac"><b>x − 3</b><i>x + 4</i></span></strong>, for <span class="m">x ≠ −3</span> and <span class="m">x ≠ −4</span>. Looking back: we determine the domain from the <em>original</em> denominator, not the simplified one—the point <span class="m">x = −3</span> has disappeared from the expression, but it remains restricted.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">What does <span class="frac"><b>x² + 9</b><i>x</i></span> simplify to?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-3e" value="a"><span><span class="m">x + 9</span></span></label>
+<label><input type="radio" name="q9-3e" value="b"><span><span class="m">x + 3</span></span></label>
+<label><input type="radio" name="q9-3e" value="c"><span>it cannot be simplified (you can only rewrite it as <span class="m">x +</span> <span class="frac"><b>9</b><i>x</i></span>)</span></label>
+<label><input type="radio" name="q9-3e" value="d"><span><span class="m">9x</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. x is not a factor of the entire numerator, so there is nothing to cancel; you can only split it into x + 9/x." data-no="This is a signature trap. x² + 9 cannot be factored, and x is not its factor, so you cannot 'cancel the x'. The nine would also have to be divided by x."></div>
+</div>
+
+<p>Multiplying and dividing fractions with x works just like with normal fractions. To multiply: top times top, bottom times bottom. It is best to factor <em>before</em> multiplying so you can cancel immediately. To divide: flip the second fraction and multiply.</p>
+
+<div class="example"><div class="ex-t">Example 5 · Multiplication and Division</div>
+<p><b>(a)</b> Simplify <span class="frac"><b>x² − 1</b><i>x + 2</i></span> <span class="m">·</span> <span class="frac"><b>x + 2</b><i>x − 1</i></span>.  <b>(b)</b> Simplify <span class="frac"><b>x</b><i>x − 2</i></span> <span class="m">÷</span> <span class="frac"><b>x²</b><i>x² − 4</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">(a) to cancel before multiplying:</span> <span class="m">x² − 1 = (x − 1)(x + 1)</span>. The factor <span class="m">(x + 2)</span> is on the top of one fraction and the bottom of the other; <span class="m">(x − 1)</span> is also a pair. All of this cancels out, leaving <span class="m">x + 1</span>.</div>
+<div class="step"><span class="step-why">(b) to remove division:</span> we flip the second fraction: <span class="frac"><b>x</b><i>x − 2</i></span> <span class="m">·</span> <span class="frac"><b>x² − 4</b><i>x²</i></span>.</div>
+<div class="step"><span class="step-why">Factor and cancel:</span> <span class="m">x² − 4 = (x − 2)(x + 2)</span>. The <span class="m">(x − 2)</span> cancels, and from <span class="m">x</span> and <span class="m">x²</span> we are left with an <span class="m">x</span> on the bottom: we get <span class="frac"><b>x + 2</b><i>x</i></span>.</div>
+</div>
+<p>Answer: <b>(a)</b> <strong><span class="m">x + 1</span></strong>; <b>(b)</b> <strong><span class="frac"><b>x + 2</b><i>x</i></span></strong>. Domain: in (b), <span class="m">x = 0</span> and <span class="m">x = ±2</span> are restricted—these are all the denominators encountered along the way.</p>
+</div>
+
+<div class="example"><div class="ex-t">Example 6 · Addition and Complex Fractions</div>
+<p><b>(a)</b> Add <span class="frac"><b>1</b><i>x</i></span> <span class="m">+</span> <span class="frac"><b>1</b><i>x + 2</i></span>.  <b>(b)</b> Simplify the complex fraction <span class="frac"><b>1 +</b><i>…</i></span> — specifically, <span class="frac"><b>1 + 1/x</b><i>1 − 1/x²</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">(a) to find a common denominator:</span> it is <span class="m">x(x + 2)</span>. Rewriting them: <span class="frac"><b>x + 2</b><i>x(x+2)</i></span> <span class="m">+</span> <span class="frac"><b>x</b><i>x(x+2)</i></span> <span class="m">=</span> <span class="frac"><b>2x + 2</b><i>x(x+2)</i></span>.</div>
+<div class="step"><span class="step-why">Factor the numerator, in case we can cancel:</span> <span class="m">2x + 2 = 2(x + 1)</span>. There is nothing in common with the bottom, so we leave it as <span class="frac"><b>2(x + 1)</b><i>x(x + 2)</i></span>.</div>
+<div class="step"><span class="step-why">(b) to clear the "fraction within a fraction"—we multiply the top and bottom by <span class="m">x²</span>:</span> top: <span class="m">x²(1 + 1/x) = x² + x</span>; bottom: <span class="m">x²(1 − 1/x²) = x² − 1</span>.</div>
+<div class="step"><span class="step-why">Factor and cancel:</span> <span class="frac"><b>x² + x</b><i>x² − 1</i></span> <span class="m">=</span> <span class="frac"><b>x(x + 1)</b><i>(x − 1)(x + 1)</i></span> <span class="m">=</span> <span class="frac"><b>x</b><i>x − 1</i></span>.</div>
+</div>
+<p>Answer: <b>(a)</b> <strong><span class="frac"><b>2(x + 1)</b><i>x(x + 2)</i></span></strong>; <b>(b)</b> <strong><span class="frac"><b>x</b><i>x − 1</i></span></strong>. Looking back: the move "multiply the entire complex fraction by the common denominator of the smaller fractions" turns a four-story structure into a simple one in a single step — keep it in your toolkit.</p>
+</div>
+
+<h3>6. Equations with Fractions and Roots: Plug It Back In</h3>
+<p>This is where the most devious trap of the entire chapter hides. When we multiply an equation by a denominator or square both sides, we sometimes <em>introduce</em> solutions that weren't in the original equation. These are called <strong>extraneous solutions</strong>. An analogy: squaring is like a copy machine that sometimes prints a smudge — you always have to compare the copy with the original.</p>
+
+<div class="box tool"><div class="box-t">Move: "Plug It Back In"</div><p>Any potential root obtained after (1) multiplying by an expression containing <span class="m">x</span> or (2) raising both sides to a power <strong>must</strong> be tested by plugging it back into the <em>original</em> equation. Any candidate that makes a denominator zero or results in a sign mismatch with a square root is extraneous and must be discarded. This is not just playing it safe; it is an essential part of the solution: without verification, the problem remains unsolved.</p></div>
+
+<div class="example"><div class="ex-t">Example 7 · Rational Equation with Verification</div>
+<p>Solve <span class="frac"><b>1</b><i>x − 1</i></span> <span class="m">+</span> <span class="frac"><b>1</b><i>x + 1</i></span> <span class="m">=</span> <span class="frac"><b>2</b><i>x² − 1</i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">To clear the fractions, we multiply by the common denominator</span> <span class="m">(x − 1)(x + 1) = x² − 1</span>: on the left we get <span class="m">(x + 1) + (x − 1) = 2x</span>, and on the right we get <span class="m">2</span>.</div>
+<div class="step"><span class="step-why">Solve the simple equation:</span> <span class="m">2x = 2</span>, which means <span class="m">x = 1</span>.</div>
+<div class="step"><span class="step-why">We must check using the "Plug It Back In" move:</span> when <span class="m">x = 1</span>, the denominator <span class="m">x − 1 = 0</span>. Division by zero is undefined — so <span class="m">x = 1</span> is extraneous.</div>
+</div>
+<p>Answer: <strong>no solution</strong>. Looking back: if we had trusted the algebra blindly and written <span class="m">x = 1</span>, we would have picked exactly the answer Count Gotcha placed in the choices. Verification is not a mere formality — it changed the outcome.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>On the SAT, the extraneous solution <em>always</em> sits among the answer choices. If you solve an equation with a fraction or a square root and get two numbers, don't celebrate finding "both" — check each one by plugging it back in. Very often, only one of them is the correct answer, and sometimes, as we saw above, there is "no solution" at all. Count Gotcha thrives on this exact kind of carelessness.</p></div>
+
+<div class="example"><div class="ex-t">Example 8 · Radical Equation</div>
+<p>Solve <span class="m">√(x + 2) = x</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">To eliminate the root, we square both sides:</span> <span class="m">x + 2 = x²</span>.</div>
+<div class="step"><span class="step-why">Set up a quadratic equation:</span> <span class="m">x² − x − 2 = 0</span>, which factors as <span class="m">(x − 2)(x + 1) = 0</span>. Candidates: <span class="m">x = 2</span> and <span class="m">x = −1</span>.</div>
+<div class="step"><span class="step-why">"Plug It Back In" to the original:</span> <span class="m">√(2 + 2) = √4 = 2 = x</span> — this works. But <span class="m">√(−1 + 2) = √1 = 1</span>, while the right side is <span class="m">x = −1</span>; since <span class="m">1 ≠ −1</span>, this one is extraneous.</div>
+</div>
+<p>Answer: <strong><span class="m">x = 2</span></strong>. Looking back: the extraneous solution <span class="m">x = −1</span> appeared because squaring "forgets" the sign — it equated <span class="m">1</span> and <span class="m">−1</span>. A principal square root is always non-negative, so the right side is required to be <span class="m">≥ 0</span>. From this alone, we could see that any negative candidate was doomed from the start.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">When solving <span class="frac"><b>x</b><i>x − 4</i></span> <span class="m">=</span> <span class="frac"><b>4</b><i>x − 4</i></span> <span class="m">+ 2</span>, multiplying by <span class="m">(x − 4)</span> yields <span class="m">x = 4</span> as the only candidate. How many solutions does the equation have?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q9-6e" value="a"><span>one: <span class="m">x = 4</span></span></label>
+<label><input type="radio" name="q9-6e" value="b"><span>two</span></label>
+<label><input type="radio" name="q9-6e" value="c"><span>none</span></label>
+<label><input type="radio" name="q9-6e" value="d"><span>infinitely many</span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. When x = 4, the denominator x − 4 = 0 — the candidate is extraneous, meaning there are no solutions." data-no="Plug x = 4 into the original equation: the denominator becomes zero, which is division by zero. Our only candidate turned out to be extraneous, so there are no solutions."></div>
+</div>
+
+<h3>7. Problems</h3>
+
+<div class="problem tier-a"><div class="pr-t">Problem 1 <span class="tier">Level A</span></div>
+<p>Given <span class="m">p(x) = 3x² − x + 2</span> and <span class="m">q(x) = x² + 4x − 5</span>. Find <span class="m">p − q</span>, and state its degree and leading coefficient.</p>
+<details class="hint"><summary>Hint 1</summary><p>To subtract a polynomial, subtract each of its coefficients from the corresponding ones of the other. Watch the signs of all terms in <span class="m">q</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Combine like terms by their powers: squares with squares, x-terms with x-terms, constants with constants.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">p − q = (3 − 1)x² + (−1 − 4)x + (2 − (−5)) = 2x² − 5x + 7</span>. The degree is <strong>2</strong>, and the leading coefficient is <strong>2</strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 2 <span class="tier">Level A</span></div>
+<p>Find the remainder when <span class="m">p(x) = 2x³ − 3x² + x − 4</span> is divided by <span class="m">(x − 2)</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Don't use long division. Remember that the remainder is the value of the function at a specific point.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>By the remainder theorem, the remainder is <span class="m">p(2)</span>. Plug in 2.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">p(2) = 2·8 − 3·4 + 2 − 4 = 16 − 12 + 2 − 4 = 2</span>. The remainder is <strong>2</strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-a"><div class="pr-t">Problem 3 <span class="tier">flashback · Chapter 8</span></div>
+<p>Simplify <span class="frac"><b>x² − 5x + 6</b><i>x² − 9</i></span> and state the domain.</p>
+<details class="hint"><summary>Hint 1</summary><p>You can only cancel factors, so factor both the top and bottom first.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Numerator: two numbers that sum to <span class="m">−5</span> and multiply to <span class="m">6</span>. Denominator: a difference of squares.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">x² − 5x + 6 = (x − 2)(x − 3)</span>, <span class="m">x² − 9 = (x − 3)(x + 3)</span>. Cancelling the common factor <span class="m">(x − 3)</span> yields <strong><span class="frac"><b>x − 2</b><i>x + 3</i></span></strong>, for <span class="m">x ≠ 3</span> and <span class="m">x ≠ −3</span>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 4 <span class="tier">Level B</span></div>
+<p>Given that <span class="m">(x − 2)</span> is a factor of <span class="m">p(x) = x³ − 4x² + x + 6</span>. Find all the roots.</p>
+<details class="hint"><summary>Hint 1</summary><p>First, verify the factor: by the "Root ↔ Factor" move, we should have <span class="m">p(2) = 0</span>. Then lower the degree by dividing.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>After dividing by <span class="m">(x − 2)</span>, you will be left with a quadratic trinomial — factor it as in Chapter 8.</p></details>
+<details class="sol"><summary>Solution</summary><p>Verification: <span class="m">p(2) = 8 − 16 + 2 + 6 = 0</span> — the factor is real. We divide: <span class="m">p(x) = (x − 2)(x² − 2x − 3) = (x − 2)(x − 3)(x + 1)</span>. Roots: <strong><span class="m">−1, 2, 3</span></strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 5 <span class="tier">Level B</span></div>
+<p>Solve <span class="m">√(3x + 1) = x − 1</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Square both sides to eliminate the radical — and get ready to verify: squaring "forgets" the sign.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>After squaring, you will get a quadratic equation. Run each candidate through the "Plug It Back In" move in the original equation.</p></details>
+<details class="sol"><summary>Solution</summary><p>Squaring: <span class="m">3x + 1 = x² − 2x + 1</span> → <span class="m">x² − 5x = 0</span> → <span class="m">x(x − 5) = 0</span>. Candidates are <span class="m">x = 0</span> and <span class="m">x = 5</span>. Verification: for <span class="m">x = 0</span>, <span class="m">√1 = 1</span>, but <span class="m">x − 1 = −1</span>; since <span class="m">1 ≠ −1</span>, it is extraneous. For <span class="m">x = 5</span>, <span class="m">√16 = 4 = 5 − 1</span> — this works. Answer: <strong><span class="m">x = 5</span></strong>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 6 <span class="tier">flashback · Chapter 6</span></div>
+<p>Simplify <span class="frac"><b>(2x³)² · x⁴</b><i>x⁵</i></span> (assume <span class="m">x ≠ 0</span>).</p>
+<details class="hint"><summary>Hint 1</summary><p>Exponent rules: <span class="m">(ab)ⁿ = aⁿbⁿ</span>, <span class="m">(xᵐ)ⁿ = x^{mn}</span>, and when dividing, exponents with the same base are subtracted.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>First square <span class="m">(2x³)²</span>, then multiply by <span class="m">x⁴</span>, and finally subtract the exponent of the denominator.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">(2x³)² = 4x⁶</span>; numerator is <span class="m">4x⁶ · x⁴ = 4x^{10}</span>; divide by <span class="m">x⁵</span>: <span class="m">4x^{10−5} = 4x⁵</span>. Answer: <strong><span class="m">4x⁵</span></strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 7 <span class="tier">Level B</span></div>
+<p>Simplify the complex fraction <span class="frac"><b>1/x − 1/3</b><i>x − 3</i></span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>First, write the small difference on top, <span class="m">1/x − 1/3</span>, as a single fraction with a common denominator of <span class="m">3x</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Notice that <span class="m">3 − x = −(x − 3)</span> — this factor will cancel with the <span class="m">(x − 3)</span> on the bottom.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">1/x − 1/3 =</span> <span class="frac"><b>3 − x</b><i>3x</i></span>. Divide by <span class="m">(x − 3)</span>: <span class="frac"><b>3 − x</b><i>3x</i></span> <span class="m">·</span> <span class="frac"><b>1</b><i>x − 3</i></span> <span class="m">=</span> <span class="frac"><b>−(x − 3)</b><i>3x(x − 3)</i></span> <span class="m">= −</span><span class="frac"><b>1</b><i>3x</i></span>. Answer: <strong>−<span class="frac"><b>1</b><i>3x</i></span></strong>, for <span class="m">x ≠ 0</span> and <span class="m">x ≠ 3</span>.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 8 <span class="tier">Level C</span></div>
+<p>When <span class="m">p(x) = x³ + kx² − 4x + 12</span> is divided by <span class="m">(x − 2)</span>, the remainder is zero. Find <span class="m">k</span> and all the roots of <span class="m">p</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>"The remainder upon dividing by <span class="m">(x − 2)</span> is zero" is a coded condition. Translate it using the remainder theorem into an equation involving <span class="m">p(2)</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Find <span class="m">k</span> using <span class="m">p(2) = 0</span>. Then, knowing <span class="m">(x − 2)</span> is a factor, divide and factor the remaining quadratic trinomial.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">p(2) = 8 + 4k − 8 + 12 = 4k + 12 = 0</span> → <span class="m">k = −3</span>. Then <span class="m">p(x) = x³ − 3x² − 4x + 12 = (x − 2)(x² − x − 6) = (x − 2)(x − 3)(x + 2)</span>. Roots: <strong><span class="m">−2, 2, 3</span></strong>.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 9 <span class="tier">Level C</span></div>
+<p>Solve <span class="frac"><b>x</b><i>x − 1</i></span> <span class="m">−</span> <span class="frac"><b>1</b><i>x + 1</i></span> <span class="m">=</span> <span class="frac"><b>2</b><i>x² − 1</i></span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Notice that <span class="m">x² − 1 = (x − 1)(x + 1)</span> is the common denominator. Write down the restricted <span class="m">x</span> values right away.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Multiply everything by <span class="m">(x − 1)(x + 1)</span>, solve the resulting equation, and be sure to check the roots against the restricted list using the "Plug It Back In" move.</p></details>
+<details class="sol"><summary>Solution</summary><p>Restricted values: <span class="m">x = 1</span> and <span class="m">x = −1</span>. Multiplying by <span class="m">(x − 1)(x + 1)</span>: on the left, we get <span class="m">x(x + 1) − (x − 1) = x² + x − x + 1 = x² + 1</span>, and on the right, <span class="m">2</span>. Thus, <span class="m">x² + 1 = 2</span> → <span class="m">x² = 1</span> → <span class="m">x = ±1</span>. But both values are restricted — making them extraneous. Answer: <strong>no solution</strong>. It is exactly <span class="m">x = 1</span> or <span class="m">x = −1</span> that Count Gotcha will put in the choices.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 10 · Spot the Error <span class="tier">Level B</span></div>
+<p>A student simplifies <span class="frac"><b>x² + 4</b><i>x</i></span> like this:</p>
+<p><em>"<span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">=</span> <span class="frac"><b>x²</b><i>x</i></span> <span class="m">+ 4 = x + 4</span>".</em></p>
+<p>Find and precisely state the flaw. What is the correct result?</p>
+<details class="hint"><summary>Hint 1</summary><p>Splitting a fraction by its numerator into separate terms is allowed. But watch out: you must divide <em>every</em> term by <span class="m">x</span>, not just the first one.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Test it with a number. Take <span class="m">x = 2</span>: what is the value of the original fraction and what is the "answer" <span class="m">x + 4</span>?</p></details>
+<details class="sol"><summary>Solution</summary><p>The flaw is in the step <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">=</span> <span class="frac"><b>x²</b><i>x</i></span> <span class="m">+ 4</span>: the second term must also be divided by <span class="m">x</span>, so it should be <span class="frac"><b>4</b><i>x</i></span>, not <span class="m">4</span>. The student 'cancelled across a term,' leaving the four untouched. The correct way is: <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">= x +</span> <span class="frac"><b>4</b><i>x</i></span>, which cannot be simplified further (<span class="m">x</span> is not a factor of the numerator <span class="m">x² + 4</span>). A numerical check at <span class="m">x = 2</span>: original expression is <span class="m">= 8/2 = 4</span>; the 'answer' <span class="m">x + 4 = 6</span>. They do not match — the error is confirmed.</p></details>
+</div>
+
+<div class="boss">
+<div class="boss-t">Chapter Boss: "The Safe Keepers"</div>
+<p>Five directors, one safe, and the code is hidden in a quadratic polynomial <span class="m">p(x) = ax² + bx + c</span>. The secret is the constant term <span class="m">c = p(0)</span> (the value of the curve on the secret vertical axis). Each director was given one point on the curve. Today, three of them showed up.</p>
+<p>Director A brought <span class="m">(1; 12)</span>, Director B brought <span class="m">(2; 21)</span>, and Director C brought <span class="m">(3; 34)</span>. Open the safe — find the code <span class="m">c</span>. Then prove to the paranoid board member that two directors cannot crack the code.</p>
+
+<div class="problem tier-c"><div class="pr-t">Boss, part 1 <span class="tier">Level C</span></div>
+<p>Using the three points <span class="m">(1; 12)</span>, <span class="m">(2; 21)</span>, and <span class="m">(3; 34)</span>, reconstruct <span class="m">p(x) = ax² + bx + c</span> and find the code <span class="m">c</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Each point gives you an equation: plug in its <span class="m">x</span> and set <span class="m">ax² + bx + c</span> equal to its <span class="m">y</span>. You will get a system of three equations in three variables, <span class="m">a, b, c</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Subtract the equations in pairs to eliminate <span class="m">c</span>: the differences will give you two equations with only <span class="m">a</span> and <span class="m">b</span>. Find <span class="m">a</span> from these, then find <span class="m">b</span>, and finally <span class="m">c</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>The system:<br><span class="m">a + b + c = 12</span><br><span class="m">4a + 2b + c = 21</span><br><span class="m">9a + 3b + c = 34</span>.<br>Subtracting the first from the second: <span class="m">3a + b = 9</span>. Subtracting the second from the third: <span class="m">5a + b = 13</span>. Their difference: <span class="m">2a = 4</span> → <span class="m">a = 2</span>. Thus, <span class="m">b = 9 − 6 = 3</span>, and <span class="m">c = 12 − 2 − 3 = 7</span>. This gives <span class="m">p(x) = 2x² + 3x + 7</span>, and the code is <strong><span class="m">c = 7</span></strong>. Verifying with the third point: <span class="m">2·9 + 3·3 + 7 = 18 + 9 + 7 = 34</span> — the safe is open.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Boss, part 2 <span class="tier">Level C</span></div>
+<p>Only A and B showed up: points <span class="m">(1; 12)</span> and <span class="m">(2; 21)</span>. Prove that the code cannot be determined — produce two <em>different</em> parabolas passing through these points with <em>different</em> constant terms.</p>
+<details class="hint"><summary>Hint 1</summary><p>Two points give only two equations for three unknowns. One unknown remains free — choose <span class="m">a</span> yourself and see what happens to <span class="m">c</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>From the two equations, derive the relationship <span class="m">3a + b = 9</span>. Plug in, say, <span class="m">a = 2</span>, and then <span class="m">a = 1</span> — compare the resulting <span class="m">c</span> values.</p></details>
+<details class="sol"><summary>Solution</summary><p>Conditions: <span class="m">a + b + c = 12</span> and <span class="m">4a + 2b + c = 21</span>. Subtracting them gives <span class="m">3a + b = 9</span> — one equation in two variables, which means <span class="m">a</span> is free.<br>If we choose <span class="m">a = 2</span>: <span class="m">b = 3</span>, <span class="m">c = 7</span> — yielding the parabola <span class="m">2x² + 3x + 7</span>.<br>If we choose <span class="m">a = 1</span>: <span class="m">b = 6</span>, <span class="m">c = 5</span> — yielding the parabola <span class="m">x² + 6x + 5</span>.<br>Both pass through <span class="m">(1; 12)</span> and <span class="m">(2; 21)</span> (check it!), but the codes are different: <strong>7</strong> and <strong>5</strong>. We could even choose <span class="m">a = 0</span>, which gives a line with <span class="m">c = 3</span>. Since <span class="m">c</span> can be anything when we only have two points, two directors know absolutely nothing about the secret. This is exactly what guarantees the security of Shamir's scheme — and exactly what you got a feel for back in the warm-up problem.</p></details>
+</div>
+</div>
+
+<div class="recap">
+<div class="recap-t">You can now</div>
+<ul class="powers">
+<li>add, subtract, and multiply polynomials, and name their degree and leading coefficient on the fly;</li>
+<li>translate between "root", "factor", and "x-intercept" in both directions using the "Root ↔ Factor" move;</li>
+<li>find the remainder when dividing by <span class="m">(x − k)</span> by plugging in <span class="m">p(k)</span> — without using long division;</li>
+<li>read the shape of the graph: use multiplicity to tell touching from crossing, and use degree and sign to see where the tails go;</li>
+<li>simplify fractions with x only by cancelling factors, and avoid falling for "cancelling across addition";</li>
+<li>add, multiply, and divide fractions with x, and untangle complex fractions;</li>
+<li>solve rational and radical equations, and discard extraneous roots using the "Plug It Back In" move;</li>
+<li>reconstruct a quadratic secret from three points, and prove that two points are never enough.</li>
+</ul>
+<p>Let's return to where we started: <strong>a root and a factor are the same fact in different clothes</strong>, and in a fraction you can only cancel factors — never terms. If you keep these two statements in mind, you will disarm half of the SAT traps before you even pick up your pencil.</p>
+<div class="cheat"><div class="cheat-t">Cheat sheet</div>
+<ul>
+<li><span class="m">p(k) = 0 ⟺ (x − k)</span> is a factor <span class="m">⟺ x = k</span> is the x-intercept;</li>
+<li><span class="m">p(x) = (x − k)q(x) + r</span>, remainder <span class="m">r = p(k)</span> (remainder theorem);</li>
+<li>even multiplicity — touching the axis; odd — crossing;</li>
+<li>tails: even degree — both the same way; odd — opposite ways; the sign of the leading coefficient flips the graph;</li>
+<li><span class="frac"><b>a·c</b><i>b·c</i></span> <span class="m">=</span> <span class="frac"><b>a</b><i>b</i></span> (cancelling the <em>factor</em> <span class="m">c</span>); <span class="frac"><b>x² + 4</b><i>x</i></span> <span class="m">= x +</span> <span class="frac"><b>4</b><i>x</i></span>, <strong>not</strong> <span class="m">x + 4</span>;</li>
+<li>multiplied by a denominator or squared — "Plug It Back In" each root into the original.</li>
+</ul></div>
+<div class="feynman"><div class="box-t">The Feynman Assignment</div><p>Explain to an imaginary 12-year-old, without using the word "polynomial" or any jargon: why two directors cannot be trusted with the code, but three can. Keep it to three or four sentences and use an everyday analogy.</p>
+<details class="sol"><summary>Model explanation</summary><p>Imagine the code is the height at which a smooth slide meets an imaginary wall. You can run infinitely many different slides through just two pegs in the ground — and each slide will hit the wall at a different height, so you can never guess the height from just two pegs. But only one unique smooth slide can pass through three pegs, fixing the height at the wall to a single possibility. That is why two people see two pegs and know nothing, but three people instantly know the code.</p></details></div>
+</div>
+</section>
+

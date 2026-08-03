@@ -1,0 +1,698 @@
+<section class="chapter" id="ch-6" data-ch="6" data-lang="ru">
+<header class="ch-head"><div class="ch-eyebrow">Глава 6 · Продвинутая математика</div><h2>Степени и корни: как лист бумаги долетает до Луны</h2><p class="ch-lede">Твоя интуиция складывает. Реальность умножает. Вся глава — про этот разрыв.</p></header>
+
+<div class="hook">
+<p>Возьми обычный лист бумаги. Его толщина — примерно <span class="m">0,1</span> мм. Сложи пополам: стало <span class="m">0,2</span> мм. Ещё раз — <span class="m">0,4</span> мм. А теперь мысленно (руками так не выйдет — после седьмого сгиба бумага сопротивляется, как доска) сложи его пополам <b>42 раза</b>. Прежде чем читать дальше, честно запиши на полях свою прикидку: какой толщины станет пачка? С книгу? С дом? С небоскрёб?</p>
+<p>Почти каждый пишет что-то земное — метр, десять метров, ну пусть высота башни. Это говорит твоя интуиция, и она складывает: сгиб добавил чуть-чуть, ещё сгиб добавил чуть-чуть. Но бумага не прибавляет — она <b>удваивается</b>. А удвоение сорок два раза даёт толщину, при которой пачка выходит <b>за орбиту Луны</b>: около 440 тысяч километров при расстоянии до Луны 384 тысячи.</p>
+<p>Разница между твоей записанной прикидкой и настоящим ответом — это не ошибка в арифметике. Это разница между двумя способами, которыми растут вещи: прибавлением и умножением. Первый мы чувствуем кожей. Второй — почти никогда, и именно он правит сложными процентами, дозами лекарств, размножением бактерий и половиной заданий SAT из раздела «Продвинутая математика».</p>
+<p>Степени — это язык умножающегося мира. Корни — обратный ход, дорога назад. Освой оба — и цифры вроде «титр антител 1:1024» или «за сутки одна клетка даёт <span class="m">4,7 × 10<sup>21</sup></span> потомков» перестанут быть магией и станут арифметикой.</p>
+</div>
+
+<div class="try-first">
+<p><b>Попробуй сначала.</b> Не хватайся за калькулятор — повози́сь 5–10 минут карандашом и ответь на два вопроса честно, своей интуицией:</p>
+<div class="problem tier-a"><div class="pr-t">Разминка <span class="tier">уровень А</span></div>
+<p>1. Запиши прикидку толщины бумаги из крючка (в метрах или километрах).<br>
+2. Во сколько раз <span class="m">2<sup>20</sup></span> больше, чем <span class="m">2<sup>10</sup></span>? Ответь до того, как посчитаешь.</p>
+</div>
+<p>Держу пари, на втором вопросе рука тянется написать «в два раза» — ведь показатель вырос вдвое, с 10 до 20. Запомни это ощущение: это и есть линейная интуиция в чистом виде. К середине главы ты увидишь, что верный ответ — <b>в 1024 раза</b>, и поймёшь, почему.</p>
+</div>
+
+<div class="box idea"><div class="box-t">Идея</div><p><b>Если запомнишь одно:</b> степень — это сколько раз число умножили само на себя. Поэтому при <em>умножении</em> степеней показатели <em>складываются</em>, а при возведении степени <em>в степень</em> — <em>перемножаются</em>. Всё остальное в главе вытекает отсюда.</p><p>Одна метафора на всю главу: степень — это лестница, где каждая ступень не прибавляет, а <b>умножает</b>. Поднялся на ступень — умножил ещё раз.</p></div>
+
+<h3>1. Степень — это ленивое умножение</h3>
+<p>Записывать <span class="m">2·2·2·2·2</span> утомительно. Математики поступили как всякий разумный лентяй: договорились писать <span class="m">2<sup>5</sup></span> и читать «два в пятой степени». Внизу — <b>основание</b> (base), то, что умножаем. Вверху — <b>показатель</b> (exponent), сколько сомножителей выписано.</p>
+<div class="formula"><b class="hl">2</b><sup class="hl2">5</sup> = 2·2·2·2·2 = 32</div>
+<ul class="legend"><li><span class="m">2</span> — основание, что умножаем;</li><li><span class="m">5</span> — показатель, сколько раз множитель стоит в ряду.</li></ul>
+<p>Из этого определения бесплатно выпадает первое правило. Перемножим <span class="m">x<sup>2</sup></span> и <span class="m">x<sup>3</sup></span>. Что это на самом деле?</p>
+<p><span class="m">x<sup>2</sup>·x<sup>3</sup> = (x·x)·(x·x·x) = x·x·x·x·x = x<sup>5</sup></span>.</p>
+<p>Мы не «применили формулу» — мы посчитали множители в ряду. Два плюс три равно пять. Отсюда правило произведения: <span class="m">x<sup>a</sup>·x<sup>b</sup> = x<sup>a+b</sup></span>. Складываем показатели, потому что просто ставим два ряда множителей встык.</p>
+
+<div class="box tool"><div class="box-t">Приём: «Посчитай множители»</div><p>Забыл правило — не вспоминай, а выпиши степени руками на маленьком случае. <span class="m">x<sup>2</sup>·x<sup>3</sup></span>? Черкни <span class="m">xx·xxx</span>, сосчитай буквы — пять. Приём работает для любого правила степеней: разверни, посчитай, увидь закономерность. Маленький пример честнее памяти.</p></div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Граф Подвох наклоняется к твоему листу и вкрадчиво предлагает: «<span class="m">x<sup>2</sup>·x<sup>3</sup></span>? Показатели ведь перемножаются — пиши <span class="m">x<sup>6</sup></span>». Не верь. Развернём: <span class="m">xx·xxx</span> — пять множителей, значит <span class="m">x<sup>5</sup></span>. При <em>умножении</em> одинаковых оснований показатели <b>складываются</b>. <span class="m">x<sup>6</sup></span> — это его любимая приманка, и она всегда стоит среди вариантов.</p></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Упрости <span class="m">x<sup>7</sup>·x<sup>3</sup></span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-1" value="a"><span><span class="m">x<sup>21</sup></span></span></label>
+<label><input type="radio" name="q6-1" value="b"><span><span class="m">x<sup>10</sup></span></span></label>
+<label><input type="radio" name="q6-1" value="c"><span><span class="m">x<sup>4</sup></span></span></label>
+<label><input type="radio" name="q6-1" value="d"><span><span class="m">2x<sup>10</sup></span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Ставим два ряда множителей встык: 7 + 3 = 10." data-no="Не совсем. x²¹ — приманка Графа: он перемножил 7 и 3. Но при умножении одинаковых оснований показатели складываются: 7 + 3 = 10."></div>
+</div>
+
+<h3>2. Четыре правила, которые не надо запоминать</h3>
+<p>Все правила степеней — это одно и то же наблюдение «посчитай множители» под разными углами. Разберём остальные три.</p>
+<p><b>Степень в степени.</b> Что такое <span class="m">(x<sup>2</sup>)<sup>3</sup></span>? Это <span class="m">x<sup>2</sup></span>, взятое трижды множителем: <span class="m">x<sup>2</sup>·x<sup>2</sup>·x<sup>2</sup></span>. По первому правилу показатели складываются: <span class="m">2+2+2 = 6</span>. А сложить три двойки — это умножить: <span class="m">2·3</span>. Вот почему <span class="m">(x<sup>a</sup>)<sup>b</sup> = x<sup>ab</sup></span> — показатели <b>перемножаются</b>.</p>
+<p><b>Деление.</b> <span class="frac"><b>x<sup>5</sup></b><i>x<sup>2</sup></i></span> = <span class="frac"><b>x·x·x·x·x</b><i>x·x</i></span>. Два множителя сверху и снизу сокращаются, остаётся <span class="m">x<sup>3</sup></span>. Значит <span class="m">x<sup>a</sup>/x<sup>b</sup> = x<sup>a−b</sup></span>: делим — вычитаем.</p>
+<p><b>Произведение в степени.</b> <span class="m">(xy)<sup>3</sup> = (xy)(xy)(xy)</span>. Порядок множителей неважен, соберём иксы к иксам: <span class="m">x<sup>3</sup>y<sup>3</sup></span>. Значит <span class="m">(xy)<sup>a</sup> = x<sup>a</sup>y<sup>a</sup></span>.</p>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Зеркальная пара, на которой заваливаются чаще всего:</p><ul><li><span class="m">x<sup>2</sup>·x<sup>3</sup> = x<sup>5</sup></span> (умножаем — <b>складываем</b> показатели);</li><li><span class="m">(x<sup>2</sup>)<sup>3</sup> = x<sup>6</sup></span> (степень в степени — <b>умножаем</b> показатели).</li></ul><p>SAT ставит рядом <span class="m">x<sup>5</sup></span> и <span class="m">x<sup>6</sup></span> и ждёт, что ты перепутаешь операцию. Спроси себя: «тут два ряда встык или один ряд повторён несколько раз?»</p></div>
+
+<div class="example"><div class="ex-t">Пример 1 · Оба правила сразу</div><p>Упрости <span class="m">(x<sup>3</sup>)<sup>2</sup>·x<sup>4</sup></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим сначала снять внешнюю степень:</span> <span class="m">(x<sup>3</sup>)<sup>2</sup></span> — степень в степени, показатели умножаем: <span class="m">3·2 = 6</span>, получаем <span class="m">x<sup>6</sup></span>.</div>
+<div class="step"><span class="step-why">Теперь хотим соединить с оставшимся множителем:</span> <span class="m">x<sup>6</sup>·x<sup>4</sup></span> — умножение, показатели складываем: <span class="m">6+4 = 10</span>.</div>
+</div>
+<p>Ответ: <strong><span class="m">x<sup>10</sup></span></strong>. Взгляд назад: заметь, как в одной строке уживаются оба правила — и «умножить» (для скобки), и «сложить» (для стыка). Порядок важен: сначала разбираемся внутри скобки, потом склеиваем.</p>
+<details class="hint"><summary>Почему в первом шаге умножаем, а не складываем?</summary><p>Потому что <span class="m">(x<sup>3</sup>)<sup>2</sup></span> — это <span class="m">x<sup>3</sup></span>, повторённое множителем дважды: <span class="m">x<sup>3</sup>·x<sup>3</sup> = x<sup>3+3</sup> = x<sup>6</sup></span>. Сложить две тройки — то же самое, что умножить <span class="m">3·2</span>.</p></details>
+</div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Чему равно <span class="m">(a<sup>5</sup>)<sup>4</sup></span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-2" value="a"><span><span class="m">a<sup>20</sup></span></span></label>
+<label><input type="radio" name="q6-2" value="b"><span><span class="m">a<sup>9</sup></span></span></label>
+<label><input type="radio" name="q6-2" value="c"><span><span class="m">a<sup>625</sup></span></span></label>
+<label><input type="radio" name="q6-2" value="d"><span><span class="m">a</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Степень в степени: 5 × 4 = 20." data-no="Не совсем. a⁹ — это если сложить 5 и 4, а сложение работает при умножении степеней. Здесь один ряд повторён 4 раза: показатели умножаем, 5 × 4 = 20."></div>
+</div>
+
+<h3>3. Спуск ниже нуля: <span class="m">x<sup>0</sup></span> и отрицательные степени</h3>
+<p>Что такое <span class="m">x<sup>0</sup></span>? «Ноль множителей» звучит бессмысленно. Не будем спорить — продолжим закономерность. Спускаясь по лестнице на ступень вниз, мы каждый раз <b>делим на основание</b>:</p>
+<p><span class="m">2<sup>3</sup> = 8</span>, <span class="m">2<sup>2</sup> = 4</span>, <span class="m">2<sup>1</sup> = 2</span>, а следующий шаг вниз — деление 2 на 2, то есть <span class="m">2<sup>0</sup> = 1</span>.</p>
+<div class="formula"><b class="hl">x<sup>0</sup> = 1</b> (при <span class="m">x ≠ 0</span>)</div>
+<p>Продолжим спуск ниже нуля — правило деления не должно ломаться:</p>
+<p><span class="m">2<sup>0</sup> = 1</span>, <span class="m">2<sup>−1</sup> = </span><span class="frac"><b>1</b><i>2</i></span>, <span class="m">2<sup>−2</sup> = </span><span class="frac"><b>1</b><i>4</i></span>. Каждая отрицательная степень — это перевёрнутая дробь: <span class="m">x<sup>−n</sup> = </span><span class="frac"><b>1</b><i>x<sup>n</sup></i></span>.</p>
+
+<div class="box why"><div class="box-t">Почему это работает</div><p>Скептик требует доказательства, а не «продолжения узора». Пожалуйста. По правилу деления <span class="m">x<sup>3</sup>/x<sup>3</sup> = x<sup>3−3</sup> = x<sup>0</sup></span>. Но любое ненулевое число, делённое само на себя, равно 1. Значит <span class="m">x<sup>0</sup> = 1</span> — иначе правило вычитания показателей само себе противоречит. Так же <span class="m">x<sup>2</sup>/x<sup>5</sup> = x<sup>−3</sup></span>, а руками — <span class="frac"><b>1</b><i>x<sup>3</sup></i></span>. Отрицательный показатель просто отправляет множитель в знаменатель.</p></div>
+
+<div class="example"><div class="ex-t">Пример 2 · Деление и знак минус в показателе</div><p>Упрости <span class="frac"><b>4x<sup>5</sup></b><i>2x<sup>8</sup></i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим разделить по частям — числа отдельно, иксы отдельно:</span> <span class="m">4/2 = 2</span>, а для иксов вычитаем показатели: <span class="m">5 − 8 = −3</span>.</div>
+<div class="step"><span class="step-why">Хотим избавиться от отрицательного показателя:</span> <span class="m">x<sup>−3</sup></span> отправляем в знаменатель — <span class="frac"><b>1</b><i>x<sup>3</sup></i></span>.</div>
+</div>
+<p>Ответ: <strong><span class="frac"><b>2</b><i>x<sup>3</sup></i></span></strong>. Взгляд назад: <span class="m">2x<sup>−3</sup></span> и <span class="frac"><b>2</b><i>x<sup>3</sup></i></span> — одно и то же. SAT принимает любую форму, но в ответах-вариантах обычно ждёт запись без отрицательных показателей.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Три ядовитых знака, которые Граф Подвох путает нарочно:</p><ul><li><span class="m">x<sup>−2</sup></span> — это <b>не</b> отрицательное число. <span class="m">2<sup>−2</sup> = </span><span class="frac"><b>1</b><i>4</i></span> — положительное. Минус в показателе означает «перевернуть», а не «поставить знак минус».</li><li><span class="m">(−2)<sup>4</sup> = 16</span>, но <span class="m">−2<sup>4</sup> = −16</span>. Без скобок степень «прилипает» к двойке раньше, чем минус: <span class="m">−2<sup>4</sup> = −(2·2·2·2) = −16</span>. Скобки в первом случае возводят и сам минус.</li></ul></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Вычисли <span class="m">7<sup>0</sup> − 2<sup>−2</sup></span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-3" value="a"><span><span class="frac"><b>5</b><i>4</i></span></span></label>
+<label><input type="radio" name="q6-3" value="b"><span><span class="frac"><b>3</b><i>4</i></span></span></label>
+<label><input type="radio" name="q6-3" value="c"><span><span class="m">0</span></span></label>
+<label><input type="radio" name="q6-3" value="d"><span><span class="m">−3</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. 7⁰ = 1, 2⁻² = 1/4, значит 1 − 1/4 = 3/4." data-no="Не совсем. Ответ −3 значит, что ты счёл 2⁻² = 4; но минус в показателе переворачивает в дробь, а не отбрасывается: 2⁻² = 1/4. И 7⁰ = 1, не 0. Итог: 1 − 1/4 = 3/4."></div>
+</div>
+
+<h3>4. Дробные степени — это корни</h3>
+<p>Что могло бы значить <span class="m">x<sup>1/2</sup></span>? Пусть правила степеней остаются в силе. Возведём <span class="m">x<sup>1/2</sup></span> в квадрат: <span class="m">(x<sup>1/2</sup>)<sup>2</sup> = x<sup>(1/2)·2</sup> = x<sup>1</sup> = x</span>. Значит <span class="m">x<sup>1/2</sup></span> — это то число, которое при возведении в квадрат даёт <span class="m">x</span>. Но так по определению устроен квадратный корень.</p>
+<div class="formula"><b class="hl">x<sup>1/2</sup></b> = √x</div>
+<p>Продолжая, <span class="m">x<sup>1/3</sup></span> — кубический корень, а общий случай: <span class="m">x<sup>m/n</sup> = <sup>n</sup>√(x<sup>m</sup>)</span>. Знаменатель дроби говорит, какой корень брать, числитель — в какую степень возводить. Порядок неважен: <span class="m"><sup>n</sup>√(x<sup>m</sup>) = (<sup>n</sup>√x)<sup>m</sup></span>.</p>
+
+<div class="box tool"><div class="box-t">Приём: «Корень = степень ½»</div><p>Как только увидел корень — переведи его в дробную степень, и все правила степеней снова работают. <span class="m">√x = x<sup>1/2</sup></span>, <span class="m"><sup>3</sup>√x = x<sup>1/3</sup></span>. Тогда <span class="m">√x·√x = x<sup>1/2</sup>·x<sup>1/2</sup> = x<sup>1</sup> = x</span> — сложили показатели, и корень исчез. Больше не нужно помнить отдельные «правила корней»: это те же правила степеней.</p></div>
+
+<div class="example"><div class="ex-t">Пример 3 · Дробные степени по частям</div><p>Вычисли <span class="m">27<sup>2/3</sup></span> и <span class="m">16<sup>3/4</sup></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим сначала взять корень (маленькие числа удобнее возводить):</span> знаменатель 3 — кубический корень, <span class="m"><sup>3</sup>√27 = 3</span>.</div>
+<div class="step"><span class="step-why">Хотим применить числитель:</span> возводим в квадрат — <span class="m">3<sup>2</sup> = 9</span>.</div>
+<div class="step">Так же <span class="m">16<sup>3/4</sup></span>: <span class="m"><sup>4</sup>√16 = 2</span>, затем <span class="m">2<sup>3</sup> = 8</span>.</div>
+</div>
+<p>Ответы: <strong>9</strong> и <strong>8</strong>. Взгляд назад: всегда бери корень первым, а степень — вторым. <span class="m">27<sup>2</sup> = 729</span>, потом <span class="m"><sup>3</sup>√729 = 9</span> — тот же ответ, но считать тяжелее. Ленивый Гений берёт корень раньше.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">Чему равно <span class="m">16<sup>3/4</sup></span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-4" value="a"><span><span class="m">6</span></span></label>
+<label><input type="radio" name="q6-4" value="b"><span><span class="m">12</span></span></label>
+<label><input type="radio" name="q6-4" value="c"><span><span class="m">8</span></span></label>
+<label><input type="radio" name="q6-4" value="d"><span><span class="m">24</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. ⁴√16 = 2, затем 2³ = 8." data-no="Не совсем. Ответ 12 получается, если умножить основание на дробь: 16 · 3/4. Так нельзя. Дробная степень — это корень плюс степень: ⁴√16 = 2, 2³ = 8."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Стоп-кадр</div><p>Закрой экран и восстанови по памяти, ничего не подглядывая:</p><ul><li>что делает <span class="m">x<sup>2</sup>·x<sup>3</sup></span> с показателями и почему;</li><li>что делает <span class="m">(x<sup>2</sup>)<sup>3</sup></span> и чем отличается от предыдущего;</li><li>чему равно <span class="m">x<sup>0</sup></span> и <span class="m">x<sup>−2</sup></span>;</li><li>что такое <span class="m">x<sup>1/2</sup></span> одним словом.</li></ul><p>Если хотя бы одно вспомнилось с трудом — вернись на страницу вверх. Дальше эти четыре факта работают все вместе.</p></div>
+
+<h3>5. Корни ближе: упрощение и коварство суммы</h3>
+<p>Корень произведения раскладывается на множители: <span class="m">√(ab) = √a·√b</span>. Через степени это очевидно: <span class="m">(ab)<sup>1/2</sup> = a<sup>1/2</sup>b<sup>1/2</sup></span> — то самое правило <span class="m">(xy)<sup>a</sup> = x<sup>a</sup>y<sup>a</sup></span>. Отсюда — способ «упрощать» корни: вытаскивать из-под них полные квадраты.</p>
+
+<div class="example"><div class="ex-t">Пример 4 · Упрощение и сложение корней</div><p>Упрости <span class="m">√48</span>, а затем найди <span class="m">√48 + √27</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим вытащить из-под корня всё, что является полным квадратом:</span> <span class="m">48 = 16·3</span>, а 16 — квадрат. Значит <span class="m">√48 = √16·√3 = 4√3</span>.</div>
+<div class="step"><span class="step-why">Хотим то же для второго корня:</span> <span class="m">27 = 9·3</span>, <span class="m">√27 = 3√3</span>.</div>
+<div class="step"><span class="step-why">Хотим сложить — а складывать корни можно только с одинаковой «начинкой»:</span> <span class="m">4√3 + 3√3 = 7√3</span>, как <span class="m">4</span> яблока плюс <span class="m">3</span> яблока.</div>
+</div>
+<p>Ответ: <strong><span class="m">7√3</span></strong>. Взгляд назад: <span class="m">√3</span> здесь ведёт себя как переменная. Складывать <span class="m">√48 + √27</span> «в лоб» нельзя — но привели к общему <span class="m">√3</span>, и сложение стало законным.</p>
+</div>
+
+<div class="box trap"><div class="box-t">Ловушка SAT</div><p>Вечная приманка, на которой спотыкается даже сильный ученик: <span class="m">√(a + b) ≠ √a + √b</span>. Корень <b>суммы</b> нельзя разбивать. Проверь на числах: <span class="m">√(9 + 16) = √25 = 5</span>, а <span class="m">√9 + √16 = 3 + 4 = 7</span>. Пять — это не семь. Раскладывается только корень <em>произведения</em>, но не суммы.</p><p>И вторая: <span class="m">√(x<sup>2</sup>) = |x|</span>, а не просто <span class="m">x</span>. Корень возвращает <em>неотрицательное</em> число, поэтому <span class="m">√((−5)<sup>2</sup>) = √25 = 5 = |−5|</span>. Если <span class="m">x</span> может быть отрицательным, модуль обязателен.</p></div>
+
+<div class="box desmos"><div class="box-t">Ленивый Гений: Desmos</div><p>Не хочешь верить, что <span class="m">√48 = 4√3</span>? Вбей в Desmos обе части и сравни — обе дадут <span class="m">6,9282…</span>. И проверь ловушку суммы: <span class="m">√(9+16)</span> даст 5, а <span class="m">√9+√16</span> даст 7. Desmos не заменяет понимание, но за секунду ловит арифметический промах перед тем, как ты обвёл неверный вариант.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">Чему равно <span class="m">√(9 + 16)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-5" value="a"><span><span class="m">5</span></span></label>
+<label><input type="radio" name="q6-5" value="b"><span><span class="m">7</span></span></label>
+<label><input type="radio" name="q6-5" value="c"><span><span class="m">25</span></span></label>
+<label><input type="radio" name="q6-5" value="d"><span><span class="m">12</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. Сначала складываем под корнем: 9 + 16 = 25, затем √25 = 5." data-no="Не совсем. Ответ 7 — это √9 + √16 = 3 + 4, а корень суммы разбивать нельзя. Сложи под корнем: √25 = 5."></div>
+</div>
+
+<h3>6. Рационализация: выгнать корень из знаменателя</h3>
+<p>Дробь <span class="frac"><b>3</b><i>√6</i></span> математики не любят: делить на иррациональное число неудобно. Хотим убрать корень из знаменателя — домножим дробь на <span class="frac"><b>√6</b><i>√6</i></span> (это единица, значение не меняется). В знаменателе <span class="m">√6·√6 = 6</span>, корень исчез.</p>
+<div class="example"><div class="ex-t">Пример 5 · Рационализация</div><p>Приведи <span class="frac"><b>3</b><i>√6</i></span> к виду без корня в знаменателе.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим убить корень внизу — домножаем на него же:</span> <span class="frac"><b>3</b><i>√6</i></span> · <span class="frac"><b>√6</b><i>√6</i></span> = <span class="frac"><b>3√6</b><i>6</i></span>.</div>
+<div class="step"><span class="step-why">Хотим сократить числа:</span> <span class="m">3/6 = 1/2</span>, остаётся <span class="frac"><b>√6</b><i>2</i></span>.</div>
+</div>
+<p>Ответ: <strong><span class="frac"><b>√6</b><i>2</i></span></strong>. Проверка на калькуляторе: <span class="m">3/√6 ≈ 1,225</span> и <span class="m">√6/2 ≈ 1,225</span> — совпало.</p>
+<details class="hint"><summary>А если внизу сумма, например <span class="m">2 − √2</span>?</summary><p>Домножь на <b>сопряжённое</b> <span class="m">2 + √2</span>: тогда внизу <span class="m">(2−√2)(2+√2) = 2<sup>2</sup> − (√2)<sup>2</sup> = 4 − 2 = 2</span> — разность квадратов, корень пропал. Это тот же приём, только через формулу <span class="m">(a−b)(a+b) = a<sup>2</sup>−b<sup>2</sup></span>.</p></details>
+</div>
+
+<h3>7. Научная запись: язык очень больших и очень малых</h3>
+<p>Записывать число эритроцитов или массу бактерии нулями — пытка. Научная запись (scientific notation) хранит число как <span class="m">a × 10<sup>n</sup></span>, где <span class="m">1 ≤ a &lt; 10</span>. Показатель <span class="m">n</span> — это сколько шагов запятая прошла: вправо для больших чисел, влево для малых.</p>
+<div class="formula"><b class="hl">3,2</b> × 10<sup class="hl2">7</sup> = 32 000 000</div>
+<p>В лаборатории это родной язык. Серийные разведения идут степенями десяти: <span class="m">10<sup>−1</sup></span>, <span class="m">10<sup>−2</sup></span>, <span class="m">10<sup>−3</sup></span> — каждый шаг делит концентрацию на десять. А титр антител 1:1024 означает, что антитело ещё ловится при разведении <span class="m">1/1024 = 1/2<sup>10</sup></span> — то есть после <b>десяти</b> двукратных разведений. «1024» — это не случайное число, это <span class="m">2<sup>10</sup></span>.</p>
+<div class="example"><div class="ex-t">Пример 6 · Операции в научной записи</div><p>Найди <span class="m">(3,2 × 10<sup>7</sup>)·(2 × 10<sup>−3</sup>)</span> и <span class="m">(6 × 10<sup>9</sup>) / (3 × 10<sup>4</sup>)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">Хотим разделить работу: числа отдельно, десятки отдельно.</span> Умножение: <span class="m">3,2·2 = 6,4</span>, а <span class="m">10<sup>7</sup>·10<sup>−3</sup> = 10<sup>7+(−3)</sup> = 10<sup>4</sup></span>. Итог <span class="m">6,4 × 10<sup>4</sup></span>.</div>
+<div class="step"><span class="step-why">То же для деления:</span> <span class="m">6/3 = 2</span>, <span class="m">10<sup>9</sup>/10<sup>4</sup> = 10<sup>5</sup></span>. Итог <span class="m">2 × 10<sup>5</sup></span>.</div>
+</div>
+<p>Ответы: <strong><span class="m">6,4 × 10<sup>4</sup></span></strong> и <strong><span class="m">2 × 10<sup>5</sup></span></strong>. Взгляд назад: степени десяти живут по обычным правилам степеней — при умножении складываются, при делении вычитаются. Сложение сложнее: чтобы сложить <span class="m">3,2 × 10<sup>7</sup></span> и <span class="m">4 × 10<sup>6</sup></span>, сперва уравняй показатели: <span class="m">4 × 10<sup>6</sup> = 0,4 × 10<sup>7</sup></span>, тогда сумма <span class="m">3,6 × 10<sup>7</sup></span>.</p>
+</div>
+
+<h3>8. Уравнения со степенями: приведи к общему основанию</h3>
+<p>Реши <span class="m">2<sup>x+1</sup> = 32</span>. Хотим сравнить показатели — а сравнивать их можно, только когда основания одинаковы. Замечаем: <span class="m">32 = 2<sup>5</sup></span>. Тогда <span class="m">2<sup>x+1</sup> = 2<sup>5</sup></span>, и раз основания равны, равны и показатели: <span class="m">x + 1 = 5</span>, значит <span class="m">x = 4</span>.</p>
+<p>Тот же ключ открывает случаи, где основания <em>разные</em>, но родственные. <span class="m">8<sup>x</sup> = 2<sup>3x</sup></span>, потому что <span class="m">8 = 2<sup>3</sup></span> и <span class="m">(2<sup>3</sup>)<sup>x</sup> = 2<sup>3x</sup></span>. Приведи обе стороны к основанию 2 — и уравнение становится обычным линейным.</p>
+
+<div class="box why"><div class="box-t">Почему это работает</div><p>Скептик спрашивает: почему из <span class="m">2<sup>x+1</sup> = 2<sup>5</sup></span> следует <span class="m">x+1 = 5</span>? Потому что функция <span class="m">2<sup>t</sup></span> строго растёт: каждому значению степени соответствует ровно один показатель. Два разных показателя не могут дать одну и ту же степень. Поэтому равенство степеней при общем основании — это равенство показателей.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Реши <span class="m">2<sup>x+1</sup> = 32</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-6" value="a"><span><span class="m">x = 5</span></span></label>
+<label><input type="radio" name="q6-6" value="b"><span><span class="m">x = 6</span></span></label>
+<label><input type="radio" name="q6-6" value="c"><span><span class="m">x = 16</span></span></label>
+<label><input type="radio" name="q6-6" value="d"><span><span class="m">x = 4</span></span></label>
+</div>
+<button class="quiz-check" type="button">Проверить</button>
+<div class="quiz-fb" data-ok="Верно. 32 = 2⁵, значит x + 1 = 5, x = 4." data-no="Не совсем. Ответ x = 5 — это забытая единица: ты приравнял x самому показателю. Но слева x + 1, поэтому x + 1 = 5 даёт x = 4."></div>
+</div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Сравнение линейного и показательного роста">
+<line class="ax" x1="40" y1="240" x2="400" y2="240"/>
+<line class="ax" x1="40" y1="240" x2="40" y2="20"/>
+<line class="grid" x1="40" y1="180" x2="400" y2="180"/>
+<line class="grid" x1="40" y1="120" x2="400" y2="120"/>
+<line class="grid" x1="40" y1="60" x2="400" y2="60"/>
+<line class="grid" x1="130" y1="240" x2="130" y2="20"/>
+<line class="grid" x1="220" y1="240" x2="220" y2="20"/>
+<line class="grid" x1="310" y1="240" x2="310" y2="20"/>
+<path class="crv" d="M40 240 L400 150" fill="none"/>
+<path class="crv2" d="M40 239 C 240 236, 320 205, 378 28" fill="none"/>
+<circle class="pt" cx="378" cy="28" r="4"/>
+<text class="lbl" x="250" y="165">линейная интуиция</text>
+<text class="lbl" x="150" y="70">как растёт мир</text>
+<text class="lbl" x="300" y="55">удвоение</text>
+</svg><figcaption>Обе кривые стартуют вместе. Прямая (сложение) ползёт ровно; кривая удвоения долго прижимается к нулю, а потом уходит в потолок. Именно этот «поздний рывок» и обманывает интуицию с бумагой.</figcaption></figure>
+
+<div class="box story"><div class="box-t">На полях</div><p>Легенда: изобретатель шахмат Сисса попросил у царя «пустяк» — одно зерно на первую клетку доски, два на вторую, четыре на третью и так, удваивая, до 64-й. Царь усмехнулся и согласился. Считаем: на клетке <span class="m">n</span> лежит <span class="m">2<sup>n−1</sup></span> зёрен, а всего — <span class="m">2<sup>64</sup> − 1 ≈ 1,8 × 10<sup>19</sup></span>. Это тысячелетия мирового урожая пшеницы. Царь проиграл той же арифметике, что и ты в пари про бумагу.</p>
+<table class="tbl"><thead><tr><th>Клетка</th><th>Зёрен на ней</th><th>Это примерно</th></tr></thead><tbody>
+<tr><td>1</td><td><span class="m">2<sup>0</sup> = 1</span></td><td>одно зерно</td></tr>
+<tr><td>4</td><td><span class="m">2<sup>3</sup> = 8</span></td><td>горсточка</td></tr>
+<tr><td>21</td><td><span class="m">2<sup>20</sup> ≈ 1,0 × 10<sup>6</sup></span></td><td>больше миллиона</td></tr>
+<tr><td>41</td><td><span class="m">2<sup>40</sup> ≈ 1,1 × 10<sup>12</sup></span></td><td>больше триллиона</td></tr>
+<tr><td>64</td><td><span class="m">2<sup>63</sup> ≈ 9,2 × 10<sup>18</sup></span></td><td>амбар размером с гору</td></tr>
+</tbody></table></div>
+
+<h3>9. Задачи</h3>
+
+<div class="problem tier-a"><div class="pr-t">Задача 1 <span class="tier">уровень А</span></div>
+<p>Упрости <span class="m">(3x<sup>2</sup>)(4x<sup>5</sup>)</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Числа перемножь отдельно, степени <span class="m">x</span> — отдельно.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Для степеней <span class="m">x</span> действует правило произведения: показатели складываются.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">3·4 = 12</span>; <span class="m">x<sup>2</sup>·x<sup>5</sup> = x<sup>2+5</sup> = x<sup>7</sup></span>. Ответ: <strong><span class="m">12x<sup>7</sup></span></strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 2 <span class="tier">уровень А</span></div>
+<p>Вычисли <span class="m">2<sup>−3</sup> + 5<sup>0</sup></span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Отрицательная степень переворачивает в дробь; любое ненулевое число в нулевой степени равно 1.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">2<sup>−3</sup> = 1/2<sup>3</sup></span>. А <span class="m">5<sup>0</sup></span> — не ноль.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">2<sup>−3</sup> = </span><span class="frac"><b>1</b><i>8</i></span>, <span class="m">5<sup>0</sup> = 1</span>. Сумма: <span class="m">1 + </span><span class="frac"><b>1</b><i>8</i></span> = <span class="frac"><b>9</b><i>8</i></span>. Ответ: <strong><span class="frac"><b>9</b><i>8</i></span></strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Задача 3 <span class="tier">уровень А</span></div>
+<p>Упрости <span class="m">√72</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Ищи среди множителей 72 самый большой полный квадрат.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">72 = 36·2</span>, а 36 — квадрат.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">√72 = √(36·2) = √36·√2 = 6√2</span>. Ответ: <strong><span class="m">6√2</span></strong>. Проверка: <span class="m">6√2 ≈ 8,49</span> и <span class="m">√72 ≈ 8,49</span>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 4 <span class="tier">уровень Б</span></div>
+<p>Упрости <span class="m">(2x<sup>3</sup>y)<sup>2</sup>·(3xy<sup>2</sup>)</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала раскрой скобку в квадрате: возведи в квадрат и число, и каждую переменную.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">(2x<sup>3</sup>y)<sup>2</sup> = 2<sup>2</sup>·x<sup>6</sup>·y<sup>2</sup> = 4x<sup>6</sup>y<sup>2</sup></span>. Дальше — обычное умножение.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">(2x<sup>3</sup>y)<sup>2</sup> = 4x<sup>6</sup>y<sup>2</sup></span>. Умножаем на <span class="m">3xy<sup>2</sup></span>: числа <span class="m">4·3 = 12</span>; для <span class="m">x</span>: <span class="m">6+1 = 7</span>; для <span class="m">y</span>: <span class="m">2+2 = 4</span>. Ответ: <strong><span class="m">12x<sup>7</sup>y<sup>4</sup></span></strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 5 <span class="tier">уровень Б</span></div>
+<p>Избавься от корня в знаменателе: <span class="frac"><b>10</b><i>√5</i></span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Домножь числитель и знаменатель на <span class="m">√5</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Внизу получится <span class="m">√5·√5 = 5</span>. Не забудь сократить с десяткой.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="frac"><b>10</b><i>√5</i></span> · <span class="frac"><b>√5</b><i>√5</i></span> = <span class="frac"><b>10√5</b><i>5</i></span> = <span class="m">2√5</span>. Ответ: <strong><span class="m">2√5</span></strong>. Проверка: <span class="m">10/√5 ≈ 4,47</span> и <span class="m">2√5 ≈ 4,47</span>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 6 <span class="tier">флешбэк · глава 2</span></div>
+<p>Упрости <span class="m">4x<sup>2</sup> − (x<sup>2</sup> − 3) + 2(x<sup>2</sup> − 1)</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Главная опасность — знак минус перед скобкой. Он меняет знак каждому слагаемому внутри.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">−(x<sup>2</sup> − 3) = −x<sup>2</sup> + 3</span>. Затем собери подобные.</p></details>
+<details class="sol"><summary>Решение</summary><p>Раскрываем: <span class="m">4x<sup>2</sup> − x<sup>2</sup> + 3 + 2x<sup>2</sup> − 2</span>. Собираем <span class="m">x<sup>2</sup></span>: <span class="m">4 − 1 + 2 = 5</span>, значит <span class="m">5x<sup>2</sup></span>. Числа: <span class="m">3 − 2 = 1</span>. Ответ: <strong><span class="m">5x<sup>2</sup> + 1</span></strong>. Классическая ошибка — забыть, что минус перед скобкой меняет знак и у <span class="m">−3</span> тоже.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Задача 7 <span class="tier">флешбэк · глава 5</span></div>
+<p>Реши неравенство <span class="m">7 − 2x ≥ 3x − 8</span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Собери иксы с одной стороны. Если решишь делить на отрицательное число — вспомни главное правило неравенств.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>При делении (или умножении) на отрицательное число знак неравенства <b>переворачивается</b>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Перенесём <span class="m">3x</span> влево: <span class="m">7 − 5x ≥ −8</span>. Затем <span class="m">−5x ≥ −15</span>. Делим на <span class="m">−5</span> — знак меняется: <span class="m">x ≤ 3</span>. Ответ: <strong><span class="m">x ≤ 3</span></strong>. Проверка: подставь <span class="m">x = 0</span> в исходное — <span class="m">7 ≥ −8</span>, верно, и 0 действительно ≤ 3.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 8 <span class="tier">уровень В</span></div>
+<p>Реши <span class="m">4<sup>x+1</sup> = 8<sup>x−1</sup></span>.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Приведи обе стороны к одному основанию. И 4, и 8 — степени двойки.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p><span class="m">4 = 2<sup>2</sup></span>, <span class="m">8 = 2<sup>3</sup></span>. Не забудь домножить показатель на скобку: <span class="m">(2<sup>2</sup>)<sup>x+1</sup> = 2<sup>2(x+1)</sup></span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>Слева: <span class="m">4<sup>x+1</sup> = 2<sup>2(x+1)</sup> = 2<sup>2x+2</sup></span>. Справа: <span class="m">8<sup>x−1</sup> = 2<sup>3(x−1)</sup> = 2<sup>3x−3</sup></span>. Основания равны, значит равны показатели: <span class="m">2x + 2 = 3x − 3</span>, откуда <span class="m">x = 5</span>. Ответ: <strong><span class="m">x = 5</span></strong>. Проверка: <span class="m">4<sup>6</sup> = 4096</span> и <span class="m">8<sup>4</sup> = 4096</span> — совпало.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Задача 9 <span class="tier">уровень В</span></div>
+<p>В 1 мл крови примерно <span class="m">5 × 10<sup>9</sup></span> эритроцитов. В теле около 5 л крови, то есть <span class="m">5 × 10<sup>3</sup></span> мл. Сколько эритроцитов всего? Ответ дай в научной записи.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Общее число = плотность на 1 мл, умноженная на число миллилитров.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Перемножай отдельно числа <span class="m">(5·5)</span> и отдельно десятки <span class="m">(10<sup>9</sup>·10<sup>3</sup>)</span>. Потом приведи к виду <span class="m">a × 10<sup>n</sup></span> с <span class="m">1 ≤ a &lt; 10</span>.</p></details>
+<details class="sol"><summary>Решение</summary><p><span class="m">(5 × 10<sup>9</sup>)·(5 × 10<sup>3</sup>) = 25 × 10<sup>12</sup></span>. Но 25 не в диапазоне <span class="m">1…10</span>, поэтому <span class="m">25 × 10<sup>12</sup> = 2,5 × 10<sup>13</sup></span>. Ответ: <strong><span class="m">2,5 × 10<sup>13</sup></span></strong> эритроцитов. Столько же даёт и справочник — порядок сошёлся.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Задача 10 · Найди ошибку <span class="tier">уровень Б</span></div>
+<p>Ученик «упрощает» <span class="m">√(x<sup>2</sup> + 9)</span> так:</p>
+<p><em>«Корень раскладывается на слагаемые: <span class="m">√(x<sup>2</sup> + 9) = √(x<sup>2</sup>) + √9 = x + 3</span>».</em></p>
+<p>Найди ошибку (а может, и не одну) и объясни, в чём изъян.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Проверь его правило на конкретном числе, например <span class="m">x = 4</span>.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Раскладывается ли корень <em>суммы</em>? И точно ли <span class="m">√(x<sup>2</sup>) = x</span> для любого <span class="m">x</span>?</p></details>
+<details class="sol"><summary>Решение</summary><p><b>Изъян первый и главный:</b> корень суммы нельзя разбивать на сумму корней — <span class="m">√(a + b) ≠ √a + √b</span>. Проверка при <span class="m">x = 4</span>: слева <span class="m">√(16 + 9) = √25 = 5</span>, а «ответ» ученика даёт <span class="m">4 + 3 = 7</span>. Пять — не семь, правило ложно. Раскладывается только корень <em>произведения</em>.</p><p><b>Изъян второй, попутный:</b> даже отдельный <span class="m">√(x<sup>2</sup>) = |x|</span>, а не <span class="m">x</span> — при отрицательном <span class="m">x</span> знак поплывёт. Итог: выражение <span class="m">√(x<sup>2</sup> + 9)</span> вообще не упрощается такими средствами, его оставляют как есть.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Босс главы: «Эпидемия в чашке Петри»</div>
+<p>Полночь, лаборатория. В стерильную чашку Петри попала <b>одна</b> бактерия <span class="m">E. coli</span>. В тепле и питательной среде она делится каждые <b>20 минут</b>: одна становится двумя, две — четырьмя. Никто не заметит до утра. Твоя задача — оценить масштаб катастрофы языком степеней.</p>
+<p>Для сравнения держи в уме порядок величины: в теле человека около <span class="m">3,7 × 10<sup>13</sup></span> клеток, а людей на Земле примерно <span class="m">8 × 10<sup>9</sup></span>. Значит во всех людях планеты, вместе взятых, порядка <span class="m">3 × 10<sup>23</sup></span> клеток. Против этого числа мы и меряем нашу бактерию.</p>
+
+<div class="problem tier-c"><div class="pr-t">Босс · часть 1 <span class="tier">уровень В</span></div>
+<p>Сколько бактерий будет в чашке через <b>24 часа</b>? Дай ответ в научной записи.</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Сначала — сколько удвоений за сутки. Делений столько же, сколько 20-минутных отрезков в 24 часах.</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Число бактерий после <span class="m">k</span> удвоений равно <span class="m">2<sup>k</sup></span> (началось с одной). Осталось оценить <span class="m">2<sup>72</sup></span> через степени десяти: <span class="m">2<sup>10</sup> ≈ 10<sup>3</sup></span>.</p></details>
+<details class="sol"><summary>Решение</summary><p>За сутки <span class="m">24·60 = 1440</span> минут, делится каждые 20 → <span class="m">1440/20 = 72</span> удвоения. Значит бактерий <span class="m">2<sup>72</sup></span>. Оцениваем: <span class="m">2<sup>72</sup> = 2<sup>70</sup>·2<sup>2</sup> = (2<sup>10</sup>)<sup>7</sup>·4 ≈ (10<sup>3</sup>)<sup>7</sup>·4 = 4 × 10<sup>21</sup></span>. Точнее — <span class="m">≈ 4,7 × 10<sup>21</sup></span>. Ответ: <strong><span class="m">≈ 4,7 × 10<sup>21</sup></span></strong> бактерий за сутки из одной клетки.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Босс · часть 2 <span class="tier">уровень В</span></div>
+<p>Через сколько часов бактерий в чашке станет больше, чем всех клеток во всех людях Земли (<span class="m">≈ 3 × 10<sup>23</sup></span>)?</p>
+<details class="hint"><summary>Подсказка 1</summary><p>Ты уже знаешь: за 24 часа накопилось <span class="m">≈ 4,7 × 10<sup>21</sup></span>. Во сколько раз человеческий рубеж <span class="m">3 × 10<sup>23</sup></span> больше этого?</p></details>
+<details class="hint"><summary>Подсказка 2</summary><p>Отношение <span class="m">3 × 10<sup>23</sup></span> к <span class="m">4,7 × 10<sup>21</sup></span> — около 64. А 64 — это <span class="m">2<sup>6</sup></span>, то есть ещё 6 удвоений. Сколько это минут?</p></details>
+<details class="sol"><summary>Решение</summary><p>Отношение: <span class="frac"><b>3 × 10<sup>23</sup></b><i>4,7 × 10<sup>21</sup></i></span> <span class="m">≈ 64 = 2<sup>6</sup></span>. Значит не хватает 6 удвоений. Каждое — 20 минут, итого <span class="m">6·20 = 120</span> минут = 2 часа. Прибавляем к суткам: <span class="m">24 + 2 = 26</span> часов. Проверка через степени: рубеж достигается на <span class="m">2<sup>78</sup> = 2<sup>72</sup>·2<sup>6</sup> ≈ 4,7 × 10<sup>21</sup>·64 ≈ 3,0 × 10<sup>23</sup></span> — сходится. Ответ: <strong>примерно за 26 часов</strong>. Взгляд назад: чтобы одна клетка обогнала клеточную массу всего человечества, хватает чуть больше суток — вот та самая линейная интуиция, разбитая вдребезги удвоением.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">Теперь ты умеешь</div>
+<ul class="powers">
+<li>складывать показатели при умножении и перемножать — при возведении степени в степень, не путая эти два движения;</li>
+<li>объяснять, а не зубрить, почему <span class="m">x<sup>0</sup> = 1</span> и <span class="m">x<sup>−n</sup> = 1/x<sup>n</sup></span>;</li>
+<li>читать дробную степень как корень: <span class="m">x<sup>m/n</sup> = <sup>n</sup>√(x<sup>m</sup>)</span>;</li>
+<li>упрощать корни, вытаскивая полные квадраты (<span class="m">√48 = 4√3</span>), и не попадаться на <span class="m">√(a+b) ≠ √a + √b</span>;</li>
+<li>рационализировать знаменатель домножением на корень или сопряжённое;</li>
+<li>считать в научной записи и переводить чудовищные числа в <span class="m">a × 10<sup>n</sup></span>;</li>
+<li>решать уравнения вида <span class="m">2<sup>x+1</sup> = 32</span> и <span class="m">4<sup>x+1</sup> = 8<sup>x−1</sup></span> приведением к общему основанию;</li>
+<li>прикидывать, за сколько часов одна бактерия обгонит по числу клеток всё человечество.</li>
+</ul>
+<div class="cheat"><div class="cheat-t">Шпаргалка</div><ul>
+<li><span class="m">x<sup>a</sup>·x<sup>b</sup> = x<sup>a+b</sup></span> — умножаем, складываем показатели;</li>
+<li><span class="m">(x<sup>a</sup>)<sup>b</sup> = x<sup>ab</sup></span> — степень в степени, перемножаем;</li>
+<li><span class="m">x<sup>a</sup>/x<sup>b</sup> = x<sup>a−b</sup></span> — делим, вычитаем;</li>
+<li><span class="m">(xy)<sup>a</sup> = x<sup>a</sup>y<sup>a</sup></span> — степень распределяется по множителям;</li>
+<li><span class="m">x<sup>0</sup> = 1</span>, <span class="m">x<sup>−n</sup> = 1/x<sup>n</sup></span> — ноль и перевёрнутая дробь;</li>
+<li><span class="m">x<sup>1/n</sup> = <sup>n</sup>√x</span>, <span class="m">x<sup>m/n</sup> = <sup>n</sup>√(x<sup>m</sup>)</span> — корень как степень;</li>
+<li><span class="m">√(ab) = √a·√b</span>, но <span class="m">√(a+b) ≠ √a + √b</span>; <span class="m">√(x<sup>2</sup>) = |x|</span>;</li>
+<li><span class="m">−2<sup>4</sup> = −16</span>, но <span class="m">(−2)<sup>4</sup> = 16</span> — следи за скобками.</li>
+</ul></div>
+<div class="feynman"><div class="box-t">Задание Фейнмана</div><p>Объясни воображаемому 12-летнему, без единого умного слова, почему лист бумаги, сложенный 42 раза, дотянется до Луны — хотя после десятка сгибов кажется, что «ну ещё чуть-чуть».</p>
+<details class="sol"><summary>Образец объяснения</summary><p>«Смотри: каждый сгиб не добавляет капельку — он <em>удваивает</em>. Один сгиб — вдвое толще, два — вчетверо, три — в восемь раз. Сначала это ерунда: пара миллиметров. Но удвоение — жадное. К десятому сгибу уже толщина книги, к двадцатому — с дом, к тридцатому — с гору. А удваивать сорок два раза — это умножить на два сорок два раза подряд, и число становится таким огромным, что пачка бумаги проткнула бы небо и упёрлась в Луну. Мы ошибаемся, потому что в голове мы прибавляем понемногу. А бумага не прибавляет — она умножает. И умножение всегда побеждает сложение, надо только подождать».</p></details></div>
+</div>
+</section>
+
+<section class="chapter" id="ch-6-en" data-ch="6" data-lang="en">
+<header class="ch-head"><div class="ch-eyebrow">Chapter 6 · Advanced Math</div><h2>Exponents and Roots: How a Sheet of Paper Reaches the Moon</h2><p class="ch-lede">Your intuition adds. Reality multiplies. This entire chapter is about that gap.</p></header>
+
+<div class="hook">
+<p>Take a standard sheet of paper. Its thickness is about <span class="m">0.1</span> mm. Fold it in half: now it is <span class="m">0.2</span> mm. Fold it again: <span class="m">0.4</span> mm. Now, in your mind (you cannot do this physically—after the seventh fold, the paper resists like a wooden board), fold it in half <b>42 times</b>. Before reading on, write down your estimate in the margins: how thick will the stack be? As thick as a book? A house? A skyscraper?</p>
+<p>Almost everyone writes something down-to-earth: a meter, ten meters, maybe the height of a tower. That is your intuition talking, and it adds: one fold adds a tiny bit, another fold adds a tiny bit. But the paper does not add—it <b>doubles</b>. Doubling forty-two times yields a thickness that goes <b>beyond the orbit of the Moon</b>: about 440 000 kilometers, compared to the lunar distance of 384 000 kilometers.</p>
+<p>The difference between your written estimate and the actual answer is not an arithmetic error. It is the difference between two ways things grow: addition and multiplication. We feel the first in our bones. The second we almost never feel, yet it rules compound interest, drug dosages, bacterial growth, and half of the SAT problems in the Advanced Math section.</p>
+<p>Exponents are the language of a multiplying world. Roots are the reverse path, the way back. Master both, and numbers like an antibody titer of 1:1024 or "a single cell yields <span class="m">4.7 × 10<sup>21</sup></span> offspring in a day" will stop being magic and become arithmetic.</p>
+</div>
+
+<div class="try-first">
+<p><b>Try it first.</b> Don't reach for a calculator—spend 5–10 minutes with a pencil and answer two questions honestly, using your intuition:</p>
+<div class="problem tier-a"><div class="pr-t">Warm-up <span class="tier">Level A</span></div>
+<p>1. Write down your estimate for the paper thickness from the hook (in meters or kilometers).<br>
+2. How many times larger is <span class="m">2<sup>20</sup></span> than <span class="m">2<sup>10</sup></span>? Answer before you calculate.</p>
+</div>
+<p>I bet that on the second question, you are tempted to write "twice as large"—after all, the exponent doubled from 10 to 20. Remember this feeling: it is linear intuition in its pure form. By the middle of the chapter, you will see that the correct answer is <b>1024 times larger</b>, and you will understand why.</p>
+</div>
+
+<div class="box idea"><div class="box-t">Idea</div><p><b>If you remember one thing:</b> an exponent is how many times a number is multiplied by itself. Therefore, when <em>multiplying</em> exponents, the powers <em>add up</em>, and when raising an exponent <em>to a power</em>, they <em>multiply</em>. Everything else in this chapter flows from this.</p><p>One metaphor for the entire chapter: an exponent is a ladder where each step does not add, but <b>multiplies</b>. Climb one step, multiply one more time.</p></div>
+
+<h3>1. Exponents are Lazy Multiplication</h3>
+<p>Writing <span class="m">2·2·2·2·2</span> is tedious. Mathematicians acted like any sensible lazy person: they agreed to write <span class="m">2<sup>5</sup></span> and read it as "two to the fifth power". On the bottom is the <b>base</b>, what we multiply. On top is the <b>exponent</b>, how many factors are written out.</p>
+<div class="formula"><b class="hl">2</b><sup class="hl2">5</sup> = 2·2·2·2·2 = 32</div>
+<ul class="legend"><li><span class="m">2</span> is the base, the number we multiply;</li><li><span class="m">5</span> is the exponent, how many times the factor appears in the row.</li></ul>
+<p>From this definition, we get our first rule for free. Let's multiply <span class="m">x<sup>2</sup></span> and <span class="m">x<sup>3</sup></span>. What is actually happening here?</p>
+<p><span class="m">x<sup>2</sup>·x<sup>3</sup> = (x·x)·(x·x·x) = x·x·x·x·x = x<sup>5</sup></span>.</p>
+<p>We did not "apply a formula"—we counted the factors in the row. Two plus three is five. Hence the product rule: <span class="m">x<sup>a</sup>·x<sup>b</sup> = x<sup>a+b</sup></span>. We add the exponents because we are just putting two rows of factors end-to-end.</p>
+
+<div class="box tool"><div class="box-t">Move: "Count the Factors"</div><p>If you forget a rule, don't try to memorize it. Write out the exponents by hand using a small case. <span class="m">x<sup>2</sup>·x<sup>3</sup></span>? Scribble <span class="m">xx·xxx</span>, count the letters—five. The move works for any exponent rule: expand it, count, and see the pattern. A small example is more reliable than memory.</p></div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Count Gotcha leans over your page and whispers: "<span class="m">x<sup>2</sup>·x<sup>3</sup></span>? The exponents multiply, of course—write <span class="m">x<sup>6</sup></span>." Don't fall for it. Let's expand it: <span class="m">xx·xxx</span>—five factors, which means <span class="m">x<sup>5</sup></span>. When <em>multiplying</em> identical bases, the exponents <b>add up</b>. <span class="m">x<sup>6</sup></span> is his favorite bait, and it will always be among the choices.</p></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Simplify <span class="m">x<sup>7</sup>·x<sup>3</sup></span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-1e" value="a"><span><span class="m">x<sup>21</sup></span></span></label>
+<label><input type="radio" name="q6-1e" value="b"><span><span class="m">x<sup>10</sup></span></span></label>
+<label><input type="radio" name="q6-1e" value="c"><span><span class="m">x<sup>4</sup></span></span></label>
+<label><input type="radio" name="q6-1e" value="d"><span><span class="m">2x<sup>10</sup></span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. We put two rows of factors end-to-end: 7 + 3 = 10." data-no="Not quite. x²¹ is Count Gotcha's bait: he multiplied 7 and 3. But when multiplying identical bases, the exponents add up: 7 + 3 = 10."></div>
+</div>
+
+<h3>2. Four Rules You Don't Need to Memorize</h3>
+<p>All exponent rules are the same "count the factors" observation viewed from different angles. Let's look at the other three.</p>
+<p><b>Power of a power.</b> What is <span class="m">(x<sup>2</sup>)<sup>3</sup></span>? It is <span class="m">x<sup>2</sup></span> used as a factor three times: <span class="m">x<sup>2</sup>·x<sup>2</sup>·x<sup>2</sup></span>. By the first rule, the exponents add up: <span class="m">2+2+2 = 6</span>. And adding three twos is the same as multiplying: <span class="m">2·3</span>. This is why <span class="m">(x<sup>a</sup>)<sup>b</sup> = x<sup>ab</sup></span>—the exponents <b>multiply</b>.</p>
+<p><b>Division.</b> <span class="frac"><b>x<sup>5</sup></b><i>x<sup>2</sup></i></span> = <span class="frac"><b>x·x·x·x·x</b><i>x·x</i></span>. Two factors on the top and bottom cancel out, leaving <span class="m">x<sup>3</sup></span>. This means <span class="m">x<sup>a</sup>/x<sup>b</sup> = x<sup>a−b</sup></span>: divide to subtract.</p>
+<p><b>Power of a product.</b> <span class="m">(xy)<sup>3</sup> = (xy)(xy)(xy)</span>. The order of factors does not matter; let's group the x's and the y's: <span class="m">x<sup>3</sup>y<sup>3</sup></span>. This means <span class="m">(xy)<sup>a</sup> = x<sup>a</sup>y<sup>a</sup></span>.</p>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>The mirror-image pair that trips up students the most:</p><ul><li><span class="m">x<sup>2</sup>·x<sup>3</sup> = x<sup>5</sup></span> (multiplying means we <b>add</b> the exponents);</li><li><span class="m">(x<sup>2</sup>)<sup>3</sup> = x<sup>6</sup></span> (raising a power to a power means we <b>multiply</b> the exponents).</li></ul><p>The SAT puts <span class="m">x<sup>5</sup></span> and <span class="m">x<sup>6</sup></span> side-by-side, waiting for you to mix up the operations. Ask yourself: "Are these two rows end-to-end, or is one row repeated several times?"</p></div>
+
+<div class="example"><div class="ex-t">Example 1 · Both Rules at Once</div><p>Simplify <span class="m">(x<sup>3</sup>)<sup>2</sup>·x<sup>4</sup></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">First, we want to clear the outer power:</span> <span class="m">(x<sup>3</sup>)<sup>2</sup></span> is a power of a power, so we multiply the exponents: <span class="m">3·2 = 6</span>, giving us <span class="m">x<sup>6</sup></span>.</div>
+<div class="step"><span class="step-why">Now, we want to combine it with the remaining factor:</span> <span class="m">x<sup>6</sup>·x<sup>4</sup></span> is multiplication, so we add the exponents: <span class="m">6+4 = 10</span>.</div>
+</div>
+<p>Answer: <strong><span class="m">x<sup>10</sup></span></strong>. Looking back: notice how both rules coexist in a single expression—both "multiply" (for the parenthesis) and "add" (for the end-to-end connection). Order matters: first deal with the inside of the parenthesis, then glue them together.</p>
+<details class="hint"><summary>Why do we multiply in the first step instead of adding?</summary><p>Because <span class="m">(x<sup>3</sup>)<sup>2</sup></span> is <span class="m">x<sup>3</sup></span> repeated as a factor twice: <span class="m">x<sup>3</sup>·x<sup>3</sup> = x<sup>3+3</sup> = x<sup>6</sup></span>. Adding two threes is the same as multiplying <span class="m">3·2</span>.</p></details>
+</div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">What is <span class="m">(a<sup>5</sup>)<sup>4</sup></span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-2e" value="a"><span><span class="m">a<sup>20</sup></span></span></label>
+<label><input type="radio" name="q6-2e" value="b"><span><span class="m">a<sup>9</sup></span></span></label>
+<label><input type="radio" name="q6-2e" value="c"><span><span class="m">a<sup>625</sup></span></span></label>
+<label><input type="radio" name="q6-2e" value="d"><span><span class="m">a</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. Power of a power: 5 × 4 = 20." data-no="Not quite. a⁹ is what you get if you add 5 and 4, but addition works when multiplying powers. Here, one row is repeated 4 times: we multiply the exponents, 5 × 4 = 20."></div>
+</div>
+
+<h3>3. Descending Below Zero: <span class="m">x<sup>0</sup></span> and Negative Exponents</h3>
+<p>What is <span class="m">x<sup>0</sup></span>? "Zero factors" sounds meaningless. Instead of arguing, let's continue the pattern. Descending the ladder one step at a time, we <b>divide by the base</b> each time:</p>
+<p><span class="m">2<sup>3</sup> = 8</span>, <span class="m">2<sup>2</sup> = 4</span>, <span class="m">2<sup>1</sup> = 2</span>, and the next step down is dividing 2 by 2, which is <span class="m">2<sup>0</sup> = 1</span>.</p>
+<div class="formula"><b class="hl">x<sup>0</sup> = 1</b> (for <span class="m">x ≠ 0</span>)</div>
+<p>Let's continue descending below zero—the division rule must not break:</p>
+<p><span class="m">2<sup>0</sup> = 1</span>, <span class="m">2<sup>−1</sup> = </span><span class="frac"><b>1</b><i>2</i></span>, <span class="m">2<sup>−2</sup> = </span><span class="frac"><b>1</b><i>4</i></span>. Every negative exponent is a flipped fraction: <span class="m">x<sup>−n</sup> = </span><span class="frac"><b>1</b><i>x<sup>n</sup></i></span>.</p>
+
+<div class="box why"><div class="box-t">Why It Works</div><p>The Skeptic demands a proof, not just "continuing the pattern." Here you go. By the division rule, <span class="m">x<sup>3</sup>/x<sup>3</sup> = x<sup>3−3</sup> = x<sup>0</sup></span>. But any non-zero number divided by itself is 1. Therefore, <span class="m">x<sup>0</sup> = 1</span>—otherwise the rule for subtracting exponents contradicts itself. Similarly, <span class="m">x<sup>2</sup>/x<sup>5</sup> = x<sup>−3</sup></span>, while by hand we get <span class="frac"><b>1</b><i>x<sup>3</sup></i></span>. A negative exponent sends the factor to the denominator.</p></div>
+
+<div class="example"><div class="ex-t">Example 2 · Division and a Negative Sign in the Exponent</div><p>Simplify <span class="frac"><b>4x<sup>5</sup></b><i>2x<sup>8</sup></i></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to divide by parts—numbers separately, x's separately:</span> <span class="m">4/2 = 2</span>, and for the x's we subtract the exponents: <span class="m">5 − 8 = −3</span>.</div>
+<div class="step"><span class="step-why">We want to get rid of the negative exponent:</span> we send <span class="m">x<sup>−3</sup></span> to the denominator—<span class="frac"><b>1</b><i>x<sup>3</sup></i></span>.</div>
+</div>
+<p>Answer: <strong><span class="frac"><b>2</b><i>x<sup>3</sup></i></span></strong>. Looking back: <span class="m">2x<sup>−3</sup></span> and <span class="frac"><b>2</b><i>x<sup>3</sup></i></span> are the same thing. The SAT accepts either form, but in the multiple-choice options, it usually expects the expression without negative exponents.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>Three poisonous signs that Count Gotcha mixes up on purpose:</p><ul><li><span class="m">x<sup>−2</sup></span> is <b>not</b> a negative number. <span class="m">2<sup>−2</sup> = </span><span class="frac"><b>1</b><i>4</i></span> is positive. A minus in the exponent means "flip", not "put a minus sign".</li><li><span class="m">(−2)<sup>4</sup> = 16</span>, but <span class="m">−2<sup>4</sup> = −16</span>. Without parentheses, the exponent binds to the two before the minus sign does: <span class="m">−2<sup>4</sup> = −(2·2·2·2) = −16</span>. In the first case, the parentheses raise the minus sign itself to the power as well.</li></ul></div>
+
+<div class="quiz" data-answer="b">
+<div class="quiz-q">Evaluate <span class="m">7<sup>0</sup> − 2<sup>−2</sup></span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-3e" value="a"><span><span class="frac"><b>5</b><i>4</i></span></span></label>
+<label><input type="radio" name="q6-3e" value="b"><span><span class="frac"><b>3</b><i>4</i></span></span></label>
+<label><input type="radio" name="q6-3e" value="c"><span><span class="m">0</span></span></label>
+<label><input type="radio" name="q6-3e" value="d"><span><span class="m">−3</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. 7⁰ = 1, 2⁻² = 1/4, so 1 − 1/4 = 3/4." data-no="Not quite. An answer of −3 means you treated 2⁻² as 4; but a minus in the exponent flips the number into a fraction rather than being discarded: 2⁻² = 1/4. And 7⁰ = 1, not 0. Total: 1 − 1/4 = 3/4."></div>
+</div>
+
+<h3>4. Fractional Exponents Are Roots</h3>
+<p>What could <span class="m">x<sup>1/2</sup></span> mean? Let's assume the rules of exponents still hold. Let's square <span class="m">x<sup>1/2</sup></span>: <span class="m">(x<sup>1/2</sup>)<sup>2</sup> = x<sup>(1/2)·2</sup> = x<sup>1</sup> = x</span>. This means <span class="m">x<sup>1/2</sup></span> is the number that, when squared, gives <span class="m">x</span>. By definition, that is exactly how a square root behaves.</p>
+<div class="formula"><b class="hl">x<sup>1/2</sup></b> = √x</div>
+<p>Continuing, <span class="m">x<sup>1/3</sup></span> is the cube root, and the general case is: <span class="m">x<sup>m/n</sup> = <sup>n</sup>√(x<sup>m</sup>)</span>. The denominator of the fraction tells you which root to take, and the numerator tells you which power to raise it to. The order does not matter: <span class="m"><sup>n</sup>√(x<sup>m</sup>) = (<sup>n</sup>√x)<sup>m</sup></span>.</p>
+
+<div class="box tool"><div class="box-t">Move: "A Root Is the ½ Power"</div><p>The moment you see a root, convert it to a fractional exponent, and all the exponent rules work again. <span class="m">√x = x<sup>1/2</sup></span>, <span class="m"><sup>3</sup>√x = x<sup>1/3</sup></span>. Then <span class="m">√x·√x = x<sup>1/2</sup>·x<sup>1/2</sup> = x<sup>1</sup> = x</span>—we add the exponents, and the root is gone. You no longer need to remember separate "root rules": they are just the exponent rules.</p></div>
+
+<div class="example"><div class="ex-t">Example 3 · Fractional Exponents in Steps</div><p>Evaluate <span class="m">27<sup>2/3</sup></span> and <span class="m">16<sup>3/4</sup></span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">First, we want to take the root (smaller numbers are easier to raise to a power):</span> the denominator 3 means a cube root, <span class="m"><sup>3</sup>√27 = 3</span>.</div>
+<div class="step"><span class="step-why">Now, we want to apply the numerator:</span> we square it—<span class="m">3<sup>2</sup> = 9</span>.</div>
+<div class="step">Similarly for <span class="m">16<sup>3/4</sup></span>: <span class="m"><sup>4</sup>√16 = 2</span>, then <span class="m">2<sup>3</sup> = 8</span>.</div>
+</div>
+<p>Answers: <strong>9</strong> and <strong>8</strong>. Looking back: always take the root first, and the power second. <span class="m">27<sup>2</sup> = 729</span>, then <span class="m"><sup>3</sup>√729 = 9</span>—same answer, but harder to calculate. The Lazy Genius takes the root first.</p>
+</div>
+
+<div class="quiz" data-answer="c">
+<div class="quiz-q">What is <span class="m">16<sup>3/4</sup></span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-4e" value="a"><span><span class="m">6</span></span></label>
+<label><input type="radio" name="q6-4e" value="b"><span><span class="m">12</span></span></label>
+<label><input type="radio" name="q6-4e" value="c"><span><span class="m">8</span></span></label>
+<label><input type="radio" name="q6-4e" value="d"><span><span class="m">24</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. ⁴√16 = 2, then 2³ = 8." data-no="Not quite. An answer of 12 is obtained if you multiply the base by the fraction: 16 · 3/4. You cannot do that. A fractional exponent is a root plus a power: ⁴√16 = 2, 2³ = 8."></div>
+</div>
+
+<div class="box recall"><div class="box-t">Freeze-Frame</div><p>Cover the screen and reconstruct from memory, without peaking:</p><ul><li>what <span class="m">x<sup>2</sup>·x<sup>3</sup></span> does to the exponents and why;</li><li>what <span class="m">(x<sup>2</sup>)<sup>3</sup></span> does and how it differs from the previous case;</li><li>what <span class="m">x<sup>0</sup></span> and <span class="m">x<sup>−2</sup></span> are equal to;</li><li>what <span class="m">x<sup>1/2</sup></span> is in one word.</li></ul><p>If you struggled to recall even one of these, go back up the page. From here on, these four facts work together.</p></div>
+
+<h3>5. A Closer Look at Roots: Simplification and the Treachery of Sums</h3>
+<p>The root of a product can be factored: <span class="m">√(ab) = √a·√b</span>. Exponents show why: <span class="m">(ab)<sup>1/2</sup> = a<sup>1/2</sup>b<sup>1/2</sup></span>—which is the same rule as <span class="m">(xy)<sup>a</sup> = x<sup>a</sup>y<sup>a</sup></span>. This gives us a way to simplify roots by pulling out perfect squares.</p>
+
+<div class="example"><div class="ex-t">Example 4 · Simplifying and Adding Roots</div><p>Simplify <span class="m">√48</span>, then find <span class="m">√48 + √27</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to pull out everything from under the root that is a perfect square:</span> <span class="m">48 = 16·3</span>, and 16 is a square. So <span class="m">√48 = √16·√3 = 4√3</span>.</div>
+<div class="step"><span class="step-why">We want to do the same for the second root:</span> <span class="m">27 = 9·3</span>, <span class="m">√27 = 3√3</span>.</div>
+<div class="step"><span class="step-why">We want to add them—and we can only add roots with the same "insides":</span> <span class="m">4√3 + 3√3 = 7√3</span>, just like <span class="m">4</span> apples plus <span class="m">3</span> apples.</div>
+</div>
+<p>Answer: <strong><span class="m">7√3</span></strong>. Looking back: <span class="m">√3</span> acts like a variable here. You cannot add <span class="m">√48 + √27</span> directly, but once we reduced them to a common <span class="m">√3</span>, the addition became valid.</p>
+</div>
+
+<div class="box trap"><div class="box-t">SAT Trap</div><p>The eternal bait that trips up even strong students: <span class="m">√(a + b) ≠ √a + √b</span>. The root of a <b>sum</b> cannot be split. Test it with numbers: <span class="m">√(9 + 16) = √25 = 5</span>, whereas <span class="m">√9 + √16 = 3 + 4 = 7</span>. Five is not seven. Only the root of a <em>product</em> can be split, not a sum.</p><p>And the second one: <span class="m">√(x<sup>2</sup>) = |x|</span>, not just <span class="m">x</span>. A root returns a <em>non-negative</em> number, so <span class="m">√((−5)<sup>2</sup>) = √25 = 5 = |−5|</span>. If <span class="m">x</span> can be negative, the absolute value is mandatory.</p></div>
+
+<div class="box desmos"><div class="box-t">The Lazy Genius: Desmos</div><p>Don't want to believe that <span class="m">√48 = 4√3</span>? Plug both parts into Desmos and compare them—both will yield <span class="m">6.9282…</span>. And check the sum trap: <span class="m">√(9+16)</span> will give you 5, while <span class="m">√9+√16</span> will give you 7. Desmos does not replace understanding, but it catches an arithmetic slip in a second, before you circle the wrong choice.</p></div>
+
+<div class="quiz" data-answer="a">
+<div class="quiz-q">What is <span class="m">√(9 + 16)</span>?</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-5e" value="a"><span><span class="m">5</span></span></label>
+<label><input type="radio" name="q6-5e" value="b"><span><span class="m">7</span></span></label>
+<label><input type="radio" name="q6-5e" value="c"><span><span class="m">25</span></span></label>
+<label><input type="radio" name="q6-5e" value="d"><span><span class="m">12</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. First, we add under the root: 9 + 16 = 25, then √25 = 5." data-no="Not quite. An answer of 7 is √9 + √16 = 3 + 4, but the root of a sum cannot be split. Add under the root first: √25 = 5."></div>
+</div>
+
+<h3>6. Rationalization: Getting the Root Out of the Denominator</h3>
+<p>Mathematicians dislike the fraction <span class="frac"><b>3</b><i>√6</i></span>: dividing by an irrational number is inconvenient. We want to remove the root from the denominator—so we multiply the fraction by <span class="frac"><b>√6</b><i>√6</i></span> (which is one, so the value does not change). In the denominator, we get <span class="m">√6·√6 = 6</span>, and the root is gone.</p>
+<div class="example"><div class="ex-t">Example 5 · Rationalization</div><p>Express <span class="frac"><b>3</b><i>√6</i></span> in a form without a root in the denominator.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to eliminate the root on the bottom—so we multiply by it:</span> <span class="frac"><b>3</b><i>√6</i></span> · <span class="frac"><b>√6</b><i>√6</i></span> = <span class="frac"><b>3√6</b><i>6</i></span>.</div>
+<div class="step"><span class="step-why">We want to simplify the fraction:</span> <span class="m">3/6 = 1/2</span>, leaving <span class="frac"><b>√6</b><i>2</i></span>.</div>
+</div>
+<p>Answer: <strong><span class="frac"><b>√6</b><i>2</i></span></strong>. Calculator check: <span class="m">3/√6 ≈ 1.225</span> and <span class="m">√6/2 ≈ 1.225</span>—they match.</p>
+<details class="hint"><summary>What if there is a sum on the bottom, like <span class="m">2 − √2</span>?</summary><p>Multiply by the <b>conjugate</b>, <span class="m">2 + √2</span>: then the bottom becomes <span class="m">(2−√2)(2+√2) = 2<sup>2</sup> − (√2)<sup>2</sup> = 4 − 2 = 2</span>—a difference of squares, and the root vanishes. This is the same move, just using the formula <span class="m">(a−b)(a+b) = a<sup>2</sup>−b<sup>2</sup></span>.</p></details>
+</div>
+
+<h3>7. Scientific Notation: The Language of the Extremely Large and Small</h3>
+<p>Writing out the number of red blood cells or the mass of a bacterium with zeros is torture. Scientific notation stores a number as <span class="m">a × 10<sup>n</sup></span>, where <span class="m">1 ≤ a &lt; 10</span>. The exponent <span class="m">n</span> represents how many places the decimal point moved: to the right for large numbers, to the left for small ones.</p>
+<div class="formula"><b class="hl">3.2</b> × 10<sup class="hl2">7</sup> = 32 000 000</div>
+<p>In the laboratory, this is the native language. Serial dilutions proceed by powers of ten: <span class="m">10<sup>−1</sup></span>, <span class="m">10<sup>−2</sup></span>, <span class="m">10<sup>−3</sup></span>—each step divides the concentration by ten. An antibody titer of 1:1024 means the antibody is still detected at a dilution of <span class="m">1/1024 = 1/2<sup>10</sup></span>—that is, after <b>ten</b> twofold dilutions. "1024" is not a random number; it is <span class="m">2<sup>10</sup></span>.</p>
+<div class="example"><div class="ex-t">Example 6 · Operations in Scientific Notation</div><p>Find <span class="m">(3.2 × 10<sup>7</sup>)·(2 × 10<sup>−3</sup>)</span> and <span class="m">(6 × 10<sup>9</sup>) / (3 × 10<sup>4</sup>)</span>.</p>
+<div class="steps">
+<div class="step"><span class="step-why">We want to split the work: numbers separately, tens separately.</span> Multiplication: <span class="m">3.2·2 = 6.4</span>, and <span class="m">10<sup>7</sup>·10<sup>−3</sup> = 10<sup>7+(−3)</sup> = 10<sup>4</sup></span>. Result: <span class="m">6.4 × 10<sup>4</sup></span>.</div>
+<div class="step"><span class="step-why">The same for division:</span> <span class="m">6/3 = 2</span>, <span class="m">10<sup>9</sup>/10<sup>4</sup> = 10<sup>5</sup></span>. Result: <span class="m">2 × 10<sup>5</sup></span>.</div>
+</div>
+<p>Answers: <strong><span class="m">6.4 × 10<sup>4</sup></span></strong> and <strong><span class="m">2 × 10<sup>5</sup></span></strong>. Looking back: powers of ten follow the usual exponent rules—adding during multiplication, subtracting during division. Addition is harder: to add <span class="m">3.2 × 10<sup>7</sup></span> and <span class="m">4 × 10<sup>6</sup></span>, first match the exponents: <span class="m">4 × 10<sup>6</sup> = 0.4 × 10<sup>7</sup></span>, then the sum is <span class="m">3.6 × 10<sup>7</sup></span>.</p>
+</div>
+
+<h3>8. Exponential Equations: Find a Common Base</h3>
+<p>Solve <span class="m">2<sup>x+1</sup> = 32</span>. We want to compare the exponents—but we can do that only when the bases are identical. We notice that <span class="m">32 = 2<sup>5</sup></span>. Thus <span class="m">2<sup>x+1</sup> = 2<sup>5</sup></span>, and since the bases are equal, the exponents must be equal too: <span class="m">x + 1 = 5</span>, which means <span class="m">x = 4</span>.</p>
+<p>The same key unlocks cases where the bases are <em>different</em> but related. <span class="m">8<sup>x</sup> = 2<sup>3x</sup></span> because <span class="m">8 = 2<sup>3</sup></span> and <span class="m">(2<sup>3</sup>)<sup>x</sup> = 2<sup>3x</sup></span>. Bring both sides to base 2, and the equation becomes a standard linear one.</p>
+
+<div class="box why"><div class="box-t">Why It Works</div><p>The Skeptic asks: why does <span class="m">2<sup>x+1</sup> = 2<sup>5</sup></span> imply that <span class="m">x+1 = 5</span>? Because the function <span class="m">2<sup>t</sup></span> is strictly increasing: each value of the power corresponds to exactly one exponent. Two different exponents cannot yield the same power. Therefore, the equality of powers with a common base means the equality of their exponents.</p></div>
+
+<div class="quiz" data-answer="d">
+<div class="quiz-q">Solve <span class="m">2<sup>x+1</sup> = 32</span>.</div>
+<div class="quiz-opts">
+<label><input type="radio" name="q6-6e" value="a"><span><span class="m">x = 5</span></span></label>
+<label><input type="radio" name="q6-6e" value="b"><span><span class="m">x = 6</span></span></label>
+<label><input type="radio" name="q6-6e" value="c"><span><span class="m">x = 16</span></span></label>
+<label><input type="radio" name="q6-6e" value="d"><span><span class="m">x = 4</span></span></label>
+</div>
+<button class="quiz-check" type="button">Check</button>
+<div class="quiz-fb" data-ok="Correct. 32 = 2⁵, which means x + 1 = 5, so x = 4." data-no="Not quite. The answer x = 5 comes from a forgotten one: you set x equal to the exponent itself. But we have x + 1 on the left, so x + 1 = 5 gives x = 4."></div>
+</div>
+
+<figure class="fig"><svg class="dia" viewBox="0 0 420 280" role="img" aria-label="Comparison of linear and exponential growth">
+<line class="ax" x1="40" y1="240" x2="400" y2="240"/>
+<line class="ax" x1="40" y1="240" x2="40" y2="20"/>
+<line class="grid" x1="40" y1="180" x2="400" y2="180"/>
+<line class="grid" x1="40" y1="120" x2="400" y2="120"/>
+<line class="grid" x1="40" y1="60" x2="400" y2="60"/>
+<line class="grid" x1="130" y1="240" x2="130" y2="20"/>
+<line class="grid" x1="220" y1="240" x2="220" y2="20"/>
+<line class="grid" x1="310" y1="240" x2="310" y2="20"/>
+<path class="crv" d="M40 240 L400 150" fill="none"/>
+<path class="crv2" d="M40 239 C 240 236, 320 205, 378 28" fill="none"/>
+<circle class="pt" cx="378" cy="28" r="4"/>
+<text class="lbl" x="250" y="165">linear intuition</text>
+<text class="lbl" x="150" y="70">how the world grows</text>
+<text class="lbl" x="300" y="55">doubling</text>
+</svg><figcaption>Both curves start together. The straight line (addition) crawls steadily; the doubling curve hugs zero for a long time, then shoots through the roof. It is this "late surge" that tricks our intuition with the paper.</figcaption></figure>
+
+<div class="box story"><div class="box-t">In the Margins</div><p>Legend has it that Sissa, the inventor of chess, asked the king for a "trifle"—one grain of wheat on the first square of the board, two on the second, four on the third, and so on, doubling up to the 64th. The king smiled and agreed. Let's calculate: square <span class="m">n</span> holds <span class="m">2<sup>n−1</sup></span> grains, and the total is <span class="m">2<sup>64</sup> − 1 ≈ 1.8 × 10<sup>19</sup></span>. That is thousands of years of global wheat harvests. The king lost to the exact same arithmetic that got you in the paper bet.</p>
+<table class="tbl"><thead><tr><th>Square</th><th>Grains on it</th><th>Equivalent to</th></tr></thead><tbody>
+<tr><td>1</td><td><span class="m">2<sup>0</sup> = 1</span></td><td>one grain</td></tr>
+<tr><td>4</td><td><span class="m">2<sup>3</sup> = 8</span></td><td>a handful</td></tr>
+<tr><td>21</td><td><span class="m">2<sup>20</sup> ≈ 1.0 × 10<sup>6</sup></span></td><td>over a million</td></tr>
+<tr><td>41</td><td><span class="m">2<sup>40</sup> ≈ 1.1 × 10<sup>12</sup></span></td><td>over a trillion</td></tr>
+<tr><td>64</td><td><span class="m">2<sup>63</sup> ≈ 9.2 × 10<sup>18</sup></span></td><td>a mountain-sized barn</td></tr>
+</tbody></table></div>
+
+<h3>9. Problems</h3>
+
+<div class="problem tier-a"><div class="pr-t">Problem 1 <span class="tier">Level A</span></div>
+<p>Simplify <span class="m">(3x<sup>2</sup>)(4x<sup>5</sup>)</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Multiply the numbers separately, and the powers of <span class="m">x</span> separately.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>For the powers of <span class="m">x</span>, the product rule applies: exponents add up.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">3·4 = 12</span>; <span class="m">x<sup>2</sup>·x<sup>5</sup> = x<sup>2+5</sup> = x<sup>7</sup></span>. Answer: <strong><span class="m">12x<sup>7</sup></span></strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 2 <span class="tier">Level A</span></div>
+<p>Evaluate <span class="m">2<sup>−3</sup> + 5<sup>0</sup></span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>A negative exponent flips the number into a fraction; any non-zero number to the power of zero equals 1.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">2<sup>−3</sup> = 1/2<sup>3</sup></span>. And <span class="m">5<sup>0</sup></span> is not zero.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">2<sup>−3</sup> = </span><span class="frac"><b>1</b><i>8</i></span>, <span class="m">5<sup>0</sup> = 1</span>. Sum: <span class="m">1 + </span><span class="frac"><b>1</b><i>8</i></span> = <span class="frac"><b>9</b><i>8</i></span>. Answer: <strong><span class="frac"><b>9</b><i>8</i></span></strong>.</p></details>
+</div>
+
+<div class="problem tier-a"><div class="pr-t">Problem 3 <span class="tier">Level A</span></div>
+<p>Simplify <span class="m">√72</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Look for the largest perfect square among the factors of 72.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">72 = 36·2</span>, and 36 is a square.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">√72 = √(36·2) = √36·√2 = 6√2</span>. Answer: <strong><span class="m">6√2</span></strong>. Check: <span class="m">6√2 ≈ 8.49</span> and <span class="m">√72 ≈ 8.49</span>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 4 <span class="tier">Level B</span></div>
+<p>Simplify <span class="m">(2x<sup>3</sup>y)<sup>2</sup>·(3xy<sup>2</sup>)</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>First, expand the squared parenthesis: raise the number and each variable to the power of 2.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">(2x<sup>3</sup>y)<sup>2</sup> = 2<sup>2</sup>·x<sup>6</sup>·y<sup>2</sup> = 4x<sup>6</sup>y<sup>2</sup></span>. From there, it is standard multiplication.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">(2x<sup>3</sup>y)<sup>2</sup> = 4x<sup>6</sup>y<sup>2</sup></span>. Multiplying by <span class="m">3xy<sup>2</sup></span>: numbers <span class="m">4·3 = 12</span>; for <span class="m">x</span>: <span class="m">6+1 = 7</span>; for <span class="m">y</span>: <span class="m">2+2 = 4</span>. Answer: <strong><span class="m">12x<sup>7</sup>y<sup>4</sup></span></strong>.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 5 <span class="tier">Level B</span></div>
+<p>Rationalize the denominator: <span class="frac"><b>10</b><i>√5</i></span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Multiply the numerator and denominator by <span class="m">√5</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The bottom will become <span class="m">√5·√5 = 5</span>. Don't forget to simplify with the 10.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="frac"><b>10</b><i>√5</i></span> · <span class="frac"><b>√5</b><i>√5</i></span> = <span class="frac"><b>10√5</b><i>5</i></span> = <span class="m">2√5</span>. Answer: <strong><span class="m">2√5</span></strong>. Check: <span class="m">10/√5 ≈ 4.47</span> and <span class="m">2√5 ≈ 4.47</span>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 6 <span class="tier">flashback · Chapter 2</span></div>
+<p>Simplify <span class="m">4x<sup>2</sup> − (x<sup>2</sup> − 3) + 2(x<sup>2</sup> − 1)</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>The main danger is the minus sign in front of the parenthesis. It changes the sign of every term inside.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">−(x<sup>2</sup> − 3) = −x<sup>2</sup> + 3</span>. Then combine like terms.</p></details>
+<details class="sol"><summary>Solution</summary><p>Expand: <span class="m">4x<sup>2</sup> − x<sup>2</sup> + 3 + 2x<sup>2</sup> − 2</span>. Grouping <span class="m">x<sup>2</sup></span>: <span class="m">4 − 1 + 2 = 5</span>, which means <span class="m">5x<sup>2</sup></span>. Numbers: <span class="m">3 − 2 = 1</span>. Answer: <strong><span class="m">5x<sup>2</sup> + 1</span></strong>. A classic mistake is forgetting that the minus in front of the parenthesis also changes the sign of the <span class="m">−3</span>.</p></details>
+</div>
+
+<div class="problem flashback tier-b"><div class="pr-t">Problem 7 <span class="tier">flashback · Chapter 5</span></div>
+<p>Solve the inequality <span class="m">7 − 2x ≥ 3x − 8</span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Collect the x's on one side. If you decide to divide by a negative number, recall the main rule of inequalities.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>When dividing (or multiplying) by a negative number, the inequality sign <b>flips</b>.</p></details>
+<details class="sol"><summary>Solution</summary><p>Move <span class="m">3x</span> to the left: <span class="m">7 − 5x ≥ −8</span>. Then <span class="m">−5x ≥ −15</span>. Dividing by <span class="m">−5</span> flips the sign: <span class="m">x ≤ 3</span>. Answer: <strong><span class="m">x ≤ 3</span></strong>. Check: plug <span class="m">x = 0</span> into the original—<span class="m">7 ≥ −8</span>, which is true, and 0 is indeed ≤ 3.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 8 <span class="tier">Level C</span></div>
+<p>Solve <span class="m">4<sup>x+1</sup> = 8<sup>x−1</sup></span>.</p>
+<details class="hint"><summary>Hint 1</summary><p>Bring both sides to the same base. Both 4 and 8 are powers of two.</p></details>
+<details class="hint"><summary>Hint 2</summary><p><span class="m">4 = 2<sup>2</sup></span>, <span class="m">8 = 2<sup>3</sup></span>. Don't forget to multiply the exponent by the parenthesis: <span class="m">(2<sup>2</sup>)<sup>x+1</sup> = 2<sup>2(x+1)</sup></span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>On the left: <span class="m">4<sup>x+1</sup> = 2<sup>2(x+1)</sup> = 2<sup>2x+2</sup></span>. On the right: <span class="m">8<sup>x−1</sup> = 2<sup>3(x−1)</sup> = 2<sup>3x−3</sup></span>. The bases are equal, which means the exponents are equal: <span class="m">2x + 2 = 3x − 3</span>, which gives <span class="m">x = 5</span>. Answer: <strong><span class="m">x = 5</span></strong>. Check: <span class="m">4<sup>6</sup> = 4096</span> and <span class="m">8<sup>4</sup> = 4096</span>—they match.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Problem 9 <span class="tier">Level C</span></div>
+<p>There are about <span class="m">5 × 10<sup>9</sup></span> red blood cells in 1 mL of blood. There is about 5 L of blood in the human body, which is <span class="m">5 × 10<sup>3</sup></span> mL. How many red blood cells are there in total? Express your answer in scientific notation.</p>
+<details class="hint"><summary>Hint 1</summary><p>Total number = density per mL multiplied by the number of milliliters.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Multiply the numbers <span class="m">(5·5)</span> and the powers of ten <span class="m">(10<sup>9</sup>·10<sup>3</sup>)</span> separately. Then convert to the form <span class="m">a × 10<sup>n</sup></span> with <span class="m">1 ≤ a &lt; 10</span>.</p></details>
+<details class="sol"><summary>Solution</summary><p><span class="m">(5 × 10<sup>9</sup>)·(5 × 10<sup>3</sup>) = 25 × 10<sup>12</sup></span>. Since 25 is not in the range <span class="m">1…10</span>, we convert it: <span class="m">25 × 10<sup>12</sup> = 2.5 × 10<sup>13</sup></span>. Answer: <strong><span class="m">2.5 × 10<sup>13</sup></span></strong> red blood cells. The reference book gives the same number—the order of magnitude matches.</p></details>
+</div>
+
+<div class="problem tier-b"><div class="pr-t">Problem 10 · Spot the error <span class="tier">Level B</span></div>
+<p>A student "simplifies" <span class="m">√(x<sup>2</sup> + 9)</span> like this:</p>
+<p><em>"A root can be split into individual terms: <span class="m">√(x<sup>2</sup> + 9) = √(x<sup>2</sup>) + √9 = x + 3</span>."</em></p>
+<p>Find the error (or perhaps more than one) and explain the flaw.</p>
+<details class="hint"><summary>Hint 1</summary><p>Test their rule with a specific number, for example <span class="m">x = 4</span>.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>Can the root of a <em>sum</em> be split? And is <span class="m">√(x<sup>2</sup>) = x</span> really true for any <span class="m">x</span>?</p></details>
+<details class="sol"><summary>Solution</summary><p><b>The first and primary flaw:</b> the root of a sum cannot be split into a sum of roots—<span class="m">√(a + b) ≠ √a + √b</span>. Checking for <span class="m">x = 4</span>: the left side gives <span class="m">√(16 + 9) = √25 = 5</span>, while the student's "answer" gives <span class="m">4 + 3 = 7</span>. Five is not seven; the rule is false. Only the root of a <em>product</em> can be split.</p><p><b>The second, secondary flaw:</b> even taken on its own, <span class="m">√(x<sup>2</sup>) = |x|</span>, not <span class="m">x</span>—if <span class="m">x</span> is negative, the sign will change. Conclusion: the expression <span class="m">√(x<sup>2</sup> + 9)</span> cannot be simplified using such methods at all, and is left as is.</p></details>
+</div>
+
+<div class="boss"><div class="boss-t">Chapter Boss: "Epidemic in a Petri Dish"</div>
+<p>Midnight, the laboratory. A <b>single</b> <span class="m">E. coli</span> bacterium finds its way into a sterile Petri dish. In the warm, nutrient-rich environment, it divides every <b>20 minutes</b>: one becomes two, two become four. Nobody will notice until morning. Your task is to estimate the scale of the disaster using exponents.</p>
+<p>For comparison, keep in mind the order of magnitude: there are about <span class="m">3.7 × 10<sup>13</sup></span> cells in a human body, and about <span class="m">8 × 10<sup>9</sup></span> people on Earth. This means all the people on the planet combined contain about <span class="m">3 × 10<sup>23</sup></span> cells. We will measure our bacterium against this number.</p>
+
+<div class="problem tier-c"><div class="pr-t">Boss · Part 1 <span class="tier">Level C</span></div>
+<p>How many bacteria will be in the dish after <b>24 hours</b>? Give your answer in scientific notation.</p>
+<details class="hint"><summary>Hint 1</summary><p>First, find the number of doublings in a day. There are as many divisions as there are 20-minute intervals in 24 hours.</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The number of bacteria after <span class="m">k</span> doublings is <span class="m">2<sup>k</sup></span> (starting with one). It remains to estimate <span class="m">2<sup>72</sup></span> using powers of ten: <span class="m">2<sup>10</sup> ≈ 10<sup>3</sup></span>.</p></details>
+<details class="sol"><summary>Solution</summary><p>In a day, there are <span class="m">24·60 = 1440</span> minutes. Dividing every 20 minutes yields <span class="m">1440/20 = 72</span> doublings. Thus, there are <span class="m">2<sup>72</sup></span> bacteria. We estimate: <span class="m">2<sup>72</sup> = 2<sup>70</sup>·2<sup>2</sup> = (2<sup>10</sup>)<sup>7</sup>·4 ≈ (10<sup>3</sup>)<sup>7</sup>·4 = 4 × 10<sup>21</sup></span>. More precisely, <span class="m">≈ 4.7 × 10<sup>21</sup></span>. Answer: <strong><span class="m">≈ 4.7 × 10<sup>21</sup></span></strong> bacteria in a day from a single cell.</p></details>
+</div>
+
+<div class="problem tier-c"><div class="pr-t">Boss · Part 2 <span class="tier">Level C</span></div>
+<p>After how many hours will the number of bacteria in the dish exceed the total number of cells in all humans on Earth (<span class="m">≈ 3 × 10<sup>23</sup></span>)?</p>
+<details class="hint"><summary>Hint 1</summary><p>You already know that in 24 hours, the population reached <span class="m">≈ 4.7 × 10<sup>21</sup></span>. How many times larger is the human milestone of <span class="m">3 × 10<sup>23</sup></span> than this?</p></details>
+<details class="hint"><summary>Hint 2</summary><p>The ratio of <span class="m">3 × 10<sup>23</sup></span> to <span class="m">4.7 × 10<sup>21</sup></span> is about 64. And 64 is <span class="m">2<sup>6</sup></span>, which means 6 more doublings. How many minutes is that?</p></details>
+<details class="sol"><summary>Solution</summary><p>Ratio: <span class="frac"><b>3 × 10<sup>23</sup></b><i>4.7 × 10<sup>21</sup></i></span> <span class="m">≈ 64 = 2<sup>6</sup></span>. So we need 6 more doublings. Each takes 20 minutes, giving a total of <span class="m">6·20 = 120</span> minutes = 2 hours. Adding this to the day: <span class="m">24 + 2 = 26</span> hours. Verification using exponents: the milestone is reached at <span class="m">2<sup>78</sup> = 2<sup>72</sup>·2<sup>6</sup> ≈ 4.7 × 10<sup>21</sup>·64 ≈ 3.0 × 10<sup>23</sup></span>—it matches. Answer: <strong>about 26 hours</strong>. Looking back: for a single cell to surpass the combined cell mass of all humanity, just over a day is enough—a striking demonstration of how doubling completely shatters our linear intuition.</p></details>
+</div>
+</div>
+
+<div class="recap"><div class="recap-t">You can now</div>
+<ul class="powers">
+<li>add exponents when multiplying, and multiply them when raising a power to a power, without confusing the two operations;</li>
+<li>explain, rather than memorize, why <span class="m">x<sup>0</sup> = 1</span> and <span class="m">x<sup>−n</sup> = 1/x<sup>n</sup></span>;</li>
+<li>read a fractional exponent as a root: <span class="m">x<sup>m/n</sup> = <sup>n</sup>√(x<sup>m</sup>)</span>;</li>
+<li>simplify roots by pulling out perfect squares (<span class="m">√48 = 4√3</span>), and avoid falling for <span class="m">√(a+b) ≠ √a + √b</span>;</li>
+<li>rationalize the denominator by multiplying by the root or its conjugate;</li>
+<li>calculate in scientific notation and translate monstrous numbers into <span class="m">a × 10<sup>n</sup></span>;</li>
+<li>solve equations like <span class="m">2<sup>x+1</sup> = 32</span> and <span class="m">4<sup>x+1</sup> = 8<sup>x−1</sup></span> by reducing to a common base;</li>
+<li>estimate how many hours it takes for a single bacterium to surpass all of humanity in cell count.</li>
+</ul>
+<div class="cheat"><div class="cheat-t">Cheat sheet</div><ul>
+<li><span class="m">x<sup>a</sup>·x<sup>b</sup> = x<sup>a+b</sup></span>—multiply to add the exponents;</li>
+<li><span class="m">(x<sup>a</sup>)<sup>b</sup> = x<sup>ab</sup></span>—power of a power, multiply the exponents;</li>
+<li><span class="m">x<sup>a</sup>/x<sup>b</sup> = x<sup>a−b</sup></span>—divide to subtract;</li>
+<li><span class="m">(xy)<sup>a</sup> = x<sup>a</sup>y<sup>a</sup></span>—the power distributes to the factors;</li>
+<li><span class="m">x<sup>0</sup> = 1</span>, <span class="m">x<sup>−n</sup> = 1/x<sup>n</sup></span>—zero and a flipped fraction;</li>
+<li><span class="m">x<sup>1/n</sup> = <sup>n</sup>√x</span>, <span class="m">x<sup>m/n</sup> = <sup>n</sup>√(x<sup>m</sup>)</span>—a root as a power;</li>
+<li><span class="m">√(ab) = √a·√b</span>, but <span class="m">√(a+b) ≠ √a + √b</span>; <span class="m">√(x<sup>2</sup>) = |x|</span>;</li>
+<li><span class="m">−2<sup>4</sup> = −16</span>, but <span class="m">(−2)<sup>4</sup> = 16</span>—watch the parentheses.</li>
+</ul></div>
+<div class="feynman"><div class="box-t">The Feynman Assignment</div><p>Explain to an imaginary 12-year-old, without using a single fancy word, why a sheet of paper folded 42 times will reach the Moon—even though after ten folds it seems like "just a tiny bit more."</p>
+<details class="sol"><summary>Model explanation</summary><p>"Look: each fold doesn't add a tiny bit—it <em>doubles</em>. One fold makes it twice as thick, two folds four times, three folds eight times. At first, it's nothing: a couple of millimeters. But doubling is greedy. By the tenth fold, it's the thickness of a book; by the twentieth, as tall as a house; by the thirtieth, as high as a mountain. And doubling forty-two times means multiplying by two forty-two times in a row, and the number becomes so huge that the stack of paper would pierce the sky and hit the Moon. We make a mistake because in our minds we add bit by bit. But the paper doesn't add—it multiplies. And multiplication always beats addition, you just have to wait."</p></details></div>
+</div>
+</section>
+

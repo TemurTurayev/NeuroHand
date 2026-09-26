@@ -21,6 +21,8 @@
       --glow-de: rgba(245, 158, 11, 0.15);
       --glow-math: rgba(59, 130, 246, 0.15);
       --glow-bio: rgba(16, 185, 129, 0.15);
+      --accent-bci: #22d3ee;
+      --glow-bci: rgba(34, 211, 238, 0.15);
       --font-head: 'Outfit', sans-serif;
       --font-body: 'Plus Jakarta Sans', sans-serif;
     }
@@ -150,6 +152,7 @@
     .card-de { --card-accent: var(--accent-de); --card-glow: var(--glow-de); }
     .card-math { --card-accent: var(--accent-math); --card-glow: var(--glow-math); }
     .card-bio { --card-accent: var(--accent-bio); --card-glow: var(--glow-bio); }
+    .card-bci { --card-accent: var(--accent-bci); --card-glow: var(--glow-bci); }
 
     .card-header {
       display: flex;
@@ -291,6 +294,22 @@
         </div>
         <a href="QLS_Interactive_Book.html" class="btn">
           <span>Читать книгу</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </article>
+
+      <!-- BCI LAB -->
+      <article class="card card-bci">
+        <div>
+          <div class="card-header">
+            <div class="icon-box">🧠</div>
+            <span class="tag">Лаборатория · EEGNet</span>
+          </div>
+          <h2>NeuroHand BCI Lab</h2>
+          <p class="desc">Настоящая ЭЭГ воображаемых движений из BCI Competition IV 2a. Нейросеть EEGNet работает прямо в браузере и отдаёт команду протезу кисти. Можно отключать электроды и добавлять шум.</p>
+        </div>
+        <a href="bci-lab/" class="btn">
+          <span>Открыть лабораторию</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </article>

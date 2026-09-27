@@ -1,0 +1,1929 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NeuroHand BCI Lab</title>
+<meta name="description" content="Настоящая ЭЭГ воображаемых движений, нейросеть EEGNet прямо в браузере и команда протезу NeuroHand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #EBF0F1;
+  --panel: #F7F9FA;
+  --panel-2: #E2E9EB;
+  --ink: #12222A;
+  --ink-2: #34474F;
+  --muted: #5A6D75;
+  --grid: #D4DEE1;
+  --grid-strong: #AFC0C6;
+  --accent: #0D6C89;
+  --accent-ink: #FFFFFF;
+  --accent-soft: rgba(13, 108, 137, 0.09);
+  --accent-soft-2: rgba(13, 108, 137, 0.18);
+  --c0: #2D5EC0;
+  --c1: #C0432B;
+  --c2: #2A8455;
+  --c3: #8A4BAF;
+  --ok: #2A8455;
+  --bad: #B8322A;
+  --erd-neg-2: #1B4A87;
+  --erd-neg-1: #6C9ACD;
+  --erd-mid: #EEF1EC;
+  --erd-pos-1: #DE8966;
+  --erd-pos-2: #9B2A1A;
+  --trace: #1A2B33;
+  --hand: #D5DFE2;
+  --hand-edge: #4A5E66;
+  --socket: #BFCBCF;
+  --font-display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0B1216;
+    --panel: #111B20;
+    --panel-2: #18252B;
+    --ink: #D9E4E7;
+    --ink-2: #B1C2C8;
+    --muted: #8397A0;
+    --grid: #1E2D34;
+    --grid-strong: #344952;
+    --accent: #4CB1CE;
+    --accent-ink: #062029;
+    --accent-soft: rgba(76, 177, 206, 0.09);
+    --accent-soft-2: rgba(76, 177, 206, 0.20);
+    --c0: #729FEC;
+    --c1: #EE7D63;
+    --c2: #5AC18B;
+    --c3: #BD8FE3;
+    --ok: #5AC18B;
+    --bad: #EF6F62;
+    --erd-neg-2: #5B9BEA;
+    --erd-neg-1: #2C5A8E;
+    --erd-mid: #1B262C;
+    --erd-pos-1: #8E4632;
+    --erd-pos-2: #F0845E;
+    --trace: #C9D7DC;
+    --hand: #2A3A41;
+    --hand-edge: #9DB2BA;
+    --socket: #1F2D33;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0B1216;
+  --panel: #111B20;
+  --panel-2: #18252B;
+  --ink: #D9E4E7;
+  --ink-2: #B1C2C8;
+  --muted: #8397A0;
+  --grid: #1E2D34;
+  --grid-strong: #344952;
+  --accent: #4CB1CE;
+  --accent-ink: #062029;
+  --accent-soft: rgba(76, 177, 206, 0.09);
+  --accent-soft-2: rgba(76, 177, 206, 0.20);
+  --c0: #729FEC;
+  --c1: #EE7D63;
+  --c2: #5AC18B;
+  --c3: #BD8FE3;
+  --ok: #5AC18B;
+  --bad: #EF6F62;
+  --erd-neg-2: #5B9BEA;
+  --erd-neg-1: #2C5A8E;
+  --erd-mid: #1B262C;
+  --erd-pos-1: #8E4632;
+  --erd-pos-2: #F0845E;
+  --trace: #C9D7DC;
+  --hand: #2A3A41;
+  --hand-edge: #9DB2BA;
+  --socket: #1F2D33;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 15px/1.55 var(--font-body);
+}
+[hidden] { display: none !important; }
+a { color: var(--accent); text-underline-offset: 2px; }
+.wrap {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-inline: clamp(16px, 3vw, 32px);
+  padding-block: 20px 56px;
+  display: grid;
+  gap: 40px;
+}
+.mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.01em; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; color: var(--ink); }
+h1 { font-size: clamp(30px, 4.2vw, 44px); line-height: 1.05; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: clamp(22px, 2.6vw, 28px); line-height: 1.15; font-weight: 600; }
+h3 { font-size: 16px; line-height: 1.25; font-weight: 600; }
+p { margin: 0; }
+.lead { font-size: 16.5px; color: var(--ink-2); max-width: 62ch; }
+.note { color: var(--muted); font-size: 13.5px; max-width: 70ch; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Recording header ---------- */
+.rec {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 24px 40px;
+  align-items: end;
+  padding-top: 8px;
+}
+.rec-title { display: grid; gap: 14px; }
+.rec-title h1 .arrow { color: var(--accent); font-weight: 600; }
+.spec {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  border-top: 1px solid var(--grid-strong);
+}
+.spec dt, .spec dd {
+  margin: 0;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--grid);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+.spec dt { color: var(--muted); padding-right: 18px; }
+.spec dd { color: var(--ink); font-variant-numeric: tabular-nums; }
+.spec dd b { font-weight: 600; color: var(--accent); }
+
+/* ---------- Panels ---------- */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--grid);
+  border-radius: 6px;
+  min-width: 0;
+}
+.panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--grid);
+}
+.panel-body { padding: 14px 16px 16px; display: grid; gap: 14px; }
+
+.console {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.decision-panel { grid-column: 1 / -1; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  appearance: none;
+  font: 500 13px/1 var(--font-body);
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--grid-strong);
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn:focus-visible, .chip:focus-visible, canvas:focus-visible, input:focus-visible, .seg button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn-primary:hover { color: var(--accent-ink); filter: brightness(1.08); }
+.btn svg { width: 12px; height: 12px; fill: currentColor; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--grid-strong);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.seg button {
+  appearance: none;
+  font: 500 12.5px/1 var(--font-body);
+  color: var(--ink-2);
+  background: transparent;
+  border: 0;
+  padding: 7px 11px;
+  cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--grid-strong); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+
+/* ---------- Trace panel ---------- */
+.trace-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.trace-meta .task { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+.trace-meta .task i { font-style: normal; }
+.trace-box { position: relative; padding: 6px 8px 0 4px; }
+#trace {
+  display: block;
+  width: 100%;
+  height: var(--trace-h, 470px);
+  cursor: ew-resize;
+  touch-action: pan-y;
+  border-radius: 3px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 8px 16px 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 18px; height: 10px; border-radius: 2px; display: inline-block; }
+.sw-line { width: 2px; height: 14px; background: var(--accent); }
+.sw-win { background: var(--accent-soft-2); }
+.sw-base { background: var(--panel-2); border: 1px dashed var(--grid-strong); }
+
+.picker {
+  border-top: 1px solid var(--grid);
+  padding: 12px 16px 16px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.picker-col { display: grid; gap: 7px; align-content: start; }
+.picker-col h3 { font-size: 14px; display: flex; align-items: center; gap: 7px; }
+.picker-col h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cls); }
+.picker-col .cmd { font-size: 12px; color: var(--muted); margin-top: -4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  appearance: none;
+  font: 500 12px/1 var(--font-mono);
+  color: var(--ink-2);
+  background: var(--panel);
+  border: 1px solid var(--grid-strong);
+  border-radius: 3px;
+  padding: 6px 7px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.chip:hover { border-color: var(--cls); }
+.chip[aria-pressed="true"] { background: var(--cls); border-color: var(--cls); color: var(--panel); }
+.chip .mk { font-size: 11px; line-height: 1; }
+.chip .mk.ok { color: var(--ok); }
+.chip .mk.bad { color: var(--bad); }
+.chip[aria-pressed="true"] .mk { color: inherit; }
+
+/* ---------- Topomap panel ---------- */
+.topo-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; justify-items: center; }
+#topo { width: min(100%, 300px); aspect-ratio: 1; display: block; cursor: pointer; }
+.topo-time { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: center; }
+.cbar { width: min(100%, 300px); display: grid; gap: 4px; }
+.cbar-grad { height: 9px; border-radius: 2px; border: 1px solid var(--grid); }
+.cbar-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.chart text { font-family: var(--font-mono); font-size: 10px; fill: var(--muted); }
+.subhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.subhead p { font-size: 12.5px; color: var(--muted); }
+
+.exp { display: grid; gap: 12px; align-content: start; border-left: 1px solid var(--grid); padding-left: 24px; }
+.exp p { font-size: 13px; color: var(--ink-2); }
+.exp p.note { font-size: 12.5px; color: var(--muted); }
+.range-row { display: grid; gap: 4px; }
+.range-row label { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); gap: 10px; }
+.range-row output { font-family: var(--font-mono); font-size: 12px; color: var(--ink); }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
+
+/* ---------- Decision panel ---------- */
+.decision {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 200px minmax(0, 1fr);
+  gap: 20px 28px;
+  padding: 16px;
+  align-items: start;
+}
+.dec-main { display: grid; gap: 14px; }
+.bars { display: grid; gap: 9px; }
+.bar { display: grid; gap: 4px; }
+.bar-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.bar-top .name { color: var(--ink-2); display: inline-flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.bar-top .name small { color: var(--muted); font-size: 11.5px; }
+.bar-top .tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid var(--grid-strong);
+  color: var(--muted);
+  border-radius: 2px;
+  padding: 1px 4px;
+}
+.bar-top .val { font-family: var(--font-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.bar-track { height: 8px; background: var(--panel-2); border-radius: 2px; overflow: hidden; }
+.bar-fill {
+  height: 100%;
+  width: var(--w, 0%);
+  background: var(--grid-strong);
+  border-radius: 2px;
+  transition: width 0.45s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+.bar.is-pred .bar-fill { background: var(--cls); }
+.bar.is-pred .name { color: var(--ink); font-weight: 600; }
+.verdict { border-top: 1px solid var(--grid); padding-top: 12px; display: grid; gap: 4px; }
+.verdict .cmd { font-family: var(--font-display); font-size: 21px; font-weight: 700; line-height: 1.15; }
+.verdict .cmd.idle { color: var(--muted); }
+.verdict .why { font-size: 13px; color: var(--ink-2); }
+.verdict .truth { font-size: 13px; }
+.verdict .truth.ok { color: var(--ok); }
+.verdict .truth.bad { color: var(--bad); }
+.verdict .delta { font-size: 12.5px; color: var(--muted); }
+.fillbar { height: 4px; background: var(--panel-2); border-radius: 2px; overflow: hidden; }
+.fillbar i { display: block; height: 100%; width: 0; background: var(--accent); }
+
+.hand-box { display: grid; gap: 6px; justify-items: center; }
+#hand { width: 190px; height: auto; display: block; overflow: visible; }
+#hand .palm, #hand .digit rect { fill: var(--hand); stroke: var(--hand-edge); stroke-width: 1.4; }
+#hand .joint { stroke: var(--hand-edge); stroke-width: 1; opacity: 0.45; }
+#hand .socket { fill: var(--socket); stroke: var(--hand-edge); stroke-width: 1.2; }
+#hand .socket-line { stroke: var(--hand-edge); stroke-width: 1; opacity: 0.4; }
+#hand .led { fill: var(--led, var(--muted)); transition: fill 0.3s; }
+#hand .model-id { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); letter-spacing: 0.08em; }
+#hand .digit { transition: transform 0.75s cubic-bezier(0.34, 1.25, 0.5, 1); }
+#hand.no-anim .digit { transition: none; }
+.servo { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); display: grid; grid-template-columns: auto auto; gap: 1px 10px; }
+.servo b { font-weight: 500; color: var(--ink-2); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Inside EEGNet ---------- */
+.section { display: grid; gap: 18px; }
+.section-head { display: grid; gap: 8px; }
+.flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+.flow li {
+  position: relative;
+  flex: 1 1 140px;
+  background: var(--panel);
+  border: 1px solid var(--grid);
+  border-radius: 4px;
+  padding: 8px 10px;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.flow li b { font-family: var(--font-display); font-weight: 600; font-size: 14px; }
+.flow li span { font-family: var(--font-mono); font-size: 11.5px; color: var(--muted); }
+.flow li + li::before {
+  content: "→";
+  position: absolute;
+  left: -9px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--accent);
+  font-size: 12px;
+}
+.branches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.branch { padding: 12px; display: grid; gap: 8px; align-content: start; }
+.branch-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.branch-head .peak { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); }
+.branch .maps { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.branch .maps figure { margin: 0; display: grid; gap: 2px; justify-items: center; }
+.branch .maps canvas { width: 100%; max-width: 110px; aspect-ratio: 1; display: block; }
+.branch .maps figcaption { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+.evidence { padding: 14px 16px 16px; display: grid; gap: 10px; }
+
+/* ---------- Test results ---------- */
+.results { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.stat { padding: 16px; display: grid; gap: 12px; }
+.stat .big { font-family: var(--font-display); font-weight: 700; font-size: 56px; line-height: 0.95; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat .big small { font-size: 26px; }
+.stat dl { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px 12px; font-size: 13px; }
+.stat dt { color: var(--muted); }
+.stat dd { margin: 0; font-family: var(--font-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.cm-wrap { overflow-x: auto; }
+table.cm { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+table.cm th, table.cm td { padding: 7px 6px; text-align: center; border: 1px solid var(--grid); }
+table.cm th { font-weight: 500; color: var(--muted); font-family: var(--font-body); font-size: 11.5px; }
+table.cm td { background: color-mix(in srgb, var(--accent) var(--p, 0%), transparent); }
+table.cm td.diag { font-weight: 600; }
+table.cm td.hot { color: var(--accent-ink); }
+.cm-caption { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+/* ---------- Atlas ---------- */
+.atlas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.atlas figure { margin: 0; padding: 12px; display: grid; gap: 8px; justify-items: center; }
+.atlas canvas { width: min(100%, 190px); aspect-ratio: 1; display: block; }
+.atlas figcaption { display: grid; gap: 2px; text-align: center; }
+.atlas figcaption b { font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.atlas figcaption span { font-size: 12.5px; color: var(--muted); }
+.atlas-foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+
+/* ---------- Method ---------- */
+.method { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.method .panel { padding: 16px; display: grid; gap: 8px; align-content: start; }
+.method p, .method li { font-size: 13.5px; color: var(--ink-2); }
+.method ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; }
+code, .code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--panel-2);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+pre.code { display: block; padding: 10px 12px; overflow-x: auto; margin: 0; white-space: pre; }
+footer.foot {
+  border-top: 1px solid var(--grid-strong);
+  padding-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .branches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .results { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .results .stat { grid-column: 1 / -1; }
+  .method { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 960px) {
+  .rec { grid-template-columns: minmax(0, 1fr); }
+  .console { grid-template-columns: minmax(0, 1fr); }
+  .decision { grid-template-columns: minmax(0, 1fr) 170px; }
+  .exp { grid-column: 1 / -1; border-left: 0; padding-left: 0; border-top: 1px solid var(--grid); padding-top: 14px; }
+  #hand { width: 160px; }
+  .picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .atlas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .atlas-foot { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 700px) {
+  .flow { flex-direction: column; gap: 14px; }
+  .flow li { flex: 0 0 auto; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .flow li span { text-align: right; }
+  .flow li + li::before { content: "↓"; left: 50%; top: -7px; }
+}
+@media (max-width: 600px) {
+  #trace { height: var(--trace-h-sm, 360px); }
+  .decision { grid-template-columns: minmax(0, 1fr); }
+  .hand-box { grid-template-columns: 130px 1fr; justify-items: start; align-items: center; }
+  #hand { width: 130px; }
+  .branches {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 6px;
+  }
+  .branch { scroll-snap-align: start; }
+  .results { grid-template-columns: minmax(0, 1fr); }
+  .stat .big { font-size: 46px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #hand .digit, .bar-fill, .btn { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap" lang="ru">
+
+  <!-- ===== Recording header ===== -->
+  <header class="rec">
+    <div class="rec-title">
+      <span class="eyebrow">NeuroHand · BCI-лаборатория</span>
+      <h1>Воображаемое движение <span class="arrow">→</span> команда протезу</h1>
+      <p class="lead">Это настоящая ЭЭГ людей, которые только представляли движение руки, ног или языка. Нейросеть EEGNet из проекта NeuroHand работает прямо в вашем браузере: она читает четыре секунды записи и решает, какую команду отправить кисти.</p>
+    </div>
+    <dl class="spec" id="spec">
+      <dt>Данные</dt><dd>BCI Competition IV 2a, 9 испытуемых</dd>
+      <dt>Отведения</dt><dd>22 ЭЭГ, система 10–20</dd>
+      <dt>Частота</dt><dd>250 Гц, полоса 4–38 Гц</dd>
+      <dt>Модель</dt><dd id="specModel">EEGNet</dd>
+      <dt>Точность на тесте</dt><dd id="specAcc">—</dd>
+    </dl>
+  </header>
+
+  <!-- ===== Console ===== -->
+  <main class="console" id="console">
+    <section class="panel" aria-labelledby="traceTitle">
+      <div class="panel-head">
+        <div class="trace-meta">
+          <span class="eyebrow" id="traceTitle">Запись</span>
+          <span class="task" id="taskLabel">—</span>
+          <span class="mono" id="trialMeta">—</span>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="playBtn" type="button" aria-label="Проиграть попытку">
+            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.2v9.6L10.6 6z"/></svg><span>Проиграть</span>
+          </button>
+          <div class="seg" role="group" aria-label="Скорость воспроизведения">
+            <button type="button" data-speed="0.5" aria-pressed="false">0.5×</button>
+            <button type="button" data-speed="1" aria-pressed="true">1×</button>
+          </div>
+          <button class="btn" id="randomBtn" type="button">Случайная попытка</button>
+        </div>
+      </div>
+      <div class="trace-box">
+        <canvas id="trace" tabindex="0" role="img" aria-label="ЭЭГ 22 отведений, от −1,5 до 4 секунд относительно подсказки. Стрелки влево и вправо двигают курсор времени."></canvas>
+      </div>
+      <div class="legend">
+        <span><i class="sw sw-line"></i>подсказка на экране (0 с)</span>
+        <span><i class="sw sw-win"></i>окно, которое читает EEGNet (0–4 с)</span>
+        <span><i class="sw sw-base"></i>фон для расчёта ERD (−1,5…−0,5 с)</span>
+        <span>Тяните по записи, чтобы двигать курсор времени</span>
+      </div>
+      <div class="picker" id="picker" aria-label="Выбор попытки"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="topoTitle">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow" id="topoTitle">Карта ритма</span>
+          <h3 id="topoHeading">Мю-ритм, 8–13 Гц</h3>
+        </div>
+        <div class="seg" role="group" aria-label="Частотный диапазон">
+          <button type="button" data-band="mu" aria-pressed="true">μ 8–13</button>
+          <button type="button" data-band="beta" aria-pressed="false">β 13–30</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="topo-layout">
+          <canvas id="topo" tabindex="0" role="img" aria-label="Карта ERD по скальпу. Щелчок по электроду отключает его для модели."></canvas>
+          <div class="topo-time" id="topoTime">—</div>
+          <div class="cbar">
+            <div class="cbar-grad" id="cbarMain"></div>
+            <div class="cbar-labels"><span>−100 % ERD</span><span>0</span><span>+100 % ERS</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="subhead">
+            <h3>C3 и C4 в этой попытке</h3>
+            <p>мощность относительно фона, %</p>
+          </div>
+          <svg class="chart" id="erdChart" viewBox="0 0 400 150" role="img" aria-label="Динамика ERD в отведениях C3 и C4"></svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel decision-panel" aria-labelledby="decTitle">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow" id="decTitle">Решение EEGNet</span>
+          <h3>Вероятность каждого класса и команда кисти</h3>
+        </div>
+        <div class="seg" role="group" aria-label="Какая модель принимает решение">
+          <button type="button" data-model="new_user" aria-pressed="false">Новый пользователь</button>
+          <button type="button" data-model="calibrated" aria-pressed="true">После калибровки</button>
+        </div>
+      </div>
+      <div class="decision">
+        <div class="dec-main">
+          <div class="bars" id="bars"></div>
+          <div class="verdict" id="verdict" aria-live="polite"></div>
+        </div>
+        <div class="hand-box">
+          <svg id="hand" class="no-anim" viewBox="-12 0 234 262" role="img" aria-label="Протез кисти NeuroHand">
+            <g id="digits-back"></g>
+            <rect class="palm" x="58" y="110" width="106" height="100" rx="26"></rect>
+            <g id="digits-front"></g>
+            <rect class="socket" x="70" y="204" width="82" height="56" rx="8"></rect>
+            <line class="socket-line" x1="70" y1="222" x2="152" y2="222"></line>
+            <circle class="led" cx="140" cy="240" r="4.5"></circle>
+            <text class="model-id" x="80" y="244">NH-01</text>
+          </svg>
+          <div class="servo" id="servo" aria-label="Углы сервоприводов"></div>
+        </div>
+        <div class="exp">
+          <h3>Эксперименты с моделью</h3>
+          <p>Щёлкните по электроду на карте ритма, чтобы отключить его для EEGNet. Или выключите целую зону:</p>
+          <div class="btn-row">
+            <button class="btn" type="button" data-lesion="motor">Без моторной полосы</button>
+            <button class="btn" type="button" data-lesion="only">Только C3, Cz, C4</button>
+            <button class="btn" type="button" data-lesion="reset">Вернуть все</button>
+          </div>
+          <div class="range-row">
+            <label for="noise"><span>Добавить шум к записи</span><output id="noiseOut" for="noise">0 мкВ</output></label>
+            <input type="range" id="noise" min="0" max="40" step="1" value="0">
+          </div>
+          <div class="range-row">
+            <label for="threshold"><span>Порог уверенности для команды</span><output id="thresholdOut" for="threshold">50 %</output></label>
+            <input type="range" id="threshold" min="25" max="90" step="1" value="50">
+          </div>
+          <p class="note">Порог — это защита протеза: если модель не уверена, кисть не двигается.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Inside EEGNet ===== -->
+  <section class="section" aria-labelledby="insideTitle">
+    <div class="section-head">
+      <span class="eyebrow">Внутри модели</span>
+      <h2 id="insideTitle">Что выучила EEGNet</h2>
+      <p class="lead">Первый слой EEGNet — это восемь временных фильтров, каждый длиной 256 мс. После обучения они работают как полосовые фильтры и сами находят нужные частоты. К каждому из них прикреплены два пространственных фильтра: это веса 22 электродов, похожие на классический метод CSP. Получается 16 «виртуальных электродов», и дальше модель следит, как их мощность меняется во времени.</p>
+    </div>
+    <ol class="flow" aria-label="Слои EEGNet по порядку">
+      <li><b>Вход</b><span>22 × 1000 отсчётов</span></li>
+      <li><b>8 временных фильтров</b><span>64 отсчёта = 256 мс</span></li>
+      <li><b>×2 пространственных</b><span>16 виртуальных электродов</span></li>
+      <li><b>ELU и усреднение</b><span>каждые 4 отсчёта</span></li>
+      <li><b>Разделимая свёртка</b><span>16 × 16</span></li>
+      <li><b>Признаки</b><span>16 × 31 (по 128 мс)</span></li>
+      <li><b>Классификатор</b><span>496 → 4, softmax</span></li>
+    </ol>
+    <p class="note" id="branchesNote"></p>
+    <div class="branches" id="branches"></div>
+    <div class="panel evidence">
+      <div class="subhead">
+        <h3>Когда модель увидела ответ</h3>
+        <p id="evidenceNote">вклад каждого отрезка в решение по текущей попытке</p>
+      </div>
+      <svg class="chart" id="evidence" viewBox="0 0 800 150" role="img" aria-label="Вклад отрезков времени в оценку каждого класса"></svg>
+      <p class="note">Каждая клетка — отрезок 128 мс внутри окна 0–4 с. Красная клетка увеличивает оценку класса, синяя уменьшает. <span id="evidenceSummary"></span></p>
+    </div>
+  </section>
+
+  <!-- ===== Test results ===== -->
+  <section class="section" aria-labelledby="testTitle">
+    <div class="section-head">
+      <span class="eyebrow">Проверка</span>
+      <h2 id="testTitle">Как модель справляется с незнакомыми попытками</h2>
+      <p class="lead" id="testLead">Здесь воспроизведён сценарий NeuroHand. Для каждого испытуемого EEGNet сначала учится на восьми других людях: это «новый пользователь», которого модель ещё не видела. Потом ту же модель калибруют на 80 % попыток самого человека. Все цифры ниже посчитаны на оставшихся 20 % попыток, которых модели не видели. Попытки в панели выше взяты из того же тестового набора случайно, поэтому среди них есть и ошибки.</p>
+    </div>
+    <div class="results">
+      <div class="panel stat" id="statBox"></div>
+      <div class="panel stat">
+        <div class="subhead"><h3>Точность по испытуемым</h3><p><i class="sw" style="background:var(--grid-strong)"></i> без калибровки · <i class="sw" style="background:var(--accent)"></i> после · пунктир — 25 %</p></div>
+        <svg class="chart" id="subjChart" viewBox="0 0 460 230" role="img" aria-label="Точность по испытуемым"></svg>
+      </div>
+      <div class="panel stat">
+        <div class="subhead"><h3>Матрица ошибок</h3><p id="cmModel">строки — задание, столбцы — ответ</p></div>
+        <div class="cm-wrap"><table class="cm" id="cm"></table></div>
+        <p class="cm-caption">Процент от попыток строки. Чем темнее клетка, тем чаще такой ответ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ERD atlas ===== -->
+  <section class="section" aria-labelledby="atlasTitle">
+    <div class="section-head">
+      <span class="eyebrow">Физиология</span>
+      <h2 id="atlasTitle">Атлас десинхронизации: где мозг «замолкает»</h2>
+      <p class="lead">Когда человек представляет движение, сенсомоторный ритм над соответствующей зоной коры ослабевает. Это называется ERD (event-related desynchronization). Ниже показаны средние карты по всем обучающим попыткам 9 испытуемых за 0,5–2,5 с после подсказки. Именно этот сигнал и ищет EEGNet.</p>
+    </div>
+    <div class="subhead">
+      <div class="seg" role="group" aria-label="Диапазон атласа">
+        <button type="button" data-atlas-band="mu" aria-pressed="true">μ 8–13 Гц</button>
+        <button type="button" data-atlas-band="beta" aria-pressed="false">β 13–30 Гц</button>
+      </div>
+      <div class="cbar" style="width:min(100%,320px)">
+        <div class="cbar-grad" id="cbarAtlas"></div>
+        <div class="cbar-labels"><span id="atlasMin">−</span><span>0</span><span id="atlasMax">+</span></div>
+      </div>
+    </div>
+    <div class="atlas" id="atlas"></div>
+    <div class="atlas-foot">
+      <div class="panel stat">
+        <div class="subhead"><h3>C3 против C4: левая и правая рука</h3><p>среднее по всем испытуемым, %</p></div>
+        <svg class="chart" id="atlasChart" viewBox="0 0 460 200" role="img" aria-label="Средний ERD в C3 и C4 для воображения левой и правой руки"></svg>
+      </div>
+      <div class="panel stat">
+        <h3>Как читать карты</h3>
+        <p class="note" id="atlasNotes">Моторная кора устроена перекрёстно: кистью правой руки управляет левое полушарие (электрод C3), а кистью левой руки — правое (C4). Ноги представлены в глубине межполушарной щели под Cz, язык — в нижних отделах прецентральной извилины.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Method ===== -->
+  <section class="section" aria-labelledby="methodTitle">
+    <div class="section-head">
+      <span class="eyebrow">Как это собрано</span>
+      <h2 id="methodTitle">Метод, ограничения, данные</h2>
+    </div>
+    <div class="method">
+      <div class="panel">
+        <h3>Данные и обработка</h3>
+        <ul>
+          <li>BCI Competition IV 2a (Грац, 2008): 9 испытуемых, обучающие сессии A01T–A09T, по 288 попыток. Попытки, которые авторы датасета пометили как артефактные, исключены.</li>
+          <li>Фильтр Баттерворта 4–38 Гц с нулевой фазой, окно 0–4 с после подсказки, z-нормировка каждого канала. Так же устроен <code>src/data/preprocessing.py</code>.</li>
+          <li>ERD считается как (P − R) / R × 100 %, где R — средняя мощность на фоне от −1,5 до −0,5 с (Pfurtscheller, 1999).</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Модель в браузере</h3>
+        <ul>
+          <li>Это та же EEGNet, что в <code>src/models/eegnet.py</code> (Lawhern et al., 2018). Для каждого испытуемого базовая модель учится на восьми других (leave-one-subject-out), с ранней остановкой. Калибровка — дообучение на попытках самого человека (Adam, шаг 5·10⁻⁴). Число эпох калибровки выбирается кросс-валидацией внутри этих попыток, тест в выборе не участвует.</li>
+          <li>Прямой проход переписан на чистом JavaScript (<code>eegnet.js</code>), без библиотек и без сервера. Он совпадает с PyTorch с точностью до <span id="parity">10⁻⁵</span>.</li>
+          <li>Пересобрать данные для страницы:</li>
+        </ul>
+        <pre class="code">python -m src.visualization.bci_lab_export</pre>
+      </div>
+      <div class="panel">
+        <h3>Ограничения и приватность</h3>
+        <ul>
+          <li>Тест взят из той же сессии, что и калибровка. На новой сессии, в другой день, точность обычно ниже, поэтому NeuroHand планирует онлайн-калибровку.</li>
+          <li>Соответствие «класс → команда кисти» — это предложение для прототипа, а не клинический протокол. Страница не является медицинским изделием.</li>
+          <li>Датасет открытый и обезличенный. Все вычисления идут на вашем устройстве, никакие данные никуда не отправляются.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>NeuroHand · Temur Turayev, TashPMI · <span id="genDate"></span></span>
+    <nav>
+      <a href="https://github.com/TemurTurayev/NeuroHand">Исходный код</a>
+      <a href="https://www.bbci.de/competition/iv/">BCI Competition IV</a>
+      <a href="https://doi.org/10.1088/1741-2552/aace8c">Статья EEGNet</a>
+    </nav>
+  </footer>
+</div>
+
+<script src="lab-data.js"></script>
+<script src="eegnet.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var LAB = window.NEUROHAND_LAB;
+  if (!LAB || !window.EEGNetJS) {
+    document.getElementById('console').innerHTML =
+      '<p class="note">Не удалось загрузить lab-data.js или eegnet.js. Откройте страницу из папки bci-lab целиком.</p>';
+    return;
+  }
+
+  // ---------------------------------------------------------------- constants
+  var M = LAB.meta;
+  var FS = M.fs;
+  var NCH = M.channels.length;
+  var T0 = M.display_window[0];          // −1.5 s
+  var T1 = M.display_window[1];          // 4.0 s
+  var NS = M.display_samples;            // 1375
+  var CUE = Math.round(-T0 * FS);        // cue sample index in the display window
+  var WIN = Math.round((M.model_window[1] - M.model_window[0]) * FS);
+  var NF = M.erd_frames;
+  var FRAME_DT = M.erd_frame_step / FS;  // 0.04 s
+  var CLASS_RU = ['Левая рука', 'Правая рука', 'Обе ноги', 'Язык'];
+  var CLASS_GEN = ['левой руки', 'правой руки', 'ног', 'языка'];
+  var COMMANDS = [
+    { name: 'Раскрыть кисть', pose: 'open' },
+    { name: 'Сжать кулак', pose: 'fist' },
+    { name: 'Щипковый захват', pose: 'pinch' },
+    { name: 'Стоп, удержание', pose: 'hold' }
+  ];
+  var MOTOR = ['C5', 'C3', 'C1', 'Cz', 'C2', 'C4', 'C6'];
+  var KEEP_ONLY = ['C3', 'Cz', 'C4'];
+  var chIndex = {};
+  M.channels.forEach(function (n, i) { chIndex[n] = i; });
+  var FOCUS_CH = [chIndex.C3, chIndex.Cz, chIndex.C4];
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------------------------------------------------------------- helpers
+  function $(s) { return document.querySelector(s); }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function hexToRgb(h) {
+    h = h.replace('#', '');
+    if (h.length === 3) h = h.split('').map(function (x) { return x + x; }).join('');
+    var n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function pct(p, digits) { return (p * 100).toFixed(digits || 0).replace('.', ',') + ' %'; }
+  function fmtSec(t) { return (t >= 0 ? '' : '−') + Math.abs(t).toFixed(2).replace('.', ',') + ' с'; }
+  function argmax(a) { var b = 0; for (var i = 1; i < a.length; i++) if (a[i] > a[b]) b = i; return b; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function svg(tag, attrs, parent) {
+    var el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(el);
+    return el;
+  }
+  function b64bytes(b64) {
+    var bin = atob(b64), u8 = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return u8;
+  }
+  function setupCanvas(cv) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    var w = cv.clientWidth, h = cv.clientHeight;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) {
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+    }
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, w: w, h: h };
+  }
+
+  // 2nd-order Butterworth band-pass 4–38 Hz at 250 Hz (scipy.signal.butter, SOS form).
+  // Added noise goes through the same band as the recording, like interference
+  // that passed the amplifier's filter; the slider then sets its RMS in µV.
+  var NOISE_SOS = [
+    [0.111982691551, 0.223965383102, 0.111982691551, 1.0, -0.849534102957, 0.348586927045],
+    [1.0, -2.0, 1.0, 1.0, -1.86193413429, 0.873083032494]
+  ];
+  function sosPass(y) {
+    NOISE_SOS.forEach(function (s) {
+      var b0 = s[0], b1 = s[1], b2 = s[2], a1 = s[4], a2 = s[5], z1 = 0, z2 = 0;
+      for (var i = 0; i < y.length; i++) {
+        var xi = y[i], yi = b0 * xi + z1;
+        z1 = b1 * xi - a1 * yi + z2;
+        z2 = b2 * xi - a2 * yi;
+        y[i] = yi;
+      }
+    });
+  }
+  function filtfilt(x) {
+    var y = Float64Array.from(x);
+    sosPass(y); y.reverse(); sosPass(y); y.reverse();
+    return y;
+  }
+
+  // Mulberry32 + Box–Muller: one fixed noise pattern, scaled by the slider
+  function makeNoise(seed) {
+    var s = seed >>> 0;
+    function rand() {
+      s = (s + 0x6D2B79F5) >>> 0;
+      var t = s;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    var out = [], pad = 250;
+    for (var c = 0; c < NCH; c++) {
+      var white = new Float64Array(NS + 2 * pad);
+      for (var i = 0; i < white.length; i++) {
+        var u = Math.max(rand(), 1e-12), v = rand();
+        white[i] = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      }
+      var band = filtfilt(white).subarray(pad, pad + NS), ss = 0;
+      for (var k = 0; k < NS; k++) ss += band[k] * band[k];
+      var rms = Math.sqrt(ss / NS) || 1;
+      out.push(Float32Array.from(band, function (x) { return x / rms; }));
+    }
+    return out;
+  }
+  var NOISE = makeNoise(20260926);
+
+  // ---------------------------------------------------------------- palette
+  var PAL = {};
+  function readPalette() {
+    PAL.stops = ['--erd-neg-2', '--erd-neg-1', '--erd-mid', '--erd-pos-1', '--erd-pos-2'].map(function (n) { return hexToRgb(css(n)); });
+    ['--ink', '--ink-2', '--muted', '--grid', '--grid-strong', '--accent', '--accent-soft', '--accent-soft-2',
+     '--panel', '--panel-2', '--trace', '--bad', '--c0', '--c1', '--c2', '--c3'].forEach(function (n) {
+      PAL[n.slice(2)] = css(n);
+    });
+    PAL.cls = [PAL.c0, PAL.c1, PAL.c2, PAL.c3];
+    PAL.mono = '500 10px ' + css('--font-mono');
+    PAL.monoSmall = '500 9px ' + css('--font-mono');
+    PAL.monoBold = '600 10px ' + css('--font-mono');
+    var grad = 'linear-gradient(90deg,' + ['--erd-neg-2', '--erd-neg-1', '--erd-mid', '--erd-pos-1', '--erd-pos-2'].map(function (n) { return 'var(' + n + ')'; }).join(',') + ')';
+    $('#cbarMain').style.background = grad;
+    $('#cbarAtlas').style.background = grad;
+  }
+  function divRGB(v) {                  // v in [−1, 1]
+    var x = (clamp(v, -1, 1) + 1) * 2;
+    var i = Math.min(3, Math.floor(x)), f = x - i, a = PAL.stops[i], b = PAL.stops[i + 1];
+    return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+  }
+  function divCss(v) { var c = divRGB(v); return 'rgb(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ')'; }
+
+  // ---------------------------------------------------------------- data
+  // Every subject has two models: a base model trained on the other eight
+  // people ("new user") and the same model after calibration on this person.
+  var ARCH = LAB.model.architecture;
+  var KINDS = ['new_user', 'calibrated'];
+  var nets = {};
+  function netFor(kind, subject) {
+    var key = kind + ':' + subject;
+    if (!nets[key]) nets[key] = new EEGNetJS.Model(LAB.model.subject_weights[subject][kind], ARCH);
+    return nets[key];
+  }
+  function currentNet() { return netFor(state.modelKind, trials[state.trial].subject); }
+  function modelName(kind, subject) {
+    return kind === 'new_user'
+      ? 'модель без калибровки: она училась на восьми других людях и испытуемого ' + subject + ' не видела'
+      : 'та же модель после калибровки на обучающих попытках ' + subject;
+  }
+
+  var trials = LAB.trials.map(function (t, i) {
+    var bytes = b64bytes(t.signal);
+    var view = new DataView(bytes.buffer);
+    var sig = [];
+    for (var c = 0; c < NCH; c++) {
+      var a = new Float32Array(NS);
+      for (var k = 0; k < NS; k++) a[k] = view.getInt16((c * NS + k) * 2, true) * t.scale;
+      sig.push(a);
+    }
+    return {
+      i: i,
+      subject: t.subject,
+      label: t.label,
+      sig: sig,
+      erd: { mu: new Int8Array(b64bytes(t.erd.mu).buffer), beta: new Int8Array(b64bytes(t.erd.beta).buffer) },
+      ref: t.reference_proba
+    };
+  });
+
+  // Robust display gain: median channel SD across all demo trials
+  var GAIN_UV = (function () {
+    var sds = [];
+    trials.forEach(function (t) {
+      t.sig.forEach(function (ch) {
+        var m = 0, v = 0, k;
+        for (k = 0; k < NS; k++) m += ch[k];
+        m /= NS;
+        for (k = 0; k < NS; k++) v += (ch[k] - m) * (ch[k] - m);
+        sds.push(Math.sqrt(v / NS));
+      });
+    });
+    sds.sort(function (a, b) { return a - b; });
+    return sds[sds.length >> 1];
+  })();
+
+  // ---------------------------------------------------------------- state
+  var state = {
+    trial: 0,
+    band: 'mu',
+    atlasBand: 'mu',
+    disabled: new Set(),
+    noise: 0,
+    threshold: 0.5,
+    modelKind: 'calibrated',
+    cursor: 1.0,
+    mode: 'review',          // 'review' | 'play'
+    speed: 1,
+    playStart: 0,
+    playFrom: T0,
+    result: null,
+    focusEl: chIndex.C3
+  };
+
+  function modelInput(trial, noise, disabled) {
+    var chans = [];
+    for (var c = 0; c < NCH; c++) {
+      var x = new Float64Array(WIN), s = trial.sig[c], n = NOISE[c];
+      for (var t = 0; t < WIN; t++) x[t] = s[CUE + t] + noise * n[CUE + t];
+      chans.push(x);
+    }
+    var z = EEGNetJS.standardize(chans);
+    disabled.forEach(function (c) { z[c].fill(0); });
+    return z;
+  }
+  function infer(trial, noise, disabled, kind) {
+    return netFor(kind || state.modelKind, trial.subject).forward(modelInput(trial, noise, disabled));
+  }
+
+  // Intact predictions for every demo trial (picker marks) and the parity check
+  // against PyTorch; each model is evaluated on first use.
+  var intact = {}, parityErr = 0;
+  function intactFor(kind) {
+    if (!intact[kind]) {
+      intact[kind] = trials.map(function (t) { return infer(t, 0, new Set(), kind); });
+      intact[kind].forEach(function (r, i) {
+        r.proba.forEach(function (p, k) { parityErr = Math.max(parityErr, Math.abs(p - trials[i].ref[kind][k])); });
+      });
+    }
+    return intact[kind];
+  }
+
+  // ---------------------------------------------------------------- topomap
+  var HEAD_R = 4;             // head outline radius in 10 % units
+  var GRID_EXT = 4.3;
+  function Topo(canvas, opts) {
+    this.cv = canvas;
+    this.opts = opts || {};
+    this.res = this.opts.res || 64;
+    this.off = document.createElement('canvas');
+    this.off.width = this.off.height = this.res;
+    this.weights = null;
+    this.buildWeights();
+  }
+  Topo.prototype.buildWeights = function () {
+    var R = this.res, P = M.positions, w = new Float32Array(R * R * NCH), inside = new Uint8Array(R * R);
+    var step = (2 * GRID_EXT) / R;
+    for (var gy = 0; gy < R; gy++) {
+      for (var gx = 0; gx < R; gx++) {
+        var u = -GRID_EXT + (gx + 0.5) * step, v = GRID_EXT - (gy + 0.5) * step;
+        var idx = gy * R + gx;
+        if (u * u + v * v > GRID_EXT * GRID_EXT) continue;
+        inside[idx] = 1;
+        var sum = 0, exact = -1;
+        for (var c = 0; c < NCH; c++) {
+          var dx = u - P[c][0], dy = v - P[c][1], d2 = dx * dx + dy * dy;
+          if (d2 < 1e-9) { exact = c; break; }
+          var wt = 1 / Math.pow(d2, 1.25);
+          w[idx * NCH + c] = wt;
+          sum += wt;
+        }
+        if (exact >= 0) {
+          for (var c2 = 0; c2 < NCH; c2++) w[idx * NCH + c2] = c2 === exact ? 1 : 0;
+        } else {
+          for (var c3 = 0; c3 < NCH; c3++) w[idx * NCH + c3] /= sum;
+        }
+      }
+    }
+    this.weights = w;
+    this.inside = inside;
+  };
+  Topo.prototype.geom = function (size) {
+    var r = size * (this.opts.labels ? 0.41 : 0.44);
+    return { cx: size / 2, cy: size / 2 + size * 0.025, r: r };
+  };
+  Topo.prototype.pos = function (c, g) {
+    var p = M.positions[c];
+    return [g.cx + p[0] * g.r / HEAD_R, g.cy - p[1] * g.r / HEAD_R];
+  };
+  Topo.prototype.draw = function (values, range, extra) {
+    extra = extra || {};
+    var s = setupCanvas(this.cv), ctx = s.ctx, size = s.w;
+    if (!size) return;
+    var g = this.geom(size);
+    this.lastGeom = g;
+    var R = this.res, img = this.off.getContext('2d').createImageData(R, R), data = img.data, w = this.weights;
+    for (var idx = 0; idx < R * R; idx++) {
+      if (!this.inside[idx]) continue;
+      var v = 0;
+      for (var c = 0; c < NCH; c++) v += w[idx * NCH + c] * values[c];
+      var rgb = divRGB(v / range);
+      data[idx * 4] = rgb[0]; data[idx * 4 + 1] = rgb[1]; data[idx * 4 + 2] = rgb[2]; data[idx * 4 + 3] = 255;
+    }
+    this.off.getContext('2d').putImageData(img, 0, 0);
+    ctx.clearRect(0, 0, s.w, s.h);
+
+    // Nose and ears behind the head disc
+    ctx.strokeStyle = PAL['ink-2'];
+    ctx.lineWidth = this.opts.labels ? 1.5 : 1.1;
+    ctx.fillStyle = PAL.panel;
+    ctx.beginPath();
+    ctx.moveTo(g.cx - g.r * 0.12, g.cy - g.r * 0.985);
+    ctx.lineTo(g.cx, g.cy - g.r * 1.12);
+    ctx.lineTo(g.cx + g.r * 0.12, g.cy - g.r * 0.985);
+    ctx.fill(); ctx.stroke();
+    [-1, 1].forEach(function (sgn) {
+      ctx.beginPath();
+      ctx.ellipse(g.cx + sgn * g.r * 1.02, g.cy, g.r * 0.06, g.r * 0.17, 0, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    });
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(g.cx, g.cy, g.r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    var ext = g.r * GRID_EXT / HEAD_R;
+    ctx.drawImage(this.off, g.cx - ext, g.cy - ext, ext * 2, ext * 2);
+    ctx.restore();
+    ctx.beginPath();
+    ctx.arc(g.cx, g.cy, g.r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Electrodes
+    var self = this, labels = this.opts.labels, dis = extra.disabled || new Set();
+    for (var e = 0; e < NCH; e++) {
+      var pp = self.pos(e, g), off = dis.has(e);
+      var rad = labels ? 3.2 : 1.6;
+      ctx.beginPath();
+      ctx.arc(pp[0], pp[1], rad, 0, Math.PI * 2);
+      ctx.fillStyle = off ? PAL.panel : PAL.ink;
+      ctx.fill();
+      if (off) {
+        ctx.strokeStyle = PAL.bad; ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(pp[0] - 5, pp[1] - 5); ctx.lineTo(pp[0] + 5, pp[1] + 5);
+        ctx.moveTo(pp[0] + 5, pp[1] - 5); ctx.lineTo(pp[0] - 5, pp[1] + 5);
+        ctx.stroke();
+      }
+      if (labels && (!self.opts.labelOnly || self.opts.labelOnly.indexOf(M.channels[e]) >= 0)) {
+        ctx.font = PAL.monoSmall;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = off ? PAL.bad : PAL.ink;
+        ctx.globalAlpha = 0.85;
+        ctx.fillText(M.channels[e], pp[0], pp[1] + 5);
+        ctx.globalAlpha = 1;
+      }
+      if (extra.focus === e) {
+        ctx.strokeStyle = PAL.accent; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(pp[0], pp[1], 9, 0, Math.PI * 2); ctx.stroke();
+      }
+    }
+  };
+  Topo.prototype.hit = function (x, y) {
+    var g = this.lastGeom; if (!g) return -1;
+    var best = -1, bd = 16 * 16;
+    for (var c = 0; c < NCH; c++) {
+      var p = this.pos(c, g), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y);
+      if (d < bd) { bd = d; best = c; }
+    }
+    return best;
+  };
+
+  // ---------------------------------------------------------------- trace
+  var traceCv = $('#trace');
+  function tToX(t, L, W) { return L + (t - T0) / (T1 - T0) * W; }
+  function drawTrace() {
+    var s = setupCanvas(traceCv), ctx = s.ctx;
+    var L = 40, Rm = 8, top = 20, bottom = 22;
+    var W = s.w - L - Rm, H = s.h - top - bottom, lane = H / NCH;
+    var trial = trials[state.trial];
+    ctx.clearRect(0, 0, s.w, s.h);
+
+    // Baseline and model windows
+    ctx.fillStyle = PAL['panel-2'];
+    ctx.fillRect(tToX(M.baseline_window[0], L, W), top, (M.baseline_window[1] - M.baseline_window[0]) / (T1 - T0) * W, H);
+    ctx.fillStyle = PAL['accent-soft'];
+    ctx.fillRect(tToX(0, L, W), top, 4 / (T1 - T0) * W, H);
+
+    // Chart-paper grid: 0.2 s minor, 1 s major
+    for (var k = Math.ceil(T0 / 0.2); k * 0.2 <= T1 + 1e-9; k++) {
+      var t = k * 0.2, x = Math.round(tToX(t, L, W)) + 0.5, major = Math.abs(t - Math.round(t)) < 1e-6;
+      ctx.strokeStyle = major ? PAL['grid-strong'] : PAL.grid;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, top + H); ctx.stroke();
+      if (major) {
+        ctx.font = PAL.mono; ctx.fillStyle = PAL.muted; ctx.textBaseline = 'top';
+        ctx.textAlign = t >= T1 - 1e-6 ? 'right' : 'center';
+        ctx.fillText((t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(Math.round(t)) + ' с', x, top + H + 6);
+      }
+    }
+    // Cue marker
+    var xc = Math.round(tToX(0, L, W)) + 0.5;
+    ctx.strokeStyle = PAL.accent; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(xc, top - 4); ctx.lineTo(xc, top + H); ctx.stroke();
+    ctx.font = PAL.mono; ctx.fillStyle = PAL.accent; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('подсказка', xc + 4, top - 3);
+    ctx.fillStyle = PAL.muted; ctx.textAlign = 'right';
+    ctx.fillText('окно EEGNet 0–4 с', tToX(4, L, W) - 2, top - 3);
+
+    // Traces
+    var endT = state.mode === 'play' ? state.cursor : T1;
+    var endK = clamp(Math.round((endT - T0) * FS), 0, NS - 1);
+    var pxPerUV = lane / (GAIN_UV * 5.2);
+    var dx = W / (NS - 1);
+    for (var c = 0; c < NCH; c++) {
+      var y0 = top + (c + 0.5) * lane, off = state.disabled.has(c), focus = FOCUS_CH.indexOf(c) >= 0;
+      ctx.font = focus ? PAL.monoBold : PAL.mono;
+      ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = off ? PAL.bad : focus ? PAL.accent : PAL.muted;
+      ctx.fillText(M.channels[c], L - 6, y0);
+      if (off) {
+        ctx.strokeStyle = PAL.bad; ctx.globalAlpha = 0.5; ctx.setLineDash([3, 4]); ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(L, y0); ctx.lineTo(L + endK * dx, y0); ctx.stroke();
+        ctx.setLineDash([]); ctx.globalAlpha = 1;
+        continue;
+      }
+      var sig = trial.sig[c], nz = NOISE[c], lim = lane * 0.62;
+      ctx.strokeStyle = focus ? PAL.accent : PAL.trace;
+      ctx.globalAlpha = focus ? 1 : 0.82;
+      ctx.lineWidth = focus ? 1.15 : 0.85;
+      ctx.beginPath();
+      for (var i = 0; i <= endK; i++) {
+        var yv = y0 - clamp((sig[i] + state.noise * nz[i]) * pxPerUV, -lim, lim);
+        if (i === 0) ctx.moveTo(L, yv); else ctx.lineTo(L + i * dx, yv);
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    // Sensitivity bar (clinical EEG convention)
+    var uvBar = GAIN_UV > 8 ? 50 : 20;
+    var hBar = uvBar * pxPerUV;
+    ctx.strokeStyle = PAL.ink; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(6, top + H - 2); ctx.lineTo(6, top + H - 2 - hBar); ctx.stroke();
+    ctx.font = PAL.monoSmall; ctx.fillStyle = PAL.muted; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText(uvBar + ' мкВ', 2, top + H + 7);
+
+    // Cursor / sweep
+    var xcur = tToX(state.cursor, L, W);
+    ctx.strokeStyle = PAL.ink; ctx.lineWidth = state.mode === 'play' ? 2 : 1.2;
+    ctx.beginPath(); ctx.moveTo(xcur, top); ctx.lineTo(xcur, top + H); ctx.stroke();
+    if (state.mode === 'review') {
+      var label = fmtSec(state.cursor);
+      ctx.font = PAL.mono;
+      var tw = ctx.measureText(label).width + 10, bx = clamp(xcur - tw / 2, L, L + W - tw);
+      ctx.fillStyle = PAL.ink; ctx.fillRect(bx, top + H - 16, tw, 15);
+      ctx.fillStyle = PAL.panel; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(label, bx + tw / 2, top + H - 8.5);
+    }
+    traceCv._geom = { L: L, W: W };
+  }
+
+  function cursorFromEvent(ev) {
+    var r = traceCv.getBoundingClientRect(), g = traceCv._geom || { L: 40, W: r.width - 48 };
+    var x = ev.clientX - r.left;
+    return clamp(T0 + (x - g.L) / g.W * (T1 - T0), T0, T1);
+  }
+  var dragging = false;
+  traceCv.addEventListener('pointerdown', function (ev) {
+    if (state.mode === 'play') stopPlay(false);
+    dragging = true;
+    traceCv.setPointerCapture(ev.pointerId);
+    setCursor(cursorFromEvent(ev));
+  });
+  traceCv.addEventListener('pointermove', function (ev) { if (dragging) setCursor(cursorFromEvent(ev)); });
+  traceCv.addEventListener('pointerup', function () { dragging = false; });
+  traceCv.addEventListener('pointercancel', function () { dragging = false; });
+  traceCv.addEventListener('keydown', function (ev) {
+    if (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight') {
+      ev.preventDefault();
+      if (state.mode === 'play') stopPlay(false);
+      setCursor(clamp(state.cursor + (ev.key === 'ArrowLeft' ? -0.1 : 0.1), T0, T1));
+    } else if (ev.key === ' ' || ev.key === 'Enter') {
+      ev.preventDefault();
+      togglePlay();
+    }
+  });
+
+  function setCursor(t) {
+    state.cursor = t;
+    drawTrace();
+    drawTopoMain();
+    drawErdChart();
+  }
+
+  // ---------------------------------------------------------------- ERD at cursor
+  function erdAt(trial, band, t) {
+    var f = Math.round((t - T0) / FRAME_DT), half = 6, arr = trial.erd[band], out = new Array(NCH);
+    var a = clamp(f - half, 0, NF - 1), b = clamp(f + half, 0, NF - 1);
+    for (var c = 0; c < NCH; c++) {
+      var s = 0;
+      for (var k = a; k <= b; k++) s += arr[c * NF + k];
+      out[c] = s / (b - a + 1);
+    }
+    return out;
+  }
+
+  var topoMain = new Topo($('#topo'), { labels: true, res: 72 });
+  function drawTopoMain() {
+    var trial = trials[state.trial];
+    topoMain.draw(erdAt(trial, state.band, state.cursor), 100, { disabled: state.disabled, focus: topoFocusVisible ? state.focusEl : -1 });
+    $('#topoTime').textContent = 'среднее за ' + fmtSec(Math.max(T0, state.cursor - 0.24)) + ' … ' + fmtSec(Math.min(T1, state.cursor + 0.24));
+  }
+  var topoFocusVisible = false;
+  var topoCv = $('#topo');
+  topoCv.addEventListener('click', function (ev) {
+    var r = topoCv.getBoundingClientRect();
+    var c = topoMain.hit(ev.clientX - r.left, ev.clientY - r.top);
+    if (c >= 0) toggleElectrode(c);
+  });
+  topoCv.addEventListener('focus', function () {
+    topoFocusVisible = topoCv.matches(':focus-visible');
+    drawTopoMain();
+  });
+  topoCv.addEventListener('blur', function () { topoFocusVisible = false; drawTopoMain(); });
+  topoCv.addEventListener('keydown', function (ev) {
+    var order = M.channels.map(function (_, i) { return i; });
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') { ev.preventDefault(); state.focusEl = order[(state.focusEl + 1) % NCH]; drawTopoMain(); }
+    else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') { ev.preventDefault(); state.focusEl = order[(state.focusEl + NCH - 1) % NCH]; drawTopoMain(); }
+    else if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); toggleElectrode(state.focusEl); }
+  });
+  function toggleElectrode(c) {
+    if (state.disabled.has(c)) state.disabled.delete(c); else state.disabled.add(c);
+    recompute();
+  }
+
+  // ---------------------------------------------------------------- line charts
+  function lineChart(el, series, o) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    var vb = el.viewBox.baseVal, Wd = vb.width, Ht = vb.height;
+    var L = 34, R = o.rightPad || 64, T = 10, B = 22, w = Wd - L - R, h = Ht - T - B;
+    function X(t) { return L + (t - o.x0) / (o.x1 - o.x0) * w; }
+    function Y(v) { return T + (o.y1 - clamp(v, o.y0, o.y1)) / (o.y1 - o.y0) * h; }
+    if (o.shade) o.shade.forEach(function (s) {
+      svg('rect', { x: X(s[0]), y: T, width: X(s[1]) - X(s[0]), height: h, fill: s[2] }, el);
+    });
+    o.yTicks.forEach(function (v) {
+      svg('line', { x1: L, x2: L + w, y1: Y(v), y2: Y(v), stroke: v === 0 ? PAL['grid-strong'] : PAL.grid, 'stroke-width': 1 }, el);
+      var tx = svg('text', { x: L - 5, y: Y(v) + 3, 'text-anchor': 'end' }, el);
+      tx.textContent = (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
+    });
+    o.xTicks.forEach(function (t) {
+      var tx = svg('text', { x: X(t), y: T + h + 15, 'text-anchor': 'middle' }, el);
+      tx.textContent = (t > 0 ? '+' : t < 0 ? '−' : '') + Math.abs(t) + (o.xUnit || '');
+    });
+    if (o.cue !== undefined) svg('line', { x1: X(o.cue), x2: X(o.cue), y1: T, y2: T + h, stroke: PAL.accent, 'stroke-width': 1.3 }, el);
+    var ends = [];
+    series.forEach(function (s) {
+      var d = '';
+      for (var i = 0; i < s.values.length; i++) {
+        var t = o.x0 + i * s.dt;
+        if (t > o.x1 + 1e-9) break;
+        d += (i ? 'L' : 'M') + X(t).toFixed(1) + ' ' + Y(s.values[i]).toFixed(1);
+      }
+      svg('path', { d: d, fill: 'none', stroke: s.color, 'stroke-width': s.width || 1.8, 'stroke-dasharray': s.dash || 'none', 'stroke-linejoin': 'round' }, el);
+      var lastIdx = Math.min(s.values.length - 1, Math.round((o.x1 - o.x0) / s.dt));
+      ends.push({ y: Y(s.values[lastIdx]), s: s });
+    });
+    // Direct labels at line ends, nudged apart
+    ends.sort(function (a, b) { return a.y - b.y; });
+    for (var j = 1; j < ends.length; j++) if (ends[j].y - ends[j - 1].y < 12) ends[j].y = ends[j - 1].y + 12;
+    ends.forEach(function (e) {
+      var tx = svg('text', { x: L + w + 6, y: e.y + 3.5, fill: e.s.color, style: 'fill:' + e.s.color + ';font-weight:600' }, el);
+      tx.textContent = e.s.label;
+    });
+    if (o.cursor !== undefined) {
+      svg('line', { x1: X(o.cursor), x2: X(o.cursor), y1: T, y2: T + h, stroke: PAL.ink, 'stroke-width': 1.2 }, el);
+    }
+  }
+
+  function drawErdChart() {
+    var trial = trials[state.trial], arr = trial.erd[state.band];
+    function ch(name) { var c = chIndex[name]; return Array.prototype.slice.call(arr, c * NF, (c + 1) * NF); }
+    lineChart($('#erdChart'), [
+      { values: ch('C3'), dt: FRAME_DT, color: PAL.c1, label: 'C3' },
+      { values: ch('C4'), dt: FRAME_DT, color: PAL.c0, label: 'C4' }
+    ], {
+      x0: T0, x1: T1, y0: -100, y1: 130, yTicks: [-100, -50, 0, 50, 100], xTicks: [-1, 0, 1, 2, 3, 4], xUnit: '',
+      cue: 0, cursor: state.cursor, rightPad: 40,
+      shade: [[M.baseline_window[0], M.baseline_window[1], PAL['panel-2']]]
+    });
+  }
+
+  // ---------------------------------------------------------------- picker
+  function buildPicker() {
+    var root = $('#picker');
+    root.innerHTML = '';
+    for (var k = 0; k < 4; k++) {
+      var col = document.createElement('div');
+      col.className = 'picker-col';
+      col.style.setProperty('--cls', 'var(--c' + k + ')');
+      col.innerHTML = '<h3><i class="dot"></i>' + CLASS_RU[k] + '</h3><div class="cmd">→ ' + COMMANDS[k].name.toLowerCase() + '</div>';
+      var chips = document.createElement('div');
+      chips.className = 'chips';
+      trials.forEach(function (t) {
+        if (t.label !== k) return;
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chip';
+        b.dataset.trial = t.i;
+        b.setAttribute('aria-pressed', 'false');
+        b.innerHTML = t.subject + '<span class="mk" aria-hidden="true"></span>';
+        b.addEventListener('click', function () { selectTrial(+this.dataset.trial, true); });
+        chips.appendChild(b);
+      });
+      col.appendChild(chips);
+      root.appendChild(col);
+    }
+  }
+  function markPicker() {
+    document.querySelectorAll('.chip').forEach(function (b) {
+      var t = trials[+b.dataset.trial], ok = argmax(intactFor(state.modelKind)[t.i].proba) === t.label;
+      var mk = b.querySelector('.mk');
+      mk.className = 'mk ' + (ok ? 'ok' : 'bad');
+      mk.textContent = ok ? '✓' : '✗';
+      b.setAttribute('aria-pressed', String(t.i === state.trial));
+      b.setAttribute('aria-label', 'Испытуемый ' + t.subject + ', ' + CLASS_RU[t.label] + ', модель ' + (ok ? 'права' : 'ошиблась'));
+    });
+  }
+
+  // ---------------------------------------------------------------- decision
+  function buildBars() {
+    var root = $('#bars');
+    root.innerHTML = '';
+    for (var k = 0; k < 4; k++) {
+      var d = document.createElement('div');
+      d.className = 'bar';
+      d.style.setProperty('--cls', 'var(--c' + k + ')');
+      d.innerHTML = '<div class="bar-top"><span class="name">' + CLASS_RU[k] + ' <small>' + COMMANDS[k].name.toLowerCase() + '</small><span class="tag" hidden>задание</span></span><span class="val">—</span></div><div class="bar-track"><div class="bar-fill"></div></div>';
+      root.appendChild(d);
+    }
+  }
+
+  function renderDecision() {
+    var trial = trials[state.trial], bars = document.querySelectorAll('.bar'), v = $('#verdict');
+    var pending = state.mode === 'play' && state.cursor < M.model_window[1];
+    bars.forEach(function (b, k) {
+      b.querySelector('.tag').hidden = k !== trial.label;
+    });
+    if (pending) {
+      bars.forEach(function (b) {
+        b.classList.remove('is-pred');
+        b.style.setProperty('--w', '0%');
+        b.querySelector('.val').textContent = '—';
+      });
+      var filled = clamp(state.cursor / M.model_window[1], 0, 1);
+      v.innerHTML = '<div class="cmd idle">Модель ждёт окно 0–4 с</div>' +
+        '<div class="why">' + (state.cursor < 0 ? 'Фон: человек смотрит на крест и ждёт подсказку' : 'Идёт воображение движения · заполнено ' + fmtSec(state.cursor) + ' из 4 с') + '</div>' +
+        '<div class="fillbar"><i style="width:' + (filled * 100).toFixed(1) + '%"></i></div>';
+      setPose('hold', null);
+      return;
+    }
+    var p = state.result.proba, pred = argmax(p), conf = p[pred], sent = conf >= state.threshold;
+    bars.forEach(function (b, k) {
+      b.classList.toggle('is-pred', k === pred);
+      b.style.setProperty('--w', (p[k] * 100).toFixed(1) + '%');
+      b.querySelector('.val').textContent = pct(p[k]);
+    });
+    var html = sent
+      ? '<div class="cmd" style="color:var(--c' + pred + ')">' + COMMANDS[pred].name + '</div>' +
+        '<div class="why">Уверенность ' + pct(conf) + ', это не ниже порога ' + pct(state.threshold) + '. Команда отправлена протезу.</div>'
+      : '<div class="cmd idle">Команда не отправлена</div>' +
+        '<div class="why">Лучший ответ «' + CLASS_RU[pred] + '» набрал ' + pct(conf) + ', ниже порога ' + pct(state.threshold) + '. Протез остаётся в покое.</div>';
+    html += pred === trial.label
+      ? '<div class="truth ok">' + (sent ? 'Команда' : 'Лучший ответ') + ' совпадает с заданием: воображение ' + CLASS_GEN[trial.label] + '</div>'
+      : '<div class="truth bad">' + (sent ? 'Команда ошибочна' : 'Лучший ответ ошибочен') + ': задание было — воображение ' + CLASS_GEN[trial.label] + '</div>';
+    var tampered = state.disabled.size > 0 || state.noise > 0;
+    if (tampered) {
+      var base = intactFor(state.modelKind)[state.trial].proba, bp = argmax(base);
+      var parts = [];
+      if (state.disabled.size) parts.push('отключено ' + state.disabled.size + ' из 22 электродов');
+      if (state.noise) parts.push('шум ' + state.noise + ' мкВ');
+      html += '<div class="delta">' + parts.join(', ') + '. Без вмешательства: «' + CLASS_RU[bp] + '» ' + pct(base[bp]) +
+        '; сейчас «' + CLASS_RU[bp] + '» ' + pct(p[bp]) + '.</div>';
+    }
+    html += '<div class="delta">Решает ' + modelName(state.modelKind, trial.subject) + '.</div>';
+    v.innerHTML = html;
+    setPose(sent ? COMMANDS[pred].pose : 'hold', sent ? pred : null);
+  }
+
+  // ---------------------------------------------------------------- hand
+  var DIGITS = [
+    { key: 'index', x: 76, y: 114, w: 22, len: 76, layer: 'back', ru: 'Указ.' },
+    { key: 'middle', x: 101, y: 112, w: 23, len: 84, layer: 'back', ru: 'Сред.' },
+    { key: 'ring', x: 126, y: 114, w: 22, len: 78, layer: 'back', ru: 'Безым.' },
+    { key: 'little', x: 150, y: 120, w: 19, len: 62, layer: 'back', ru: 'Мизин.' },
+    { key: 'thumb', x: 60, y: 150, w: 23, len: 66, layer: 'front', ru: 'Больш.' }
+  ];
+  var POSES = {
+    open:  { index: [-7, 1], middle: [-1, 1], ring: [5, 1], little: [11, 1], thumb: [-58, 1] },
+    fist:  { index: [0, 0.3], middle: [0, 0.3], ring: [0, 0.3], little: [0, 0.32], thumb: [34, 0.8] },
+    pinch: { index: [-30, 0.55], middle: [-2, 0.93], ring: [3, 0.9], little: [8, 0.88], thumb: [0, 1] },
+    hold:  { index: [-3, 0.86], middle: [0, 0.86], ring: [3, 0.86], little: [7, 0.86], thumb: [-30, 0.94] }
+  };
+  function buildHand() {
+    var back = $('#digits-back'), front = $('#digits-front');
+    DIGITS.forEach(function (d) {
+      var g = svg('g', { 'class': 'digit', id: 'd-' + d.key }, d.layer === 'back' ? back : front);
+      svg('rect', { x: -d.w / 2, y: -d.len, width: d.w, height: d.len + 12, rx: d.w / 2 }, g);
+      [0.36, 0.68].forEach(function (f) {
+        svg('line', { 'class': 'joint', x1: -d.w / 2 + 3, x2: d.w / 2 - 3, y1: -d.len * f, y2: -d.len * f }, g);
+      });
+    });
+  }
+  function setPose(name, cls) {
+    var pose = POSES[name], servo = [];
+    DIGITS.forEach(function (d) {
+      var p = pose[d.key], el = document.getElementById('d-' + d.key);
+      el.style.transform = 'translate(' + d.x + 'px,' + d.y + 'px) rotate(' + p[0] + 'deg) scale(1,' + p[1] + ')';
+      var angle = d.key === 'thumb'
+        ? Math.round(clamp((p[0] + 58) / 92, 0, 1) * 90)
+        : Math.round(clamp((1 - p[1]) / 0.7, 0, 1) * 90);
+      servo.push('<span>' + d.ru + '</span><b>' + angle + '°</b>');
+    });
+    $('#servo').innerHTML = servo.join('');
+    $('#hand').style.setProperty('--led', cls === null || cls === undefined ? 'var(--muted)' : 'var(--c' + cls + ')');
+  }
+
+  // ---------------------------------------------------------------- playback
+  var raf = 0;
+  function togglePlay() { if (state.mode === 'play') stopPlay(true); else startPlay(); }
+  function startPlay() {
+    state.mode = 'play';
+    state.playStart = performance.now();
+    state.cursor = T0;
+    $('#playBtn').innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.5h3v9H2zM7 1.5h3v9H7z"/></svg><span>Пауза</span>';
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(tick);
+  }
+  function tick(now) {
+    var t = T0 + (now - state.playStart) / 1000 * state.speed;
+    if (t >= T1) { state.cursor = T1; stopPlay(true); return; }
+    state.cursor = t;
+    drawTrace(); drawTopoMain(); drawErdChart(); renderDecision();
+    raf = requestAnimationFrame(tick);
+  }
+  function stopPlay(finished) {
+    cancelAnimationFrame(raf);
+    state.mode = 'review';
+    if (finished) state.cursor = T1;
+    $('#playBtn').innerHTML = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1.2v9.6L10.6 6z"/></svg><span>Проиграть</span>';
+    drawTrace(); drawTopoMain(); drawErdChart(); renderDecision();
+  }
+  $('#playBtn').addEventListener('click', togglePlay);
+  document.querySelectorAll('[data-speed]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var sp = +this.dataset.speed;
+      if (state.mode === 'play') {
+        // keep the playhead where it is when the speed changes
+        state.playStart = performance.now() - (state.cursor - T0) / sp * 1000;
+      }
+      state.speed = sp;
+      document.querySelectorAll('[data-speed]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    });
+  });
+  $('#randomBtn').addEventListener('click', function () {
+    var n;
+    do { n = Math.floor(Math.random() * trials.length); } while (n === state.trial && trials.length > 1);
+    selectTrial(n, true);
+  });
+
+  // ---------------------------------------------------------------- controls
+  document.querySelectorAll('[data-band]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.band = this.dataset.band;
+      document.querySelectorAll('[data-band]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      $('#topoHeading').textContent = state.band === 'mu' ? 'Мю-ритм, 8–13 Гц' : 'Бета-ритм, 13–30 Гц';
+      drawTopoMain(); drawErdChart();
+    });
+  });
+  document.querySelectorAll('[data-lesion]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var kind = this.dataset.lesion;
+      state.disabled = new Set();
+      if (kind === 'motor') MOTOR.forEach(function (n) { state.disabled.add(chIndex[n]); });
+      if (kind === 'only') M.channels.forEach(function (n, i) { if (KEEP_ONLY.indexOf(n) < 0) state.disabled.add(i); });
+      recompute();
+    });
+  });
+  var pendingRecompute = 0;
+  $('#noise').addEventListener('input', function () {
+    state.noise = +this.value;
+    $('#noiseOut').textContent = state.noise + ' мкВ';
+    cancelAnimationFrame(pendingRecompute);
+    pendingRecompute = requestAnimationFrame(recompute);
+  });
+  $('#threshold').addEventListener('input', function () {
+    state.threshold = +this.value / 100;
+    $('#thresholdOut').textContent = this.value + ' %';
+    renderDecision();
+  });
+
+  function recompute() {
+    state.result = infer(trials[state.trial], state.noise, state.disabled);
+    drawTrace(); drawTopoMain(); renderDecision(); drawEvidence();
+  }
+  function selectTrial(i, play) {
+    state.trial = i;
+    var t = trials[i];
+    $('#taskLabel').innerHTML = 'Задание: <i style="color:var(--c' + t.label + ')">' + CLASS_RU[t.label].toLowerCase() + '</i>';
+    $('#trialMeta').textContent = 'исп. ' + t.subject + ' · сессия T · 22 отв. · 250 Гц · 4–38 Гц';
+    markPicker();
+    state.result = infer(t, state.noise, state.disabled);
+    drawEvidence();
+    drawBranches();
+    if (play && !reduceMotion) startPlay();
+    else { state.mode = 'review'; state.cursor = 1.0; drawTrace(); drawTopoMain(); drawErdChart(); renderDecision(); }
+  }
+
+  // ---------------------------------------------------------------- inside EEGNet
+  var branchTopos = [];
+  function bandName(f) {
+    if (f < 4) return 'δ';
+    if (f < 8) return 'θ';
+    if (f < 13) return 'μ/α';
+    if (f < 30) return 'β';
+    return 'γ';
+  }
+  function buildBranches() {
+    var root = $('#branches'), A = LAB.model.architecture, freqs = [];
+    for (var f = 0; f <= 45; f += 0.5) freqs.push(f);
+    root.innerHTML = '';
+    branchTopos = [];
+    for (var b = 0; b < A.F1; b++) {
+      var card = document.createElement('div');
+      card.className = 'panel branch';
+      card.dataset.branch = b;
+      card.innerHTML = '<div class="branch-head"><h3>Ветвь ' + (b + 1) + '</h3><span class="peak"></span></div>';
+      svg('svg', { 'class': 'chart', viewBox: '0 0 220 86', role: 'img', 'aria-label': 'Частотная характеристика ветви ' + (b + 1) }, card);
+      card._freqs = freqs;
+      var maps = document.createElement('div');
+      maps.className = 'maps';
+      for (var d = 0; d < A.D; d++) {
+        var fig = document.createElement('figure');
+        var cv = document.createElement('canvas');
+        cv.setAttribute('role', 'img');
+        cv.setAttribute('aria-label', 'Пространственный фильтр ' + (b + 1) + String.fromCharCode(1072 + d));
+        fig.appendChild(cv);
+        var cap = document.createElement('figcaption');
+        cap.textContent = 'фильтр ' + (b + 1) + String.fromCharCode(1072 + d);
+        fig.appendChild(cap);
+        maps.appendChild(fig);
+        branchTopos.push({ topo: new Topo(cv, { res: 44 }), o: b * A.D + d });
+      }
+      card.appendChild(maps);
+      root.appendChild(card);
+    }
+  }
+  function drawBranches() {
+    var net = currentNet();
+    $('#branchesNote').textContent = 'Показаны фильтры модели испытуемого ' + trials[state.trial].subject + ' ' + (state.modelKind === 'new_user' ? 'до калибровки' : 'после калибровки') + ' (переключатель — в панели решения). Бледные края графиков — частоты вне полосы записи 4–38 Гц: в данных их нет, поэтому пик ищется внутри полосы.';
+    var lo = M.bandpass[0], hi = M.bandpass[1];
+    document.querySelectorAll('.branch').forEach(function (card) {
+      var resp = net.frequencyResponse(+card.dataset.branch, card._freqs, FS), mx = 0, pk = 0;
+      // Only 4–38 Hz survives the recording filter, so the peak is searched there
+      for (var i = 0; i < resp.length; i++) {
+        var f0 = card._freqs[i];
+        if (f0 >= lo && f0 <= hi && resp[i] > mx) { mx = resp[i]; pk = f0; }
+      }
+      card._resp = resp; card._mx = mx;
+      card.querySelector('.peak').textContent = pk <= lo ? 'низкие частоты · θ'
+        : pk >= hi ? 'высокие частоты · γ'
+        : 'пик ' + String(pk).replace('.', ',') + ' Гц · ' + bandName(pk);
+      var el = card.querySelector('svg');
+      while (el.firstChild) el.removeChild(el.firstChild);
+      var L = 4, R = 4, T = 12, B = 16, W = 220 - L - R, H = 86 - T - B, fx = function (f) { return L + f / 45 * W; };
+      [[4, 8, 'θ', 0.35], [8, 13, 'μ', 1], [13, 30, 'β', 0.55]].forEach(function (s) {
+        svg('rect', { x: fx(s[0]), y: T, width: fx(s[1]) - fx(s[0]), height: H, fill: PAL['accent-soft'], 'fill-opacity': s[3] + 0.4 }, el);
+        var tx = svg('text', { x: (fx(s[0]) + fx(s[1])) / 2, y: T - 3, 'text-anchor': 'middle' }, el);
+        tx.textContent = s[2];
+      });
+      var d = '';
+      card._resp.forEach(function (v, i) { d += (i ? 'L' : 'M') + fx(card._freqs[i]).toFixed(1) + ' ' + (T + H - Math.min(v / card._mx, 1.1) * H).toFixed(1); });
+      svg('path', { d: d + 'L' + fx(45) + ' ' + (T + H) + 'L' + fx(0) + ' ' + (T + H) + 'Z', fill: PAL['accent-soft-2'] }, el);
+      svg('path', { d: d, fill: 'none', stroke: PAL.accent, 'stroke-width': 1.6 }, el);
+      // Fade the frequencies that the 4–38 Hz recording filter removed
+      [[0, lo], [hi, 45]].forEach(function (r) {
+        svg('rect', { x: fx(r[0]), y: T - 2, width: fx(r[1]) - fx(r[0]), height: H + 2, fill: PAL.panel, 'fill-opacity': 0.72 }, el);
+      });
+      svg('line', { x1: L, x2: L + W, y1: T + H, y2: T + H, stroke: PAL['grid-strong'] }, el);
+      [0, 10, 20, 30, 40].forEach(function (f) {
+        var tx = svg('text', { x: fx(f), y: T + H + 12, 'text-anchor': f === 0 ? 'start' : 'middle' }, el);
+        tx.textContent = f + (f === 40 ? ' Гц' : '');
+      });
+    });
+    branchTopos.forEach(function (bt) {
+      var w = net.spatialFilter(bt.o), mx = 0;
+      w.forEach(function (x) { mx = Math.max(mx, Math.abs(x)); });
+      bt.topo.draw(w, mx || 1);
+    });
+  }
+
+  function drawEvidence() {
+    var el = $('#evidence');
+    while (el.firstChild) el.removeChild(el.firstChild);
+    var res = state.result, ev = currentNet().evidence(res.features, res.bins), mx = 0;
+    ev.forEach(function (row) { row.forEach(function (v) { mx = Math.max(mx, Math.abs(v)); }); });
+    var L = 104, R = 8, T = 6, B = 20, W = 800 - L - R, H = 150 - T - B, rowH = H / 4, cw = W / res.bins;
+    var pred = argmax(res.proba);
+    for (var k = 0; k < 4; k++) {
+      var tx = svg('text', { x: L - 8, y: T + k * rowH + rowH / 2 + 3.5, 'text-anchor': 'end', style: k === pred ? 'fill:var(--ink);font-weight:600' : '' }, el);
+      tx.textContent = CLASS_RU[k];
+      for (var b = 0; b < res.bins; b++) {
+        svg('rect', { x: L + b * cw + 0.5, y: T + k * rowH + 1, width: cw - 1, height: rowH - 2, fill: divCss(ev[k][b] / (mx || 1)) }, el);
+      }
+      if (k === pred) svg('rect', { x: L - 0.5, y: T + k * rowH + 0.5, width: W + 1, height: rowH - 1, fill: 'none', stroke: PAL.ink, 'stroke-width': 1.2 }, el);
+    }
+    for (var s = 0; s <= 4; s++) {
+      var t2 = svg('text', { x: L + s * (W / 4), y: T + H + 15, 'text-anchor': s === 0 ? 'start' : s === 4 ? 'end' : 'middle' }, el);
+      t2.textContent = s + ' с';
+    }
+    $('#evidenceNote').textContent = 'попытка ' + trials[state.trial].subject + ', рамкой выделен ответ модели';
+  }
+
+  // ---------------------------------------------------------------- results
+  function kappaOf(acc, chance) { return (acc - chance) / (1 - chance); }
+  function renderResults() {
+    var E = LAB.evaluation, P = E.new_user, C = E.calibrated;
+    var minutes = Math.round(E.calibration_trials_per_subject * 8 / 60 / 5) * 5;
+    $('#specAcc').innerHTML = '<b>' + pct(C.accuracy, 1) + '</b> после калибровки · ' + pct(P.accuracy, 1) + ' без неё · случайно 25 %';
+    $('#specModel').textContent = 'EEGNet, ' + LAB.model.n_params.toLocaleString('ru-RU') + ' параметров';
+    $('#statBox').innerHTML =
+      '<span class="eyebrow">Точность, 4 класса</span>' +
+      '<div class="big num">' + (C.accuracy * 100).toFixed(1).replace('.', ',') + '<small> %</small></div>' +
+      '<p class="note">после калибровки на ~' + Math.round(E.calibration_trials_per_subject) + ' попытках человека (около ' + minutes + ' минут записи)</p>' +
+      '<dl>' +
+      '<dt>Новый пользователь</dt><dd>' + pct(P.accuracy, 1) + ', κ = ' + kappaOf(P.accuracy, E.chance).toFixed(2).replace('.', ',') + '</dd>' +
+      '<dt>После калибровки</dt><dd>' + pct(C.accuracy, 1) + ', κ = ' + kappaOf(C.accuracy, E.chance).toFixed(2).replace('.', ',') + '</dd>' +
+      '<dt>Тестовых попыток</dt><dd>' + E.n_test + '</dd>' +
+      '<dt>Случайное угадывание</dt><dd>25 %, κ = 0</dd>' +
+      '</dl>' +
+      '<p class="note">Каппа Коэна — официальная метрика BCI Competition IV 2a: она показывает, насколько модель лучше случайного угадывания.</p>';
+
+    // Per-subject grouped bars: new user vs calibrated
+    var el = $('#subjChart');
+    while (el.firstChild) el.removeChild(el.firstChild);
+    var L = 34, R = 6, T = 14, B = 24, W = 460 - L - R, H = 230 - T - B;
+    var n = C.per_subject.length, bw = W / n;
+    function Y(v) { return T + (1 - v) * H; }
+    [0, 0.25, 0.5, 0.75, 1].forEach(function (v) {
+      svg('line', { x1: L, x2: L + W, y1: Y(v), y2: Y(v), stroke: v === 0 ? PAL['grid-strong'] : PAL.grid }, el);
+      var tx = svg('text', { x: L - 5, y: Y(v) + 3, 'text-anchor': 'end' }, el);
+      tx.textContent = (v * 100) + ' %';
+    });
+    C.per_subject.forEach(function (s, i) {
+      var baseAcc = P.per_subject[i].accuracy, x0 = L + i * bw + bw * 0.12, w = bw * 0.36;
+      [[baseAcc, PAL['grid-strong'], 'var(--muted)'], [s.accuracy, PAL.accent, 'var(--ink)']].forEach(function (b, j) {
+        var x = x0 + j * (w + bw * 0.04);
+        svg('rect', { x: x, y: Y(b[0]), width: w, height: Y(0) - Y(b[0]), fill: b[1], rx: 1.5 }, el);
+        var v = svg('text', { x: x + w / 2, y: Y(b[0]) - 4, 'text-anchor': 'middle', style: 'fill:' + b[2] + ';font-size:9px' }, el);
+        v.textContent = Math.round(b[0] * 100);
+      });
+      var lb = svg('text', { x: L + i * bw + bw / 2, y: T + H + 15, 'text-anchor': 'middle' }, el);
+      lb.textContent = s.subject;
+    });
+    svg('line', { x1: L, x2: L + W, y1: Y(E.chance), y2: Y(E.chance), stroke: PAL.bad, 'stroke-dasharray': '4 4', 'stroke-width': 1.3 }, el);
+
+    // Confusion matrix of the model chosen in the decision panel
+    var cm = E[state.modelKind].confusion, html = '<thead><tr><th scope="col"></th>';
+    CLASS_RU.forEach(function (c) { html += '<th scope="col">' + c + '</th>'; });
+    html += '</tr></thead><tbody>';
+    cm.forEach(function (row, i) {
+      var tot = row.reduce(function (a, b) { return a + b; }, 0) || 1;
+      html += '<tr><th scope="row">' + CLASS_RU[i] + '</th>';
+      row.forEach(function (v, j) {
+        var p = v / tot;
+        html += '<td class="' + (i === j ? 'diag ' : '') + (p > 0.55 ? 'hot' : '') + '" style="--p:' + Math.round(p * 100) + '%">' + Math.round(p * 100) + '</td>';
+      });
+      html += '</tr>';
+    });
+    $('#cm').innerHTML = html + '</tbody>';
+    $('#cmModel').textContent = (state.modelKind === 'new_user' ? 'без калибровки' : 'после калибровки') + ' · строки — задание, столбцы — ответ';
+  }
+
+  document.querySelectorAll('[data-model]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.modelKind = this.dataset.model;
+      document.querySelectorAll('[data-model]').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.model === state.modelKind)); });
+      state.result = infer(trials[state.trial], state.noise, state.disabled);
+      markPicker();
+      renderDecision(); drawEvidence(); drawBranches(); renderResults();
+    });
+  });
+
+  // ---------------------------------------------------------------- atlas
+  var atlasTopos = [];
+  function atlasWindow(band, cls) {
+    var g = LAB.grand_average_erd[band][cls], a = Math.round((0.5 - T0) / FRAME_DT), b = Math.round((2.5 - T0) / FRAME_DT);
+    return g.map(function (row) { var s = 0; for (var k = a; k <= b; k++) s += row[k]; return s / (b - a + 1); });
+  }
+  function buildAtlas() {
+    var root = $('#atlas');
+    root.innerHTML = '';
+    atlasTopos = [];
+    for (var k = 0; k < 4; k++) {
+      var fig = document.createElement('figure');
+      fig.className = 'panel';
+      var cv = document.createElement('canvas');
+      cv.setAttribute('role', 'img');
+      cv.setAttribute('aria-label', 'Средняя карта ERD: ' + CLASS_RU[k]);
+      fig.appendChild(cv);
+      var cap = document.createElement('figcaption');
+      cap.innerHTML = '<b style="color:var(--c' + k + ')">' + CLASS_RU[k] + '</b><span id="atlasCap' + k + '"></span>';
+      fig.appendChild(cap);
+      root.appendChild(fig);
+      atlasTopos.push(new Topo(cv, { labels: true, labelOnly: ['C3', 'Cz', 'C4'], res: 64 }));
+    }
+    drawAtlas();
+  }
+  function drawAtlas() {
+    var maps = [0, 1, 2, 3].map(function (k) { return atlasWindow(state.atlasBand, k); }), mx = 0;
+    maps.forEach(function (m) { m.forEach(function (v) { mx = Math.max(mx, Math.abs(v)); }); });
+    var range = Math.max(10, Math.ceil(mx / 5) * 5);
+    $('#atlasMin').textContent = '−' + range + ' % ERD';
+    $('#atlasMax').textContent = '+' + range + ' % ERS';
+    maps.forEach(function (m, k) {
+      atlasTopos[k].draw(m, range);
+      var c3 = m[chIndex.C3], c4 = m[chIndex.C4], cz = m[chIndex.Cz];
+      $('#atlasCap' + k).textContent = 'C3 ' + fmtPct(c3) + ' · Cz ' + fmtPct(cz) + ' · C4 ' + fmtPct(c4);
+    });
+    var g = LAB.grand_average_erd[state.atlasBand];
+    function series(cls, ch) { return g[cls][chIndex[ch]]; }
+    lineChart($('#atlasChart'), [
+      { values: series(0, 'C3'), dt: FRAME_DT, color: PAL.c0, label: 'Лев. · C3', dash: '5 4' },
+      { values: series(0, 'C4'), dt: FRAME_DT, color: PAL.c0, label: 'Лев. · C4' },
+      { values: series(1, 'C3'), dt: FRAME_DT, color: PAL.c1, label: 'Прав. · C3' },
+      { values: series(1, 'C4'), dt: FRAME_DT, color: PAL.c1, label: 'Прав. · C4', dash: '5 4' }
+    ], {
+      x0: T0, x1: T1, y0: -range * 1.4, y1: range * 0.8,
+      yTicks: niceTicks(-range * 1.4, range * 0.8), xTicks: [-1, 0, 1, 2, 3, 4], cue: 0, rightPad: 72,
+      shade: [[M.baseline_window[0], M.baseline_window[1], PAL['panel-2']]]
+    });
+  }
+  function sci(v) {
+    var e = Math.ceil(Math.log10(v));
+    return '10' + String(e).replace('-', '⁻').replace(/\d/g, function (d) { return '⁰¹²³⁴⁵⁶⁷⁸⁹'[+d]; });
+  }
+  function fmtPct(v) { return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(Math.round(v)) + ' %'; }
+  function niceTicks(a, b) {
+    var span = b - a, step = span > 80 ? 25 : span > 40 ? 10 : 5, out = [];
+    for (var v = Math.ceil(a / step) * step; v <= b; v += step) out.push(v);
+    return out;
+  }
+  document.querySelectorAll('[data-atlas-band]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.atlasBand = this.dataset.atlasBand;
+      document.querySelectorAll('[data-atlas-band]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      drawAtlas();
+    });
+  });
+
+  // ---------------------------------------------------------------- narratives from the data
+  function sumOf(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+  function describeAtlas() {
+    var mu = [0, 1, 2, 3].map(function (k) { return atlasWindow('mu', k); });
+    var c3 = chIndex.C3, c4 = chIndex.C4, cz = chIndex.Cz, cpz = chIndex.CPz;
+    var parts = ['Моторная кора устроена перекрёстно: кистью правой руки управляет левое полушарие (электрод C3), а кистью левой — правое (C4).'];
+    function side(cls, strong, weak, strongName, weakName) {
+      var a = mu[cls][strong], b = mu[cls][weak];
+      return a < b && a < 0
+        ? 'при воображении ' + CLASS_GEN[cls] + ' мю-ритм падает сильнее над ' + strongName + ' (' + fmtPct(a) + '), чем над ' + weakName + ' (' + fmtPct(b) + ')'
+        : 'при воображении ' + CLASS_GEN[cls] + ' разница между ' + strongName + ' (' + fmtPct(a) + ') и ' + weakName + ' (' + fmtPct(b) + ') в среднем мала';
+    }
+    parts.push('На средних картах ' + side(1, c3, c4, 'C3', 'C4') + ', а ' + side(0, c4, c3, 'C4', 'C3') + '.');
+    var feetMin = Math.min(mu[2][cz], mu[2][cpz]);
+    if (feetMin < 0) parts.push('Ноги представлены в глубине межполушарной щели, поэтому их ERD слабая и видна у Cz–CPz (' + fmtPct(feetMin) + ').');
+    var tongueHand = (mu[3][c3] + mu[3][c4]) / 2;
+    if (tongueHand > 0) parts.push('При воображении языка мю-ритм над кистевыми зонами, наоборот, растёт (C3 ' + fmtPct(mu[3][c3]) + ', C4 ' + fmtPct(mu[3][c4]) + '). Это ERS, известный эффект «фокальная десинхронизация, окружающая синхронизация» (Pfurtscheller, 2006).');
+    var cm = LAB.evaluation.calibrated.confusion, acc = cm.map(function (row, i) { return row[i] / (sumOf(row) || 1); });
+    var worst = acc.indexOf(Math.min.apply(null, acc));
+    parts.push('Хуже всего модель узнаёт класс «' + CLASS_RU[worst] + '»: ' + pct(acc[worst]) + ' верных ответов после калибровки.');
+    $('#atlasNotes').textContent = parts.join(' ');
+  }
+  function describeEvidence() {
+    // Average over this page's trials: evidence for the chosen class minus the mean of the others
+    var res = intactFor('calibrated'), bins = res[0].bins, prof = new Float64Array(bins);
+    res.forEach(function (r, i) {
+      var ev = netFor('calibrated', trials[i].subject).evidence(r.features, r.bins), pred = argmax(r.proba);
+      for (var b = 0; b < bins; b++) {
+        var others = 0;
+        for (var k = 0; k < 4; k++) if (k !== pred) others += ev[k][b];
+        prof[b] += ev[pred][b] - others / 3;
+      }
+    });
+    var binDur = (M.model_window[1] - M.model_window[0]) / bins, best = 0, bestVal = -Infinity;
+    for (var w = 0; w < 8; w++) {
+      var v = 0, n = 0;
+      for (var b2 = 0; b2 < bins; b2++) {
+        var mid = (b2 + 0.5) * binDur;
+        if (mid >= w * 0.5 && mid < (w + 1) * 0.5) { v += prof[b2]; n++; }
+      }
+      if (n && v / n > bestVal) { bestVal = v / n; best = w; }
+    }
+    $('#evidenceSummary').textContent = 'В среднем по ' + trials.length + ' попыткам этой страницы сильнее всего на решение влияет отрезок ' +
+      String(best * 0.5).replace('.', ',') + '–' + String(best * 0.5 + 0.5).replace('.', ',') + ' с после подсказки: к этому времени развивается десинхронизация.';
+  }
+
+  // ---------------------------------------------------------------- boot
+  function redrawAll() {
+    readPalette();
+    drawTrace(); drawTopoMain(); drawErdChart(); renderDecision(); drawEvidence();
+    drawBranches(); drawAtlas(); renderResults();
+  }
+
+  readPalette();
+  buildHand();
+  buildBars();
+  buildPicker();
+  buildBranches();
+  buildAtlas();
+  function showParity() { $('#parity').textContent = sci(Math.max(parityErr, 1e-7)); }
+  intactFor('calibrated');
+  showParity();
+  setTimeout(function () { KINDS.forEach(intactFor); showParity(); }, 400);
+  $('#genDate').textContent = 'модель обучена ' + M.generated;
+
+  // Open on a correctly classified right-hand trial: the clearest demo of contralateral ERD
+  var start = trials.findIndex(function (t) { return t.label === 1 && argmax(intactFor('calibrated')[t.i].proba) === 1; });
+  selectTrial(start >= 0 ? start : 0, false);
+  renderResults();
+  describeAtlas();
+  describeEvidence();
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () { $('#hand').classList.remove('no-anim'); });
+  });
+
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(function () { drawTrace(); drawTopoMain(); drawBranches(); drawAtlas(); });
+    [traceCv, topoCv, $('#branches'), $('#atlas')].forEach(function (el) { ro.observe(el); });
+  }
+  if (window.matchMedia) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    if (mq.addEventListener) mq.addEventListener('change', redrawAll);
+  }
+  new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+})();
+</script>
+</body>
+</html>

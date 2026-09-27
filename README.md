@@ -55,6 +55,7 @@ NeuroHand aims to create an **affordable EEG-controlled prosthetic hand** (targe
 - ✅ **4-Class Motor Imagery** classification (L hand, R hand, feet, tongue)
 - ✅ **Transfer Learning Ready** for OpenBCI data
 - ✅ **Visualization Tools** for EEG signals and model performance
+- ✅ **BCI Lab in the browser**: real EEG playback, ERD maps and EEGNet running client-side ([see below](#-bci-lab-in-the-browser))
 
 ### Planned (Post-Hardware)
 
@@ -63,6 +64,46 @@ NeuroHand aims to create an **affordable EEG-controlled prosthetic hand** (targe
 - 🔄 **Prosthetic Control System** (Arduino + servos)
 - 🔄 **Online Learning** with Elastic Weight Consolidation (EWC)
 - 🔄 **Safety Mechanisms** (confidence thresholds, voting, watchdog)
+
+---
+
+## 🧪 BCI Lab in the browser
+
+**[Open the lab →](https://temurturayev.github.io/NeuroHand/bci-lab/)** (or open `bci-lab/index.html` locally)
+
+An interactive page that shows what NeuroHand does, end to end, on real data from
+BCI Competition IV 2a:
+
+- **Recording**: 22-channel EEG of a person imagining a left-hand, right-hand, feet or
+  tongue movement, played back like a clinical EEG (−1.5 to +4 s around the cue).
+- **Rhythm map**: live scalp map of mu (8–13 Hz) and beta (13–30 Hz) ERD/ERS, plus the
+  C3 vs C4 time course. Imagining the right hand suppresses the mu rhythm over C3.
+- **Decision**: EEGNet runs **in the browser** (`bci-lab/eegnet.js`, plain JavaScript,
+  no server) and drives a prosthetic-hand mock-up with servo angles and a
+  confidence threshold.
+- **Experiments**: switch off electrodes by clicking the map, add band-limited noise,
+  compare a *new user* model with the same model *after calibration*.
+- **Inside EEGNet**: the learned temporal filters (as frequency responses), their
+  spatial filters (as scalp maps) and which 128 ms segments drove the decision.
+
+| Model (held-out test trials, 4 classes) | Accuracy | Cohen's κ |
+|---|---|---|
+| New user: trained on the other 8 subjects | 46.9 % | 0.29 |
+| After calibration on ~207 of the user's own trials (about 30 min of recording) | 61.3 % | 0.48 |
+| Chance | 25 % | 0 |
+
+The data and the models are rebuilt with:
+
+```bash
+python -m src.visualization.bci_lab_export --data-dir data/raw/bciiv2a_npz
+```
+
+The script expects the `.npz` port of the dataset
+([bregydoc/bcidatasetIV2a](https://github.com/bregydoc/bcidatasetIV2a)), trains one
+leave-one-subject-out EEGNet per subject, calibrates it (epochs chosen by
+cross-validation inside the calibration trials), and writes `bci-lab/lab-data.js`.
+The JavaScript forward pass is checked against PyTorch in
+`tests/test_bci_lab_export.py`.
 
 ---
 
@@ -75,7 +116,8 @@ NeuroHand aims to create an **affordable EEG-controlled prosthetic hand** (targe
 | Data Pipeline | ✅ Complete | 100% |
 | EEGNet Model | ✅ Complete | 100% |
 | Baseline Training | ✅ Complete | 100% |
-| Test Suite | ✅ Complete (46 tests) | 100% |
+| Test Suite | ✅ Complete (53 tests) | 100% |
+| Browser BCI Lab | ✅ Complete | 100% |
 | OpenBCI Integration | ⏳ Waiting | 0% |
 | Prosthetic Hardware | ⏳ Planned | 0% |
 | Real-time System | ⏳ Planned | 0% |
@@ -210,8 +252,13 @@ NeuroHand/
 │   │   └── professional_app.py # Professional demo interface
 │   └── visualization/
 │       ├── plot_signals.py     # EEG visualization
-│       └── plot_results.py     # Training curves, confusion matrix
-├── tests/                      # Test suite (46 tests)
+│       ├── plot_results.py     # Training curves, confusion matrix
+│       └── bci_lab_export.py   # Trains models + exports data for the browser lab
+├── bci-lab/                    # Interactive BCI lab (static page, GitHub Pages)
+│   ├── index.html              # The lab
+│   ├── eegnet.js               # EEGNet forward pass in plain JavaScript
+│   └── lab-data.js             # Generated: demo trials, ERD, model weights
+├── tests/                      # Test suite (53 tests)
 │   ├── conftest.py             # Test fixtures
 │   ├── test_models.py          # Model architecture tests
 │   ├── test_preprocessing.py   # Preprocessing pipeline tests

@@ -319,7 +319,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
 /* ---------- Decision panel ---------- */
 .decision {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) 200px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 380px) minmax(0, 1fr);
   gap: 20px 28px;
   padding: 16px;
   align-items: start;
@@ -372,6 +372,17 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; }
 #hand .model-id { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); letter-spacing: 0.08em; }
 #hand .digit { transition: transform 0.75s cubic-bezier(0.34, 1.25, 0.5, 1); }
 #hand.no-anim .digit { transition: none; }
+.hand3d {
+  width: 100%;
+  height: 360px;
+  cursor: grab;
+  border-radius: 6px;
+  background: radial-gradient(ellipse at 50% 38%, var(--panel) 0%, var(--panel-2) 100%);
+}
+.hand3d.is-dragging { cursor: grabbing; }
+.hand3d canvas { display: block; }
+.hand-hint { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: -2px; }
+.hand-box.is-3d .servo { grid-template-columns: repeat(5, auto auto); gap: 1px 6px; }
 .servo { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); display: grid; grid-template-columns: auto auto; gap: 1px 10px; }
 .servo b { font-weight: 500; color: var(--ink-2); text-align: right; font-variant-numeric: tabular-nums; }
 
@@ -479,7 +490,7 @@ footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
 @media (max-width: 960px) {
   .rec { grid-template-columns: minmax(0, 1fr); }
   .console { grid-template-columns: minmax(0, 1fr); }
-  .decision { grid-template-columns: minmax(0, 1fr) 170px; }
+  .decision { grid-template-columns: minmax(0, 1fr) minmax(240px, 320px); }
   .exp { grid-column: 1 / -1; border-left: 0; padding-left: 0; border-top: 1px solid var(--grid); padding-top: 14px; }
   #hand { width: 160px; }
   .picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -496,6 +507,8 @@ footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
   #trace { height: var(--trace-h-sm, 360px); }
   .decision { grid-template-columns: minmax(0, 1fr); }
   .hand-box { grid-template-columns: 130px 1fr; justify-items: start; align-items: center; }
+  .hand-box.is-3d { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+  .hand3d { height: 300px; }
   #hand { width: 130px; }
   .branches {
     grid-template-columns: none;
@@ -612,6 +625,8 @@ footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
           <div class="verdict" id="verdict" aria-live="polite"></div>
         </div>
         <div class="hand-box">
+          <div id="hand3d" class="hand3d" hidden role="img" aria-label="3D-модель протеза кисти NeuroHand. Потяните, чтобы повернуть."></div>
+          <p class="hand-hint" id="handHint" hidden>Потяните, чтобы повернуть</p>
           <svg id="hand" class="no-anim" viewBox="-12 0 234 262" role="img" aria-label="Протез кисти NeuroHand">
             <g id="digits-back"></g>
             <rect class="palm" x="58" y="110" width="106" height="100" rx="26"></rect>
@@ -771,6 +786,8 @@ footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
 
 <script src="lab-data.js"></script>
 <script src="eegnet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="hand3d.js"></script>
 <script>
 (function () {
   'use strict';
@@ -1503,6 +1520,7 @@ footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
     });
     $('#servo').innerHTML = servo.join('');
     $('#hand').style.setProperty('--led', cls === null || cls === undefined ? 'var(--muted)' : 'var(--c' + cls + ')');
+    if (hand3d) hand3d.setPose(name, cls === null || cls === undefined ? null : PAL.cls[cls]);
   }
 
   // ---------------------------------------------------------------- playback
@@ -1893,6 +1911,15 @@ footer.foot nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
 
   readPalette();
   buildHand();
+  // 3D hand when WebGL and three.js are available; the SVG hand stays as fallback
+  var hand3d = window.Hand3D ? window.Hand3D.create($('#hand3d')) : null;
+  if (hand3d) {
+    $('#hand3d').hidden = false;
+    $('#handHint').hidden = false;
+    $('#hand').setAttribute('hidden', '');
+    document.querySelector('.hand-box').classList.add('is-3d');
+    hand3d.resize();
+  }
   buildBars();
   buildPicker();
   buildBranches();
